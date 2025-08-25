@@ -1,28 +1,25 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Mic, MicOff, MessageCircle, X, Minimize2, Maximize2, Volume2, VolumeX, Phone, PhoneOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import { useToast } from '@/hooks/use-toast';
-import { RealtimeWebRTCCoach, SALES_COACH_PROMPT, handleWebRTCError } from '@/lib/openai-webrtc';
+import { RealtimeWebRTCCoach, handleWebRTCError } from "@/lib/openai-webrtc";
+import { generateContactPrompt, generateFeedbackPrompt } from "@/lib/scenario-prompts";
+import { useSalesStore } from "@/store/salesStore";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Phone, PhoneCall, Mic, MicOff, MessageSquare, Minimize2, Maximize2, User } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
 
 interface EnhancedVoiceCoachProps {
-  scenario?: any; // Accept both Scenario and EnhancedScenario
-  isOpen?: boolean;
+  scenario?: any;
+  open?: boolean;
   onToggle?: () => void;
 }
 
 interface Message {
-  id: string;
   content: string;
-  isUser: boolean;
+  sender: "user" | "assistant" | "system" | "contact" | "coach";
   timestamp: Date;
 }
 
-export function EnhancedVoiceCoach({ scenario, isOpen = true, onToggle }: EnhancedVoiceCoachProps) {
-  // Fixed typo issue - force cache refresh
+export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: EnhancedVoiceCoachProps) {
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -30,127 +27,78 @@ export function EnhancedVoiceCoach({ scenario, isOpen = true, onToggle }: Enhanc
   const [isMuted, setIsMuted] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
-  const [currentPhase, setCurrentPhase] = useState("Découverte");
-  const [transcript, setTranscript] = useState("");
-  const { toast } = useToast();
-  
+  const [error, setError] = useState<string | null>(null);
+  const [currentPhase, setCurrentPhase] = useState("ouverture");
+  const [isInFeedbackMode, setIsInFeedbackMode] = useState(false);
   const voiceCoachRef = useRef<RealtimeWebRTCCoach | null>(null);
 
-  // Clé API OpenAI pour usage personnel
-  const getApiKey = () => {
-    return "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";
-  };
-
-  // Get contextual coaching based on scenario
-  const getContextualCoaching = () => {
-    if (!scenario) return "Sélectionnez un scénario pour commencer";
-    
-    const phaseCoaching = {
-      "Découverte": `Objectif: Comprendre ${scenario.company?.name || scenario.title}. Questions clés: découvrir les besoins et pain points`,
-      "Démonstration": `Focus: Montrer la valeur de votre solution. Mettre en avant les bénéfices concrets`,
-      "Objections": `Préparez-vous aux objections probables. Écoutez et reformulez avant de répondre`,
-      "Closing": `Objectif: Finaliser la vente. Proposer les prochaines étapes concrètes`
-    };
-    
-    return phaseCoaching[currentPhase] || "Concentrez-vous sur l'écoute active";
-  };
-
-  // Préparer les instructions contextuelles
-  const getContextualInstructions = () => {
-    if (!scenario) return SALES_COACH_PROMPT;
-    
-    return `${SALES_COACH_PROMPT}
-
-CONTEXTE DU SCÉNARIO :
-- Entreprise : ${scenario.company?.name || "Non spécifié"}
-- Secteur : ${scenario.company?.sector || "Non spécifié"}
-- Interlocuteur : ${scenario.interlocutor?.name || "Non spécifié"} (${scenario.interlocutor?.role || "Non spécifié"})
-- Objectif : ${scenario.salesGoal || scenario.description}
-- Phase actuelle : ${currentPhase}
-
-Adapte tes conseils à ce contexte spécifique et aide l'utilisateur à réussir ce scénario de vente.`;
-  };
-
   const startConversation = async () => {
-    const apiKey = getApiKey();
-    if (!apiKey) {
-      toast({
-        title: "Clé API manquante",
-        description: "Veuillez configurer votre clé API OpenAI dans les secrets.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsConnecting(true);
-    
     try {
+      setError(null);
+      
+      if (!scenario) {
+        setError("Aucun scénario sélectionné");
+        return;
+      }
+
+      const apiKey = prompt("Entrez votre clé API OpenAI:");
+      if (!apiKey) {
+        setError("Clé API requise");
+        return;
+      }
+
       voiceCoachRef.current = new RealtimeWebRTCCoach(apiKey);
       
-      // Configurer les callbacks WebRTC
-      voiceCoachRef.current.onSessionReady = () => {
-        console.log("Session WebRTC prête");
+      const coach = voiceCoachRef.current;
+      
+      // Configuration des callbacks
+      coach.onSessionReady = () => {
         setIsConnected(true);
         setIsConnecting(false);
-        
-        toast({
-          title: "Coach vocal connecté",
-          description: "Vous pouvez maintenant parler avec votre coach commercial.",
-        });
+        setIsInFeedbackMode(false);
+        addMessage(`${scenario.interlocutor.name} est maintenant en ligne`, "system");
       };
-      
-      voiceCoachRef.current.onSpeechStarted = () => {
+
+      coach.onSpeechStarted = () => {
         setIsRecording(true);
-        setIsSpeaking(false);
       };
-      
-      voiceCoachRef.current.onSpeechStopped = () => {
+
+      coach.onSpeechStopped = () => {
         setIsRecording(false);
       };
-      
-      voiceCoachRef.current.onResponseStarted = () => {
+
+      coach.onResponseStarted = () => {
         setIsSpeaking(true);
       };
-      
-      voiceCoachRef.current.onResponseCompleted = (response) => {
+
+      coach.onResponseCompleted = (response) => {
         setIsSpeaking(false);
-        if (response.output?.[0]?.content?.[0]?.transcript) {
-          const newMessage: Message = {
-            id: Date.now().toString(),
-            content: response.output[0].content[0].transcript,
-            isUser: false,
-            timestamp: new Date(),
-          };
-          setMessages(prev => [...prev, newMessage]);
+        if (response?.output?.[0]?.content?.[0]?.text) {
+          const sender = isInFeedbackMode ? "coach" : "contact";
+          addMessage(response.output[0].content[0].text, sender);
         }
       };
-      
-      voiceCoachRef.current.onTranscriptDelta = (delta) => {
-        setTranscript(prev => prev + delta);
+
+      coach.onTranscriptDelta = (delta) => {
+        // Optionnel : afficher la transcription en temps réel
       };
-      
-      voiceCoachRef.current.onError = (error) => {
-        console.error("Erreur coach vocal WebRTC:", error);
-        toast({
-          title: "Erreur du coach vocal",
-          description: handleWebRTCError(error),
-          variant: "destructive",
-        });
+
+      coach.onError = (error) => {
+        setError(error);
         setIsConnected(false);
         setIsConnecting(false);
       };
 
-      // Se connecter via WebRTC avec les instructions contextuelles
-      await voiceCoachRef.current.connect(getContextualInstructions());
+      setIsConnecting(true);
       
+      // Instructions contextuelles - le coach joue le rôle du contact
+      const contactPrompt = generateContactPrompt(scenario, currentPhase);
+      await coach.connect(contactPrompt);
+
     } catch (error) {
-      console.error("Erreur connexion:", error);
+      console.error("Erreur lors de la connexion:", error);
+      setError(handleWebRTCError(error));
       setIsConnecting(false);
-      toast({
-        title: "Erreur de connexion",
-        description: "Impossible de se connecter au coach vocal. Vérifiez votre clé API.",
-        variant: "destructive",
-      });
     }
   };
 
@@ -159,17 +107,47 @@ Adapte tes conseils à ce contexte spécifique et aide l'utilisateur à réussir
       voiceCoachRef.current.disconnect();
       voiceCoachRef.current = null;
     }
-    
     setIsConnected(false);
-    setIsSpeaking(false);
+    setIsConnecting(false);
     setIsRecording(false);
-    setMessages([]);
-    setTranscript("");
+    setIsSpeaking(false);
+    setIsMuted(false);
+    setIsInFeedbackMode(false);
+    addMessage("Conversation terminée", "system");
+  };
+
+  const startFeedbackMode = async () => {
+    if (!voiceCoachRef.current || !scenario) return;
     
-    toast({
-      title: "Session terminée",
-      description: "Votre session de coaching vocal est terminée.",
-    });
+    setIsInFeedbackMode(true);
+    const feedbackPrompt = generateFeedbackPrompt(scenario);
+    
+    // Créer une nouvelle session avec le prompt de feedback
+    try {
+      await voiceCoachRef.current.disconnect();
+      const apiKey = prompt("Clé API pour le feedback (même que précédemment):");
+      if (!apiKey) return;
+      
+      voiceCoachRef.current = new RealtimeWebRTCCoach(apiKey);
+      const coach = voiceCoachRef.current;
+      
+      // Reconfigurer les callbacks
+      coach.onSessionReady = () => {
+        addMessage("Coach prêt pour le débrief", "system");
+      };
+      
+      coach.onResponseCompleted = (response) => {
+        setIsSpeaking(false);
+        if (response?.output?.[0]?.content?.[0]?.text) {
+          addMessage(response.output[0].content[0].text, "coach");
+        }
+      };
+      
+      await coach.connect(feedbackPrompt);
+    } catch (error) {
+      console.error("Erreur lors du basculement en mode feedback:", error);
+      setError("Impossible de basculer en mode feedback");
+    }
   };
 
   const toggleMute = () => {
@@ -179,7 +157,33 @@ Adapte tes conseils à ce contexte spécifique et aide l'utilisateur à réussir
     }
   };
 
-  // Nettoyage à la fermeture du composant
+  const addMessage = (content: string, sender: "user" | "assistant" | "system" | "contact" | "coach") => {
+    const newMessage: Message = {
+      content,
+      sender,
+      timestamp: new Date(),
+    };
+    setMessages(prev => [...prev, newMessage]);
+  };
+
+  const getContextualCoaching = () => {
+    if (!scenario) return "Aucun scénario sélectionné";
+    
+    if (isInFeedbackMode) {
+      return "💬 Mode débrief activé - Analysez votre performance avec le coach";
+    }
+    
+    const phaseAdvice = {
+      ouverture: `🎯 Vous parlez à ${scenario.interlocutor.name}. Créez du rapport et obtenez quelques minutes d'attention`,
+      decouverte: `🔍 Découvrez les vrais besoins de ${scenario.interlocutor.name}. Focus sur: ${scenario.interlocutor.priorities.slice(0,2).join(", ")}`,
+      demonstration: `💡 Montrez comment ${scenario.product.name} résout les problèmes de ${scenario.company.name}`, 
+      objections: `⚡ ${scenario.interlocutor.name} peut objecter sur: ${scenario.interlocutor.concerns.slice(0,2).join(", ")}`,
+      closing: `🎪 Proposez une prochaine étape concrète à ${scenario.interlocutor.name}`
+    };
+
+    return phaseAdvice[currentPhase as keyof typeof phaseAdvice] || "Continuez la conversation";
+  };
+
   useEffect(() => {
     return () => {
       if (voiceCoachRef.current) {
@@ -188,97 +192,46 @@ Adapte tes conseils à ce contexte spécifique et aide l'utilisateur à réussir
     };
   }, []);
 
-  if (!isOpen && !isMinimized) {
+  // Rendu conditionnel selon l'état
+  if (!open) {
     return (
-      <Button
-        onClick={onToggle}
-        className="fixed bottom-6 right-6 h-14 w-14 rounded-full bg-accent hover:bg-accent-dark shadow-accent z-50"
-        size="sm"
-      >
-        <MessageCircle className="h-6 w-6" />
-      </Button>
+      <div className="fixed bottom-4 right-4 z-50">
+        <Button
+          onClick={onToggle}
+          className="h-12 w-12 rounded-full shadow-lg bg-primary hover:bg-primary/90"
+        >
+          <User className="h-5 w-5" />
+        </Button>
+      </div>
     );
   }
 
   if (isMinimized) {
     return (
-      <div className="fixed bottom-6 right-6 z-50">
-        <Card className="w-80 bg-card/95 backdrop-blur-sm border shadow-xl">
+      <div className="fixed bottom-4 right-4 z-50">
+        <Card className="w-64 shadow-xl border-primary/20">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-success animate-pulse' : 'bg-muted'}`} />
-                <CardTitle className="text-sm">Coach Vocal</CardTitle>
-                {isConnected && (
-                  <Badge variant="secondary" className="text-xs">
-                    {currentPhase}
-                  </Badge>
-                )}
+                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-gray-400'}`} />
+                <span className="text-sm font-medium">
+                  {scenario?.interlocutor.name || "Contact"}
+                </span>
               </div>
-              <div className="flex items-center gap-1">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsMinimized(false)}
-                  className="h-6 w-6 p-0"
-                >
+              <div className="flex gap-1">
+                <Button variant="ghost" size="sm" onClick={() => setIsMinimized(false)}>
                   <Maximize2 className="h-3 w-3" />
                 </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={onToggle}
-                  className="h-6 w-6 p-0"
-                >
-                  <X className="h-3 w-3" />
+                <Button variant="ghost" size="sm" onClick={onToggle}>
+                  ×
                 </Button>
               </div>
             </div>
           </CardHeader>
-          <CardContent className="pb-4">
-            <div className="text-xs text-muted-foreground mb-2">
-              {getContextualCoaching()}
+          <CardContent className="pt-0">
+            <div className="text-xs text-muted-foreground">
+              {isConnected ? `${scenario?.interlocutor.role} - En ligne` : "Hors ligne"}
             </div>
-            {!isConnected ? (
-              <Button 
-                onClick={startConversation}
-                disabled={isConnecting}
-                size="sm"
-                className="w-full bg-accent hover:bg-accent-dark"
-              >
-                {isConnecting ? (
-                  <>
-                    <div className="w-3 h-3 border border-current border-t-transparent rounded-full animate-spin mr-2" />
-                    Connexion...
-                  </>
-                ) : (
-                  <>
-                    <Phone className="w-3 h-3 mr-2" />
-                    Démarrer
-                  </>
-                )}
-              </Button>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsMuted(!isMuted)}
-                  className="flex-1"
-                >
-                  {isMuted ? <VolumeX className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />}
-                </Button>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={endConversation}
-                  className="flex-1"
-                >
-                  <PhoneOff className="w-3 h-3 mr-1" />
-                  Fin
-                </Button>
-              </div>
-            )}
           </CardContent>
         </Card>
       </div>
@@ -286,124 +239,151 @@ Adapte tes conseils à ce contexte spécifique et aide l'utilisateur à réussir
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
-      <Card className="w-96 h-[500px] bg-card/95 backdrop-blur-sm border shadow-xl flex flex-col">
-        <CardHeader className="pb-4">
+    <div className="fixed bottom-4 right-4 z-50">
+      <Card className="w-96 h-[600px] shadow-xl border-primary/20 flex flex-col">
+        <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-success animate-pulse' : 'bg-muted'}`} />
-              <div>
-                <CardTitle className="text-lg">Coach Vocal IA</CardTitle>
-                <p className="text-xs text-muted-foreground">
-                  {isConnected ? `Connecté • ${currentPhase}` : 'Hors ligne'}
-                </p>
-              </div>
+            <div className="flex items-center gap-2">
+              <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-gray-400'}`} />
+              <CardTitle className="text-lg">
+                {isInFeedbackMode ? "Coach Commercial" : (scenario?.interlocutor.name || "Contact")}
+              </CardTitle>
             </div>
-            <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsMinimized(true)}
-                className="h-8 w-8 p-0"
-              >
-                <Minimize2 className="h-4 w-4" />
+            <div className="flex gap-1">
+              <Button variant="ghost" size="sm" onClick={() => setIsMinimized(true)}>
+                <Minimize2 className="h-3 w-3" />
               </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onToggle}
-                className="h-8 w-8 p-0"
-              >
-                <X className="h-4 w-4" />
+              <Button variant="ghost" size="sm" onClick={onToggle}>
+                ×
               </Button>
             </div>
           </div>
-        </CardHeader>
-
-        <CardContent className="flex-1 flex flex-col p-4 space-y-4">
-          {/* Contextual Coaching */}
-          {scenario && (
-            <div className="p-3 bg-accent/10 rounded-lg">
-              <div className="text-xs font-medium text-accent mb-1">Conseil contextualisé:</div>
-              <div className="text-xs text-muted-foreground">
-                {getContextualCoaching()}
-              </div>
+          {scenario && !isInFeedbackMode && (
+            <div className="text-sm text-muted-foreground">
+              {scenario.interlocutor.role} chez {scenario.company.name}
             </div>
           )}
+        </CardHeader>
+
+        <CardContent className="flex-1 flex flex-col p-4">
+          {/* Coaching contextuel */}
+          <div className="mb-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
+            <h4 className="text-sm font-medium mb-2">
+              {isInFeedbackMode ? "Analyse de performance" : "Votre contact"}
+            </h4>
+            <p className="text-xs text-muted-foreground">
+              {getContextualCoaching()}
+            </p>
+            <div className="mt-2 flex items-center gap-2">
+              <Badge variant="outline" className="text-xs">
+                {isInFeedbackMode ? "Mode Débrief" : `Phase: ${currentPhase}`}
+              </Badge>
+              {scenario && (
+                <Badge variant="outline" className="text-xs">
+                  {scenario.difficulty}
+                </Badge>
+              )}
+            </div>
+          </div>
 
           {/* Messages */}
-          <ScrollArea className="flex-1 h-0">
-            <div className="space-y-3">
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-[80%] p-3 rounded-lg text-sm ${
-                      message.isUser
-                        ? 'bg-accent text-accent-foreground'
-                        : 'bg-muted text-muted-foreground'
-                    }`}
-                  >
-                    {message.content}
+          <div className="flex-1 overflow-y-auto space-y-2 mb-4">
+            {messages.map((message, index) => (
+              <div key={index} className={`mb-2 p-2 rounded max-w-[80%] ${
+                message.sender === 'user' 
+                  ? 'bg-primary text-primary-foreground ml-auto' 
+                  : message.sender === 'system'
+                  ? 'bg-muted text-muted-foreground text-center text-xs'
+                  : message.sender === 'contact'
+                  ? 'bg-blue-100 text-blue-900 border border-blue-200'
+                  : message.sender === 'coach'
+                  ? 'bg-green-100 text-green-900 border border-green-200'
+                  : 'bg-muted'
+              }`}>
+                {message.sender === 'contact' && (
+                  <div className="text-xs font-medium text-blue-700 mb-1">
+                    {scenario?.interlocutor.name}
                   </div>
-                </div>
-              ))}
-            </div>
-          </ScrollArea>
-
-          <Separator />
-
-          {/* Controls */}
-          <div className="space-y-2">
-            {!isConnected ? (
-              <Button 
-                onClick={startConversation} 
-                disabled={isConnecting}
-                className="w-full bg-accent hover:bg-accent-dark"
-              >
-                {isConnecting ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-2" />
-                    Connexion au coach...
-                  </>
-                ) : (
-                  <>
-                    <Phone className="w-4 h-4 mr-2" />
-                    Démarrer la session
-                  </>
                 )}
-              </Button>
-            ) : (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <Button
-                    variant={isSpeaking ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setIsSpeaking(!isSpeaking)}
-                    className="flex-1"
-                  >
-                    {isSpeaking ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
-                    {isSpeaking ? 'Parle...' : 'Parler'}
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsMuted(!isMuted)}
-                  >
-                    {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-                  </Button>
+                {message.sender === 'coach' && (
+                  <div className="text-xs font-medium text-green-700 mb-1">
+                    Coach Commercial
+                  </div>
+                )}
+                <div className="text-sm">{message.content}</div>
+                <div className="text-xs opacity-50 mt-1">
+                  {message.timestamp.toLocaleTimeString()}
                 </div>
-                <Button
-                  variant="destructive"
-                  size="sm"
-                  onClick={endConversation}
-                  className="w-full"
+              </div>
+            ))}
+          </div>
+
+          {/* Contrôles */}
+          <div className="border-t pt-4">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                {isConnected ? (
+                  <Badge className="bg-green-100 text-green-800">
+                    {isInFeedbackMode ? "Coach connecté" : "Contact en ligne"}
+                  </Badge>
+                ) : (
+                  <Badge variant="outline">Déconnecté</Badge>
+                )}
+                {isRecording && (
+                  <Badge className="bg-red-100 text-red-800">Vous parlez</Badge>
+                )}
+                {isSpeaking && (
+                  <Badge className="bg-blue-100 text-blue-800">
+                    {isInFeedbackMode ? "Coach parle" : "Contact parle"}
+                  </Badge>
+                )}
+              </div>
+            </div>
+
+            <div className="flex gap-2">
+              {!isConnected ? (
+                <Button 
+                  onClick={startConversation} 
+                  disabled={isConnecting}
+                  className="flex-1 gap-2"
                 >
-                  <PhoneOff className="w-4 h-4 mr-2" />
-                  Terminer la session
+                  <Phone className="h-4 w-4" />
+                  {isConnecting ? "Connexion..." : "Appeler le contact"}
                 </Button>
+              ) : (
+                <>
+                  <Button 
+                    onClick={endConversation}
+                    variant="destructive"
+                    className="flex-1 gap-2"
+                  >
+                    <PhoneCall className="h-4 w-4" />
+                    Raccrocher
+                  </Button>
+                  {!isInFeedbackMode && (
+                    <Button
+                      onClick={startFeedbackMode}
+                      variant="outline"
+                      size="sm"
+                      className="text-xs"
+                    >
+                      Débrief
+                    </Button>
+                  )}
+                  <Button
+                    onClick={toggleMute}
+                    variant={isMuted ? "destructive" : "secondary"}
+                    size="sm"
+                  >
+                    {isMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                  </Button>
+                </>
+              )}
+            </div>
+
+            {error && (
+              <div className="mt-2 p-2 bg-destructive/10 border border-destructive/20 rounded text-xs text-destructive">
+                {error}
               </div>
             )}
           </div>

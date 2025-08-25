@@ -692,7 +692,7 @@ export default function ScenarioPage() {
       </div>
 
       {/* Voice Coach Widget */}
-      <EnhancedVoiceCoach scenario={scenario} isOpen={true} onToggle={() => {}} />
+      <EnhancedVoiceCoach scenario={scenario} open={true} onToggle={() => {}} />
     </div>
   );
 }
