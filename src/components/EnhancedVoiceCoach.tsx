@@ -253,7 +253,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
               <Button variant="ghost" size="sm" onClick={() => setIsMinimized(true)}>
                 <Minimize2 className="h-3 w-3" />
               </Button>
-              <Button variant="ghost" size="sm" onClick={onToggle}>
+              <Button variant="ghost" size="sm" onClick={() => onToggle?.()}>
                 ×
               </Button>
             </div>
