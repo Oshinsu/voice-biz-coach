@@ -1,16 +1,18 @@
 import { useState, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Mic, MicOff, Phone, PhoneOff, MessageSquare, BookOpen, Target, TrendingUp } from "lucide-react";
+import { Mic, Phone, PhoneOff, MessageSquare, BookOpen, Target, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import heroImage from "@/assets/coach-hero.jpg";
-import { useRealtimeSession } from "@/components/api/RealtimeSession";
+
+// Configuration API OpenAI - remplacez par votre clé API
+const OPENAI_API_KEY = "sk-your-api-key-here";
 
 export const VoiceCoach = () => {
   const { toast } = useToast();
-  const { sessionData, createSession, clearSession, isCreating } = useRealtimeSession();
   const [isConnected, setIsConnected] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentTopic, setCurrentTopic] = useState<string>("");
   const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
@@ -18,10 +20,8 @@ export const VoiceCoach = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const startConversation = useCallback(async () => {
+    setIsConnecting(true);
     try {
-      // Créer une session OpenAI Realtime
-      const session = await createSession();
-      
       // Demander l'accès au microphone
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       
@@ -44,14 +44,86 @@ export const VoiceCoach = () => {
       const dc = pc.createDataChannel("oai-events");
       dataChannelRef.current = dc;
       
+      dc.addEventListener("open", () => {
+        console.log("Canal de données ouvert");
+        // Configurer la session avec les instructions du coach
+        const sessionUpdate = {
+          type: "session.update",
+          session: {
+            instructions: `Tu es un coach commercial expert et bienveillant. Ton rôle est d'aider les utilisateurs à améliorer leurs compétences commerciales à travers des conversations vocales interactives.
+
+CONTEXTE ET PERSONNALITÉ :
+- Tu es un coach commercial expérimenté avec plus de 15 ans d'expérience
+- Tu parles français de manière naturelle et professionnelle
+- Tu es patient, encourageant et constructif dans tes retours
+- Tu utilises des exemples concrets et des situations réelles
+
+DOMAINES D'EXPERTISE :
+1. Techniques de vente et négociation
+2. Prospection et génération de leads
+3. Présentation commerciale et storytelling
+4. Gestion des objections
+5. Closing et finalisation des ventes
+6. Relation client et fidélisation
+7. Marketing commercial et personal branding
+8. Motivation et mindset commercial
+
+MÉTHODE D'ENSEIGNEMENT :
+- Pose des questions pour comprendre le niveau et les besoins
+- Propose des exercices pratiques et des jeux de rôles
+- Donne des conseils actionnables et spécifiques
+- Encourage la pratique et l'amélioration continue
+- Adapte ton approche selon le profil de l'utilisateur
+
+STRUCTURE DES CONVERSATIONS :
+1. Accueil chaleureux et identification des besoins
+2. Évaluation du niveau actuel
+3. Définition d'objectifs d'apprentissage
+4. Exercices pratiques et conseils
+5. Récapitulatif et prochaines étapes
+
+Commence toujours par te présenter brièvement et demander à l'utilisateur quel aspect commercial il souhaite travailler aujourd'hui.`,
+            voice: "sage",
+            input_audio_format: "pcm16",
+            output_audio_format: "pcm16",
+            modalities: ["text", "audio"],
+            temperature: 0.8,
+          },
+        };
+        dc.send(JSON.stringify(sessionUpdate));
+      });
+      
       dc.addEventListener("message", (e) => {
         const event = JSON.parse(e.data);
         console.log("Événement reçu:", event);
         
-        if (event.type === "response.audio.delta") {
-          setIsSpeaking(true);
-        } else if (event.type === "response.done") {
-          setIsSpeaking(false);
+        switch (event.type) {
+          case "session.created":
+            console.log("Session créée avec succès");
+            break;
+          case "session.updated":
+            console.log("Session mise à jour");
+            break;
+          case "input_audio_buffer.speech_started":
+            console.log("Détection de parole utilisateur");
+            break;
+          case "input_audio_buffer.speech_stopped":
+            console.log("Fin de parole utilisateur");
+            break;
+          case "response.audio.delta":
+            setIsSpeaking(true);
+            break;
+          case "response.done":
+            setIsSpeaking(false);
+            break;
+          case "error":
+            console.error("Erreur:", event);
+            toast({
+              title: "Erreur de session",
+              description: event.error?.message || "Une erreur est survenue",
+              variant: "destructive",
+            });
+            break;
         }
       });
 
@@ -66,11 +138,15 @@ export const VoiceCoach = () => {
           method: "POST",
           body: offer.sdp,
           headers: {
-            Authorization: `Bearer ${session.client_secret.value}`,
+            Authorization: `Bearer ${OPENAI_API_KEY}`,
             "Content-Type": "application/sdp",
           },
         }
       );
+
+      if (!response.ok) {
+        throw new Error(`Erreur HTTP ${response.status}`);
+      }
 
       const answer = {
         type: "answer" as const,
@@ -89,11 +165,13 @@ export const VoiceCoach = () => {
       console.error("Erreur lors du démarrage:", error);
       toast({
         title: "Erreur de connexion",
-        description: "Impossible de se connecter au coach vocal",
+        description: error instanceof Error ? error.message : "Impossible de se connecter au coach vocal",
         variant: "destructive",
       });
+    } finally {
+      setIsConnecting(false);
     }
-  }, [createSession, toast]);
+  }, [toast]);
 
   const endConversation = useCallback(() => {
     if (peerConnectionRef.current) {
@@ -109,7 +187,6 @@ export const VoiceCoach = () => {
       audioRef.current = null;
     }
     
-    clearSession();
     setIsConnected(false);
     setIsSpeaking(false);
     setCurrentTopic("");
@@ -118,7 +195,39 @@ export const VoiceCoach = () => {
       title: "Session terminée",
       description: "Votre session de coaching est terminée",
     });
-  }, [clearSession, toast]);
+  }, [toast]);
+
+  const selectTopic = useCallback((topic: string) => {
+    setCurrentTopic(topic);
+    if (isConnected && dataChannelRef.current) {
+      // Envoyer un message au coach sur le sujet sélectionné
+      const topicMessage = {
+        type: "conversation.item.create",
+        item: {
+          type: "message",
+          role: "user",
+          content: [
+            {
+              type: "input_text",
+              text: `Je souhaiterais travailler sur le sujet suivant : ${topic}. Peux-tu me proposer un exercice ou des conseils pratiques pour ce domaine ?`,
+            },
+          ],
+        },
+      };
+      dataChannelRef.current.send(JSON.stringify(topicMessage));
+      
+      // Déclencher une réponse
+      const responseCreate = {
+        type: "response.create",
+      };
+      dataChannelRef.current.send(JSON.stringify(responseCreate));
+      
+      toast({
+        title: `Sujet sélectionné: ${topic}`,
+        description: "Le coach va vous proposer des exercices pour ce domaine",
+      });
+    }
+  }, [isConnected, toast]);
 
   const learningTopics = [
     {
@@ -181,7 +290,7 @@ export const VoiceCoach = () => {
               )} />
               <span className="text-sm font-medium">
                 {isConnected ? "Connecté" : 
-                 isCreating ? "Connexion..." : "Déconnecté"}
+                 isConnecting ? "Connexion..." : "Déconnecté"}
               </span>
               {isSpeaking && (
                 <div className="flex space-x-1">
@@ -197,11 +306,11 @@ export const VoiceCoach = () => {
               {!isConnected ? (
                 <Button
                   onClick={startConversation}
-                  disabled={isCreating}
+                  disabled={isConnecting}
                   size="lg"
                   className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground"
                 >
-                  {isCreating ? (
+                  {isConnecting ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
                       Connexion...
@@ -242,16 +351,11 @@ export const VoiceCoach = () => {
             {learningTopics.map((topic, index) => (
               <Card 
                 key={index}
-                className="p-6 hover:shadow-lg transition-all duration-300 cursor-pointer group bg-gradient-to-br from-card to-secondary/30"
-                onClick={() => {
-                  setCurrentTopic(topic.title);
-                  if (isConnected) {
-                    toast({
-                      title: `Sujet sélectionné: ${topic.title}`,
-                      description: "Vous pouvez maintenant parler de ce sujet avec votre coach",
-                    });
-                  }
-                }}
+                className={cn(
+                  "p-6 hover:shadow-lg transition-all duration-300 cursor-pointer group bg-gradient-to-br from-card to-secondary/30",
+                  currentTopic === topic.title && "ring-2 ring-primary"
+                )}
+                onClick={() => selectTopic(topic.title)}
               >
                 <div className="flex items-start space-x-4">
                   <div className={cn(
@@ -289,6 +393,15 @@ export const VoiceCoach = () => {
             </div>
           </div>
         </Card>
+
+        {/* API Key Notice */}
+        {OPENAI_API_KEY === "sk-your-api-key-here" && (
+          <Card className="p-4 bg-warning/10 border-warning">
+            <p className="text-sm text-warning-foreground">
+              ⚠️ <strong>Configuration requise :</strong> Remplacez "sk-your-api-key-here" par votre vraie clé API OpenAI dans le code source.
+            </p>
+          </Card>
+        )}
       </div>
     </div>
   );
