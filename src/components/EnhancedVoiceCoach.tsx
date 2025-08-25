@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
-import { RealtimeVoiceCoach, SALES_COACH_PROMPT } from '@/lib/openai-realtime';
+import { RealtimeWebRTCCoach, SALES_COACH_PROMPT, handleWebRTCError } from '@/lib/openai-webrtc';
 
 interface EnhancedVoiceCoachProps {
   scenario?: any; // Accept both Scenario and EnhancedScenario
@@ -34,7 +34,7 @@ export function EnhancedVoiceCoach({ scenario, isOpen = true, onToggle }: Enhanc
   const [transcript, setTranscript] = useState("");
   const { toast } = useToast();
   
-  const voiceCoachRef = useRef<RealtimeVoiceCoach | null>(null);
+  const voiceCoachRef = useRef<RealtimeWebRTCCoach | null>(null);
 
   // Clé API OpenAI pour usage personnel
   const getApiKey = () => {
@@ -85,9 +85,20 @@ Adapte tes conseils à ce contexte spécifique et aide l'utilisateur à réussir
     setIsConnecting(true);
     
     try {
-      voiceCoachRef.current = new RealtimeVoiceCoach(apiKey);
+      voiceCoachRef.current = new RealtimeWebRTCCoach(apiKey);
       
-      // Configurer les callbacks
+      // Configurer les callbacks WebRTC
+      voiceCoachRef.current.onSessionReady = () => {
+        console.log("Session WebRTC prête");
+        setIsConnected(true);
+        setIsConnecting(false);
+        
+        toast({
+          title: "Coach vocal connecté",
+          description: "Vous pouvez maintenant parler avec votre coach commercial.",
+        });
+      };
+      
       voiceCoachRef.current.onSpeechStarted = () => {
         setIsRecording(true);
         setIsSpeaking(false);
@@ -119,29 +130,18 @@ Adapte tes conseils à ce contexte spécifique et aide l'utilisateur à réussir
       };
       
       voiceCoachRef.current.onError = (error) => {
-        console.error("Erreur coach vocal:", error);
+        console.error("Erreur coach vocal WebRTC:", error);
         toast({
           title: "Erreur du coach vocal",
-          description: "Une erreur s'est produite. Veuillez réessayer.",
+          description: handleWebRTCError(error),
           variant: "destructive",
         });
         setIsConnected(false);
         setIsConnecting(false);
       };
 
-      // Se connecter avec les instructions contextuelles
+      // Se connecter via WebRTC avec les instructions contextuelles
       await voiceCoachRef.current.connect(getContextualInstructions());
-      
-      setIsConnected(true);
-      setIsConnecting(false);
-      
-      // Démarrer l'enregistrement automatiquement
-      await voiceCoachRef.current.startRecording();
-      
-      toast({
-        title: "Coach vocal connecté",
-        description: "Vous pouvez maintenant parler avec votre coach commercial.",
-      });
       
     } catch (error) {
       console.error("Erreur connexion:", error);
@@ -174,12 +174,8 @@ Adapte tes conseils à ce contexte spécifique et aide l'utilisateur à réussir
 
   const toggleMute = () => {
     if (voiceCoachRef.current) {
-      if (isMuted) {
-        voiceCoachRef.current.startRecording();
-      } else {
-        voiceCoachRef.current.stopRecording();
-      }
-      setIsMuted(!isMuted);
+      const isMutedNow = voiceCoachRef.current.toggleMute();
+      setIsMuted(isMutedNow);
     }
   };
 
