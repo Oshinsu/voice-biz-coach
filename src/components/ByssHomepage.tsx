@@ -7,10 +7,11 @@ import { scenarios } from "@/data/scenarios";
 import { EnhancedHeader } from "./EnhancedHeader";
 import { EnhancedStats } from "./EnhancedStats";
 import { TrustElements } from "./TrustElements";
-import { EnhancedScenarios } from "./EnhancedScenarios";
+
 
 const getScenarioIcon = (scenarioId: string) => {
   const iconMap: { [key: string]: any } = {
+    "byss-vns-school": GraduationCap,
     "kpi-performance": BarChart3,
     "saas-crm": Users,
     "marketplace-b2b": TrendingUp,
@@ -223,8 +224,6 @@ export function ByssHomepage() {
         </div>
       </section>
 
-      {/* Enhanced Scenarios Section */}
-      <EnhancedScenarios />
 
       {/* Trust Elements */}
       <TrustElements />

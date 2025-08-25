@@ -65,6 +65,168 @@ export interface Scenario {
 
 export const scenarios: Scenario[] = [
   {
+    id: "byss-vns-school",
+    title: "Byss VNS pour École Commerce",
+    description: "Vendre Byss VNS à l'École Supérieure de Commerce d'Aix-en-Provence pour moderniser l'enseignement commercial",
+    company: {
+      name: "ESCAP - École Supérieure de Commerce d'Aix-en-Provence",
+      sector: "Enseignement Supérieur - Commerce",
+      size: "Institution de taille moyenne (2500 étudiants, 150 professeurs)",
+      revenue: "Budget formation annuel : 3,2M€",
+      location: "Aix-en-Provence, France",
+      description: "École de commerce reconnue fondée en 1985, spécialisée dans les formations commerciales et marketing. Réputée pour ses programmes Master Commerce et ses partenariats entreprises.",
+      painPoints: [
+        "Méthodes d'enseignement commercial traditionnelles dépassées",
+        "Manque d'engagement des étudiants en cours de vente",
+        "Difficulté à évaluer les compétences pratiques de négociation",
+        "Pression croissante pour moderniser l'approche pédagogique",
+        "Concurrence avec écoles plus digitalisées"
+      ],
+      currentSolution: "Jeux de rôles traditionnels, cas d'étude papier, simulations basiques",
+      budget: "150 000€ - 300 000€ pour solutions pédagogiques innovantes",
+      timeline: "Déploiement souhaité pour la rentrée de septembre (6 mois)"
+    },
+    interlocutor: {
+      name: "Dr. Marie Rousseau",
+      role: "Directrice Pédagogique Master Commerce et Négociation",
+      personality: "Innovatrice pragmatique, exigeante sur la qualité pédagogique, ouverte aux nouvelles technologies mais prudente sur les investissements",
+      communicationStyle: "Professionnelle et structurée, pose des questions précises, apprécie les preuves d'efficacité pédagogique",
+      decisionPower: "Forte influence - Décisionnaire pour son département avec validation Directeur Général requis pour budgets >200k€",
+      priorities: [
+        "Améliorer l'employabilité des diplômés",
+        "Moderniser les méthodes pédagogiques",
+        "Maintenir l'excellence académique de l'école",
+        "Justifier les investissements par des résultats mesurables"
+      ],
+      concerns: [
+        "Complexité technique d'adoption pour les professeurs",
+        "ROI difficile à mesurer dans l'éducation",
+        "Résistance au changement du corps professoral",
+        "Budget serré avec autres priorités d'investissement"
+      ],
+      motivations: [
+        "Être reconnue comme pionnière en innovation pédagogique",
+        "Améliorer la satisfaction et réussite étudiante",
+        "Attirer de meilleurs étudiants grâce à la modernité",
+        "Obtenir des témoignages positifs d'entreprises partenaires"
+      ],
+      experience: "15 ans dans l'enseignement supérieur, ancienne consultante en stratégie commerciale, docteure en sciences de gestion"
+    },
+    product: {
+      name: "Byss VNS - Voice Negotiation Simulator",
+      description: "Plateforme de simulation commerciale par IA conversationnelle, permettant aux étudiants de s'entraîner à la négociation avec des personas clients réalistes",
+      pricing: {
+        starter: "Licence Éducation : 25€/étudiant/an (minimum 50 étudiants)",
+        professional: "Licence Département : 18€/étudiant/an (minimum 200 étudiants) + outils pédagogiques avancés",
+        enterprise: "Licence École : 12€/étudiant/an (minimum 500 étudiants) + formation professeurs + support dédié"
+      },
+      keyFeatures: [
+        "Simulations vocales IA avec 50+ personas clients variés",
+        "Scénarios commerciaux adaptés aux secteurs d'activité",
+        "Évaluation automatique des performances de négociation",
+        "Dashboard pédagogique pour suivi des étudiants",
+        "Bibliothèque de cas d'usage business réels",
+        "Intégration LMS (Moodle, Canvas, Blackboard)",
+        "Rapports détaillés de progression individuelle",
+        "Mode coaching en temps réel pour accompagnement"
+      ],
+      competitiveAdvantages: [
+        "Seule solution IA conversationnelle dédiée à l'enseignement commercial",
+        "Adaptation française des méthodes de vente locales",
+        "Évolutivité des scenarios selon besoins pédagogiques",
+        "Engagement étudiant supérieur aux méthodes traditionnelles",
+        "Mesure objective des compétences soft skills"
+      ],
+      roi: "30% d'amélioration des résultats de négociation étudiante, 45% d'augmentation de l'engagement cours",
+      implementationTime: "6-8 semaines avec formation professeurs incluse"
+    },
+    objectives: [
+      "Démontrer l'impact pédagogique supérieur de Byss VNS vs méthodes traditionnelles",
+      "Prouver l'facilité d'adoption par les professeurs",
+      "Présenter un ROI clair en termes d'employabilité étudiante",
+      "Rassurer sur le support technique et pédagogique",
+      "Obtenir un accord pour un pilote département avant déploiement complet"
+    ],
+    salesGoal: "Contrat licence École (500+ étudiants) sur 3 ans = 180 000€ TTC",
+    expectedRevenue: "180 000€ sur 3 ans (60k€/an)",
+    swot: {
+      strengths: [
+        "Solution innovante unique sur le marché éducatif français",
+        "IA conversationnelle de pointe développée en France",
+        "Équipe fondatrice expérience EdTech + Commercial",
+        "Adaptabilité aux besoins spécifiques pédagogiques",
+        "Prix compétitif vs solutions internationales"
+      ],
+      weaknesses: [
+        "Startup jeune avec références limitées dans l'éducation",
+        "Technologie complexe nécessitant accompagnement change management",
+        "Dépendance à la qualité de connexion internet",
+        "Courbe d'apprentissage pour professeurs moins tech-savvy"
+      ],
+      opportunities: [
+        "Digitalisation accélérée de l'enseignement supérieur post-COVID",
+        "Demande croissante pour soft skills dans recrutement",
+        "Budgets européens pour transformation numérique éducation",
+        "Partenariats potentiels avec autres écoles du réseau",
+        "Expansion vers universités et écoles d'ingénieurs"
+      ],
+      threats: [
+        "Arrivée de géants tech (Microsoft, Google) sur le marché EdTech",
+        "Résistance structurelle au changement dans l'enseignement",
+        "Réductions budgets éducation en période économique difficile",
+        "Concurrence solutions gratuites ou low-cost existantes"
+      ]
+    },
+    competitorSwot: {
+      strengths: [
+        "Capsim Business Simulation : Marché établi, références internationales",
+        "Marketplace Simulations : Intégration LMS native, support multilingue",
+        "Jeux de rôles traditionnels : Pas de coût technologique, maîtrise professeurs"
+      ],
+      weaknesses: [
+        "Solutions génériques non adaptées marché français",
+        "Pas d'IA conversationnelle pour simulations vocales réalistes",
+        "Interfaces souvent datées et peu engageantes",
+        "Support technique limité en français"
+      ],
+      opportunities: [
+        "Budget éducation en croissance pour transformation digitale",
+        "Besoin établi de modernisation pédagogique"
+      ],
+      threats: [
+        "Innovation Byss VNS disruptive sur leurs modèles économiques",
+        "Adaptation possible de leurs solutions au marché français"
+      ]
+    },
+    probableObjections: [
+      "Le budget est-il justifié comparé aux méthodes actuelles gratuites ?",
+      "Nos professeurs vont-ils réussir à adopter cette technologie ?",
+      "Comment mesurer concrètement l'amélioration des résultats étudiants ?",
+      "Que se passe-t-il si la technologie dysfonctionne en plein cours ?",
+      "N'est-ce pas trop complexe pour nos étudiants moins à l'aise avec la tech ?",
+      "Avez-vous des références d'autres écoles qui utilisent déjà votre solution ?",
+      "Comment garantir la protection des données étudiantes ?",
+      "Le contrat peut-il être adapté si les résultats ne sont pas au rendez-vous ?"
+    ],
+    successCriteria: [
+      "Accord Dr. Rousseau pour présentation au Comité de Direction",
+      "Démonstration live convaincante avec professeurs témoins",
+      "Proposition pilote acceptée sur 1 classe test (50 étudiants)",
+      "Validation technique infrastructure par DSI de l'école",
+      "Négociation contrat cadre pluriannuel",
+      "Engagement formation professeurs incluse"
+    ],
+    tools: [
+      "Calculateur ROI Éducatif (employabilité, satisfaction, ranking)",
+      "Comparateur vs solutions concurrentes",
+      "Audit pédagogique méthodes actuelles",
+      "Planificateur implémentation académique",
+      "Simulateur budget départemental"
+    ],
+    difficulty: "Moyen",
+    probability: 68
+  },
+  {
     id: "kpi-performance",
     title: "Optimisation Analytics E-commerce",
     description: "Vendre une plateforme d'analytics avancée à un e-commerce en croissance",
