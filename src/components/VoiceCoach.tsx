@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import heroImage from "@/assets/coach-hero.jpg";
 
 // Configuration API OpenAI - remplacez par votre clé API
-const OPENAI_API_KEY = "sk-your-api-key-here";
+const OPENAI_API_KEY = "sk-proj-wHf8Oi7UVt3YJr23QUOzF4aWdv7Hp4C8pJu2EgS9OwF5RGt5_NB1Hs4LAFT3BlbkFJx7QHg5Fj2EtFPsHPG8NJmK";
 
 export const VoiceCoach = () => {
   const { toast } = useToast();
@@ -22,10 +22,34 @@ export const VoiceCoach = () => {
   const startConversation = useCallback(async () => {
     setIsConnecting(true);
     try {
-      // Demander l'accès au microphone
+      // Étape 1: Créer une session éphémère avec OpenAI
+      console.log("Création de la session éphémère...");
+      const sessionResponse = await fetch("https://api.openai.com/v1/realtime/sessions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${OPENAI_API_KEY}`,
+          "Content-Type": "application/json",
+          "OpenAI-Beta": "realtime=v1"
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-realtime-preview-2024-12-17",
+          voice: "sage"
+        })
+      });
+
+      if (!sessionResponse.ok) {
+        const errorText = await sessionResponse.text();
+        console.error("Erreur session:", sessionResponse.status, errorText);
+        throw new Error(`Erreur lors de la création de la session: ${sessionResponse.status} - ${errorText}`);
+      }
+
+      const sessionData = await sessionResponse.json();
+      console.log("Session créée:", sessionData);
+
+      // Étape 2: Demander l'accès au microphone
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       
-      // Créer une connexion WebRTC
+      // Étape 3: Créer une connexion WebRTC
       const pc = new RTCPeerConnection();
       peerConnectionRef.current = pc;
 
@@ -131,15 +155,16 @@ Commence toujours par te présenter brièvement et demander à l'utilisateur que
       const offer = await pc.createOffer();
       await pc.setLocalDescription(offer);
 
-      // Envoyer l'offre à OpenAI
+      // Étape 4: Envoyer l'offre SDP à OpenAI avec la session éphémère
       const response = await fetch(
         `https://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17`,
         {
           method: "POST",
           body: offer.sdp,
           headers: {
-            Authorization: `Bearer ${OPENAI_API_KEY}`,
+            "Authorization": `Bearer ${sessionData.client_secret.value}`,
             "Content-Type": "application/sdp",
+            "OpenAI-Beta": "realtime=v1"
           },
         }
       );
@@ -395,13 +420,6 @@ Commence toujours par te présenter brièvement et demander à l'utilisateur que
         </Card>
 
         {/* API Key Notice */}
-        {OPENAI_API_KEY === "sk-your-api-key-here" && (
-          <Card className="p-4 bg-warning/10 border-warning">
-            <p className="text-sm text-warning-foreground">
-              ⚠️ <strong>Configuration requise :</strong> Remplacez "sk-your-api-key-here" par votre vraie clé API OpenAI dans le code source.
-            </p>
-          </Card>
-        )}
       </div>
     </div>
   );
