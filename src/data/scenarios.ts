@@ -76,50 +76,135 @@ export const scenarios: Scenario[] = [
       size: "50 employés",
       revenue: "8M€/an",
       location: "Lyon, France",
-      description: "Boutique en ligne spécialisée dans la mode éthique et durable",
-      painPoints: ["Difficulté à tracker le ROI des campagnes", "Perte de clients sans comprendre pourquoi"],
-      currentSolution: "Google Analytics + tableurs Excel",
-      budget: "15-25k€/an",
-      timeline: "Q1 2024"
+      description: "E-commerce spécialisé dans la mode éthique et durable, fondé en 2018 par Clara Dubois, ancienne acheteuse chez Zara. Pionnier français du commerce équitable en ligne avec 12 marques partenaires certifiées GOTS. Croissance de 45% en 2023, présence en France, Belgique et Suisse. Stack technique : Shopify Plus, Klaviyo pour l'email, Meta Ads et Google Ads. Équipe de 50 personnes répartie entre Lyon (siège), entrepôt Rillieux-la-Pape et télétravail. Ambition : devenir leader européen de la mode éthique d'ici 2027.",
+      painPoints: [
+        "Attribution marketing fragmentée : impossible de savoir si une vente vient de Google, Facebook, email ou influenceurs", 
+        "Taux de churn de 23% sans comprendre les signaux précurseurs de départ",
+        "Budget publicitaire de 80k€/mois mal optimisé faute de visibilité cross-canal",
+        "Équipe marketing frustrée de passer 40% de son temps sur des rapports manuels",
+        "Retours produits de 12% avec peu d'insights sur les raisons",
+        "Saisonnalité imprévisible malgré 5 ans d'historique"
+      ],
+      currentSolution: "Google Analytics 4 + Google Ads + Facebook Business Manager + Klaviyo + 15 fichiers Excel consolidés manuellement chaque semaine par Sophie Martin",
+      budget: "15-25k€/an pour analytics (budget total marketing 1M€)",
+      timeline: "Q1 2024 - urgence car lancement collection printemps"
     },
     interlocutor: {
       name: "Sophie Martin",
-      role: "Directrice Marketing",
-      personality: "Analytique et perfectionniste",
-      communicationStyle: "Directe, aime les chiffres concrets",
-      decisionPower: "Décisionnaire avec validation CEO",
-      priorities: ["ROI mesurable", "Facilité d'usage"],
-      concerns: ["Coût", "Complexité"],
-      motivations: ["Performance", "Croissance"],
-      experience: "5 ans en marketing digital"
+      role: "Directrice Marketing & Analytics",
+      personality: "Perfectionniste data-driven, impatiente face à l'inefficacité, adore les dashboards et métriques. Workaholic assumée qui vérifie ses KPIs le dimanche soir. Frustrée de ne pas avoir les bonnes données pour prendre des décisions rapides.",
+      communicationStyle: "Directe et chiffrée. Coupe court aux discussions sans données. Pose 3 questions précises par minute en rendez-vous. Adore les graphiques et déteste les présentations PowerPoint fleuves. Prend des notes sur son iPad avec Apple Pencil.",
+      decisionPower: "Décisionnaire jusqu'à 30k€, validation CEO Clara Dubois au-delà. Influence forte sur la roadmap tech et budgets marketing.",
+      priorities: [
+        "Attribution précise du ROI par canal marketing", 
+        "Réduction du CAC (actuellement 47€, objectif 35€)",
+        "Prédiction du churn client pour actions préventives",
+        "Automatisation des reportings hebdomadaires",
+        "Optimisation des budgets publicitaires en temps réel"
+      ],
+      concerns: [
+        "Temps d'implémentation : ne peut pas se permettre 2 mois sans data",
+        "Formation équipe : Jules (traffic manager) et Amélie (CRM) peu techniques",
+        "Intégration avec Shopify Plus sans casser les conversions actuelles", 
+        "Fiabilité des prédictions IA : a été échaudée par un outil précédent"
+      ],
+      motivations: [
+        "Reconnaissance professionnelle : veut être promue VP Growth en 2024",
+        "Performance financière : bonus indexé sur l'amélioration du ROAS",
+        "Passion data : ancienne consultante chez Converteo, fascinée par les corrélations"
+      ],
+      experience: "8 ans en marketing digital : 3 ans chez Converteo (conseil), 2 ans chez Spartoo (e-commerce), 3 ans chez ModaStyle. MBA HEC spécialisation Marketing Quantitatif. Certification Google Analytics, certifiée Facebook Blueprint."
     },
     product: {
       name: "DataTrack Pro",
-      description: "Plateforme analytics tout-en-un pour e-commerce avec IA prédictive",
+      description: "Plateforme d'attribution marketing et analytics prédictive spécialement conçue pour les e-commerces omni-canal. IA propriétaire entraînée sur 500M+ de sessions e-commerce. Connecteurs natifs avec 200+ outils marketing. Déploiement sans code en 24h.",
       pricing: {
-        starter: "299€/mois",
-        professional: "599€/mois", 
-        enterprise: "1200€/mois"
+        starter: "299€/mois (jusqu'à 100k sessions/mois, 5 canaux)",
+        professional: "599€/mois (jusqu'à 500k sessions/mois, canaux illimités, IA prédictive)", 
+        enterprise: "1200€/mois (sessions illimitées, white-label, API dédiée, CSM)"
       },
-      keyFeatures: ["Tracking multi-canal unifié", "Prédictions IA de churn"],
-      competitiveAdvantages: ["Setup en 24h vs 2 semaines concurrence", "IA propriétaire 30% plus précise"],
-      roi: "300% ROI en 6 mois",
-      implementationTime: "2 semaines"
+      keyFeatures: [
+        "Attribution multi-touch avec modèles Shapley et Data-Driven",
+        "Prédiction de churn avec 89% de précision (30j avant)",
+        "Optimisation budgets publicitaires en temps réel via algorithmes génétiques",
+        "Segmentation automatique de la clientèle (RFM enrichi)",
+        "Calcul de LTV prédictive par cohorte et segment",
+        "Alertes intelligentes sur les anomalies de performance",
+        "Tableau de bord temps réel avec 50+ métriques e-commerce",
+        "Recommandations IA d'actions marketing (quotidiennes)",
+        "Tests A/B automatisés sur les campagnes",
+        "Intégration native Shopify, Klaviyo, Meta, Google, TikTok"
+      ],
+      competitiveAdvantages: [
+        "Setup sans code en 24h vs 2-6 semaines pour Northbeam/Triple Whale",
+        "IA propriétaire 30% plus précise que Google Analytics 4 sur l'attribution",
+        "Support français avec CSM dédié vs support international",
+        "Coût 60% inférieur à Northbeam pour fonctionnalités équivalentes",
+        "Spécialisation mode/lifestyle : connaît les saisonnalités secteur"
+      ],
+      roi: "Clients moyens : +47% ROAS, -23% CAC, +12% LTV en 6 mois. Retour investissement 312% première année.",
+      implementationTime: "24h setup + 1 semaine calibrage IA + formation équipe"
     },
     objectives: ["Démontrer la valeur du tracking unifié", "Quantifier les pertes actuelles"],
     salesGoal: "Contrat Pro à 599€/mois (12 mois)",
     expectedRevenue: "7,188€",
     swot: {
-      strengths: ["IA propriétaire", "Setup rapide"],
-      weaknesses: ["Prix premium", "Jeune entreprise"],
-      opportunities: ["Marché en croissance", "Besoin urgent client"],
-      threats: ["Concurrents établis", "Solutions open-source"]
+      strengths: [
+        "IA propriétaire entraînée sur 500M+ sessions e-commerce (impact: 9/10, probabilité: 9/10)",
+        "Setup en 24h vs 2-6 semaines concurrence (impact: 8/10, probabilité: 10/10)",
+        "Spécialisation e-commerce mode/lifestyle avec use cases sectoriels (impact: 7/10, probabilité: 8/10)",
+        "Support client français avec CSM dédiés (impact: 6/10, probabilité: 9/10)",
+        "Prix 60% inférieur à Northbeam/Triple Whale (impact: 8/10, probabilité: 10/10)",
+        "Connecteurs natifs avec 200+ outils marketing sans développement (impact: 7/10, probabilité: 9/10)",
+        "ROI prouvé : +47% ROAS moyen chez clients similaires (impact: 9/10, probabilité: 8/10)"
+      ],
+      weaknesses: [
+        "Startup de 2 ans vs acteurs établis depuis 10+ ans (impact: 6/10, probabilité: 8/10)",
+        "Prix premium vs Google Analytics gratuit (impact: 7/10, probabilité: 9/10)",
+        "Équipe technique de 12 personnes vs 200+ chez Salesforce (impact: 5/10, probabilité: 7/10)",
+        "Pas encore de certification ISO 27001 (impact: 4/10, probabilité: 6/10)",
+        "Fonctionnalités avancées encore en développement (impact: 5/10, probabilité: 6/10)"
+      ],
+      opportunities: [
+        "Marché attribution marketing croît de 23% par an (impact: 9/10, probabilité: 9/10)",
+        "iOS 14.5 et cookieless obligent à repenser l'attribution (impact: 8/10, probabilité: 10/10)",
+        "ModaStyle a un besoin urgent Q1 2024 (impact: 9/10, probabilité: 8/10)",
+        "Frustration client avec setup complexe des concurrents (impact: 7/10, probabilité: 8/10)",
+        "Budget marketing 1M€ permet investissement analytics (impact: 8/10, probabilité: 7/10)"
+      ],
+      threats: [
+        "Northbeam, Triple Whale avec 5-10M$ de funding (impact: 7/10, probabilité: 8/10)",
+        "Google Analytics 4 s'améliore constamment (impact: 6/10, probabilité: 9/10)",
+        "Solutions open-source comme PostHog gagnent en maturité (impact: 5/10, probabilité: 6/10)",
+        "Recession économique réduit budgets outils marketing (impact: 8/10, probabilité: 4/10)",
+        "Réglementation RGPD/DMA peut limiter tracking (impact: 6/10, probabilité: 7/10)"
+      ]
     },
     competitorSwot: {
-      strengths: ["Outils gratuits existants", "Habitudes établies"],
-      weaknesses: ["Données silos", "Pas de prédictif"],
-      opportunities: ["Coût zéro", "Connaissance interne"],
-      threats: ["Manque de visibilité", "Erreurs décisions"]
+      strengths: [
+        "Google Analytics 4 gratuit et universellement connu (impact: 8/10, probabilité: 10/10)",
+        "Équipe maîtrise déjà Excel et process actuels (impact: 6/10, probabilité: 10/10)",
+        "Coût total actuel proche de zéro (impact: 7/10, probabilité: 10/10)",
+        "Données historiques de 5 ans dans GA4 (impact: 6/10, probabilité: 9/10)"
+      ],
+      weaknesses: [
+        "Attribution multi-touch impossible dans GA4 (impact: 9/10, probabilité: 10/10)",
+        "Aucune prédiction de churn ou LTV (impact: 8/10, probabilité: 10/10)",
+        "Reporting manuel chronophage : 2j/semaine perdus (impact: 7/10, probabilité: 10/10)",
+        "Données en silos : impossible de croiser Facebook + Google + Klaviyo (impact: 8/10, probabilité: 10/10)",
+        "Optimisation budgets publicitaires reactive, pas proactive (impact: 7/10, probabilité: 9/10)"
+      ],
+      opportunities: [
+        "Économies immédiates sans nouvel outil (impact: 6/10, probabilité: 10/10)",
+        "Pas de formation équipe requise (impact: 4/10, probabilité: 10/10)",
+        "Contrôle total des données (impact: 5/10, probabilité: 8/10)"
+      ],
+      threats: [
+        "Concurrents ModaStyle utilisent des outils plus avancés (impact: 8/10, probabilité: 7/10)",
+        "Mauvaises décisions marketing faute de data fiable (impact: 9/10, probabilité: 8/10)",
+        "Perte de 23% des clients sans signaux d'alerte (impact: 9/10, probabilité: 9/10)",
+        "ROAS stagnant alors que budgets publicitaires augmentent (impact: 8/10, probabilité: 8/10)"
+      ]
     },
     probableObjections: ["C'est trop cher pour nous", "Google Analytics suffit"],
     successCriteria: ["Démonstration des pertes actuelles", "ROI chiffré présenté"],
@@ -137,50 +222,135 @@ export const scenarios: Scenario[] = [
       size: "25 employés",
       revenue: "3M€/an",
       location: "Lille, France",
-      description: "Société de services informatiques spécialisée dans l'accompagnement PME",
-      painPoints: ["Gestion commerciale dispersée", "Suivi client inefficace", "Reporting manuel chronophage"],
-      currentSolution: "Excel + emails",
-      budget: "5-10k€/an",
-      timeline: "Q2 2024"
+      description: "ESN spécialisée dans l'accompagnement digital des PME depuis 2015. Fondée par Marc Dubois et Thomas Leroy, deux anciens consultants d'Accenture. Expertise : migration cloud, cybersécurité, digitalisation processus métier. Clients typiques : PME 50-200 salariés dans l'industrie et services. Croissance 25% par an depuis 3 ans. Équipe : 8 développeurs, 4 consultants fonctionnels, 6 chefs de projet, 4 commerciaux, 3 support. Certifications Microsoft Gold Partner, AWS Select Partner. Ambition : atteindre 5M€ CA en 2025 et ouvrir antenne Bruxelles.",
+      painPoints: [
+        "Leads dispersés entre 4 commerciaux sans visibilité centralisée : perte d'opportunités par doublons",
+        "Suivi client post-projet inexistant : taux de renouvellement de seulement 60% vs 85% marché",
+        "Reporting commercial manuel : Marc passe 1 jour/semaine à consolider Excel de chaque commercial",
+        "Pipeline prévisionnel impossible : difficile de prévoir trésorerie et ressources",
+        "Relances prospects incohérentes : chaque commercial a sa méthode, pas de standardisation",
+        "Historique client perdu : quand un commercial part, toute la relation client s'évapore",
+        "Facturation retardée faute de visibilité sur l'avancement projets"
+      ],
+      currentSolution: "4 fichiers Excel distincts (un par commercial) + Outlook pour emails + OneNote pour notes clients + Teams pour communication interne",
+      budget: "5-10k€/an (représente 0,2% du CA mais Marc prêt à investir pour structurer croissance)",
+      timeline: "Q2 2024 - urgence car recrutement 3 nouveaux commerciaux prévu"
     },
     interlocutor: {
       name: "Marc Dubois",
-      role: "Directeur Commercial",
-      personality: "Pragmatique et orienté résultats",
-      communicationStyle: "Concret, apprécie la simplicité",
-      decisionPower: "Décisionnaire final",
-      priorities: ["Simplicité d'usage", "ROI rapide"],
-      concerns: ["Formation équipe", "Migration données"],
-      motivations: ["Efficacité", "Croissance chiffre d'affaires"],
-      experience: "8 ans en direction commerciale"
+      role: "Co-fondateur & Directeur Commercial",
+      personality: "Entrepreneur pragmatique, ancien consultant habitué aux méthodes structurées mais qui privilégie l'efficacité à la sophistication. Impatient face aux outils complexes. Leader bienveillant mais exigeant sur les résultats. Adore les démonstrations concrètes plutôt que les discours théoriques.",
+      communicationStyle: "Direct et terre-à-terre. Aime les exemples concrets et les chiffres simples. Coupe court aux présentations trop techniques. Préfère les réunions de 30min max. Teste immédiatement ce qu'on lui montre. Pose des questions pratiques du type 'combien de clics pour faire ça ?'",
+      decisionPower: "Décisionnaire final jusqu'à 15k€/an, co-décision avec Thomas Leroy (CTO) au-delà. Influence forte sur tous les choix outils et process commerciaux.",
+      priorities: [
+        "Simplicité d'adoption par équipe commerciale (âge moyen 28 ans, niveau tech variable)",
+        "ROI visible sous 3 mois : gain temps ou amélioration conversion",
+        "Centralisation données clients sans perdre informations existantes", 
+        "Standardisation process commercial pour faciliter onboarding nouveaux",
+        "Visibilité pipeline pour anticiper besoins en recrutement"
+      ],
+      concerns: [
+        "Résistance équipe aux changements : dernière tentative CRM (Zoho) abandonnée en 2022",
+        "Temps de formation : équipe commerciale sur le terrain 80% du temps",
+        "Migration données Excel sans perte : 3 ans d'historique client critique",
+        "Coût caché : méfiant après expérience coûteuse avec éditeur qui multipliait les modules"
+      ],
+      motivations: [
+        "Ambition croissance : passer de 4 à 7 commerciaux nécessite structuration",
+        "Reconnaissance professionnelle : être l'ESN la mieux organisée de Lille",
+        "Performance financière : améliorer marge en optimisant temps commercial"
+      ],
+      experience: "12 ans total : 4 ans consultant senior chez Accenture (finance/industrie), 8 ans entrepreneur (3 ans création TechServices, 5 ans développement). Formation : Master Management Lille, certifié PMP. Connaît bien les enjeux tech mais privilégie business value."
     },
     product: {
       name: "SalesFlow CRM",
-      description: "CRM tout-en-un simple et puissant pour PME",
+      description: "CRM nouvelle génération spécialement conçu pour les PME de services avec workflows automatisés et interface mobile-first. Développé par une équipe française ex-Salesforce. +2000 PME clientes, note 4.8/5 sur Capterra.",
       pricing: {
-        starter: "29€/mois/utilisateur",
-        professional: "49€/mois/utilisateur",
-        enterprise: "89€/mois/utilisateur"
+        starter: "29€/mois/utilisateur (pipeline + contacts, 1000 contacts max)",
+        professional: "49€/mois/utilisateur (automation + reporting, contacts illimités, mobile)",
+        enterprise: "89€/mois/utilisateur (API + intégrations avancées + support prioritaire)"
       },
-      keyFeatures: ["Pipeline visuel", "Automation marketing", "Reporting temps réel"],
-      competitiveAdvantages: ["Interface intuitive", "Migration assistée gratuite"],
-      roi: "200% ROI en 3 mois",
-      implementationTime: "1 semaine"
+      keyFeatures: [
+        "Pipeline visuel drag & drop inspiré de Trello",
+        "Mobile-first : 90% des actions faisables depuis smartphone",
+        "Automation marketing : sequences emails, relances automatiques, scoring leads",
+        "Reporting temps réel avec 25+ métriques commerciales et forecasting",
+        "Intégration native Office 365, Google Workspace, comptabilité (Sage, Cegid)",
+        "Import automatique emails et calendrier sans configuration",
+        "Templates sectoriels pré-configurés pour ESN/conseil",
+        "Notifications intelligentes : alertes opportunités chaudes, relances oubliées",
+        "Tableau de bord manager : performance équipe, répartition prospects",
+        "Gestion devis/factures intégrée avec signature électronique"
+      ],
+      competitiveAdvantages: [
+        "Interface 3x plus simple que Salesforce, formation 2h vs 2 jours",
+        "Migration assistée gratuite avec préservation historique Excel",
+        "Support téléphonique français (Nantes) vs chatbot international",
+        "Prix 40% inférieur à HubSpot pour fonctionnalités équivalentes",
+        "Spécialisation PME services : templates et workflows sectoriels"
+      ],
+      roi: "Clients moyens : +35% taux conversion, -50% temps admin commercial, +25% CA/commercial en 6 mois. ROI 280% première année.",
+      implementationTime: "3 jours configuration + 1 semaine formation équipe + migration données"
     },
     objectives: ["Démontrer la simplicité d'usage", "Calculer le gain de productivité"],
     salesGoal: "Contrat Pro pour 10 utilisateurs (12 mois)",
     expectedRevenue: "5,880€",
     swot: {
-      strengths: ["Interface simple", "Support français"],
-      weaknesses: ["Fonctionnalités limitées", "Jeune sur le marché"],
-      opportunities: ["Marché PME en croissance", "Digitalisation urgente"],
-      threats: ["Concurrents établis", "Solutions gratuites"]
+      strengths: [
+        "Interface ultra-intuitive : adoption 90% vs 60% marché (impact: 8/10, probabilité: 9/10)",
+        "Support français avec hotline directe (impact: 7/10, probabilité: 10/10)",
+        "Prix 40% inférieur à HubSpot/Salesforce (impact: 8/10, probabilité: 10/10)",
+        "Migration gratuite avec conservation historique (impact: 9/10, probabilité: 10/10)",
+        "Spécialisation PME services avec templates sectoriels (impact: 7/10, probabilité: 8/10)",
+        "Mobile-first : 90% fonctionnalités disponibles sur smartphone (impact: 6/10, probabilité: 9/10)",
+        "ROI prouvé : +35% taux conversion moyen clients (impact: 9/10, probabilité: 8/10)"
+      ],
+      weaknesses: [
+        "Jeune société (5 ans) vs Salesforce/Microsoft établis (impact: 5/10, probabilité: 7/10)",
+        "Fonctionnalités enterprise limitées vs solutions haut de gamme (impact: 4/10, probabilité: 6/10)",
+        "Équipe R&D de 15 personnes vs 1000+ chez Salesforce (impact: 4/10, probabilité: 7/10)",
+        "Pas encore de certifications sectorielles (ISO 27001 en cours) (impact: 3/10, probabilité: 5/10)"
+      ],
+      opportunities: [
+        "Marché CRM PME croît de 15% par an en France (impact: 8/10, probabilité: 9/10)",
+        "Post-COVID accélère digitalisation commerciale (impact: 7/10, probabilité: 8/10)",
+        "TechServices prévoit croissance : besoin urgent structuration (impact: 9/10, probabilité: 8/10)",
+        "Frustration avec solutions complexes ouvre marché simplicité (impact: 7/10, probabilité: 7/10)",
+        "Télétravail nécessite outils collaboratifs mobiles (impact: 6/10, probabilité: 9/10)"
+      ],
+      threats: [
+        "Microsoft/Google offrent CRM dans leurs suites Office (impact: 6/10, probabilité: 8/10)",
+        "HubSpot améliore son offering PME (impact: 5/10, probabilité: 7/10)",
+        "Solutions open-source comme SuiteCRM gagnent maturité (impact: 4/10, probabilité: 6/10)",
+        "Récession économique réduit budgets digitalisation (impact: 7/10, probabilité: 3/10)"
+      ]
     },
     competitorSwot: {
-      strengths: ["Outils Excel familiers", "Coût zéro actuel"],
-      weaknesses: ["Pas de centralisation", "Erreurs humaines"],
-      opportunities: ["Connaissance interne", "Pas de formation"],
-      threats: ["Perte d'opportunités", "Manque de visibilité"]
+      strengths: [
+        "Excel maîtrisé par 100% équipe commerciale (impact: 6/10, probabilité: 10/10)",
+        "Coût zéro et contrôle total des données (impact: 7/10, probabilité: 10/10)",
+        "Flexibilité totale : chacun adapte sa méthode (impact: 5/10, probabilité: 9/10)",
+        "Pas de dépendance externe ou de formation requise (impact: 5/10, probabilité: 10/10)"
+      ],
+      weaknesses: [
+        "Aucune centralisation : 4 sources de vérité différentes (impact: 9/10, probabilité: 10/10)",
+        "Pas de suivi automatique des relances (impact: 7/10, probabilité: 10/10)",
+        "Reporting consolidé prend 8h/semaine à Marc (impact: 6/10, probabilité: 10/10)",
+        "Perte historique client quand commercial part (impact: 8/10, probabilité: 8/10)",
+        "Impossible de forecaster pipeline de manière fiable (impact: 8/10, probabilité: 9/10)",
+        "Erreurs de saisie et doublons fréquents (impact: 6/10, probabilité: 8/10)"
+      ],
+      opportunities: [
+        "Économies immédiates sans investissement (impact: 6/10, probabilité: 10/10)",
+        "Chaque commercial garde ses habitudes (impact: 4/10, probabilité: 9/10)",
+        "Pas de risque technique ou de panne (impact: 3/10, probabilité: 8/10)"
+      ],
+      threats: [
+        "Concurrents ESN plus organisés gagnent appels d'offres (impact: 8/10, probabilité: 7/10)",
+        "Croissance impossible à gérer sans structuration (impact: 9/10, probabilité: 8/10)",
+        "Turnover commercial fait perdre relations clients (impact: 8/10, probabilité: 6/10)",
+        "Manque de visibilité nuit à la trésorerie prévisionnelle (impact: 7/10, probabilité: 9/10)"
+      ]
     },
     probableObjections: ["On s'en sort bien avec Excel", "C'est compliqué à mettre en place"],
     successCriteria: ["Démonstration pipeline visuel", "Calcul gain productivité"],
@@ -198,22 +368,46 @@ export const scenarios: Scenario[] = [
       size: "150 employés",
       revenue: "25M€/an",
       location: "Saint-Étienne, France",
-      description: "Fabricant de pièces métalliques pour l'automobile et l'aéronautique",
-      painPoints: ["Approvisionnement complexe", "Négociations longues", "Manque de transparence fournisseurs"],
-      currentSolution: "Achats traditionnels via commercial",
-      budget: "50-100k€/an",
-      timeline: "Q3-Q4 2024"
+      description: "Fabricant de pièces métalliques de précision fondé en 1987 par la famille Moreau. Leader régional usinage/découpe laser pour Renault, PSA, Safran, Thales. Certification ISO 9001, TS 16949 automobile, EN 9100 aéronautique. 3 sites : Saint-Étienne (siège + R&D), Firminy (production série), Roanne (prototypage). 150 employés : 80 production, 25 bureau d'études, 20 qualité/méthodes, 15 support, 10 commercial. CA stable malgré crise auto. Enjeu : diversification vers médical et énergie pour réduire dépendance automobile.",
+      painPoints: [
+        "Approvisionnement de 1200+ références auprès de 80 fournisseurs sans visibilité globale",
+        "Négociations manuelles chronophages : 6 semaines moyenne pour nouvelle référence",
+        "Manque transparence prix marché : découvre tarifs plus bas chez concurrents a posteriori",
+        "Ruptures stock imprévisibles : 15% retards livraison clients par défaut fournisseur",
+        "Process achats non digitalisé : catalogues papier, bons de commande fax",
+        "Audit fournisseurs insuffisant : 2 incidents qualité coûteux en 2023",
+        "Pas de sourcing alternatif systématique sur pièces critiques"
+      ],
+      currentSolution: "ERP Sage X3 + Excel pour comparatifs + téléphone/email fournisseurs + catalogues papier + réseau relationnel Catherine",
+      budget: "50-100k€/an (0,3% CA mais direction pousse économies achats post-crise)",
+      timeline: "Q3-Q4 2024 - budget voté, pression actionnaires familiaux pour optimiser coûts"
     },
     interlocutor: {
       name: "Catherine Moreau",
-      role: "Directrice Achats",
-      personality: "Méticuleuse et conservatrice",
-      communicationStyle: "Formelle, aime les preuves détaillées",
-      decisionPower: "Influence forte, validation Direction Générale",
-      priorities: ["Réduction coûts", "Sécurité approvisionnement"],
-      concerns: ["Fiabilité plateforme", "Résistance équipes"],
-      motivations: ["Optimisation", "Reconnaissance professionnelle"],
-      experience: "15 ans en achats industriels"
+      role: "Directrice Achats & Supply Chain",
+      personality: "Perfectionniste méthodique, fille du fondateur habituée aux process rigoureux. Conservatrice par nature mais consciente des enjeux de modernisation. Très respectée en interne pour son expertise technique. Redoute les changements brusques mais ouverte si ROI démontré.",
+      communicationStyle: "Formelle et structurée. Aime les présentations détaillées avec chiffres et références. Pose des questions techniques précises. Vérifie toujours les sources. Préfère les réunions en présentiel avec supports papier. Méfiance initiale puis confiance durable.",
+      decisionPower: "Influence très forte auprès de son frère Jean-Marc (PDG). Décisionnaire jusqu'à 75k€, validation CA au-delà. Son avis technique fait autorité en interne.",
+      priorities: [
+        "Réduction coûts achats de 8% demandée par actionnaires familiaux",
+        "Sécurisation approvisionnement pièces critiques (zéro rupture client)",
+        "Diversification sourcing pour réduire dépendance fournisseurs locaux",
+        "Amélioration délais négociation : objectif 3 semaines vs 6 actuelles",
+        "Traçabilité complète pour audits clients aéronautique"
+      ],
+      concerns: [
+        "Fiabilité plateforme : ne peut pas se permettre bug sur commandes critiques",
+        "Résistance équipe achats (moyenne d'âge 48 ans, peu digitalisée)",
+        "Dépendance technologique : peur de perdre autonomie et relations fournisseurs",
+        "Sécurité données : plans industriels et prix négociés confidentiels",
+        "Formation équipe : 6 acheteurs avec niveaux informatiques hétérogènes"
+      ],
+      motivations: [
+        "Reconnaissance professionnelle : prouver la valeur des achats dans la famille",
+        "Performance financière : bonus indexé sur économies réalisées",
+        "Modernisation : ne pas être en retard vs concurrents qui digitalisent"
+      ],
+      experience: "18 ans total : formation ingénieur EMSE Saint-Étienne, 3 ans acheteur chez Michelin, 15 ans MétalPro (évolution interne). Spécialiste métallurgie, certification achats CDAF. Connaissance approfondie supply chain automobile/aéro."
     },
     product: {
       name: "IndustryConnect",
