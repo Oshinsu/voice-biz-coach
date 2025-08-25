@@ -20,6 +20,7 @@ export function EnhancedHeader() {
 
   const navigation = [
     { name: "Accueil", href: "/", current: location.pathname === "/" },
+    { name: "Scénarios", href: "/scenarios", current: location.pathname === "/scenarios" },
     { name: "Services", href: "/services", current: location.pathname === "/services" },
     { name: "Qui sommes-nous", href: "/about", current: location.pathname === "/about" },
     { name: "Contact", href: "/contact", current: location.pathname === "/contact" }

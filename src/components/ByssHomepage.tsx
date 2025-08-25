@@ -1,4 +1,4 @@
-import { ArrowRight, Brain, TrendingUp, Users, Zap, CheckCircle, Star, Mic, BarChart3, Shield, GraduationCap } from "lucide-react";
+import { ArrowRight, Brain, TrendingUp, Users, Zap, CheckCircle, Star, Mic, BarChart3, Shield, GraduationCap, Building, Target } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -224,6 +224,108 @@ export function ByssHomepage() {
         </div>
       </section>
 
+
+      {/* Scenarios Section */}
+      <section className="py-20 px-6 bg-gradient-to-br from-background via-background/95 to-accent/5">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge className="mb-4 bg-accent/10 text-accent border-accent/20 animate-bounce-gentle">
+              Scénarios d'entraînement
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6 animate-fade-in">
+              Maîtrisez tous les{" "}
+              <span className="bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent">
+                contextes commerciaux
+              </span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed animate-slide-up">
+              Découvrez nos scénarios de vente réalistes conçus pour développer vos compétences 
+              dans différents secteurs et situations commerciales.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
+            {scenarios.slice(0, 6).map((scenario, index) => (
+              <Card 
+                key={scenario.id} 
+                className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-gradient-card border-0"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-foreground group-hover:text-accent transition-colors line-clamp-2">
+                      {scenario.title}
+                    </h3>
+                    <Badge 
+                      className={`ml-2 text-xs ${
+                        scenario.difficulty === 'Facile' ? 'bg-green-100 text-green-800 border-green-200' :
+                        scenario.difficulty === 'Moyen' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
+                        'bg-red-100 text-red-800 border-red-200'
+                      }`}
+                    >
+                      {scenario.difficulty}
+                    </Badge>
+                  </div>
+                  
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+                    {scenario.description}
+                  </p>
+                  
+                  <div className="space-y-2 mb-4">
+                    <div className="flex items-center gap-2">
+                      <Building className="h-3 w-3 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground line-clamp-1">
+                        {scenario.company.name}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Target className="h-3 w-3 text-muted-foreground" />
+                      <span className="text-xs text-muted-foreground">
+                        {scenario.expectedRevenue}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center justify-between mb-4 p-2 bg-background/50 rounded">
+                    <div className="text-center">
+                      <div className="text-sm font-bold text-accent">{scenario.probability}%</div>
+                      <div className="text-xs text-muted-foreground">Succès</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-sm font-bold text-foreground">{scenario.objectives.length}</div>
+                      <div className="text-xs text-muted-foreground">Objectifs</div>
+                    </div>
+                  </div>
+                  
+                  <Button 
+                    className="w-full bg-gradient-cta hover:shadow-lg hover:shadow-accent/30 text-accent-foreground transition-all duration-300 hover:scale-105"
+                    asChild
+                  >
+                    <Link to={`/scenario/${scenario.id}`}>
+                      Commencer
+                      <ArrowRight className="ml-1 h-3 w-3" />
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="border-accent/30 hover:bg-accent/10 hover:border-accent text-accent hover:text-accent transition-all duration-300"
+              asChild
+            >
+              <Link to="/scenarios">
+                Voir tous les scénarios
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
 
       {/* Trust Elements */}
       <TrustElements />
