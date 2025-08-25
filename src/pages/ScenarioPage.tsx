@@ -13,14 +13,14 @@ import { useEffect } from "react";
 export default function ScenarioPage() {
   const { id } = useParams();
   const scenario = id ? getScenarioById(id) : null;
-  const { setSelectedScenario, setMode } = useSalesStore();
+  const { setScenario, setMode } = useSalesStore();
 
   useEffect(() => {
     if (scenario) {
-      setSelectedScenario(scenario);
+      setScenario(scenario);
       setMode('roleplay');
     }
-  }, [scenario, setSelectedScenario, setMode]);
+  }, [scenario, setScenario, setMode]);
 
   if (!scenario) {
     return <Navigate to="/" replace />;
