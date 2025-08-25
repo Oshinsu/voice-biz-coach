@@ -28,42 +28,8 @@ export function TrustElements() {
   return (
     <section className="py-20 px-6 bg-secondary/20">
       <div className="max-w-7xl mx-auto">
-        {/* Partner Schools */}
-        <div className="text-center mb-16">
-          <Badge className="mb-4 bg-accent/10 text-accent border-accent/20">
-            Écoles partenaires
-          </Badge>
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-8">
-            Ils nous font confiance
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center">
-            {partnerLogos.map((partner, index) => (
-              <div 
-                key={partner.name}
-                className="group cursor-pointer animate-fade-in"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <Card className="p-6 bg-background/50 hover:bg-background border-border/50 hover:border-accent/30 transition-all duration-300 hover:shadow-lg">
-                  <CardContent className="p-0">
-                    <div className="text-center">
-                      <div className="w-12 h-12 bg-gradient-accent rounded-full mx-auto mb-3 flex items-center justify-center">
-                        <span className="text-lg font-bold text-accent-foreground">
-                          {partner.name.split(' ')[0].charAt(0)}
-                        </span>
-                      </div>
-                      <div className="text-xs font-medium text-foreground group-hover:text-accent transition-colors">
-                        {partner.name}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Achievements */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
           {achievements.map((achievement, index) => {
             const Icon = achievement.icon;
             return (
@@ -84,31 +50,6 @@ export function TrustElements() {
               </Card>
             );
           })}
-        </div>
-
-        {/* Certifications */}
-        <div className="text-center">
-          <h3 className="text-xl font-bold text-foreground mb-8">
-            Sécurité et conformité
-          </h3>
-          <div className="flex flex-wrap justify-center gap-6">
-            {certifications.map((cert, index) => {
-              const Icon = cert.icon;
-              return (
-                <div 
-                  key={cert.name}
-                  className="flex items-center gap-3 bg-background/70 px-4 py-3 rounded-full border border-border/50 animate-slide-in-left"
-                  style={{ animationDelay: `${index * 200}ms` }}
-                >
-                  <Icon className="h-5 w-5 text-success" />
-                  <span className="text-sm font-medium text-foreground">{cert.name}</span>
-                  <Badge variant="secondary" className="text-xs">
-                    {cert.status}
-                  </Badge>
-                </div>
-              );
-            })}
-          </div>
         </div>
       </div>
     </section>

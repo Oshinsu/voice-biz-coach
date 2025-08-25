@@ -84,7 +84,7 @@ interface EnhancedStatsProps {
 export function EnhancedStats({ totalCompanies, totalRevenue, avgSuccessRate }: EnhancedStatsProps) {
   return (
     <section className="py-20 px-6 bg-gradient-mesh relative overflow-hidden">
-      <div className="absolute inset-0 bg-orange-500/20 backdrop-blur-sm"></div>
+      <div className="absolute inset-0 bg-accent/20 backdrop-blur-sm"></div>
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 animate-fade-in">
