@@ -80,13 +80,13 @@ export function ByssHomepage() {
               <div className="flex flex-col sm:flex-row gap-4 mb-12 animate-scale-in">
                 <Button size="lg" className="bg-gradient-cta hover:shadow-lg hover:shadow-accent/30 text-accent-foreground group text-lg px-8 py-4 hover:scale-105 transition-all duration-300" asChild>
                   <Link to="/scenarios">
-                    Découvrir la plateforme
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </Link>
-                </Button>
+                      Découvrir la plateforme  
+                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </Button>
                 <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:border-primary-foreground/50 text-lg px-8 py-4 backdrop-blur-sm transition-all duration-300" asChild>
-                  <Link to="/contact">
-                    Démo personnalisée
+                  <Link to="/auth">
+                    Essai gratuit
                   </Link>
                 </Button>
               </div>
