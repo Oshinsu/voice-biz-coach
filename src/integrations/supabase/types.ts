@@ -14,16 +14,165 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string | null
+          first_name: string | null
+          id: string
+          last_name: string | null
+          organization: string | null
+          school_name: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id: string
+          last_name?: string | null
+          organization?: string | null
+          school_name?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          last_name?: string | null
+          organization?: string | null
+          school_name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      training_sessions: {
+        Row: {
+          audio_transcript: string | null
+          conversation_type: string
+          created_at: string
+          duration_seconds: number | null
+          feedback: string | null
+          id: string
+          metadata: Json | null
+          objectives_completed: string[] | null
+          phase: string
+          scenario_id: string
+          score: number | null
+          user_id: string
+        }
+        Insert: {
+          audio_transcript?: string | null
+          conversation_type: string
+          created_at?: string
+          duration_seconds?: number | null
+          feedback?: string | null
+          id?: string
+          metadata?: Json | null
+          objectives_completed?: string[] | null
+          phase: string
+          scenario_id: string
+          score?: number | null
+          user_id: string
+        }
+        Update: {
+          audio_transcript?: string | null
+          conversation_type?: string
+          created_at?: string
+          duration_seconds?: number | null
+          feedback?: string | null
+          id?: string
+          metadata?: Json | null
+          objectives_completed?: string[] | null
+          phase?: string
+          scenario_id?: string
+          score?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_stats: {
+        Row: {
+          average_score: number | null
+          best_score: number | null
+          completed_scenarios: string[] | null
+          id: string
+          improvement_rate: number | null
+          last_session_date: string | null
+          preferred_scenarios: string[] | null
+          total_duration_minutes: number | null
+          total_sessions: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          average_score?: number | null
+          best_score?: number | null
+          completed_scenarios?: string[] | null
+          id?: string
+          improvement_rate?: number | null
+          last_session_date?: string | null
+          preferred_scenarios?: string[] | null
+          total_duration_minutes?: number | null
+          total_sessions?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          average_score?: number | null
+          best_score?: number | null
+          completed_scenarios?: string[] | null
+          id?: string
+          improvement_rate?: number | null
+          last_session_date?: string | null
+          preferred_scenarios?: string[] | null
+          total_duration_minutes?: number | null
+          total_sessions?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "school" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +299,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "school", "user"],
+    },
   },
 } as const
