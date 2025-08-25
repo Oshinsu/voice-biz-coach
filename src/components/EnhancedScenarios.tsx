@@ -50,8 +50,8 @@ export function EnhancedScenarios() {
   const featuredScenario = scenarios[0]; // Premier scénario comme "featured"
 
   return (
-    <section className="py-20 px-6 bg-gradient-mesh relative overflow-hidden">
-      <div className="absolute inset-0 bg-secondary/30 backdrop-blur-sm"></div>
+    <section className="py-20 px-6 bg-gradient-feature relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-background via-background/95 to-background/90"></div>
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12">
           <Badge className="mb-4 bg-accent/10 text-accent border-accent/20 animate-bounce-gentle">
@@ -92,8 +92,8 @@ export function EnhancedScenarios() {
                 🎯 Scénario recommandé
               </Badge>
             </div>
-            <Card className="bg-gradient-cta border-0 shadow-2xl overflow-hidden relative group">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10"></div>
+            <Card className="bg-gradient-card border-0 shadow-xl overflow-hidden relative group">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5"></div>
               <div className="relative z-10 lg:flex">
                 <div className="lg:w-2/3 p-8">
                   <div className="flex items-center gap-4 mb-6">
@@ -134,7 +134,7 @@ export function EnhancedScenarios() {
                   </Link>
                 </div>
                 
-                <div className="lg:w-1/3 p-8 bg-background/30 flex items-center justify-center">
+                <div className="lg:w-1/3 p-8 bg-primary/5 flex items-center justify-center">
                   <div className="text-center space-y-4">
                     <div className="w-24 h-24 bg-accent/20 rounded-full flex items-center justify-center mx-auto animate-pulse-glow">
                       <Star className="h-12 w-12 text-accent" />
@@ -166,7 +166,7 @@ export function EnhancedScenarios() {
             return (
               <Card 
                 key={scenario.id} 
-                className="group hover:shadow-xl transition-all duration-500 hover:-translate-y-2 bg-gradient-feature border-0 animate-fade-in relative overflow-hidden"
+                className="group hover:shadow-xl transition-all duration-500 hover:-translate-y-2 bg-background border border-border/50 animate-fade-in relative overflow-hidden"
                 style={{ animationDelay: `${index * 100}ms` }}
                 onMouseEnter={() => setHoveredCard(scenario.id)}
                 onMouseLeave={() => setHoveredCard(null)}
