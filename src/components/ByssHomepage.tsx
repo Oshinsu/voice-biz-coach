@@ -96,7 +96,7 @@ export function ByssHomepage() {
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 text-lg px-8 py-4" asChild>
+                <Button size="lg" variant="outline" className="border-primary-foreground/30 text-blue-900 hover:bg-primary-foreground/10 text-lg px-8 py-4" asChild>
                   <Link to="/contact">
                     Démo personnalisée
                   </Link>
