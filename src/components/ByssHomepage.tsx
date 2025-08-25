@@ -91,7 +91,7 @@ export function ByssHomepage() {
               
               <div className="flex flex-col sm:flex-row gap-4 mb-12 animate-scale-in">
                 <Button size="lg" className="bg-accent hover:bg-accent/80 text-accent-foreground shadow-accent group text-lg px-8 py-4" asChild>
-                  <Link to="/scenario/tech-startup">
+                  <Link to="/scenario/saas-crm">
                     Découvrir la plateforme
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -391,7 +391,7 @@ export function ByssHomepage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" className="bg-accent hover:bg-accent/80 text-accent-foreground shadow-accent text-lg px-8 py-4" asChild>
-              <Link to="/scenario/tech-startup">
+              <Link to="/scenario/saas-crm">
                 Démarrer l'essai gratuit
                 <CheckCircle className="ml-2 h-5 w-5" />
               </Link>
