@@ -5,6 +5,7 @@ import { Persona } from '@/data/personas';
 import { SalesPhase } from '@/data/salesPhases';
 
 export type Mode = 'roleplay' | 'coach';
+export type ConversationType = 'cold-call' | 'rdv';
 
 export interface Message {
   id: string;
@@ -34,10 +35,15 @@ export interface CalcResult {
 export interface SalesState {
   // Mode et configuration
   mode: Mode;
+  conversationType: ConversationType;
   currentPhase: string;
   selectedScenario: Scenario | null;
   selectedPersona: Persona | null;
   difficulty: 'facile' | 'moyen' | 'difficile';
+  
+  // Progression et déblocage
+  coldCallCompleted: boolean;
+  rdvUnlocked: boolean;
   
   // Conversation
   messages: Message[];
@@ -55,10 +61,15 @@ export interface SalesState {
   
   // Actions
   setMode: (mode: Mode) => void;
+  setConversationType: (type: ConversationType) => void;
   setCurrentPhase: (phase: string) => void;
   setScenario: (scenario: Scenario | null) => void;
   setPersona: (persona: Persona | null) => void;
   setDifficulty: (difficulty: 'facile' | 'moyen' | 'difficile') => void;
+  
+  // Progression
+  completeColdCall: () => void;
+  unlockRdv: () => void;
   
   addMessage: (message: Omit<Message, 'id' | 'timestamp'>) => void;
   addCoachNote: (note: Omit<CoachNote, 'id' | 'timestamp'>) => void;
@@ -75,10 +86,15 @@ export const useSalesStore = create<SalesState>()(
     (set, get) => ({
       // État initial
       mode: 'roleplay',
+      conversationType: 'cold-call',
       currentPhase: 'ouverture',
       selectedScenario: null,
       selectedPersona: null,
       difficulty: 'moyen',
+      
+      // Progression
+      coldCallCompleted: false,
+      rdvUnlocked: false,
       
       messages: [],
       transcript: [],
@@ -93,10 +109,15 @@ export const useSalesStore = create<SalesState>()(
       
       // Actions
       setMode: (mode) => set({ mode }),
+      setConversationType: (type) => set({ conversationType: type }),
       setCurrentPhase: (phase) => set({ currentPhase: phase }),
       setScenario: (scenario) => set({ selectedScenario: scenario }),
       setPersona: (persona) => set({ selectedPersona: persona }),
       setDifficulty: (difficulty) => set({ difficulty }),
+      
+      // Progression
+      completeColdCall: () => set({ coldCallCompleted: true, rdvUnlocked: true }),
+      unlockRdv: () => set({ rdvUnlocked: true }),
       
       addMessage: (messageData) => {
         const message: Message = {
@@ -146,7 +167,8 @@ export const useSalesStore = create<SalesState>()(
         scores: {},
         nextSteps: [],
         calcResults: [],
-        currentPhase: 'ouverture'
+        currentPhase: 'ouverture',
+        conversationType: 'cold-call'
       })
     }),
     {
@@ -156,7 +178,10 @@ export const useSalesStore = create<SalesState>()(
         selectedScenario: state.selectedScenario,
         selectedPersona: state.selectedPersona,
         difficulty: state.difficulty,
-        mode: state.mode
+        mode: state.mode,
+        conversationType: state.conversationType,
+        coldCallCompleted: state.coldCallCompleted,
+        rdvUnlocked: state.rdvUnlocked
       })
     }
   )

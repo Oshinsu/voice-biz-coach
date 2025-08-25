@@ -6,16 +6,18 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSalesStore } from "@/store/salesStore";
 import { salesPhases, getPhaseById, getNextPhases } from "@/data/salesPhases";
-import { Brain, CheckCircle2, AlertCircle, ArrowRight, Lightbulb } from "lucide-react";
+import { Brain, CheckCircle2, AlertCircle, ArrowRight, Lightbulb, Phone, Calendar } from "lucide-react";
 
 export const CoachPanel = () => {
   const {
     currentPhase,
+    conversationType,
     setCurrentPhase,
     coachNotes,
     scores,
     nextSteps,
-    mode
+    mode,
+    completeColdCall
   } = useSalesStore();
 
   const currentPhaseData = getPhaseById(currentPhase);
@@ -44,9 +46,16 @@ export const CoachPanel = () => {
           <CardTitle className="flex items-center gap-2 text-lg">
             <Brain className="h-5 w-5" />
             Phase Tracker
+            <Badge variant="outline" className="ml-auto">
+              {conversationType === 'cold-call' ? (
+                <><Phone className="h-3 w-3 mr-1" /> Cold Call</>
+              ) : (
+                <><Calendar className="h-3 w-3 mr-1" /> RDV</>
+              )}
+            </Badge>
           </CardTitle>
           <CardDescription>
-            Suivi de votre progression commerciale
+            Suivi de votre progression commerciale - {conversationType === 'cold-call' ? 'Objectif: Décrocher un RDV' : 'Objectif: Conclure la vente'}
           </CardDescription>
         </CardHeader>
         
@@ -69,6 +78,10 @@ export const CoachPanel = () => {
               <p className="text-sm text-muted-foreground">
                 {currentPhaseData.description}
               </p>
+              
+              <div className="text-xs text-muted-foreground">
+                <strong>Durée attendue:</strong> {currentPhaseData.duration[conversationType]}
+              </div>
             </div>
           )}
 
@@ -113,6 +126,9 @@ export const CoachPanel = () => {
                 {salesPhases.map((phase) => {
                   const score = getPhaseScore(phase.id);
                   const isActive = phase.id === currentPhase;
+                  const isApplicable = conversationType === 'rdv' || ['ouverture', 'decouverte', 'reformulation', 'objections', 'closing'].includes(phase.id);
+                  
+                  if (!isApplicable) return null;
                   
                   return (
                     <div
@@ -133,6 +149,17 @@ export const CoachPanel = () => {
               </div>
             </ScrollArea>
           </div>
+          
+          {/* Actions rapides */}
+          {conversationType === 'cold-call' && currentPhase === 'closing' && currentScore >= 70 && (
+            <Button 
+              onClick={completeColdCall}
+              size="sm"
+              className="w-full"
+            >
+              ✅ Marquer le Cold Call comme réussi
+            </Button>
+          )}
         </CardContent>
       </Card>
 

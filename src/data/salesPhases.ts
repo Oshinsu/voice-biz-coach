@@ -7,278 +7,260 @@ export interface SalesPhase {
   successIndicators: string[];
   commonMistakes: string[];
   nextPhases: string[];
+  chatbotInstructions: {
+    coldCall: string;
+    rdv: string;
+  };
+  duration: {
+    coldCall: string;
+    rdv: string;
+  };
 }
 
 export const salesPhases: SalesPhase[] = [
   {
     id: "ouverture",
-    title: "Ouverture",
-    description: "Établir le contact et créer une première impression positive",
+    title: "Ouverture/Accroche",
+    description: "Établir le contact, créer l'intérêt initial et obtenir l'attention du prospect",
     objectives: [
-      "Créer un rapport de confiance",
-      "Susciter l'intérêt",
-      "Obtenir l'attention",
-      "Poser le cadre de l'entretien"
+      "Créer un rapport de confiance immédiat",
+      "Susciter l'intérêt et la curiosité",
+      "Obtenir l'attention totale du prospect",
+      "Poser le cadre de l'entretien",
+      "Qualifier la disponibilité"
     ],
     keyQuestions: [
-      "Quelle est votre situation actuelle ?",
-      "Quels sont vos principaux défis ?",
-      "Qu'est-ce qui vous amène à réfléchir à une solution ?",
-      "Combien de temps avez-vous ?"
+      "Ai-je bien [Nom] au téléphone ?",
+      "Avez-vous 2 minutes pour que je vous explique pourquoi je vous appelle ?",
+      "Êtes-vous la personne en charge de [domaine] chez [entreprise] ?",
+      "Puis-je vous présenter rapidement notre solution ?"
     ],
     successIndicators: [
-      "Climat de confiance établi",
       "Prospect engagé dans la conversation",
-      "Objectifs de l'entretien clarifiés",
-      "Timing défini"
+      "Attention obtenue et maintenue",
+      "Timing de l'appel validé",
+      "Contexte professionnel confirmé"
     ],
     commonMistakes: [
-      "Parler trop de soi/son entreprise",
-      "Aller trop vite sur la présentation produit",
-      "Ne pas établir de rapport humain",
-      "Oublier de qualifier le timing"
+      "Présentation trop longue de soi/entreprise",
+      "Ne pas vérifier la disponibilité",
+      "Aller directement au produit",
+      "Ton trop commercial dès le début"
     ],
-    nextPhases: ["decouverte"]
+    nextPhases: ["decouverte"],
+    chatbotInstructions: {
+      coldCall: "Soyez très occupé(e) et pressé(e). Accordez maximum 30 secondes d'attention initiale. Interrompez si ça ne vous intéresse pas immédiatement. Demandez qui appelle et pourquoi très rapidement.",
+      rdv: "Soyez courtois(e) mais professionnel(le). Vous avez du temps mais restez sur vos gardes. Écoutez la présentation de l'interlocuteur avec attention modérée."
+    },
+    duration: {
+      coldCall: "30 secondes - 2 minutes",
+      rdv: "3-5 minutes"
+    }
   },
   {
     id: "decouverte",
     title: "Découverte",
-    description: "Comprendre en profondeur les besoins et enjeux du prospect",
+    description: "Identifier les besoins, pain points et enjeux business du prospect",
     objectives: [
-      "Identifier les pain points",
-      "Comprendre l'organisation",
-      "Qualifier le budget",
-      "Identifier les décideurs"
+      "Identifier les problèmes actuels",
+      "Comprendre l'impact business",
+      "Qualifier le budget disponible",
+      "Mapper le processus de décision",
+      "Identifier les décideurs clés"
     ],
     keyQuestions: [
-      "Comment gérez-vous actuellement... ?",
-      "Quels sont les impacts de cette situation ?",
-      "Qui est impliqué dans cette décision ?",
-      "Quel budget avez-vous prévu ?"
+      "Comment gérez-vous actuellement [problématique] ?",
+      "Quels sont les principaux défis que vous rencontrez ?",
+      "Quel impact cela a-t-il sur votre activité ?",
+      "Qui est impliqué dans ce type de décision ?",
+      "Avez-vous déjà budgété pour ce type de solution ?"
     ],
     successIndicators: [
-      "Besoins clairement identifiés",
-      "Enjeux business compris",
-      "Processus de décision mapé",
-      "Budget qualifié"
+      "Pain points clairement identifiés",
+      "Impact business quantifié",
+      "Budget range qualifié",
+      "Décideurs identifiés",
+      "Urgence évaluée"
     ],
     commonMistakes: [
-      "Poser des questions fermées",
-      "Ne pas creuser assez",
+      "Questions trop fermées",
+      "Ne pas creuser assez profond",
       "Oublier l'aspect émotionnel",
-      "Ne pas qualifier le budget"
+      "Passer trop vite aux solutions"
     ],
-    nextPhases: ["reformulation"]
+    nextPhases: ["reformulation"],
+    chatbotInstructions: {
+      coldCall: "Répondez de façon très succincte. Mentionnez vos défis principaux mais sans rentrer dans les détails. Montrez-vous de plus en plus intéressé(e) si les questions sont pertinentes.",
+      rdv: "Partagez vos défis en détail. Expliquez le contexte et l'impact. Soyez transparent(e) sur votre situation actuelle et vos besoins."
+    },
+    duration: {
+      coldCall: "2-4 minutes",
+      rdv: "8-12 minutes"
+    }
   },
   {
     id: "reformulation",
-    title: "Reformulation",
-    description: "Reformuler et valider la compréhension des besoins",
+    title: "Reformulation/Proposition",
+    description: "Synthétiser les besoins et proposer la solution adaptée",
     objectives: [
-      "Confirmer la compréhension",
-      "Hiérarchiser les besoins",
-      "Obtenir l'accord sur les enjeux",
-      "Préparer la proposition"
+      "Confirmer la compréhension des besoins",
+      "Hiérarchiser les priorités",
+      "Proposer une solution personnalisée",
+      "Créer le lien besoins-solution",
+      "Obtenir l'accord sur la synthèse"
     ],
     keyQuestions: [
-      "Si je comprends bien... ?",
-      "Quel est le point le plus critique ?",
-      "Quelles seraient les conséquences de ne rien faire ?",
-      "Êtes-vous d'accord avec cette synthèse ?"
+      "Si je comprends bien, votre principal défi est... ?",
+      "Quelle serait votre priorité absolue ?",
+      "Voyez-vous comment notre solution pourrait vous aider ?",
+      "Est-ce que cette synthèse vous correspond ?",
+      "Qu'est-ce qui vous semble le plus intéressant ?"
     ],
     successIndicators: [
       "Besoins confirmés par le prospect",
-      "Priorités établies",
-      "Enjeux validés",
-      "Prospect en accord"
-    ],
-    commonMistakes: [
-      "Reformuler de manière inexacte",
-      "Ne pas faire valider",
-      "Aller trop vite",
-      "Oublier l'aspect émotionnel"
-    ],
-    nextPhases: ["proposition-valeur"]
-  },
-  {
-    id: "proposition-valeur",
-    title: "Proposition de valeur",
-    description: "Présenter la solution en lien avec les besoins identifiés",
-    objectives: [
-      "Positionner la solution",
-      "Créer de la valeur",
-      "Différencier vs concurrence",
-      "Susciter l'envie"
-    ],
-    keyQuestions: [
-      "Voyez-vous comment cela répond à votre besoin ?",
-      "Qu'est-ce qui vous semble le plus intéressant ?",
-      "Avez-vous déjà vu quelque chose de similaire ?",
-      "Quelles questions avez-vous ?"
-    ],
-    successIndicators: [
-      "Lien clair besoins/solution",
-      "Valeur perçue par le prospect",
-      "Différenciation comprise",
+      "Priorités clairement établies",
+      "Solution adaptée présentée",
+      "Lien de valeur établi",
       "Intérêt manifesté"
     ],
     commonMistakes: [
-      "Présentation générique",
-      "Trop de fonctionnalités",
-      "Pas de lien avec les besoins",
-      "Monologue trop long"
+      "Reformulation inexacte",
+      "Proposition trop générique",
+      "Ne pas faire valider",
+      "Trop de fonctionnalités d'un coup"
     ],
-    nextPhases: ["preuves"]
+    nextPhases: ["demonstration"],
+    chatbotInstructions: {
+      coldCall: "Confirmez rapidement si la synthèse est correcte. Si la solution semble intéressante, acceptez un RDV pour en discuter plus en détail.",
+      rdv: "Validez ou corrigez la synthèse. Posez des questions sur la solution proposée. Montrez votre intérêt pour les aspects qui vous concernent."
+    },
+    duration: {
+      coldCall: "1-2 minutes",
+      rdv: "5-8 minutes"
+    }
   },
   {
-    id: "preuves",
-    title: "Preuves",
-    description: "Apporter des preuves concrètes de la valeur proposée",
+    id: "demonstration",
+    title: "Démonstration/Preuves",
+    description: "Présenter concrètement la valeur et apporter des preuves tangibles",
     objectives: [
-      "Crédibiliser la proposition",
-      "Rassurer le prospect",
-      "Quantifier les bénéfices",
-      "Éliminer les doutes"
+      "Démontrer la valeur concrète",
+      "Apporter des preuves crédibles",
+      "Quantifier les bénéfices attendus",
+      "Rassurer avec des références",
+      "Éliminer les doutes techniques"
     ],
     keyQuestions: [
-      "Souhaitez-vous voir des exemples concrets ?",
-      "Voulez-vous parler à d'autres clients ?",
-      "Quelles garanties attendez-vous ?",
-      "Qu'est-ce qui vous rassurerait ?"
+      "Souhaitez-vous voir comment cela fonctionne concrètement ?",
+      "Voulez-vous parler à d'autres clients similaires ?",
+      "Quel ROI attendez-vous de ce type d'investissement ?",
+      "Qu'est-ce qui vous rassurerait le plus ?",
+      "Avez-vous des questions techniques spécifiques ?"
     ],
     successIndicators: [
-      "Crédibilité établie",
-      "Doutes levés",
-      "ROI perçu",
-      "Confiance renforcée"
+      "Valeur concrète démontrée",
+      "ROI perçu et accepté",
+      "Références crédibles fournies",
+      "Doutes techniques levés",
+      "Confiance établie"
     ],
     commonMistakes: [
-      "Preuves non pertinentes",
-      "Trop de références",
-      "Pas assez spécifique",
-      "Oublier le ROI"
+      "Démonstration trop technique",
+      "Références non pertinentes",
+      "ROI non quantifié",
+      "Trop long sur les fonctionnalités"
     ],
-    nextPhases: ["objections", "negociation"]
+    nextPhases: ["objections"],
+    chatbotInstructions: {
+      coldCall: "Phase généralement non atteinte en cold call. Si mentionnée, demandez un RDV pour voir la démonstration complète.",
+      rdv: "Écoutez attentivement la démonstration. Posez des questions précises. Demandez des références dans votre secteur. Questionnez le ROI."
+    },
+    duration: {
+      coldCall: "Non applicable",
+      rdv: "10-15 minutes"
+    }
   },
   {
     id: "objections",
-    title: "Objections",
-    description: "Traiter les objections et réticences du prospect",
+    title: "Objections/Négociation",
+    description: "Traiter les objections et négocier les conditions d'accord",
     objectives: [
       "Comprendre les vraies objections",
-      "Rassurer le prospect",
-      "Lever les freins",
+      "Rassurer et lever les freins",
+      "Négocier les conditions acceptables",
+      "Trouver un terrain d'entente",
       "Avancer vers la décision"
     ],
     keyQuestions: [
       "Qu'est-ce qui vous pose problème exactement ?",
-      "À part cela, y a-t-il autre chose ?",
-      "Comment voyez-vous les choses ?",
-      "Que faudrait-il pour vous convaincre ?"
+      "À part cela, y a-t-il autre chose qui vous préoccupe ?",
+      "Que faudrait-il pour vous convaincre ?",
+      "Comment pourrions-nous nous arranger ?",
+      "Quelles garanties attendez-vous ?"
     ],
     successIndicators: [
-      "Objections comprises",
-      "Réponses satisfaisantes",
-      "Freins levés",
-      "Progression vers décision"
+      "Objections comprises et traitées",
+      "Conditions négociées acceptables",
+      "Freins principaux levés",
+      "Progression vers engagement",
+      "Accord de principe obtenu"
     ],
     commonMistakes: [
-      "Répondre trop vite",
-      "Ne pas creuser l'objection",
-      "Être défensif",
-      "Ignorer l'émotion"
+      "Répondre trop défensivement",
+      "Ne pas creuser la vraie objection",
+      "Céder trop facilement sur le prix",
+      "Ignorer l'aspect émotionnel"
     ],
-    nextPhases: ["negociation", "closing"]
-  },
-  {
-    id: "negociation",
-    title: "Négociation",
-    description: "Négocier les conditions commerciales",
-    objectives: [
-      "Trouver un accord gagnant-gagnant",
-      "Préserver la valeur",
-      "Finaliser les conditions",
-      "Préparer la signature"
-    ],
-    keyQuestions: [
-      "Que proposez-vous ?",
-      "Comment pourrait-on s'arranger ?",
-      "Qu'est-ce qui est négociable pour vous ?",
-      "À quelles conditions pouvez-vous décider ?"
-    ],
-    successIndicators: [
-      "Accord trouvé",
-      "Conditions acceptables",
-      "Valeur préservée",
-      "Engagement mutuel"
-    ],
-    commonMistakes: [
-      "Céder trop facilement",
-      "Négocier sans contrepartie",
-      "Oublier la valeur",
-      "Précipiter l'accord"
-    ],
-    nextPhases: ["closing"]
+    nextPhases: ["closing"],
+    chatbotInstructions: {
+      coldCall: "Exprimez vos principales préoccupations (budget, timing, besoin de réflexion). Si bien traité, acceptez un RDV pour approfondir.",
+      rdv: "Soulevez vos objections réelles. Négociez si possible. Demandez des garanties. Exprimez vos contraintes organisationnelles."
+    },
+    duration: {
+      coldCall: "1-3 minutes",
+      rdv: "8-12 minutes"
+    }
   },
   {
     id: "closing",
-    title: "Closing",
-    description: "Conclure la vente et obtenir l'engagement",
+    title: "Closing/Next Steps",
+    description: "Conclure et organiser les prochaines étapes concrètes",
     objectives: [
-      "Obtenir la décision",
-      "Formaliser l'accord",
-      "Rassurer sur le choix",
-      "Organiser la suite"
-    ],
-    keyQuestions: [
-      "Êtes-vous prêt à démarrer ?",
-      "Quand souhaitez-vous commencer ?",
-      "Qu'est-ce qui vous empêche de décider maintenant ?",
-      "Comment procède-t-on ?"
-    ],
-    successIndicators: [
-      "Décision prise",
-      "Engagement formel",
-      "Planning défini",
-      "Satisfaction mutuelle"
-    ],
-    commonMistakes: [
-      "Ne pas demander la vente",
-      "Continuer à vendre après le oui",
-      "Douter de sa proposition",
-      "Oublier les next steps"
-    ],
-    nextPhases: ["next-steps"]
-  },
-  {
-    id: "next-steps",
-    title: "Next Steps",
-    description: "Organiser la suite et assurer le suivi",
-    objectives: [
-      "Définir les étapes suivantes",
+      "Obtenir un engagement clair",
+      "Définir les prochaines étapes",
       "Planifier la mise en œuvre",
       "Organiser le suivi",
-      "Maintenir l'engagement"
+      "Sécuriser la décision"
     ],
     keyQuestions: [
-      "Quelles sont les prochaines étapes ?",
-      "Qui fait quoi et quand ?",
-      "Comment restons-nous en contact ?",
-      "Quand nous revoyons-nous ?"
+      "Êtes-vous prêt(e) à aller plus loin ensemble ?",
+      "Quand pourrions-nous nous revoir ?",
+      "Qu'est-ce qui vous empêche de décider maintenant ?",
+      "Comment procédons-nous pour la suite ?",
+      "Qui d'autre doit être impliqué dans la décision ?"
     ],
     successIndicators: [
-      "Plan d'action clair",
-      "Responsabilités définies",
+      "Engagement clair obtenu",
+      "Prochaines étapes définies",
       "Timeline établie",
+      "Responsabilités clarifiées",
       "Suivi organisé"
     ],
     commonMistakes: [
-      "Laisser dans le flou",
-      "Ne pas planifier de suivi",
-      "Oublier les détails pratiques",
-      "Perdre le contact"
+      "Ne pas demander l'engagement",
+      "Laisser dans le vague",
+      "Oublier de planifier le suivi",
+      "Ne pas impliquer les décideurs"
     ],
-    nextPhases: []
+    nextPhases: [],
+    chatbotInstructions: {
+      coldCall: "OBJECTIF: Accepter un RDV pour approfondir. Si convaincu(e), proposez des créneaux. Sinon, demandez du temps de réflexion avec un rappel planifié.",
+      rdv: "Prenez une décision ou demandez du temps. Si intéressé(e), définissez les next steps concrets. Impliquez votre équipe si nécessaire."
+    },
+    duration: {
+      coldCall: "2-4 minutes",
+      rdv: "5-8 minutes"
+    }
   }
 ];
 

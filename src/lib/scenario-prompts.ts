@@ -1,7 +1,9 @@
 import { Scenario } from "@/data/scenarios";
+import { ConversationType } from "@/store/salesStore";
+import { getPhaseById } from "@/data/salesPhases";
 
 // Générateur de prompts contextuels pour les contacts de scénarios
-export function generateContactPrompt(scenario: Scenario, currentPhase?: string): string {
+export function generateContactPrompt(scenario: Scenario, currentPhase?: string, conversationType: ConversationType = 'cold-call'): string {
   const { interlocutor, company, product } = scenario;
   
   // Calcul du niveau de résistance basé sur la difficulté
@@ -103,59 +105,72 @@ PROBABILITÉ DE SUCCÈS : ${scenario.probability}%
 7. **Critères de succès à garder en tête** :
    ${scenario.successCriteria.map(crit => `- ${crit}`).join('\n')}
 
-${getPhaseSpecificBehavior(currentPhase, scenario)}
+${getPhaseSpecificBehavior(currentPhase, scenario, conversationType)}
+
+**TYPE DE CONVERSATION : ${conversationType.toUpperCase()}**
+${conversationType === 'cold-call' ? 
+  `Vous recevez un appel non attendu. Vous êtes très occupé(e) et n'avez que quelques minutes à accorder. Soyez direct(e) et demandez rapidement l'objet de l'appel. Si ce n'est pas intéressant, raccrochez poliment mais fermement.` :
+  `Vous avez un rendez-vous planifié avec ce commercial. Vous avez du temps et êtes disposé(e) à écouter, mais restez vigilant(e) et posez des questions pertinentes. Vous évaluez si cette solution peut vraiment vous aider.`
+}
 
 **OUVERTURE DE LA CONVERSATION :**
-Accueillez brièvement le commercial en tant que ${interlocutor.role} ${resistanceLevel === 'élevée' ? 'très occupé(e) et pressé(e)' : resistanceLevel === 'modérée' ? 'occupé(e) mais courtois(e)' : 'disponible et ouvert(e)'}. Demandez l'objet précis de son appel en gardant votre personnalité authentique.`;
+${conversationType === 'cold-call' ? 
+  `Répondez comme quelqu'un de très occupé qui reçoit un appel non prévu. Demandez immédiatement qui appelle et pourquoi, avec un ton ${resistanceLevel === 'élevée' ? 'impatient' : resistanceLevel === 'modérée' ? 'professionnel mais pressé' : 'courtois mais direct'}.` :
+  `Accueillez le commercial pour votre rendez-vous planifié. Soyez ${resistanceLevel === 'élevée' ? 'sceptique mais courtois' : resistanceLevel === 'modérée' ? 'ouvert mais vigilant' : 'disponible et curieux'}.`
+}`;
 
   return basePrompt;
 }
 
-function getPhaseSpecificBehavior(phase: string | undefined, scenario: Scenario): string {
-  switch (phase) {
-    case 'ouverture':
-      return `PHASE ACTUELLE - OUVERTURE :
-- Sois poli(e) mais pressé(e), tu as d'autres priorités
-- Accorde 5-10 minutes maximum sauf si le sujet t'intéresse vraiment
-- Pose des questions sur l'objet précis de l'appel
-- Sois légèrement sceptique sur les solutions "miracle"`;
+function getPhaseSpecificBehavior(phase: string | undefined, scenario: Scenario, conversationType: ConversationType): string {
+  const phaseData = getPhaseById(phase || 'ouverture');
+  const chatbotInstruction = phaseData?.chatbotInstructions[conversationType] || '';
+  const duration = phaseData?.duration[conversationType] || '';
+  
+  const baseInstruction = `PHASE ACTUELLE - ${phaseData?.title?.toUpperCase() || 'OUVERTURE'} (${duration}):
+${chatbotInstruction}`;
 
-    case 'decouverte':
-      return `PHASE ACTUELLE - DÉCOUVERTE :
-- Réponds aux questions sur l'entreprise et tes défis
-- Ne révèle les vrais problèmes que si les questions sont pertinentes
-- Exprime tes priorités : ${scenario.interlocutor.priorities.join(', ')}
-- Mentionne tes préoccupations si le commercial semble trop insistant`;
+  // Instructions spécifiques par phase et type de conversation
+  const specificBehavior = (() => {
+    switch (phase) {
+      case 'ouverture':
+        return conversationType === 'cold-call' ? 
+          '- Vous ne vous attendiez pas à cet appel\n- Demandez immédiatement qui c\'est et pourquoi\n- Gardez la main sur la durée de l\'appel\n- Interrompez si ce n\'est pas pertinent' :
+          '- Vous avez accepté ce RDV, soyez disponible\n- Écoutez la présentation de l\'interlocuteur\n- Posez des questions de contexte\n- Établissez le cadre de l\'entretien';
+      
+      case 'decouverte':
+        return conversationType === 'cold-call' ?
+          '- Réponses courtes et directes\n- Ne révélez que l\'essentiel\n- Posez des contre-questions\n- Restez maître du timing' :
+          '- Partagez vos défis en détail\n- Expliquez le contexte et l\'impact\n- Soyez transparent sur votre situation\n- Mentionnez vos priorités actuelles';
+      
+      case 'reformulation':
+        return `- Validez ou corrigez la compréhension\n- Hiérarchisez vos besoins\n- Posez des questions sur la solution\n- ${conversationType === 'cold-call' ? 'Si intéressant, acceptez un RDV' : 'Creusez les détails de la proposition'}`;
+      
+      case 'demonstration':
+        return conversationType === 'cold-call' ?
+          '- Généralement non applicable en cold call\n- Si mentionné, demandez un RDV pour la démo' :
+          '- Écoutez attentivement la démonstration\n- Posez des questions techniques précises\n- Demandez des références sectorielles\n- Questionnez le ROI et les garanties';
+      
+      case 'objections':
+        return `- Exprimez vos vraies préoccupations\n- Questionnez le budget/timing/faisabilité\n- Demandez des garanties et preuves\n- ${conversationType === 'cold-call' ? 'Si convaincu, acceptez un RDV' : 'Négociez les conditions si intéressé'}`;
+      
+      case 'closing':
+        return conversationType === 'cold-call' ?
+          '- OBJECTIF: Donner votre accord pour un RDV\n- Proposez vos disponibilités si convaincu\n- Sinon, demandez du temps de réflexion' :
+          '- Prenez une décision ou demandez du temps\n- Impliquez votre équipe si nécessaire\n- Définissez les étapes suivantes concrètes\n- Organisez le suivi';
+      
+      default:
+        return '- Adaptez votre comportement selon l\'évolution\n- Montrez plus d\'intérêt si les arguments sont convaincants\n- Maintenez vos préoccupations légitimes';
+    }
+  })();
 
-    case 'demonstration':
-      return `PHASE ACTUELLE - DÉMONSTRATION :
-- Écoute la présentation avec intérêt modéré
-- Pose des questions précises sur les fonctionnalités qui t'intéressent
-- Exprime tes doutes sur les points qui te préoccupent
-- Compare mentalement avec votre solution actuelle : ${scenario.company.currentSolution}`;
+  return `${baseInstruction}
 
-    case 'traitement-objections':
-      return `PHASE ACTUELLE - OBJECTIONS :
-- Exprime clairement tes préoccupations principales
-- Objecte sur le budget si le prix semble élevé
-- Questionne la complexité si ça semble compliqué
-- Demande des garanties et références client
-- Objections probables : ${scenario.probableObjections.join(', ')}`;
+COMPORTEMENT SPÉCIFIQUE :
+${specificBehavior}
 
-    case 'closing':
-      return `PHASE ACTUELLE - CLOSING :
-- Tu es intéressé(e) mais prudent(e)
-- Demande du temps pour réfléchir et consulter l'équipe
-- Négocie si le commercial propose des conditions
-- Demande des références et cas clients similaires
-- Évoque ton processus de décision : ${scenario.interlocutor.decisionPower}`;
-
-    default:
-      return `COMPORTEMENT GÉNÉRAL :
-- Adapte ton attitude selon l'évolution de la conversation
-- Sois de plus en plus intéressé(e) si les arguments sont convaincants
-- Maintiens tes préoccupations tout au long de l'échange`;
-  }
+OBJECTIONS CONTEXTUELLES :
+${scenario.probableObjections.map(obj => `- ${obj}`).join('\n')}`;
 }
 
 // Prompt de feedback post-conversation
@@ -173,16 +188,25 @@ Sois bienveillant mais précis dans tes retours. Base-toi sur les spécificités
 }
 
 // Prompt pour le mode coaching pendant l'appel
-export function generateCoachingPrompt(scenario: Scenario, currentPhase?: string): string {
-  return `Tu es un coach commercial expert qui observe discrètement une conversation entre un commercial et ${scenario.interlocutor.name} (${scenario.interlocutor.role} chez ${scenario.company.name}).
+export function generateCoachingPrompt(scenario: Scenario, currentPhase?: string, conversationType: ConversationType = 'cold-call'): string {
+  const phaseData = getPhaseById(currentPhase || 'ouverture');
+  return `Tu es un coach commercial expert qui observe discrètement une conversation ${conversationType.toUpperCase()} entre un commercial et ${scenario.interlocutor.name} (${scenario.interlocutor.role} chez ${scenario.company.name}).
 
 CONTEXTE DU SCÉNARIO :
-- Objectif de vente : ${scenario.salesGoal}
+- Type de conversation : ${conversationType === 'cold-call' ? 'Appel à froid' : 'Rendez-vous planifié'}
+- Objectif : ${conversationType === 'cold-call' ? 'Décrocher un RDV' : scenario.salesGoal}
 - Difficulté : ${scenario.difficulty}
 - Budget client : ${scenario.company.budget}
-- Préoccupations principales : ${scenario.interlocutor.concerns.join(', ')}
+- Durée attendue : ${phaseData?.duration[conversationType] || 'Non définie'}
 
-PHASE ACTUELLE : ${currentPhase || 'Non définie'}
+PHASE ACTUELLE : ${phaseData?.title || 'Non définie'} (${currentPhase || 'ouverture'})
+OBJECTIFS PHASE : ${phaseData?.objectives.slice(0, 2).join(', ') || 'Non définis'}
+
+CONSEILS CONTEXTUELS POUR CETTE PHASE :
+${conversationType === 'cold-call' ? 
+  '- Aller à l\'essentiel, le prospect est pressé\n- Poser des questions qui créent l\'intérêt\n- Objectif principal: obtenir un RDV' :
+  '- Approfondir les besoins et défis\n- Construire la valeur étape par étape\n- Viser l\'engagement ou la progression'
+}
 
 Donne des conseils courts et actionnables (1-2 phrases max) pour aider le commercial selon la situation. Reste discret et interviens seulement si nécessaire.`;
 }

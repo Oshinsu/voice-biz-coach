@@ -7,7 +7,24 @@ import { Separator } from "@/components/ui/separator";
 import { scenarios } from "@/data/scenarios";
 import { personas } from "@/data/personas";
 import { useSalesStore } from "@/store/salesStore";
-import { Calculator, TrendingUp, Target, Zap } from "lucide-react";
+import { Calculator, TrendingUp, Target, Zap, Phone, Calendar, Lock } from "lucide-react";
+
+const conversationTypeOptions = [
+  { 
+    value: 'cold-call', 
+    label: 'Cold Call', 
+    description: 'Appel à froid pour décrocher un RDV',
+    icon: <Phone className="h-4 w-4" />,
+    duration: '5-15 minutes'
+  },
+  { 
+    value: 'rdv', 
+    label: 'Rendez-vous Commercial', 
+    description: 'RDV planifié avec toutes les phases',
+    icon: <Calendar className="h-4 w-4" />,
+    duration: '20-45 minutes'
+  }
+];
 
 const difficultyOptions = [
   { value: 'facile', label: 'Facile', description: 'Prospect coopératif' },
@@ -33,15 +50,20 @@ export const ScenarioSelector = () => {
     selectedScenario,
     selectedPersona,
     difficulty,
+    conversationType,
+    coldCallCompleted,
+    rdvUnlocked,
     setScenario,
     setPersona,
     setDifficulty,
+    setConversationType,
     clearSession
   } = useSalesStore();
   
   const [localScenario, setLocalScenario] = useState(selectedScenario?.id || '');
   const [localPersona, setLocalPersona] = useState(selectedPersona?.id || '');
   const [localDifficulty, setLocalDifficulty] = useState(difficulty);
+  const [localConversationType, setLocalConversationType] = useState(conversationType);
 
   const handleStart = () => {
     const scenario = scenarios.find(s => s.id === localScenario);
@@ -51,11 +73,13 @@ export const ScenarioSelector = () => {
       setScenario(scenario);
       setPersona(persona);
       setDifficulty(localDifficulty);
+      setConversationType(localConversationType);
       clearSession();
     }
   };
 
   const canStart = localScenario && localPersona;
+  const isRdvLocked = localConversationType === 'rdv' && !rdvUnlocked;
 
   return (
     <Card className="h-full">
@@ -70,6 +94,54 @@ export const ScenarioSelector = () => {
       </CardHeader>
       
       <CardContent className="space-y-6">
+        {/* Type de conversation */}
+        <div className="space-y-3">
+          <label className="text-sm font-medium">Type de conversation</label>
+          <Select value={localConversationType} onValueChange={(value: any) => setLocalConversationType(value)}>
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {conversationTypeOptions.map((option) => (
+                <SelectItem 
+                  key={option.value} 
+                  value={option.value}
+                  disabled={option.value === 'rdv' && !rdvUnlocked}
+                >
+                  <div className="flex items-center gap-2">
+                    {option.icon}
+                    <div className="space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{option.label}</span>
+                        {option.value === 'rdv' && !rdvUnlocked && (
+                          <Lock className="h-3 w-3 text-muted-foreground" />
+                        )}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {option.description} • {option.duration}
+                      </div>
+                    </div>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          
+          {localConversationType === 'rdv' && !rdvUnlocked && (
+            <div className="text-xs text-muted-foreground bg-muted p-2 rounded">
+              💡 Complétez d'abord un Cold Call avec succès pour débloquer les RDV complets
+            </div>
+          )}
+          
+          {coldCallCompleted && (
+            <div className="text-xs text-green-600 bg-green-50 p-2 rounded">
+              ✅ Cold Call complété - RDV débloqués !
+            </div>
+          )}
+        </div>
+
+        <Separator />
+
         {/* Sélection du scénario */}
         <div className="space-y-3">
           <label className="text-sm font-medium">Scénario</label>
@@ -197,10 +269,10 @@ export const ScenarioSelector = () => {
         <div className="space-y-3">
           <Button 
             onClick={handleStart} 
-            disabled={!canStart}
+            disabled={!canStart || isRdvLocked}
             className="w-full"
           >
-            {selectedScenario ? 'Redémarrer la session' : 'Démarrer la session'}
+            {isRdvLocked ? 'RDV verrouillé' : selectedScenario ? 'Redémarrer la session' : 'Démarrer la session'}
           </Button>
           
           {selectedScenario && (
@@ -209,7 +281,7 @@ export const ScenarioSelector = () => {
                 Session active : {selectedScenario.title}
               </p>
               <p className="text-xs text-muted-foreground">
-                avec {selectedPersona?.title}
+                {conversationType === 'cold-call' ? 'Cold Call' : 'RDV Commercial'} avec {selectedPersona?.title}
               </p>
             </div>
           )}
