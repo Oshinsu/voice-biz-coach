@@ -7,7 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import heroImage from "@/assets/coach-hero.jpg";
 
 // Configuration API OpenAI - remplacez par votre clé API
-const OPENAI_API_KEY = "sk-proj-wHf8Oi7UVt3YJr23QUOzF4aWdv7Hp4C8pJu2EgS9OwF5RGt5_NB1Hs4LAFT3BlbkFJx7QHg5Fj2EtFPsHPG8NJmK";
+const OPENAI_API_KEY = "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";
 
 export const VoiceCoach = () => {
   const { toast } = useToast();
