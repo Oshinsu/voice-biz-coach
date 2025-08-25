@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { EnhancedScenario } from '@/data/enrichedScenarios';
 
 interface EnhancedVoiceCoachProps {
-  scenario?: EnhancedScenario;
+  scenario?: any; // Accept both Scenario and EnhancedScenario
   isOpen?: boolean;
   onToggle?: () => void;
 }

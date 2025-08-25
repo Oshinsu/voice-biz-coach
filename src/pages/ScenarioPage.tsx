@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getScenarioById } from "@/data/scenarios";
 import { useSalesStore } from "@/store/salesStore";
 import { useEffect, useState } from "react";
-import { VoiceCoachWidget } from "@/components/VoiceCoachWidget";
+import { EnhancedVoiceCoach } from "@/components/EnhancedVoiceCoach";
 
 export default function ScenarioPage() {
   const { id } = useParams();
@@ -692,7 +692,7 @@ export default function ScenarioPage() {
       </div>
 
       {/* Voice Coach Widget */}
-      <VoiceCoachWidget />
+      <EnhancedVoiceCoach scenario={scenario} isOpen={true} onToggle={() => {}} />
     </div>
   );
 }
