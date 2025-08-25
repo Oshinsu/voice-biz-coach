@@ -79,11 +79,12 @@ export function EnhancedHeader() {
             <Button 
               variant="outline" 
               className="border-border/50 hover:border-accent/50 hover:text-accent transition-all duration-300"
+              asChild
             >
-              Connexion
+              <Link to="/contact">Connexion</Link>
             </Button>
-            <Button className="bg-gradient-cta hover:shadow-lg hover:shadow-accent/25 text-accent-foreground transition-all duration-300 hover:scale-105">
-              Essai gratuit
+            <Button className="bg-gradient-cta hover:shadow-lg hover:shadow-accent/25 text-accent-foreground transition-all duration-300 hover:scale-105" asChild>
+              <Link to="/scenario/byss-vns-school">Essai gratuit</Link>
             </Button>
           </div>
 
@@ -127,11 +128,12 @@ export function EnhancedHeader() {
               <Button 
                 variant="outline" 
                 className="w-full border-border/50 hover:border-accent/50"
+                asChild
               >
-                Connexion
+                <Link to="/contact">Connexion</Link>
               </Button>
-              <Button className="w-full bg-gradient-cta text-accent-foreground">
-                Essai gratuit
+              <Button className="w-full bg-gradient-cta text-accent-foreground" asChild>
+                <Link to="/scenario/byss-vns-school">Essai gratuit</Link>
               </Button>
             </div>
           </div>

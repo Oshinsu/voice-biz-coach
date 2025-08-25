@@ -79,7 +79,7 @@ export function ByssHomepage() {
               
               <div className="flex flex-col sm:flex-row gap-4 mb-12 animate-scale-in">
                 <Button size="lg" className="bg-gradient-cta hover:shadow-lg hover:shadow-accent/30 text-accent-foreground group text-lg px-8 py-4 hover:scale-105 transition-all duration-300" asChild>
-                  <Link to="/scenario/saas-crm">
+                  <Link to="/scenario/byss-vns-school">
                     Découvrir la plateforme
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Link>
@@ -283,8 +283,10 @@ export function ByssHomepage() {
                   ))}
                 </div>
 
-                <Button className="w-full bg-gradient-cta hover:shadow-lg hover:shadow-accent/30 text-accent-foreground text-lg py-4 hover:scale-105 transition-all duration-300">
-                  Demander une démo personnalisée
+                <Button className="w-full bg-gradient-cta hover:shadow-lg hover:shadow-accent/30 text-accent-foreground text-lg py-4 hover:scale-105 transition-all duration-300" asChild>
+                  <Link to="/contact">
+                    Demander une démo personnalisée
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
@@ -372,7 +374,7 @@ export function ByssHomepage() {
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12 animate-scale-in">
             <Button size="lg" className="bg-accent hover:bg-accent/90 hover:shadow-xl hover:shadow-accent/30 text-accent-foreground text-lg px-10 py-4 hover:scale-105 transition-all duration-300 group" asChild>
-              <Link to="/scenario/saas-crm">
+              <Link to="/scenario/byss-vns-school">
                 Démarrer l'essai gratuit
                 <CheckCircle className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
               </Link>
