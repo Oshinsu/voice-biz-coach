@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Mic, MicOff, MessageCircle, X, Minimize2, Maximize2, Volume2, VolumeX, Phone, PhoneOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
-import { EnhancedScenario } from '@/data/enrichedScenarios';
+import { useToast } from '@/hooks/use-toast';
+import { RealtimeVoiceCoach, SALES_COACH_PROMPT } from '@/lib/openai-realtime';
 
 interface EnhancedVoiceCoachProps {
   scenario?: any; // Accept both Scenario and EnhancedScenario
@@ -24,76 +25,173 @@ export function EnhancedVoiceCoach({ scenario, isOpen = true, onToggle }: Enhanc
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [currentPhase, setCurrentPhase] = useState("Découverte");
+  const [transcript, setTranscript] = useState("");
+  const { toast } = useToast();
+  
+  const voiceCoachRef = useRef<RealtimeVoiceCoach | null>(null);
+
+  // Obtenir la clé API depuis les secrets ou les variables d'environnement
+  const getApiKey = () => {
+    // En production, utiliser les secrets Supabase
+    // Pour le développement, vous pouvez mettre votre clé temporairement
+    return process.env.OPENAI_API_KEY || "";
+  };
 
   // Get contextual coaching based on scenario
   const getContextualCoaching = () => {
     if (!scenario) return "Sélectionnez un scénario pour commencer";
     
-    return {
-      "Découverte": `Objectif: Comprendre ${scenario.company.name}. Questions clés: ${scenario.interlocutor.priorities.slice(0, 2).join(", ")}`,
-      "Démonstration": `Focus: Montrer la valeur de ${scenario.product.name}. Mettre en avant: ${scenario.product.competitiveAdvantages.slice(0, 2).join(", ")}`,
-      "Objections": `Préparez-vous aux objections probables: ${scenario.probableObjections.slice(0, 2).map(obj => obj.objection).join(", ")}`,
-      "Closing": `Objectif: ${scenario.salesGoal}. Arguments clés: ${scenario.product.roi}`
-    }[currentPhase] || "Concentrez-vous sur l'écoute active";
+    const phaseCoaching = {
+      "Découverte": `Objectif: Comprendre ${scenario.company?.name || scenario.title}. Questions clés: découvrir les besoins et pain points`,
+      "Démonstration": `Focus: Montrer la valeur de votre solution. Mettre en avant les bénéfices concrets`,
+      "Objections": `Préparez-vous aux objections probables. Écoutez et reformulez avant de répondre`,
+      "Closing": `Objectif: Finaliser la vente. Proposer les prochaines étapes concrètes`
+    };
+    
+    return phaseCoaching[currentPhase] || "Concentrez-vous sur l'écoute active";
   };
 
-  const startCoversation = () => {
+  // Préparer les instructions contextuelles
+  const getContextualInstructions = () => {
+    if (!scenario) return SALES_COACH_PROMPT;
+    
+    return `${SALES_COACH_PROMPT}
+
+CONTEXTE DU SCÉNARIO :
+- Entreprise : ${scenario.company?.name || "Non spécifié"}
+- Secteur : ${scenario.company?.sector || "Non spécifié"}
+- Interlocuteur : ${scenario.interlocutor?.name || "Non spécifié"} (${scenario.interlocutor?.role || "Non spécifié"})
+- Objectif : ${scenario.salesGoal || scenario.description}
+- Phase actuelle : ${currentPhase}
+
+Adapte tes conseils à ce contexte spécifique et aide l'utilisateur à réussir ce scénario de vente.`;
+  };
+
+  const startConversation = async () => {
+    const apiKey = getApiKey();
+    if (!apiKey) {
+      toast({
+        title: "Clé API manquante",
+        description: "Veuillez configurer votre clé API OpenAI dans les secrets.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsConnecting(true);
     
-    setTimeout(() => {
-      setIsConnecting(false);
-      setIsConnected(true);
+    try {
+      voiceCoachRef.current = new RealtimeVoiceCoach(apiKey);
       
-      // Add welcome message
-      const welcomeMessage: Message = {
-        id: Date.now().toString(),
-        content: scenario 
-          ? `Bonjour ! Je suis votre coach pour le scénario ${scenario.title}. Vous allez interagir avec ${scenario.interlocutor.name}, ${scenario.interlocutor.role} chez ${scenario.company.name}. Votre objectif : ${scenario.salesGoal}. Prêt à commencer ?`
-          : "Bonjour ! Je suis votre coach vocal. Commençons par sélectionner un scénario.",
-        isUser: false,
-        timestamp: new Date(),
+      // Configurer les callbacks
+      voiceCoachRef.current.onSpeechStarted = () => {
+        setIsRecording(true);
+        setIsSpeaking(false);
       };
       
-      setMessages([welcomeMessage]);
-    }, 2000);
-  };
-
-  const endConversation = () => {
-    setIsConnected(false);
-    setIsSpeaking(false);
-    setMessages([]);
-  };
-
-  // Simulate coaching feedback based on scenario
-  useEffect(() => {
-    if (isConnected && scenario) {
-      const interval = setInterval(() => {
-        if (Math.random() > 0.7) { // 30% chance of coaching tip
-          const tips = [
-            `N'oubliez pas que ${scenario.interlocutor.name} est ${scenario.interlocutor.personality}. Adaptez votre approche.`,
-            `Point clé à mentionner : ${scenario.product.roi}`,
-            `Attention à l'objection probable : "${scenario.probableObjections[0]?.objection}"`,
-            `Votre interlocuteur valorise : ${scenario.interlocutor.priorities[0]}`
-          ];
-          
-          const tip: Message = {
+      voiceCoachRef.current.onSpeechStopped = () => {
+        setIsRecording(false);
+      };
+      
+      voiceCoachRef.current.onResponseStarted = () => {
+        setIsSpeaking(true);
+      };
+      
+      voiceCoachRef.current.onResponseCompleted = (response) => {
+        setIsSpeaking(false);
+        if (response.output?.[0]?.content?.[0]?.transcript) {
+          const newMessage: Message = {
             id: Date.now().toString(),
-            content: tips[Math.floor(Math.random() * tips.length)],
+            content: response.output[0].content[0].transcript,
             isUser: false,
             timestamp: new Date(),
           };
-          
-          setMessages(prev => [...prev, tip]);
+          setMessages(prev => [...prev, newMessage]);
         }
-      }, 15000);
+      };
       
-      return () => clearInterval(interval);
+      voiceCoachRef.current.onTranscriptDelta = (delta) => {
+        setTranscript(prev => prev + delta);
+      };
+      
+      voiceCoachRef.current.onError = (error) => {
+        console.error("Erreur coach vocal:", error);
+        toast({
+          title: "Erreur du coach vocal",
+          description: "Une erreur s'est produite. Veuillez réessayer.",
+          variant: "destructive",
+        });
+        setIsConnected(false);
+        setIsConnecting(false);
+      };
+
+      // Se connecter avec les instructions contextuelles
+      await voiceCoachRef.current.connect(getContextualInstructions());
+      
+      setIsConnected(true);
+      setIsConnecting(false);
+      
+      // Démarrer l'enregistrement automatiquement
+      await voiceCoachRef.current.startRecording();
+      
+      toast({
+        title: "Coach vocal connecté",
+        description: "Vous pouvez maintenant parler avec votre coach commercial.",
+      });
+      
+    } catch (error) {
+      console.error("Erreur connexion:", error);
+      setIsConnecting(false);
+      toast({
+        title: "Erreur de connexion",
+        description: "Impossible de se connecter au coach vocal. Vérifiez votre clé API.",
+        variant: "destructive",
+      });
     }
-  }, [isConnected, scenario]);
+  };
+
+  const endConversation = () => {
+    if (voiceCoachRef.current) {
+      voiceCoachRef.current.disconnect();
+      voiceCoachRef.current = null;
+    }
+    
+    setIsConnected(false);
+    setIsSpeaking(false);
+    setIsRecording(false);
+    setMessages([]);
+    setTranscript("");
+    
+    toast({
+      title: "Session terminée",
+      description: "Votre session de coaching vocal est terminée.",
+    });
+  };
+
+  const toggleMute = () => {
+    if (voiceCoachRef.current) {
+      if (isMuted) {
+        voiceCoachRef.current.startRecording();
+      } else {
+        voiceCoachRef.current.stopRecording();
+      }
+      setIsMuted(!isMuted);
+    }
+  };
+
+  // Nettoyage à la fermeture du composant
+  useEffect(() => {
+    return () => {
+      if (voiceCoachRef.current) {
+        voiceCoachRef.current.disconnect();
+      }
+    };
+  }, []);
 
   if (!isOpen && !isMinimized) {
     return (
@@ -148,7 +246,7 @@ export function EnhancedVoiceCoach({ scenario, isOpen = true, onToggle }: Enhanc
             </div>
             {!isConnected ? (
               <Button 
-                onClick={startCoversation} 
+                onClick={startConversation}
                 disabled={isConnecting}
                 size="sm"
                 className="w-full bg-accent hover:bg-accent-dark"
@@ -266,7 +364,7 @@ export function EnhancedVoiceCoach({ scenario, isOpen = true, onToggle }: Enhanc
           <div className="space-y-2">
             {!isConnected ? (
               <Button 
-                onClick={startCoversation} 
+                onClick={startConversation} 
                 disabled={isConnecting}
                 className="w-full bg-accent hover:bg-accent-dark"
               >
