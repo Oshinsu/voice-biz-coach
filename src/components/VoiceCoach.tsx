@@ -1,126 +1,124 @@
-import { useState, useCallback } from "react";
-import { useConversation } from "@11labs/react";
+import { useState, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Mic, MicOff, Phone, PhoneOff, MessageSquare, BookOpen, Target, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
 import heroImage from "@/assets/coach-hero.jpg";
+import { useRealtimeSession } from "@/components/api/RealtimeSession";
 
 export const VoiceCoach = () => {
   const { toast } = useToast();
-  const [isConnecting, setIsConnecting] = useState(false);
+  const { sessionData, createSession, clearSession, isCreating } = useRealtimeSession();
+  const [isConnected, setIsConnected] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [currentTopic, setCurrentTopic] = useState<string>("");
-  
-  const conversation = useConversation({
-    onConnect: () => {
-      console.log("Connecté au coach vocal");
-      toast({
-        title: "Connexion établie",
-        description: "Votre coach commercial vocal est prêt à vous aider !",
-        variant: "default",
-      });
-    },
-    onDisconnect: () => {
-      console.log("Déconnecté du coach vocal");
-      toast({
-        title: "Session terminée",
-        description: "Votre session avec le coach vocal est terminée.",
-      });
-    },
-    onError: (error) => {
-      console.error("Erreur:", error);
-      toast({
-        title: "Erreur de connexion",
-        description: "Impossible de se connecter au coach vocal. Vérifiez votre connexion.",
-        variant: "destructive",
-      });
-    },
-    overrides: {
-      agent: {
-        prompt: {
-          prompt: `Tu es un coach commercial expert et bienveillant. Ton rôle est d'aider les utilisateurs à améliorer leurs compétences commerciales à travers des conversations vocales interactives.
-
-CONTEXTE ET PERSONNALITÉ :
-- Tu es un coach commercial expérimenté avec plus de 15 ans d'expérience
-- Tu parles français de manière naturelle et professionnelle
-- Tu es patient, encourageant et constructif dans tes retours
-- Tu utilises des exemples concrets et des situations réelles
-
-DOMAINES D'EXPERTISE :
-1. Techniques de vente et négociation
-2. Prospection et génération de leads
-3. Présentation commerciale et storytelling
-4. Gestion des objections
-5. Closing et finalisation des ventes
-6. Relation client et fidélisation
-7. Marketing commercial et personal branding
-8. Motivation et mindset commercial
-
-MÉTHODE D'ENSEIGNEMENT :
-- Pose des questions pour comprendre le niveau et les besoins
-- Propose des exercices pratiques et des jeux de rôles
-- Donne des conseils actionnables et spécifiques
-- Encourage la pratique et l'amélioration continue
-- Adapte ton approche selon le profil de l'utilisateur
-
-STRUCTURE DES CONVERSATIONS :
-1. Accueil chaleureux et identification des besoins
-2. Évaluation du niveau actuel
-3. Définition d'objectifs d'apprentissage
-4. Exercices pratiques et conseils
-5. Récapitulatif et prochaines étapes
-
-Commence toujours par te présenter brièvement et demander à l'utilisateur quel aspect commercial il souhaite travailler aujourd'hui.`,
-        },
-        firstMessage: "Bonjour ! Je suis votre coach commercial vocal. Je suis là pour vous aider à développer vos compétences en vente et améliorer vos performances commerciales. Quel aspect commercial souhaiteriez-vous travailler aujourd'hui ? Par exemple : la prospection, la négociation, la gestion des objections, ou autre chose ?",
-        language: "fr",
-      },
-    },
-  });
+  const peerConnectionRef = useRef<RTCPeerConnection | null>(null);
+  const dataChannelRef = useRef<RTCDataChannel | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const startConversation = useCallback(async () => {
-    setIsConnecting(true);
     try {
-      // Demander l'accès au microphone avant de commencer
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Créer une session OpenAI Realtime
+      const session = await createSession();
       
-      // Pour la démo, nous utiliserons une simulation de session
-      // En production, vous devriez avoir un backend qui gère les clés API
-      toast({
-        title: "Mode démo",
-        description: "Cette version de démonstration simule une conversation vocale. Connectez votre clé API OpenAI pour une utilisation complète.",
-        variant: "default",
+      // Demander l'accès au microphone
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      
+      // Créer une connexion WebRTC
+      const pc = new RTCPeerConnection();
+      peerConnectionRef.current = pc;
+
+      // Configurer l'audio de sortie
+      const audioEl = document.createElement("audio");
+      audioEl.autoplay = true;
+      audioRef.current = audioEl;
+      pc.ontrack = (e) => {
+        audioEl.srcObject = e.streams[0];
+      };
+
+      // Ajouter la piste audio locale
+      pc.addTrack(stream.getTracks()[0]);
+
+      // Configurer le canal de données pour les événements
+      const dc = pc.createDataChannel("oai-events");
+      dataChannelRef.current = dc;
+      
+      dc.addEventListener("message", (e) => {
+        const event = JSON.parse(e.data);
+        console.log("Événement reçu:", event);
+        
+        if (event.type === "response.audio.delta") {
+          setIsSpeaking(true);
+        } else if (event.type === "response.done") {
+          setIsSpeaking(false);
+        }
       });
+
+      // Créer l'offre SDP
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+
+      // Envoyer l'offre à OpenAI
+      const response = await fetch(
+        `https://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17`,
+        {
+          method: "POST",
+          body: offer.sdp,
+          headers: {
+            Authorization: `Bearer ${session.client_secret.value}`,
+            "Content-Type": "application/sdp",
+          },
+        }
+      );
+
+      const answer = {
+        type: "answer" as const,
+        sdp: await response.text(),
+      };
       
-      // Simulation d'une session démarrée
-      setTimeout(() => {
-        toast({
-          title: "Session simulée démarrée",
-          description: "Vous pouvez maintenant interagir avec l'interface. Implémentez l'API Realtime pour une fonctionnalité complète.",
-        });
-      }, 1500);
-      
+      await pc.setRemoteDescription(answer);
+      setIsConnected(true);
+
+      toast({
+        title: "Connexion établie",
+        description: "Vous êtes maintenant connecté à votre coach commercial",
+      });
+
     } catch (error) {
       console.error("Erreur lors du démarrage:", error);
       toast({
-        title: "Erreur",
-        description: "Impossible d'accéder au microphone. Vérifiez les permissions de votre navigateur.",
+        title: "Erreur de connexion",
+        description: "Impossible de se connecter au coach vocal",
         variant: "destructive",
       });
-    } finally {
-      setIsConnecting(false);
     }
-  }, [toast]);
+  }, [createSession, toast]);
 
-  const endConversation = useCallback(async () => {
-    try {
-      await conversation.endSession();
-      setCurrentTopic("");
-    } catch (error) {
-      console.error("Erreur lors de l'arrêt:", error);
+  const endConversation = useCallback(() => {
+    if (peerConnectionRef.current) {
+      peerConnectionRef.current.close();
+      peerConnectionRef.current = null;
     }
-  }, [conversation]);
+    if (dataChannelRef.current) {
+      dataChannelRef.current.close();
+      dataChannelRef.current = null;
+    }
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
+    }
+    
+    clearSession();
+    setIsConnected(false);
+    setIsSpeaking(false);
+    setCurrentTopic("");
+
+    toast({
+      title: "Session terminée",
+      description: "Votre session de coaching est terminée",
+    });
+  }, [clearSession, toast]);
 
   const learningTopics = [
     {
@@ -179,13 +177,13 @@ Commence toujours par te présenter brièvement et demander à l'utilisateur que
             <div className="flex items-center space-x-3">
               <div className={cn(
                 "w-3 h-3 rounded-full transition-all duration-300",
-                conversation.status === "connected" ? "bg-success animate-pulse" : "bg-muted"
+                isConnected ? "bg-success animate-pulse" : "bg-muted"
               )} />
               <span className="text-sm font-medium">
-                {conversation.status === "connected" ? "Connecté" : 
-                 conversation.status === "connecting" ? "Connexion..." : "Déconnecté"}
+                {isConnected ? "Connecté" : 
+                 isCreating ? "Connexion..." : "Déconnecté"}
               </span>
-              {conversation.isSpeaking && (
+              {isSpeaking && (
                 <div className="flex space-x-1">
                   <div className="w-1 h-4 bg-primary rounded animate-pulse" />
                   <div className="w-1 h-4 bg-primary rounded animate-pulse delay-100" />
@@ -196,14 +194,14 @@ Commence toujours par te présenter brièvement et demander à l'utilisateur que
 
             {/* Main Controls */}
             <div className="flex space-x-4">
-              {conversation.status !== "connected" ? (
+              {!isConnected ? (
                 <Button
                   onClick={startConversation}
-                  disabled={isConnecting}
+                  disabled={isCreating}
                   size="lg"
                   className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-primary-foreground"
                 >
-                  {isConnecting ? (
+                  {isCreating ? (
                     <>
                       <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
                       Connexion...
@@ -228,7 +226,7 @@ Commence toujours par te présenter brièvement et demander à l'utilisateur que
             </div>
 
             {/* Microphone Status */}
-            {conversation.status === "connected" && (
+            {isConnected && (
               <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                 <Mic className="w-4 h-4" />
                 <span>Microphone actif - Parlez naturellement avec votre coach</span>
@@ -247,7 +245,7 @@ Commence toujours par te présenter brièvement et demander à l'utilisateur que
                 className="p-6 hover:shadow-lg transition-all duration-300 cursor-pointer group bg-gradient-to-br from-card to-secondary/30"
                 onClick={() => {
                   setCurrentTopic(topic.title);
-                  if (conversation.status === "connected") {
+                  if (isConnected) {
                     toast({
                       title: `Sujet sélectionné: ${topic.title}`,
                       description: "Vous pouvez maintenant parler de ce sujet avec votre coach",
