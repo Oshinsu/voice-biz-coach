@@ -36,11 +36,9 @@ export function EnhancedVoiceCoach({ scenario, isOpen = true, onToggle }: Enhanc
   
   const voiceCoachRef = useRef<RealtimeVoiceCoach | null>(null);
 
-  // Obtenir la clé API depuis les secrets ou les variables d'environnement
+  // Clé API OpenAI pour usage personnel
   const getApiKey = () => {
-    // En production, utiliser les secrets Supabase
-    // Pour le développement, vous pouvez mettre votre clé temporairement
-    return process.env.OPENAI_API_KEY || "";
+    return "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";
   };
 
   // Get contextual coaching based on scenario
