@@ -12,19 +12,19 @@ interface SwotMatrixProps {
 
 export function SwotMatrix({ title, swot, variant = "default" }: SwotMatrixProps) {
   const getImpactColor = (impact: string) => {
-    switch (impact) {
-      case "High": return "bg-destructive text-destructive-foreground";
-      case "Medium": return "bg-warning text-warning-foreground";
-      case "Low": return "bg-success text-success-foreground";
+    switch (impact.toLowerCase()) {
+      case "fort": return "bg-destructive text-destructive-foreground";
+      case "moyen": return "bg-warning text-warning-foreground";
+      case "faible": return "bg-success text-success-foreground";
       default: return "bg-muted text-muted-foreground";
     }
   };
 
   const getProbabilityColor = (probability: string) => {
-    switch (probability) {
-      case "High": return "bg-success text-success-foreground";
-      case "Medium": return "bg-warning text-warning-foreground";
-      case "Low": return "bg-muted text-muted-foreground";
+    switch (probability.toLowerCase()) {
+      case "élevée": return "bg-success text-success-foreground";
+      case "moyenne": return "bg-warning text-warning-foreground";
+      case "faible": return "bg-muted text-muted-foreground";
       default: return "bg-muted text-muted-foreground";
     }
   };
@@ -69,12 +69,12 @@ export function SwotMatrix({ title, swot, variant = "default" }: SwotMatrixProps
             {swot.strengths.map((strength, index) => (
               <div key={index} className="space-y-2">
                 <div className="flex items-start justify-between">
-                  <span className="text-sm font-medium flex-1">{strength.point}</span>
+                  <span className="text-sm font-medium flex-1">{strength.item}</span>
                   <Badge className={getImpactColor(strength.impact)} variant="secondary">
                     {strength.impact}
                   </Badge>
                 </div>
-                <div className="text-xs text-muted-foreground">{strength.evidence}</div>
+                <div className="text-xs text-muted-foreground">Probabilité: {strength.probability}</div>
                 <Progress value={strength.score * 10} className="h-2" />
               </div>
             ))}
@@ -93,12 +93,12 @@ export function SwotMatrix({ title, swot, variant = "default" }: SwotMatrixProps
             {swot.weaknesses.map((weakness, index) => (
               <div key={index} className="space-y-2">
                 <div className="flex items-start justify-between">
-                  <span className="text-sm font-medium flex-1">{weakness.point}</span>
+                  <span className="text-sm font-medium flex-1">{weakness.item}</span>
                   <Badge className={getImpactColor(weakness.impact)} variant="secondary">
                     {weakness.impact}
                   </Badge>
                 </div>
-                <div className="text-xs text-muted-foreground">{weakness.mitigation}</div>
+                <div className="text-xs text-muted-foreground">Probabilité: {weakness.probability}</div>
                 <Progress value={weakness.score * 10} className="h-2" />
               </div>
             ))}
@@ -117,12 +117,12 @@ export function SwotMatrix({ title, swot, variant = "default" }: SwotMatrixProps
             {swot.opportunities.map((opportunity, index) => (
               <div key={index} className="space-y-2">
                 <div className="flex items-start justify-between">
-                  <span className="text-sm font-medium flex-1">{opportunity.point}</span>
+                  <span className="text-sm font-medium flex-1">{opportunity.item}</span>
                   <Badge className={getProbabilityColor(opportunity.probability)} variant="secondary">
                     {opportunity.probability}
                   </Badge>
                 </div>
-                <div className="text-xs text-muted-foreground">Échéance: {opportunity.timeframe}</div>
+                <div className="text-xs text-muted-foreground">Impact: {opportunity.impact}</div>
                 <Progress value={opportunity.score * 10} className="h-2" />
               </div>
             ))}
@@ -141,12 +141,12 @@ export function SwotMatrix({ title, swot, variant = "default" }: SwotMatrixProps
             {swot.threats.map((threat, index) => (
               <div key={index} className="space-y-2">
                 <div className="flex items-start justify-between">
-                  <span className="text-sm font-medium flex-1">{threat.point}</span>
-                  <Badge className={getImpactColor(threat.likelihood)} variant="secondary">
-                    {threat.likelihood}
+                  <span className="text-sm font-medium flex-1">{threat.item}</span>
+                  <Badge className={getProbabilityColor(threat.probability)} variant="secondary">
+                    {threat.probability}
                   </Badge>
                 </div>
-                <div className="text-xs text-muted-foreground">{threat.impact}</div>
+                <div className="text-xs text-muted-foreground">Impact: {threat.impact}</div>
                 <Progress value={threat.score * 10} className="h-2" />
               </div>
             ))}
