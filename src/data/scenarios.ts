@@ -1,9 +1,61 @@
+export interface Company {
+  name: string;
+  sector: string;
+  size: string;
+  revenue: string;
+  location: string;
+  description: string;
+  painPoints: string[];
+  currentSolution: string;
+  budget: string;
+  timeline: string;
+}
+
+export interface Interlocutor {
+  name: string;
+  role: string;
+  personality: string;
+  communicationStyle: string;
+  decisionPower: string;
+  priorities: string[];
+  concerns: string[];
+  motivations: string[];
+  experience: string;
+}
+
+export interface Product {
+  name: string;
+  description: string;
+  pricing: {
+    starter: string;
+    professional: string;
+    enterprise: string;
+  };
+  keyFeatures: string[];
+  competitiveAdvantages: string[];
+  roi: string;
+  implementationTime: string;
+}
+
+export interface SwotAnalysis {
+  strengths: string[];
+  weaknesses: string[];
+  opportunities: string[];
+  threats: string[];
+}
+
 export interface Scenario {
   id: string;
   title: string;
   description: string;
+  company: Company;
+  interlocutor: Interlocutor;
+  product: Product;
   objectives: string[];
-  mockData: Record<string, any>;
+  salesGoal: string;
+  expectedRevenue: string;
+  swot: SwotAnalysis;
+  competitorSwot: SwotAnalysis;
   probableObjections: string[];
   successCriteria: string[];
   tools: string[];
@@ -12,188 +64,62 @@ export interface Scenario {
 export const scenarios: Scenario[] = [
   {
     id: "kpi-performance",
-    title: "KPI Performance",
-    description: "Définir et piloter les indicateurs clés : CTR, CPC, CPA, LTV, CAC payback",
-    objectives: [
-      "Analyser les performances actuelles",
-      "Identifier les KPI critiques",
-      "Proposer des optimisations",
-      "Définir un plan d'action"
-    ],
-    mockData: {
-      impressions: 50000,
-      clics: 1500,
-      conversions: 75,
-      cout_total: 3000,
-      ltv: 450,
-      periode: "30 jours"
+    title: "Optimisation Analytics E-commerce",
+    description: "Vendre une plateforme d'analytics avancée à un e-commerce en croissance",
+    company: {
+      name: "ModaStyle",
+      sector: "E-commerce Mode",
+      size: "50 employés",
+      revenue: "8M€/an",
+      location: "Lyon, France",
+      description: "Boutique en ligne spécialisée dans la mode éthique et durable",
+      painPoints: ["Difficulté à tracker le ROI des campagnes", "Perte de clients sans comprendre pourquoi"],
+      currentSolution: "Google Analytics + tableurs Excel",
+      budget: "15-25k€/an",
+      timeline: "Q1 2024"
     },
-    probableObjections: [
-      "Ces métriques ne reflètent pas notre réalité",
-      "Nos KPI actuels nous conviennent",
-      "C'est trop complexe à mettre en place",
-      "Le ROI n'est pas évident"
-    ],
-    successCriteria: [
-      "KPI prioritaires identifiés",
-      "Plan de mesure défini",
-      "Outils de suivi proposés",
-      "Objectifs chiffrés validés"
-    ],
+    interlocutor: {
+      name: "Sophie Martin",
+      role: "Directrice Marketing",
+      personality: "Analytique et perfectionniste",
+      communicationStyle: "Directe, aime les chiffres concrets",
+      decisionPower: "Décisionnaire avec validation CEO",
+      priorities: ["ROI mesurable", "Facilité d'usage"],
+      concerns: ["Coût", "Complexité"],
+      motivations: ["Performance", "Croissance"],
+      experience: "5 ans en marketing digital"
+    },
+    product: {
+      name: "DataTrack Pro",
+      description: "Plateforme analytics tout-en-un pour e-commerce avec IA prédictive",
+      pricing: {
+        starter: "299€/mois",
+        professional: "599€/mois", 
+        enterprise: "1200€/mois"
+      },
+      keyFeatures: ["Tracking multi-canal unifié", "Prédictions IA de churn"],
+      competitiveAdvantages: ["Setup en 24h vs 2 semaines concurrence", "IA propriétaire 30% plus précise"],
+      roi: "300% ROI en 6 mois",
+      implementationTime: "2 semaines"
+    },
+    objectives: ["Démontrer la valeur du tracking unifié", "Quantifier les pertes actuelles"],
+    salesGoal: "Contrat Pro à 599€/mois (12 mois)",
+    expectedRevenue: "7,188€",
+    swot: {
+      strengths: ["IA propriétaire", "Setup rapide"],
+      weaknesses: ["Prix premium", "Jeune entreprise"],
+      opportunities: ["Marché en croissance", "Besoin urgent client"],
+      threats: ["Concurrents établis", "Solutions open-source"]
+    },
+    competitorSwot: {
+      strengths: ["Outils gratuits existants", "Habitudes établies"],
+      weaknesses: ["Données silos", "Pas de prédictif"],
+      opportunities: ["Coût zéro", "Connaissance interne"],
+      threats: ["Manque de visibilité", "Erreurs décisions"]
+    },
+    probableObjections: ["C'est trop cher pour nous", "Google Analytics suffit"],
+    successCriteria: ["Démonstration des pertes actuelles", "ROI chiffré présenté"],
     tools: ["calc_kpi", "score_phase"]
-  },
-  {
-    id: "ca-benefice",
-    title: "CA & Bénéfice",
-    description: "Calcul CA, marge brute, marge nette, seuil de rentabilité",
-    objectives: [
-      "Analyser la structure de coûts",
-      "Calculer les marges",
-      "Déterminer le seuil de rentabilité",
-      "Projeter la croissance"
-    ],
-    mockData: {
-      prix_unitaire: 150,
-      qte_mensuelle: 200,
-      cout_unitaire: 90,
-      frais_fixes: 8000,
-      taux_croissance: 15
-    },
-    probableObjections: [
-      "Nos marges sont déjà optimisées",
-      "Ces calculs sont trop théoriques",
-      "Notre modèle économique est différent",
-      "Le marché ne permet pas ces prix"
-    ],
-    successCriteria: [
-      "Structure de coûts clarifiée",
-      "Marges optimisées identifiées",
-      "Seuil de rentabilité défini",
-      "Plan de croissance validé"
-    ],
-    tools: ["calc_ca_benef", "score_phase"]
-  },
-  {
-    id: "etude-marche",
-    title: "Étude de marché",
-    description: "Taille marché (TAM/SAM/SOM), concurrence, pricing, canaux",
-    objectives: [
-      "Dimensionner le marché accessible",
-      "Analyser la concurrence",
-      "Définir la stratégie pricing",
-      "Identifier les canaux optimaux"
-    ],
-    mockData: {
-      tam: "2.5 milliards €",
-      sam: "150 millions €",
-      som: "15 millions €",
-      concurrents_directs: 8,
-      part_marche_cible: 3,
-      canaux: ["digital", "partenaires", "direct"]
-    },
-    probableObjections: [
-      "Le marché est trop saturé",
-      "Ces chiffres sont surévalués",
-      "La concurrence est trop forte",
-      "Nos canaux actuels suffisent"
-    ],
-    successCriteria: [
-      "Marché adressable quantifié",
-      "Positionnement concurrentiel défini",
-      "Stratégie pricing validée",
-      "Mix canaux optimisé"
-    ],
-    tools: ["make_swot", "make_pestel", "score_phase"]
-  },
-  {
-    id: "swot-analysis",
-    title: "SWOT",
-    description: "Forces/faiblesses/opportunités/menaces par secteur",
-    objectives: [
-      "Identifier les forces internes",
-      "Reconnaître les faiblesses",
-      "Saisir les opportunités",
-      "Anticiper les menaces"
-    ],
-    mockData: {
-      secteur: "SaaS B2B",
-      taille_entreprise: "50-200 employés",
-      region: "France",
-      maturite: "Scale-up"
-    },
-    probableObjections: [
-      "Nous connaissons déjà nos forces",
-      "Cette analyse est trop générale",
-      "Nos faiblesses sont temporaires",
-      "Le marché évolue trop vite"
-    ],
-    successCriteria: [
-      "SWOT complète et réaliste",
-      "Priorités stratégiques définies",
-      "Plan d'action par axe",
-      "Indicateurs de suivi"
-    ],
-    tools: ["make_swot", "score_phase"]
-  },
-  {
-    id: "pestel-analysis",
-    title: "PESTEL",
-    description: "Macro-facteurs + impact sur la proposition de valeur",
-    objectives: [
-      "Analyser l'environnement macro",
-      "Identifier les facteurs d'influence",
-      "Évaluer les impacts business",
-      "Adapter la stratégie"
-    ],
-    mockData: {
-      secteur: "FinTech",
-      region: "Europe",
-      horizon: "3 ans",
-      facteurs_critiques: ["réglementation", "technologie", "social"]
-    },
-    probableObjections: [
-      "Ces facteurs nous dépassent",
-      "Nous sommes trop petits pour être impactés",
-      "L'analyse est trop macro",
-      "Difficile à actionner"
-    ],
-    successCriteria: [
-      "Facteurs macro identifiés",
-      "Impacts quantifiés",
-      "Stratégie adaptée",
-      "Veille organisée"
-    ],
-    tools: ["make_pestel", "score_phase"]
-  },
-  {
-    id: "usp-positioning",
-    title: "USP & Positionnement & Cible",
-    description: "Promesse, bénéfice produit, différenciation, segments",
-    objectives: [
-      "Définir la proposition unique",
-      "Clarifier les bénéfices",
-      "Différencier vs concurrence",
-      "Segmenter les cibles"
-    ],
-    mockData: {
-      produit: "Plateforme de gestion commerciale",
-      cibles_principales: ["PME", "Commerciaux", "Dirigeants"],
-      differentiants: ["IA intégrée", "Interface intuitive", "Prix compétitif"],
-      pain_points: ["perte de temps", "manque de visibilité", "processus manuels"]
-    },
-    probableObjections: [
-      "Notre USP est déjà claire",
-      "Tous nos concurrents disent pareil",
-      "C'est trop compliqué à expliquer",
-      "Nos clients ne comprennent pas"
-    ],
-    successCriteria: [
-      "USP formulée clairement",
-      "Bénéfices quantifiés",
-      "Différenciation évidente",
-      "Segments priorisés"
-    ],
-    tools: ["craft_usp", "score_phase"]
   }
 ];
 
