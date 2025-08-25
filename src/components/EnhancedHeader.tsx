@@ -4,12 +4,14 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { useNavigation } from "@/hooks/useNavigation";
 
 export function EnhancedHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { user } = useAuth();
+  const { navigationItems, siteConfig, loading } = useNavigation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,13 +22,18 @@ export function EnhancedHeader() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navigation = [
+  // Use navigation items from Supabase, fallback to default if loading
+  const navigation = loading || navigationItems.length === 0 ? [
     { name: "Accueil", href: "/", current: location.pathname === "/" },
     { name: "Scénarios", href: "/scenarios", current: location.pathname === "/scenarios" },
     { name: "Services", href: "/services", current: location.pathname === "/services" },
     { name: "Qui sommes-nous", href: "/about", current: location.pathname === "/about" },
     { name: "Contact", href: "/contact", current: location.pathname === "/contact" }
-  ];
+  ] : navigationItems.map(item => ({
+    name: item.name,
+    href: item.href,
+    current: location.pathname === item.href
+  }));
 
   return (
     <header className={cn(
@@ -47,10 +54,10 @@ export function EnhancedHeader() {
             </div>
             <div className="hidden sm:block">
               <h1 className="text-xl font-bold text-foreground group-hover:text-accent transition-colors">
-                Byss VNS
+                {siteConfig.site_title || "Byss VNS"}
               </h1>
               <p className="text-xs text-muted-foreground leading-none">
-                Virtual Negotiation Simulator
+                {siteConfig.site_subtitle || "Virtual Negotiation Simulator"}
               </p>
             </div>
           </Link>
@@ -87,7 +94,7 @@ export function EnhancedHeader() {
               >
                 <Link to="/profile" className="flex items-center gap-2">
                   <User className="h-4 w-4" />
-                  Mon profil
+                  {siteConfig.profile_button || "Mon profil"}
                 </Link>
               </Button>
             ) : (
@@ -97,10 +104,10 @@ export function EnhancedHeader() {
                   className="border-border/50 hover:border-accent/50 hover:text-accent transition-all duration-300"
                   asChild
                 >
-                  <Link to="/auth">Connexion</Link>
+                  <Link to="/auth">{siteConfig.auth_button_login || "Connexion"}</Link>
                 </Button>
                 <Button className="bg-gradient-cta hover:shadow-lg hover:shadow-accent/25 text-accent-foreground transition-all duration-300 hover:scale-105" asChild>
-                  <Link to="/auth">Essai gratuit</Link>
+                  <Link to="/auth">{siteConfig.auth_button_signup || "Essai gratuit"}</Link>
                 </Button>
               </>
             )}
@@ -151,7 +158,7 @@ export function EnhancedHeader() {
                 >
                   <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2">
                     <User className="h-4 w-4" />
-                    Mon profil
+                    {siteConfig.profile_button || "Mon profil"}
                   </Link>
                 </Button>
               ) : (
@@ -161,10 +168,10 @@ export function EnhancedHeader() {
                     className="w-full border-border/50 hover:border-accent/50"
                     asChild
                   >
-                    <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Connexion</Link>
+                    <Link to="/auth" onClick={() => setIsMenuOpen(false)}>{siteConfig.auth_button_login || "Connexion"}</Link>
                   </Button>
                   <Button className="w-full bg-gradient-cta text-accent-foreground" asChild>
-                    <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Essai gratuit</Link>
+                    <Link to="/auth" onClick={() => setIsMenuOpen(false)}>{siteConfig.auth_button_signup || "Essai gratuit"}</Link>
                   </Button>
                 </>
               )}

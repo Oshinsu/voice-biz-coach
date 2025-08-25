@@ -1,0 +1,73 @@
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+
+interface NavigationItem {
+  id: string;
+  name: string;
+  href: string;
+  order_index: number;
+  is_active: boolean;
+}
+
+interface SiteConfig {
+  [key: string]: string;
+}
+
+export const useNavigation = () => {
+  const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
+  const [siteConfig, setSiteConfig] = useState<SiteConfig>({});
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+
+        // Fetch navigation items
+        const { data: navData, error: navError } = await supabase
+          .from('navigation_items')
+          .select('*')
+          .eq('is_active', true)
+          .order('order_index');
+
+        if (navError) {
+          throw navError;
+        }
+
+        // Fetch site configuration
+        const { data: configData, error: configError } = await supabase
+          .from('site_config')
+          .select('key, value');
+
+        if (configError) {
+          throw configError;
+        }
+
+        // Transform config data
+        const config: SiteConfig = {};
+        configData?.forEach((item) => {
+          config[item.key] = String(JSON.parse(String(item.value)));
+        });
+
+        setNavigationItems(navData || []);
+        setSiteConfig(config);
+      } catch (err) {
+        console.error('Error fetching navigation data:', err);
+        setError(err instanceof Error ? err.message : 'Failed to fetch navigation data');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  return {
+    navigationItems,
+    siteConfig,
+    loading,
+    error,
+  };
+};
