@@ -22,6 +22,7 @@ interface Message {
 }
 
 export function EnhancedVoiceCoach({ scenario, isOpen = true, onToggle }: EnhancedVoiceCoachProps) {
+  // Fixed typo issue - force cache refresh
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
