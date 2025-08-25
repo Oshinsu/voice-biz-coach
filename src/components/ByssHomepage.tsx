@@ -1,120 +1,81 @@
-import { ArrowRight, Brain, TrendingUp, Users, Zap, CheckCircle, Star, Mic, BarChart3, Shield, GraduationCap, Building, Target } from "lucide-react";
+import { ArrowRight, Brain, TrendingUp, Users, Zap, CheckCircle, Star, Mic, BarChart3, Shield, GraduationCap, Building, Target, PlayCircle, Award, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { scenarios } from "@/data/scenarios";
 import { EnhancedHeader } from "./EnhancedHeader";
-import { EnhancedStats } from "./EnhancedStats";
 import { TrustElements } from "./TrustElements";
 
-
-const getScenarioIcon = (scenarioId: string) => {
-  const iconMap: { [key: string]: any } = {
-    "byss-vns-school": GraduationCap,
-    "kpi-performance": BarChart3,
-    "saas-crm": Users,
-    "marketplace-b2b": TrendingUp,
-    "formation-digitale": GraduationCap,
-    "cybersecurite-pme": Shield,
-    "erp-manufacturing": BarChart3,
-  };
-  return iconMap[scenarioId] || BarChart3;
-};
-
-const getDifficultyColor = (difficulty: string) => {
-  switch (difficulty) {
-    case "Facile":
-      return "bg-success text-success-foreground";
-    case "Moyen":
-      return "bg-warning text-warning-foreground";
-    case "Difficile":
-      return "bg-destructive text-destructive-foreground";
-    default:
-      return "bg-muted text-muted-foreground";
-  }
-};
-
 export function ByssHomepage() {
-  const totalRevenue = scenarios.reduce((sum, scenario) => 
-    sum + parseFloat(scenario.expectedRevenue.replace(/[€,]/g, '')), 0
-  );
-  const avgSuccessRate = Math.round(scenarios.reduce((sum, s) => sum + s.probability, 0) / scenarios.length);
-  const totalCompanies = scenarios.length;
-
   return (
-    <div className="min-h-screen bg-background relative">
-      {/* Clean Background */}
-      <div className="absolute inset-0 bg-background"></div>
-      
-      {/* Enhanced Header */}
+    <div className="min-h-screen bg-background">
+      {/* Header */}
       <EnhancedHeader />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-6 z-10">
-        <div className="max-w-7xl mx-auto">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* Background Image */}
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `linear-gradient(135deg, rgba(0, 35, 102, 0.9), rgba(0, 35, 102, 0.7)), url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=2088&auto=format&fit=crop')`
+          }}
+        />
+        
+        {/* Content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 py-20">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
             <div className="text-left">
-              <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 rounded-lg px-4 py-2 mb-8">
-                <Zap className="h-5 w-5 text-accent" />
-                <span className="text-sm font-medium text-accent">Powered by OpenAI GPT-4o Realtime</span>
+              <div className="mb-8">
+                <div className="w-20 h-1 bg-accent mb-6"></div>
+                <h3 className="text-accent font-medium text-lg mb-4 tracking-wide">
+                  RÉVÉLEZ VOTRE POTENTIEL
+                </h3>
               </div>
               
-              <h1 className="text-5xl md:text-7xl font-bold text-primary mb-6 leading-tight">
-                <span className="text-accent">Byss VNS</span><br />
-                <span className="text-primary">Virtual Negotiation</span><br />
-                <span className="text-accent">Simulator</span>
+              <h1 className="text-4xl md:text-6xl font-bold text-white mb-8 leading-tight">
+                L'expertise au service de<br />
+                <span className="text-white">votre réussite</span><br />
+                <span className="text-white">commerciale</span>
               </h1>
               
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl leading-relaxed">
-                Formez vos étudiants aux techniques de négociation commerciale avec notre simulateur vocal IA de pointe. 
-                Une technologie révolutionnaire pour l'enseignement commercial moderne.
+              <p className="text-xl text-white/90 mb-12 max-w-2xl leading-relaxed">
+                Byss VNS est votre partenaire de confiance pour booster vos compétences en 
+                négociation commerciale, aspects stratégiques de la vente digitale, 
+                et anglais des affaires. Nous proposons également des 
+                ressources exclusives avec notre simulateur vocal IA de négociation.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground px-8 py-4" asChild>
+                <Button size="lg" className="bg-accent hover:bg-accent/90 text-white px-8 py-4 rounded-lg text-lg font-medium" asChild>
                   <Link to="/scenarios">
-                      Découvrir la plateforme  
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                  </Button>
-                <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4" asChild>
+                    Nos Services
+                  </Link>
+                </Button>
+                <Button size="lg" variant="ghost" className="text-white border border-white/30 hover:bg-white/10 px-8 py-4 rounded-lg text-lg font-medium" asChild>
                   <Link to="/auth">
-                    Essai gratuit
+                    En Savoir Plus →
                   </Link>
                 </Button>
               </div>
-
-              <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-accent" />
-                  <span>IA vocale la plus avancée</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-accent" />
-                  <span>Scénarios ultra-réalistes</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-5 w-5 text-accent" />
-                  <span>Analytics en temps réel</span>
-                </div>
-              </div>
             </div>
 
+            {/* Right Content - Demo Card */}
             <div className="relative">
-              <Card className="bg-card border border-border shadow-lg rounded-lg">
+              <Card className="bg-white/95 backdrop-blur-sm border-0 shadow-2xl rounded-2xl overflow-hidden">
                 <CardContent className="p-8">
                   <div className="space-y-6">
-                    <div className="flex items-center gap-4 p-4 bg-accent/10 rounded-lg border border-accent/20">
-                      <div className="p-3 bg-accent rounded-lg">
-                        <Mic className="h-6 w-6 text-accent-foreground" />
+                    <div className="flex items-center gap-4 p-4 bg-primary/5 rounded-xl">
+                      <div className="p-3 bg-accent rounded-xl">
+                        <Mic className="h-6 w-6 text-white" />
                       </div>
                       <div>
-                        <p className="font-semibold">Session en cours</p>
+                        <p className="font-semibold text-primary">Session IA en cours</p>
                         <p className="text-sm text-muted-foreground">Négociation avec TechCorp</p>
                       </div>
                       <div className="ml-auto">
-                        <div className="w-3 h-3 bg-success rounded-full"></div>
+                        <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                       </div>
                     </div>
                     
@@ -123,25 +84,25 @@ export function ByssHomepage() {
                         <span className="text-sm text-muted-foreground font-medium">Progression globale</span>
                         <span className="text-sm font-bold text-accent">68%</span>
                       </div>
-                      <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full bg-accent rounded-full" style={{ width: '68%' }}></div>
+                      <div className="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                        <div className="h-full bg-accent rounded-full transition-all duration-1000" style={{ width: '68%' }}></div>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="text-center p-4 bg-success/10 rounded-lg border border-success/20">
-                        <div className="text-2xl font-bold text-success">85%</div>
-                        <div className="text-xs text-muted-foreground">Taux de réussite</div>
+                      <div className="text-center p-4 bg-green-50 rounded-xl border border-green-100">
+                        <div className="text-2xl font-bold text-green-600">85%</div>
+                        <div className="text-xs text-gray-600">Taux de réussite</div>
                       </div>
-                      <div className="text-center p-4 bg-accent/10 rounded-lg border border-accent/20">
-                        <div className="text-2xl font-bold text-accent">12</div>
-                        <div className="text-xs text-muted-foreground">Objections gérées</div>
+                      <div className="text-center p-4 bg-blue-50 rounded-xl border border-blue-100">
+                        <div className="text-2xl font-bold text-blue-600">12</div>
+                        <div className="text-xs text-gray-600">Objections gérées</div>
                       </div>
                     </div>
 
                     <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                      <div className="w-2 h-2 bg-accent rounded-full"></div>
-                      <span>Simulation en temps réel</span>
+                      <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+                      <span>Simulation IA en temps réel</span>
                     </div>
                   </div>
                 </CardContent>
@@ -151,305 +112,194 @@ export function ByssHomepage() {
         </div>
       </section>
 
-      {/* Enhanced Stats Section */}
-      <EnhancedStats 
-        totalCompanies={totalCompanies}
-        totalRevenue={totalRevenue}
-        avgSuccessRate={avgSuccessRate}
-      />
-
-      {/* Technology Section */}
-      <section className="py-20 px-6 bg-background">
+      {/* About Section - Inspired by Métora */}
+      <section className="py-20 px-6 bg-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <Badge className="mb-4 bg-accent/10 text-accent border-accent/20">Technologie de pointe</Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Propulsé par l'IA vocale<br />
-              <span className="text-accent">la plus avancée</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Notre plateforme utilise OpenAI GPT-4o Realtime API, l'IA conversationnelle 
-              la plus sophistiquée disponible, pour des simulations ultra-réalistes.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="bg-card border border-border shadow-md hover:shadow-lg transition-shadow duration-300">
-              <CardContent className="p-8 text-center">
-                <div className="p-4 bg-accent/10 rounded-lg w-16 h-16 mx-auto mb-6 flex items-center justify-center">
-                  <Brain className="h-8 w-8 text-accent" />
-                </div>
-                <h3 className="text-xl font-bold mb-4">IA Conversationnelle</h3>
-                <p className="text-muted-foreground">
-                  Conversations vocales naturelles avec analyse en temps réel des émotions, 
-                  du ton et des techniques de négociation utilisées.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card border border-border shadow-md hover:shadow-lg transition-shadow duration-300">
-              <CardContent className="p-8 text-center">
-                <div className="p-4 bg-accent/10 rounded-lg w-16 h-16 mx-auto mb-6 flex items-center justify-center">
-                  <BarChart3 className="h-8 w-8 text-accent" />
-                </div>
-                <h3 className="text-xl font-bold mb-4">Analytics Avancés</h3>
-                <p className="text-muted-foreground">
-                  Tableaux de bord détaillés pour suivre les progrès des étudiants, 
-                  identifier les points d'amélioration et personnaliser l'enseignement.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card border border-border shadow-md hover:shadow-lg transition-shadow duration-300">
-              <CardContent className="p-8 text-center">
-                <div className="p-4 bg-accent/10 rounded-lg w-16 h-16 mx-auto mb-6 flex items-center justify-center">
-                  <GraduationCap className="h-8 w-8 text-accent" />
-                </div>
-                <h3 className="text-xl font-bold mb-4">Pédagogie Innovante</h3>
-                <p className="text-muted-foreground">
-                  Méthodes d'apprentissage immersives basées sur la pratique, 
-                  adaptées aux programmes des écoles de commerce modernes.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-
-
-      {/* Trust Elements */}
-      <TrustElements />
-
-      {/* Enhanced Pricing Section */}
-      <section className="py-20 px-6 bg-background relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-mesh opacity-20"></div>
-        <div className="max-w-6xl mx-auto relative z-10">
-          <div className="text-center mb-16">
-            <Badge className="mb-4 bg-accent/10 text-accent border-accent/20 animate-bounce-gentle">
-              Tarification transparente
-            </Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6 animate-fade-in">
-              Une solution complète pour votre établissement
-            </h2>
-            <p className="text-xl text-muted-foreground mb-8 animate-slide-up">
-              Accès illimité pour tous vos étudiants et formateurs
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Pricing Card */}
-            <Card className="bg-gradient-to-br from-card via-card/90 to-card/80 border-0 shadow-2xl hover:shadow-accent/20 transition-all duration-500 relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-              <CardContent className="p-8 relative z-10">
-                <div className="text-center mb-8">
-                  <div className="inline-flex items-center gap-2 bg-accent/10 px-4 py-2 rounded-full mb-4">
-                    <Star className="h-4 w-4 text-accent" />
-                    <span className="text-sm font-medium text-accent">Solution Premium</span>
-                  </div>
-                  <div className="text-6xl font-bold bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent mb-2">
-                    749€
-                  </div>
-                  <div className="text-lg text-muted-foreground">par mois</div>
-                  <div className="text-sm text-muted-foreground/70 mt-2">+ coûts API OpenAI variables</div>
-                </div>
-                
-                <div className="space-y-4 mb-8">
-                  {[
-                    "Accès illimité pour tous les étudiants",
-                    "Tableaux de bord enseignants avancés",
-                    "Analytics détaillés par étudiant",
-                    "Support prioritaire 24/7",
-                    "Intégration LMS personnalisée",
-                    "Formation équipe pédagogique",
-                    "Scénarios personnalisés sur demande",
-                    "Rapports de performance détaillés"
-                  ].map((feature, index) => (
-                    <div 
-                      key={feature}
-                      className="flex items-center gap-3 animate-slide-in-left"
-                      style={{ animationDelay: `${index * 100}ms` }}
-                    >
-                      <CheckCircle className="h-5 w-5 text-success flex-shrink-0" />
-                      <span className="text-foreground">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <Button className="w-full bg-gradient-cta hover:shadow-lg hover:shadow-accent/30 text-accent-foreground text-lg py-4 hover:scale-105 transition-all duration-300" asChild>
-                  <Link to="/contact">
-                    Demander une démo personnalisée
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
-
-            {/* Value Propositions */}
-            <div className="space-y-8">
-              <div className="animate-slide-in-right">
-                <h3 className="text-2xl font-bold text-foreground mb-6">
-                  Pourquoi choisir Byss VNS ?
-                </h3>
-                <div className="space-y-6">
-                  {[
-                    {
-                      icon: Brain,
-                      title: "ROI mesurable",
-                      description: "Amélioration de 40% des compétences commerciales selon nos études"
-                    },
-                    {
-                      icon: Shield,
-                      title: "Sécurité garantie",
-                      description: "Conformité RGPD et hébergement en Europe avec chiffrement end-to-end"
-                    },
-                    {
-                      icon: Users,
-                      title: "Support dédié",
-                      description: "Équipe d'experts pédagogiques pour vous accompagner dans le déploiement"
-                    }
-                  ].map((item, index) => {
-                    const Icon = item.icon;
-                    return (
-                      <div 
-                        key={item.title}
-                        className="flex gap-4 p-4 bg-background/50 rounded-xl border border-border/50 hover:bg-background transition-colors animate-fade-in"
-                        style={{ animationDelay: `${index * 200}ms` }}
-                      >
-                        <div className="p-3 bg-accent/10 rounded-lg flex-shrink-0">
-                          <Icon className="h-6 w-6 text-accent" />
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-foreground mb-2">{item.title}</h4>
-                          <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="p-6 bg-gradient-to-br from-success/10 to-success/5 rounded-xl border border-success/20 animate-scale-in">
-                <div className="flex items-center gap-3 mb-3">
-                  <CheckCircle className="h-6 w-6 text-success" />
-                  <span className="font-semibold text-success">Garantie satisfait ou remboursé</span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Essai gratuit de 30 jours. Si vous n'êtes pas satisfait, nous vous remboursons intégralement.
-                </p>
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left - Image */}
+            <div className="relative">
+              <div className="bg-primary rounded-3xl p-8 shadow-2xl">
+                <img 
+                  src="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?q=80&w=2070&auto=format&fit=crop" 
+                  alt="Formation professionnelle" 
+                  className="w-full h-80 object-cover rounded-2xl"
+                />
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Enhanced CTA Section */}
-      <section className="py-20 px-6 bg-gradient-primary relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-mesh opacity-40"></div>
-        <div className="absolute top-10 left-1/4 w-32 h-32 bg-accent/20 rounded-full blur-2xl animate-float"></div>
-        <div className="absolute bottom-10 right-1/4 w-48 h-48 bg-primary-light/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
-        
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <Badge className="mb-6 bg-primary-foreground/10 text-primary-foreground border-primary-foreground/20 animate-bounce-gentle">
-            🚀 Révolution pédagogique
-          </Badge>
-          
-          <h2 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-6 animate-fade-in leading-tight">
-            Révolutionnez l'enseignement
-            <span className="block text-accent bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent">
-              commercial
-            </span>
-          </h2>
-          
-          <p className="text-xl text-primary-foreground/80 mb-8 max-w-3xl mx-auto animate-slide-up leading-relaxed">
-            Rejoignez les écoles de commerce qui forment déjà la nouvelle génération 
-            de négociateurs avec l'IA vocale de pointe. L'avenir de l'éducation commerciale commence aujourd'hui.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12 animate-scale-in">
-            <Button size="lg" className="bg-accent hover:bg-accent/90 hover:shadow-xl hover:shadow-accent/30 text-accent-foreground text-lg px-10 py-4 hover:scale-105 transition-all duration-300 group" asChild>
-              <Link to="/auth">
-                Démarrer l'essai gratuit
-                <CheckCircle className="ml-2 h-5 w-5 group-hover:rotate-12 transition-transform" />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:border-primary-foreground/50 text-lg px-10 py-4 backdrop-blur-sm transition-all duration-300 hover:scale-105" asChild>
-              <Link to="/contact">
-                Planifier une présentation
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-primary-foreground/70 animate-slide-up" style={{ animationDelay: '600ms' }}>
-            <div className="flex items-center justify-center gap-3">
-              <CheckCircle className="h-5 w-5 text-accent" />
-              <span>Configuration en 24h</span>
-            </div>
-            <div className="flex items-center justify-center gap-3">
-              <CheckCircle className="h-5 w-5 text-accent" />
-              <span>Formation incluse</span>
-            </div>
-            <div className="flex items-center justify-center gap-3">
-              <CheckCircle className="h-5 w-5 text-accent" />
-              <span>Support dédié</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-16 px-6 bg-background border-t border-border">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            {/* Right - Content */}
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 bg-accent rounded-lg">
-                  <Brain className="h-6 w-6 text-accent-foreground" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-bold text-foreground">Byss VNS</h3>
-                  <p className="text-xs text-muted-foreground">Virtual Negotiation Simulator</p>
-                </div>
+              <div className="bg-primary rounded-3xl p-8 text-white">
+                <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                  Byss VNS – Forgez votre Supériorité Stratégique
+                </h2>
+                <p className="text-lg leading-relaxed">
+                  Créée par l'expertise en négociation et en développement commercial, Byss VNS est née de la volonté de transmettre des 
+                  compétences indispensables à la réussite dans un environnement professionnel compétitif. 
+                  Fort d'une riche expérience en négociation et en développement commercial, nous avons su 
+                  allier pédagogie, expertise technique et maîtrise de l'IA pour offrir des formations 
+                  innovantes et adaptées aux réalités du marché commercial. Notre mission : transformer 
+                  vos ambitions en compétences concrètes et vous donner les clés pour exceller dans vos 
+                  domaines d'activité.
+                </p>
               </div>
-              <p className="text-sm text-muted-foreground">
-                La plateforme de formation commerciale alimentée par l'IA vocale la plus avancée.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Transformation Section */}
+      <section className="py-20 px-6 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left - Content */}
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-primary mb-8">
+                Transformez Vos Ambitions en Victoires
+              </h2>
+              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+                Sous la direction de notre expertise, bénéficiez d'une formation 
+                solide et d'un savoir-faire reconnu dans la formation professionnelle 
+                et la négociation.
               </p>
             </div>
 
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">Plateforme</h4>
-              <div className="space-y-2">
-                <Link to="/" className="block text-sm text-muted-foreground hover:text-accent transition-colors">Accueil</Link>
-                <Link to="/services" className="block text-sm text-muted-foreground hover:text-accent transition-colors">Services</Link>
-                <Link to="/about" className="block text-sm text-muted-foreground hover:text-accent transition-colors">Qui sommes-nous</Link>
+            {/* Right - Stats */}
+            <div className="grid grid-cols-2 gap-6">
+              <div className="bg-white p-8 rounded-2xl shadow-lg text-center">
+                <div className="text-4xl font-bold text-accent mb-2">24%</div>
+                <h3 className="font-semibold text-primary mb-2">Productivité en hausse</h3>
+                <p className="text-sm text-muted-foreground">
+                  Les entreprises investissant dans des formations en ligne constatent en moyenne 
+                  une augmentation de 24% de la productivité de leurs employés.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-2xl shadow-lg text-center">
+                <div className="text-4xl font-bold text-primary mb-2">90%</div>
+                <h3 className="font-semibold text-primary mb-2">Adoption par les entreprises</h3>
+                <p className="text-sm text-muted-foreground">
+                  Près de 90% des entreprises à l'échelle mondiale utilisent désormais la formation en 
+                  ligne pour développer les compétences de leurs collaborateurs.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-2xl shadow-lg text-center">
+                <div className="text-4xl font-bold text-accent mb-2">35%</div>
+                <h3 className="font-semibold text-primary mb-2">Impact sur la négociation</h3>
+                <p className="text-sm text-muted-foreground">
+                  Les professionnels ayant suivi une formation en négociation améliorent leurs taux de 
+                  succès dans la conclusion d'accords d'environ 35%.
+                </p>
+              </div>
+
+              <div className="bg-white p-8 rounded-2xl shadow-lg text-center">
+                <div className="text-4xl font-bold text-primary mb-2">-50%</div>
+                <h3 className="font-semibold text-primary mb-2">Réduction des coûts</h3>
+                <p className="text-sm text-muted-foreground">
+                  La formation en ligne permet de réduire les coûts liés à l'apprentissage jusqu'à 50% par 
+                  rapport aux formations en présentiel traditionnelles.
+                </p>
               </div>
             </div>
-
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">Support</h4>
-              <div className="space-y-2">
-                <Link to="/contact" className="block text-sm text-muted-foreground hover:text-accent transition-colors">Contact</Link>
-                <Link to="/privacy" className="block text-sm text-muted-foreground hover:text-accent transition-colors">Confidentialité</Link>
-                <Link to="/terms" className="block text-sm text-muted-foreground hover:text-accent transition-colors">CGU</Link>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-semibold text-foreground mb-4">Contact</h4>
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <p>hello@byss-vns.com</p>
-                <p>+33 1 23 45 67 89</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="pt-8 border-t border-border text-center">
-            <p className="text-sm text-muted-foreground">
-              © 2024 Byss VNS. Tous droits réservés. Powered by OpenAI GPT-4o Realtime API.
-            </p>
           </div>
         </div>
-      </footer>
+      </section>
+
+      {/* Academy Section */}
+      <section className="py-20 px-6 bg-primary text-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left - Content */}
+            <div>
+              <div className="mb-8">
+                <div className="w-20 h-1 bg-accent mb-6"></div>
+                <h3 className="text-accent font-medium text-lg mb-4 tracking-wide">
+                  NOS VALEURS
+                </h3>
+              </div>
+              
+              <h2 className="text-3xl md:text-4xl font-bold mb-8">
+                Byss VNS – L'Académie des Négociateurs du Futur
+              </h2>
+              
+              <p className="text-lg mb-8 leading-relaxed opacity-90">
+                Dans le monde professionnel, <strong>votre valeur n'est pas celle que 
+                vous pensez, elle est celle que vous pouvez démontrer.</strong>
+              </p>
+              
+              <p className="text-lg mb-12 leading-relaxed opacity-90">
+                Chez <strong>Byss VNS</strong>, nous enseignons l'impact, la persuasion et 
+                l'influence. Nos formations ne se limitent pas à vous 
+                apprendre, elles vous arment pour un monde où chaque mot, 
+                chaque contrat, chaque négociation peut être un <strong>game 
+                changer</strong>.
+              </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                  <div className="text-accent text-2xl mb-4">✓</div>
+                  <h3 className="font-bold text-xl mb-3">
+                    Les erreurs fatales à éviter qui peuvent vous coûter un deal.
+                  </h3>
+                  <p className="opacity-80">
+                    Verrouiller un deal à votre avantage sans laisser une faille 
+                    juridique.
+                  </p>
+                </div>
+                
+                <div>
+                  <div className="text-accent text-2xl mb-4">✓</div>
+                  <h3 className="font-bold text-xl mb-3">
+                    Comment identifier et exploiter les failles de votre interlocuteur.
+                  </h3>
+                  <p className="opacity-80">
+                    Convaincre, influencer et obtenir ce que vous voulez, même face aux 
+                    interlocuteurs les plus coriaces.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right - Image */}
+            <div className="relative">
+              <img 
+                src="https://images.unsplash.com/photo-1551836022-deb4988cc6c0?q=80&w=2070&auto=format&fit=crop" 
+                alt="Professionnelle au travail" 
+                className="w-full h-96 object-cover rounded-2xl shadow-2xl"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-6 bg-accent">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-8">
+            Votre passerelle vers l'excellence
+          </h2>
+          <p className="text-xl text-white/90 mb-12 leading-relaxed">
+            Investissez dans votre développement aujourd'hui pour ouvrir les portes d'un 
+            futur prometteur.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-white text-accent hover:bg-gray-50 px-8 py-4 rounded-lg text-lg font-medium" asChild>
+              <Link to="/scenarios">
+                Découvrir nos formations
+              </Link>
+            </Button>
+            <Button size="lg" variant="ghost" className="text-white border border-white/30 hover:bg-white/10 px-8 py-4 rounded-lg text-lg font-medium" asChild>
+              <Link to="/auth">
+                Commencer gratuitement
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Elements */}
+      <TrustElements />
     </div>
   );
 }
