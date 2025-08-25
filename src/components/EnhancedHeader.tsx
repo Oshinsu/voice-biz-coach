@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
-import { Brain, Menu, X, ChevronDown } from "lucide-react";
+import { Brain, Menu, X, ChevronDown, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 
 export function EnhancedHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -77,16 +79,31 @@ export function EnhancedHeader() {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-4">
-            <Button 
-              variant="outline" 
-              className="border-border/50 hover:border-accent/50 hover:text-accent transition-all duration-300"
-              asChild
-            >
-              <Link to="/contact">Connexion</Link>
-            </Button>
-            <Button className="bg-gradient-cta hover:shadow-lg hover:shadow-accent/25 text-accent-foreground transition-all duration-300 hover:scale-105" asChild>
-              <Link to="/scenario/byss-vns-school">Essai gratuit</Link>
-            </Button>
+            {user ? (
+              <Button 
+                variant="outline" 
+                className="border-border/50 hover:border-accent/50 hover:text-accent transition-all duration-300"
+                asChild
+              >
+                <Link to="/profile" className="flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  Mon profil
+                </Link>
+              </Button>
+            ) : (
+              <>
+                <Button 
+                  variant="outline" 
+                  className="border-border/50 hover:border-accent/50 hover:text-accent transition-all duration-300"
+                  asChild
+                >
+                  <Link to="/auth">Connexion</Link>
+                </Button>
+                <Button className="bg-gradient-cta hover:shadow-lg hover:shadow-accent/25 text-accent-foreground transition-all duration-300 hover:scale-105" asChild>
+                  <Link to="/auth">Essai gratuit</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -126,16 +143,31 @@ export function EnhancedHeader() {
             </nav>
             
             <div className="mt-6 pt-4 border-t border-border/50 space-y-3">
-              <Button 
-                variant="outline" 
-                className="w-full border-border/50 hover:border-accent/50"
-                asChild
-              >
-                <Link to="/contact">Connexion</Link>
-              </Button>
-              <Button className="w-full bg-gradient-cta text-accent-foreground" asChild>
-                <Link to="/scenario/byss-vns-school">Essai gratuit</Link>
-              </Button>
+              {user ? (
+                <Button 
+                  variant="outline" 
+                  className="w-full border-border/50 hover:border-accent/50"
+                  asChild
+                >
+                  <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    Mon profil
+                  </Link>
+                </Button>
+              ) : (
+                <>
+                  <Button 
+                    variant="outline" 
+                    className="w-full border-border/50 hover:border-accent/50"
+                    asChild
+                  >
+                    <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Connexion</Link>
+                  </Button>
+                  <Button className="w-full bg-gradient-cta text-accent-foreground" asChild>
+                    <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Essai gratuit</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         )}
