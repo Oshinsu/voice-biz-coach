@@ -4,14 +4,12 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigation } from "@/hooks/useNavigation";
 
 export function EnhancedHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { user } = useAuth();
-  const { navigationItems, siteConfig, loading } = useNavigation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,24 +20,20 @@ export function EnhancedHeader() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Use navigation items from Supabase, fallback to default if loading
-  const navigation = loading || navigationItems.length === 0 ? [
+  // Simple navigation without Supabase
+  const navigation = [
     { name: "Accueil", href: "/", current: location.pathname === "/" },
     { name: "Scénarios", href: "/scenarios", current: location.pathname === "/scenarios" },
     { name: "Services", href: "/services", current: location.pathname === "/services" },
     { name: "Qui sommes-nous", href: "/about", current: location.pathname === "/about" },
     { name: "Contact", href: "/contact", current: location.pathname === "/contact" }
-  ] : navigationItems.map(item => ({
-    name: item.name,
-    href: item.href,
-    current: location.pathname === item.href
-  }));
+  ];
 
   return (
     <header className={cn(
       "fixed top-0 w-full z-50 transition-all duration-300",
       isScrolled 
-        ? "bg-background/90 backdrop-blur-xl border-b border-border/50 shadow-lg" 
+        ? "bg-background/90 backdrop-blur-xl border-b border-border shadow-lg" 
         : "bg-background/60 backdrop-blur-lg border-b border-border/30"
     )}>
       <div className="max-w-7xl mx-auto px-6 py-4">
@@ -47,17 +41,16 @@ export function EnhancedHeader() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
             <div className="relative">
-              <div className="p-2 bg-accent rounded-xl shadow-lg group-hover:shadow-accent/25 transition-all duration-300 group-hover:scale-110">
+              <div className="p-2 bg-accent rounded-xl shadow-lg transition-all duration-300 group-hover:scale-110">
                 <Brain className="h-7 w-7 text-accent-foreground" />
               </div>
-              <div className="absolute inset-0 bg-accent rounded-xl blur opacity-20 group-hover:opacity-40 transition-opacity duration-300"></div>
             </div>
             <div className="hidden sm:block">
               <h1 className="text-xl font-bold text-foreground group-hover:text-accent transition-colors">
-                {siteConfig.site_title || "Byss VNS"}
+                Byss VNS
               </h1>
               <p className="text-xs text-muted-foreground leading-none">
-                {siteConfig.site_subtitle || "Virtual Negotiation Simulator"}
+                Virtual Negotiation Simulator
               </p>
             </div>
           </Link>
@@ -89,25 +82,25 @@ export function EnhancedHeader() {
             {user ? (
               <Button 
                 variant="outline" 
-                className="border-border/50 hover:border-accent/50 hover:text-accent transition-all duration-300"
+                className="border-border hover:border-accent hover:text-accent transition-all duration-300"
                 asChild
               >
                 <Link to="/profile" className="flex items-center gap-2">
                   <User className="h-4 w-4" />
-                  {siteConfig.profile_button || "Mon profil"}
+                  Mon profil
                 </Link>
               </Button>
             ) : (
               <>
                 <Button 
                   variant="outline" 
-                  className="border-border/50 hover:border-accent/50 hover:text-accent transition-all duration-300"
+                  className="border-border hover:border-accent hover:text-accent transition-all duration-300"
                   asChild
                 >
-                  <Link to="/auth">{siteConfig.auth_button_login || "Connexion"}</Link>
+                  <Link to="/auth">Connexion</Link>
                 </Button>
-                <Button className="bg-gradient-cta hover:shadow-lg hover:shadow-accent/25 text-accent-foreground transition-all duration-300 hover:scale-105" asChild>
-                  <Link to="/auth">{siteConfig.auth_button_signup || "Essai gratuit"}</Link>
+                <Button className="bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300" asChild>
+                  <Link to="/auth">Essai gratuit</Link>
                 </Button>
               </>
             )}
@@ -130,7 +123,7 @@ export function EnhancedHeader() {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="lg:hidden mt-4 p-4 bg-background/95 backdrop-blur-xl rounded-xl border border-border/50 shadow-xl animate-slide-up">
+          <div className="lg:hidden mt-4 p-4 bg-background/95 backdrop-blur-xl rounded-xl border border-border shadow-xl">
             <nav className="space-y-3">
               {navigation.map((item) => (
                 <Link
@@ -139,8 +132,8 @@ export function EnhancedHeader() {
                   className={cn(
                     "block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300",
                     item.current
-                      ? "bg-accent/10 text-accent border border-accent/20"
-                      : "text-foreground hover:bg-accent/5 hover:text-accent"
+                      ? "bg-secondary text-accent border border-border"
+                      : "text-foreground hover:bg-secondary hover:text-accent"
                   )}
                   onClick={() => setIsMenuOpen(false)}
                 >
@@ -149,29 +142,29 @@ export function EnhancedHeader() {
               ))}
             </nav>
             
-            <div className="mt-6 pt-4 border-t border-border/50 space-y-3">
+            <div className="mt-6 pt-4 border-t border-border space-y-3">
               {user ? (
                 <Button 
                   variant="outline" 
-                  className="w-full border-border/50 hover:border-accent/50"
+                  className="w-full border-border hover:border-accent"
                   asChild
                 >
                   <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-2">
                     <User className="h-4 w-4" />
-                    {siteConfig.profile_button || "Mon profil"}
+                    Mon profil
                   </Link>
                 </Button>
               ) : (
                 <>
                   <Button 
                     variant="outline" 
-                    className="w-full border-border/50 hover:border-accent/50"
+                    className="w-full border-border hover:border-accent"
                     asChild
                   >
-                    <Link to="/auth" onClick={() => setIsMenuOpen(false)}>{siteConfig.auth_button_login || "Connexion"}</Link>
+                    <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Connexion</Link>
                   </Button>
-                  <Button className="w-full bg-gradient-cta text-accent-foreground" asChild>
-                    <Link to="/auth" onClick={() => setIsMenuOpen(false)}>{siteConfig.auth_button_signup || "Essai gratuit"}</Link>
+                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
+                    <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Essai gratuit</Link>
                   </Button>
                 </>
               )}

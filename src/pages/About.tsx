@@ -76,7 +76,7 @@ export default function About() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header Navigation */}
-      <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
+      <header className="fixed top-0 w-full z-50 bg-background/90 backdrop-blur-lg border-b border-border">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
             <div className="p-2 bg-accent rounded-lg">
@@ -96,20 +96,22 @@ export default function About() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <Button variant="outline">Connexion</Button>
-            <Button className="bg-accent hover:bg-accent-dark text-accent-foreground">
-              Essai gratuit
+            <Button variant="outline" asChild>
+              <Link to="/auth">Connexion</Link>
+            </Button>
+            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
+              <Link to="/auth">Essai gratuit</Link>
             </Button>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6 bg-gradient-hero">
+      <section className="pt-32 pb-20 px-6 bg-primary">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge className="mb-6 bg-accent/10 text-accent border-accent/20">Notre Mission</Badge>
+              <Badge className="mb-6 bg-secondary text-accent">Notre Mission</Badge>
                <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
                  L'Alliance de l'Innovation
                  <span className="text-accent block">et de la Formation</span>
@@ -133,15 +135,14 @@ export default function About() {
             </div>
 
             <div className="relative">
-              <div className="absolute inset-0 bg-accent/20 rounded-3xl blur-3xl"></div>
-              <Card className="relative bg-card/90 backdrop-blur-sm border-0 shadow-2xl rounded-3xl">
+              <Card className="bg-card border border-border shadow-lg">
                 <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-6 text-center">Notre Vision</h3>
+                  <h3 className="text-2xl font-bold mb-6 text-center text-foreground">Notre Vision</h3>
                   <div className="space-y-4">
                     <div className="flex items-start gap-3">
                       <CheckCircle className="h-6 w-6 text-success mt-1 flex-shrink-0" />
                       <div>
-                        <h4 className="font-semibold mb-1">Innovation Permanente</h4>
+                        <h4 className="font-semibold mb-1 text-foreground">Innovation Permanente</h4>
                         <p className="text-sm text-muted-foreground">
                           Intégrer les dernières avancées en IA pour des expériences toujours plus réalistes
                         </p>
@@ -150,7 +151,7 @@ export default function About() {
                     <div className="flex items-start gap-3">
                       <CheckCircle className="h-6 w-6 text-success mt-1 flex-shrink-0" />
                       <div>
-                        <h4 className="font-semibold mb-1">Accessibilité Universelle</h4>
+                        <h4 className="font-semibold mb-1 text-foreground">Accessibilité Universelle</h4>
                         <p className="text-sm text-muted-foreground">
                           Démocratiser l'accès à une formation commerciale de qualité pour tous
                         </p>
@@ -159,7 +160,7 @@ export default function About() {
                     <div className="flex items-start gap-3">
                       <CheckCircle className="h-6 w-6 text-success mt-1 flex-shrink-0" />
                       <div>
-                        <h4 className="font-semibold mb-1">Impact Mesurable</h4>
+                        <h4 className="font-semibold mb-1 text-foreground">Impact Mesurable</h4>
                         <p className="text-sm text-muted-foreground">
                           Créer des outils qui génèrent des résultats concrets et durables
                         </p>
@@ -187,12 +188,12 @@ export default function About() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((value, index) => (
-              <Card key={index} className="text-center group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-gradient-card border-0">
+              <Card key={index} className="text-center group hover:shadow-xl transition-all duration-300 bg-card border border-border">
                 <CardContent className="p-6">
-                  <div className="p-4 bg-accent/10 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <div className="p-4 bg-secondary rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
                     <value.icon className="h-8 w-8 text-accent" />
                   </div>
-                  <h3 className="text-lg font-bold mb-3">{value.title}</h3>
+                  <h3 className="text-lg font-bold mb-3 text-foreground">{value.title}</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     {value.description}
                   </p>
@@ -204,7 +205,7 @@ export default function About() {
       </section>
 
       {/* Timeline Section */}
-      <section className="py-20 px-6 bg-secondary/30">
+      <section className="py-20 px-6 bg-secondary">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-foreground mb-4">
@@ -216,15 +217,15 @@ export default function About() {
           </div>
 
           <div className="relative">
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-accent/20"></div>
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-border"></div>
             <div className="space-y-12">
               {milestones.map((milestone, index) => (
                 <div key={index} className={`flex items-center gap-8 ${index % 2 === 0 ? 'flex-row' : 'flex-row-reverse'}`}>
                   <div className={`flex-1 ${index % 2 === 0 ? 'text-right' : 'text-left'}`}>
-                    <Card className="bg-card border-0 shadow-lg">
+                    <Card className="bg-card border border-border shadow-lg">
                       <CardContent className="p-6">
                         <div className="text-2xl font-bold text-accent mb-2">{milestone.year}</div>
-                        <h3 className="text-lg font-bold mb-3">{milestone.title}</h3>
+                        <h3 className="text-lg font-bold mb-3 text-foreground">{milestone.title}</h3>
                         <p className="text-muted-foreground">{milestone.description}</p>
                       </CardContent>
                     </Card>
@@ -257,13 +258,13 @@ export default function About() {
 
            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
              {team.map((member, index) => (
-              <Card key={index} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-gradient-card border-0 overflow-hidden">
+              <Card key={index} className="group hover:shadow-xl transition-all duration-300 bg-card border border-border overflow-hidden">
                 <CardContent className="p-6 text-center">
-                  <div className="w-24 h-24 bg-accent/10 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <div className="w-24 h-24 bg-secondary rounded-full mx-auto mb-4 flex items-center justify-center">
                     <Users className="h-12 w-12 text-accent" />
                   </div>
                   
-                  <h3 className="text-lg font-bold mb-1">{member.name}</h3>
+                  <h3 className="text-lg font-bold mb-1 text-foreground">{member.name}</h3>
                   <p className="text-accent font-medium mb-2">{member.role}</p>
                   <Badge variant="outline" className="mb-4 text-xs">
                     {member.speciality}
@@ -289,11 +290,11 @@ export default function About() {
       </section>
 
       {/* Technology Excellence */}
-      <section className="py-20 px-6 bg-secondary/30">
+      <section className="py-20 px-6 bg-secondary">
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
-              <Badge className="mb-4 bg-accent/10 text-accent border-accent/20">Excellence Technique</Badge>
+              <Badge className="mb-4 bg-accent text-accent-foreground">Excellence Technique</Badge>
               <h2 className="text-4xl font-bold text-foreground mb-6">
                 Pourquoi choisir
                 <span className="text-accent block">Byss VNS ?</span>
@@ -301,11 +302,11 @@ export default function About() {
               
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
-                  <div className="p-2 bg-accent/10 rounded-lg mt-1">
+                  <div className="p-2 bg-card rounded-lg mt-1 border border-border">
                     <Brain className="h-6 w-6 text-accent" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold mb-2">Technologie de Pointe</h3>
+                    <h3 className="text-lg font-bold mb-2 text-foreground">Technologie de Pointe</h3>
                     <p className="text-muted-foreground">
                       Intégration exclusive de l'API OpenAI GPT-4o Realtime, 
                       la technologie d'IA conversationnelle la plus avancée au monde.
@@ -314,11 +315,11 @@ export default function About() {
                 </div>
                 
                 <div className="flex items-start gap-4">
-                  <div className="p-2 bg-accent/10 rounded-lg mt-1">
+                  <div className="p-2 bg-card rounded-lg mt-1 border border-border">
                     <Users className="h-6 w-6 text-accent" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold mb-2">Expertise Pédagogique</h3>
+                    <h3 className="text-lg font-bold mb-2 text-foreground">Expertise Pédagogique</h3>
                     <p className="text-muted-foreground">
                       Développé en collaboration avec des experts en sciences de l'éducation 
                       et des formateurs commerciaux de renom.
@@ -327,11 +328,11 @@ export default function About() {
                 </div>
                 
                 <div className="flex items-start gap-4">
-                  <div className="p-2 bg-accent/10 rounded-lg mt-1">
+                  <div className="p-2 bg-card rounded-lg mt-1 border border-border">
                     <Target className="h-6 w-6 text-accent" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold mb-2">Résultats Prouvés</h3>
+                    <h3 className="text-lg font-bold mb-2 text-foreground">Résultats Prouvés</h3>
                     <p className="text-muted-foreground">
                       Amélioration moyenne de 65% des performances commerciales 
                       chez nos utilisateurs après 3 mois d'utilisation.
@@ -342,22 +343,21 @@ export default function About() {
             </div>
 
             <div className="relative">
-              <div className="absolute inset-0 bg-accent/20 rounded-3xl blur-3xl"></div>
-              <Card className="relative bg-card/90 backdrop-blur-sm border-0 shadow-2xl rounded-3xl">
+              <Card className="bg-card border border-border shadow-lg">
                 <CardContent className="p-8">
-                  <h3 className="text-xl font-bold mb-6 text-center">Certifications & Partenariats</h3>
+                  <h3 className="text-xl font-bold mb-6 text-center text-foreground">Certifications & Partenariats</h3>
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between p-3 bg-accent/5 rounded-lg">
-                      <span className="font-medium">OpenAI Partner</span>
-                      <Badge className="bg-accent/10 text-accent">Certified</Badge>
+                    <div className="flex items-center justify-between p-3 bg-secondary rounded-lg">
+                      <span className="font-medium text-foreground">OpenAI Partner</span>
+                      <Badge className="bg-accent text-accent-foreground">Certified</Badge>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-success/5 rounded-lg">
-                      <span className="font-medium">RGPD Compliance</span>
-                      <Badge className="bg-success/10 text-success">Verified</Badge>
+                    <div className="flex items-center justify-between p-3 bg-secondary rounded-lg">
+                      <span className="font-medium text-foreground">RGPD Compliance</span>
+                      <Badge className="bg-success text-success-foreground">Verified</Badge>
                     </div>
-                    <div className="flex items-center justify-between p-3 bg-primary/5 rounded-lg">
-                      <span className="font-medium">ISO 27001</span>
-                      <Badge className="bg-primary/10 text-primary">Pending</Badge>
+                    <div className="flex items-center justify-between p-3 bg-secondary rounded-lg">
+                      <span className="font-medium text-foreground">ISO 27001</span>
+                      <Badge className="bg-primary text-primary-foreground">Pending</Badge>
                     </div>
                   </div>
                 </CardContent>
@@ -368,7 +368,7 @@ export default function About() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-primary">
+      <section className="py-20 px-6 bg-primary">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
             Rejoignez l'Innovation Pédagogique
@@ -378,11 +378,11 @@ export default function About() {
             dans votre établissement
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-accent hover:bg-accent-dark text-accent-foreground shadow-accent text-lg px-8 py-4">
+            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8 py-4">
               Planifier une rencontre
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button size="lg" variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 text-lg px-8 py-4">
+            <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary text-lg px-8 py-4">
               En savoir plus
             </Button>
           </div>

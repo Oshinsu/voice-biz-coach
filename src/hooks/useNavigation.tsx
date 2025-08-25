@@ -45,10 +45,17 @@ export const useNavigation = () => {
           throw configError;
         }
 
-        // Transform config data
+        // Transform config data - fix JSON parsing
         const config: SiteConfig = {};
         configData?.forEach((item) => {
-          config[item.key] = String(JSON.parse(String(item.value)));
+          try {
+            // Handle string values that are already strings
+            const value = typeof item.value === 'string' ? item.value : String(item.value);
+            config[item.key] = value.startsWith('"') ? JSON.parse(value) : value;
+          } catch (e) {
+            // If JSON parsing fails, use the raw value
+            config[item.key] = String(item.value);
+          }
         });
 
         setNavigationItems(navData || []);

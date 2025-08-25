@@ -76,19 +76,29 @@ export default function Auth() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-hero relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-mesh opacity-30"></div>
-      <div className="absolute top-20 left-10 w-72 h-72 bg-accent/10 rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+    <div className="min-h-screen bg-primary">
+      {/* Header */}
+      <header className="fixed top-0 w-full z-50 bg-background/90 backdrop-blur-lg border-b border-border">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-3">
+            <div className="p-2 bg-accent rounded-lg">
+              <Shield className="h-6 w-6 text-accent-foreground" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-foreground">Byss VNS</h1>
+              <p className="text-xs text-muted-foreground">Virtual Negotiation Simulator</p>
+            </div>
+          </Link>
+        </div>
+      </header>
       
-      <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
+      <div className="pt-24 min-h-screen flex items-center justify-center p-6">
         <div className="w-full max-w-md">
           {/* Header */}
           <div className="text-center mb-8">
             <Link 
               to="/" 
-              className="inline-flex items-center gap-2 text-primary-foreground/80 hover:text-primary-foreground transition-colors mb-6"
+              className="inline-flex items-center gap-2 text-primary-foreground hover:text-accent transition-colors mb-6"
             >
               <ArrowLeft className="h-4 w-4" />
               Retour à l'accueil
@@ -101,9 +111,9 @@ export default function Auth() {
             </p>
           </div>
 
-          <Card className="bg-card/90 backdrop-blur-lg border-0 shadow-2xl">
+          <Card className="bg-card border border-border shadow-lg">
             <CardHeader>
-              <CardTitle className="text-center">
+              <CardTitle className="text-center text-foreground">
                 {activeTab === 'signin' ? 'Connexion' : 'Créer un compte'}
               </CardTitle>
             </CardHeader>
@@ -147,7 +157,7 @@ export default function Auth() {
                     )}
                     <Button
                       type="submit"
-                      className="w-full bg-gradient-cta hover:shadow-lg hover:shadow-accent/30"
+                      className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
                       disabled={loading}
                     >
                       {loading ? 'Connexion...' : 'Se connecter'}
@@ -267,7 +277,7 @@ export default function Auth() {
 
                     <Button
                       type="submit"
-                      className="w-full bg-gradient-cta hover:shadow-lg hover:shadow-accent/30"
+                      className="w-full bg-accent hover:bg-accent/90 text-accent-foreground"
                       disabled={loading}
                     >
                       {loading ? 'Création...' : 'Créer le compte'}

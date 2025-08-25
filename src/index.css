@@ -108,3 +108,10 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+/* Remove all problematic gradients and animations */
+.bg-gradient-hero { @apply bg-primary; }
+.bg-gradient-primary { @apply bg-primary; }
+.bg-gradient-cta { @apply bg-accent; }
+.bg-gradient-card { @apply bg-card; }
+.bg-gradient-mesh { @apply bg-secondary; }

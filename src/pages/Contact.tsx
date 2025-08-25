@@ -11,7 +11,7 @@ export default function Contact() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header Navigation */}
-      <header className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-lg border-b border-border/50">
+      <header className="fixed top-0 w-full z-50 bg-background/90 backdrop-blur-lg border-b border-border">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
             <div className="p-2 bg-accent rounded-lg">
@@ -31,16 +31,18 @@ export default function Contact() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <Button variant="outline">Connexion</Button>
-            <Button className="bg-accent hover:bg-accent-dark text-accent-foreground">
-              Essai gratuit
+            <Button variant="outline" asChild>
+              <Link to="/auth">Connexion</Link>
+            </Button>
+            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
+              <Link to="/auth">Essai gratuit</Link>
             </Button>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6 bg-gradient-hero">
+      <section className="pt-32 pb-20 px-6 bg-primary">
         <div className="max-w-7xl mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground mb-6">
             Contactez-nous
@@ -58,9 +60,9 @@ export default function Contact() {
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div>
-              <Card className="bg-card border-0 shadow-xl">
+              <Card className="bg-card border border-border shadow-lg">
                 <CardHeader>
-                  <CardTitle className="text-2xl">Demander une démonstration</CardTitle>
+                  <CardTitle className="text-2xl text-foreground">Demander une démonstration</CardTitle>
                   <p className="text-muted-foreground">
                     Remplissez ce formulaire et nous vous recontacterons rapidement 
                     pour planifier une présentation personnalisée.
@@ -151,7 +153,7 @@ export default function Contact() {
                     />
                   </div>
 
-                  <Button className="w-full bg-accent hover:bg-accent-dark text-accent-foreground text-lg py-3">
+                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground text-lg py-3">
                     Envoyer la demande
                     <Send className="ml-2 h-5 w-5" />
                   </Button>
@@ -170,16 +172,16 @@ export default function Contact() {
             {/* Contact Information */}
             <div className="space-y-8">
               {/* Direct Contact */}
-              <Card className="bg-gradient-card border-0 shadow-lg">
+              <Card className="bg-card border border-border shadow-lg">
                 <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-6">Contacts Directs</h3>
+                  <h3 className="text-2xl font-bold mb-6 text-foreground">Contacts Directs</h3>
                   <div className="space-y-6">
                     <div className="flex items-start gap-4">
-                      <div className="p-3 bg-accent/10 rounded-lg">
+                      <div className="p-3 bg-secondary rounded-lg">
                         <Mail className="h-6 w-6 text-accent" />
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-1">Email</h4>
+                        <h4 className="font-semibold mb-1 text-foreground">Email</h4>
                         <p className="text-muted-foreground">hello@byss-vns.com</p>
                         <p className="text-sm text-muted-foreground mt-1">
                           Réponse sous 24h en jour ouvré
@@ -188,11 +190,11 @@ export default function Contact() {
                     </div>
 
                     <div className="flex items-start gap-4">
-                      <div className="p-3 bg-accent/10 rounded-lg">
+                      <div className="p-3 bg-secondary rounded-lg">
                         <Phone className="h-6 w-6 text-accent" />
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-1">Téléphone</h4>
+                        <h4 className="font-semibold mb-1 text-foreground">Téléphone</h4>
                         <p className="text-muted-foreground">+33 1 23 45 67 89</p>
                         <p className="text-sm text-muted-foreground mt-1">
                           Du lundi au vendredi, 9h-18h
@@ -201,11 +203,11 @@ export default function Contact() {
                     </div>
 
                     <div className="flex items-start gap-4">
-                      <div className="p-3 bg-accent/10 rounded-lg">
+                      <div className="p-3 bg-secondary rounded-lg">
                         <MapPin className="h-6 w-6 text-accent" />
                       </div>
                       <div>
-                        <h4 className="font-semibold mb-1">Adresse</h4>
+                        <h4 className="font-semibold mb-1 text-foreground">Adresse</h4>
                         <p className="text-muted-foreground">
                           123 Avenue de l'Innovation<br />
                           75001 Paris, France
@@ -217,23 +219,23 @@ export default function Contact() {
               </Card>
 
               {/* Business Hours */}
-              <Card className="bg-gradient-card border-0 shadow-lg">
+              <Card className="bg-card border border-border shadow-lg">
                 <CardContent className="p-8">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="p-2 bg-accent/10 rounded-lg">
+                    <div className="p-2 bg-secondary rounded-lg">
                       <Clock className="h-6 w-6 text-accent" />
                     </div>
-                    <h3 className="text-xl font-bold">Horaires de Support</h3>
+                    <h3 className="text-xl font-bold text-foreground">Horaires de Support</h3>
                   </div>
                   
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Lundi - Vendredi</span>
-                      <span className="font-medium">9h00 - 18h00</span>
+                      <span className="font-medium text-foreground">9h00 - 18h00</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Samedi</span>
-                      <span className="font-medium">10h00 - 16h00</span>
+                      <span className="font-medium text-foreground">10h00 - 16h00</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Dimanche</span>
@@ -241,7 +243,7 @@ export default function Contact() {
                     </div>
                   </div>
                   
-                  <div className="mt-6 p-4 bg-accent/5 rounded-lg">
+                  <div className="mt-6 p-4 bg-secondary rounded-lg">
                     <p className="text-sm text-muted-foreground">
                       <strong>Support d'urgence :</strong> Disponible 24/7 pour les clients 
                       avec contrat de support premium
@@ -251,9 +253,9 @@ export default function Contact() {
               </Card>
 
               {/* Quick Actions */}
-              <Card className="bg-gradient-card border-0 shadow-lg">
+              <Card className="bg-card border border-border shadow-lg">
                 <CardContent className="p-8">
-                  <h3 className="text-xl font-bold mb-6">Actions Rapides</h3>
+                  <h3 className="text-xl font-bold mb-6 text-foreground">Actions Rapides</h3>
                   <div className="space-y-4">
                     <Button variant="outline" className="w-full justify-start">
                       <Mail className="mr-3 h-5 w-5" />
@@ -276,16 +278,16 @@ export default function Contact() {
       </section>
 
       {/* FAQ Preview */}
-      <section className="py-20 px-6 bg-secondary/30">
+      <section className="py-20 px-6 bg-secondary">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl font-bold text-foreground mb-6">
             Questions Fréquentes
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-            <Card className="bg-card border-0 shadow-lg">
+            <Card className="bg-card border border-border shadow-lg">
               <CardContent className="p-6">
-                <h4 className="font-semibold mb-3">Quelle est la durée de déploiement ?</h4>
+                <h4 className="font-semibold mb-3 text-foreground">Quelle est la durée de déploiement ?</h4>
                 <p className="text-sm text-muted-foreground">
                   Le déploiement complet prend généralement entre 2 et 4 semaines, 
                   incluant la formation de vos équipes.
@@ -293,9 +295,9 @@ export default function Contact() {
               </CardContent>
             </Card>
             
-            <Card className="bg-card border-0 shadow-lg">
+            <Card className="bg-card border border-border shadow-lg">
               <CardContent className="p-6">
-                <h4 className="font-semibold mb-3">Proposez-vous une période d'essai ?</h4>
+                <h4 className="font-semibold mb-3 text-foreground">Proposez-vous une période d'essai ?</h4>
                 <p className="text-sm text-muted-foreground">
                   Oui, nous offrons une période d'essai de 30 jours gratuite 
                   pour évaluer la plateforme avec vos étudiants.
@@ -303,9 +305,9 @@ export default function Contact() {
               </CardContent>
             </Card>
             
-            <Card className="bg-card border-0 shadow-lg">
+            <Card className="bg-card border border-border shadow-lg">
               <CardContent className="p-6">
-                <h4 className="font-semibold mb-3">L'intégration LMS est-elle possible ?</h4>
+                <h4 className="font-semibold mb-3 text-foreground">L'intégration LMS est-elle possible ?</h4>
                 <p className="text-sm text-muted-foreground">
                   Absolument ! Nous supportons les principales plateformes 
                   LMS (Moodle, Canvas, Blackboard, etc.).
@@ -313,9 +315,9 @@ export default function Contact() {
               </CardContent>
             </Card>
             
-            <Card className="bg-card border-0 shadow-lg">
+            <Card className="bg-card border border-border shadow-lg">
               <CardContent className="p-6">
-                <h4 className="font-semibold mb-3">Quels sont les prérequis techniques ?</h4>
+                <h4 className="font-semibold mb-3 text-foreground">Quels sont les prérequis techniques ?</h4>
                 <p className="text-sm text-muted-foreground">
                   Simple navigateur web moderne et connexion internet. 
                   Aucune installation logicielle requise.
@@ -327,7 +329,7 @@ export default function Contact() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 bg-gradient-primary">
+      <section className="py-20 px-6 bg-primary">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
             Prêt à démarrer ?
@@ -335,7 +337,7 @@ export default function Contact() {
           <p className="text-xl text-primary-foreground/80 mb-8">
             Planifions ensemble la transformation digitale de votre enseignement commercial
           </p>
-          <Button size="lg" className="bg-accent hover:bg-accent-dark text-accent-foreground shadow-accent text-lg px-8 py-4">
+          <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8 py-4">
             Planifier une démo personnalisée
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
