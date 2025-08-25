@@ -90,12 +90,16 @@ export function ByssHomepage() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mb-12 animate-scale-in">
-                <Button size="lg" className="bg-accent hover:bg-accent-dark text-accent-foreground shadow-accent group text-lg px-8 py-4">
-                  Découvrir la plateforme
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <Button size="lg" className="bg-accent hover:bg-accent/80 text-accent-foreground shadow-accent group text-lg px-8 py-4" asChild>
+                  <Link to="/scenario/tech-startup">
+                    Découvrir la plateforme
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
                 </Button>
-                <Button size="lg" variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 text-lg px-8 py-4">
-                  Démo personnalisée
+                <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 text-lg px-8 py-4" asChild>
+                  <Link to="/contact">
+                    Démo personnalisée
+                  </Link>
                 </Button>
               </div>
 
@@ -386,12 +390,16 @@ export function ByssHomepage() {
             de négociateurs avec l'IA vocale de pointe
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-accent hover:bg-accent-dark text-accent-foreground shadow-accent text-lg px-8 py-4">
-              Démarrer l'essai gratuit
-              <CheckCircle className="ml-2 h-5 w-5" />
+            <Button size="lg" className="bg-accent hover:bg-accent/80 text-accent-foreground shadow-accent text-lg px-8 py-4" asChild>
+              <Link to="/scenario/tech-startup">
+                Démarrer l'essai gratuit
+                <CheckCircle className="ml-2 h-5 w-5" />
+              </Link>
             </Button>
-            <Button size="lg" variant="outline" className="border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 text-lg px-8 py-4">
-              Planifier une présentation
+            <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 text-lg px-8 py-4" asChild>
+              <Link to="/contact">
+                Planifier une présentation
+              </Link>
             </Button>
           </div>
         </div>

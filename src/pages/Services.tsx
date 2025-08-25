@@ -8,40 +8,40 @@ export default function Services() {
   const services = [
     {
       icon: Brain,
-      title: "Simulateur IA Vocale",
-      description: "Conversations naturelles en temps réel avec l'IA la plus avancée",
+      title: "Simulateur de Négociation Vocale",
+      description: "Vos étudiants négocient en temps réel avec des personas IA dotées de personnalités, objections et styles uniques",
       features: [
-        "OpenAI GPT-4o Realtime API",
-        "Reconnaissance vocale instantanée",
-        "Analyse émotionnelle en temps réel",
-        "Adaptation du niveau de difficulté",
-        "Feedback personnalisé immédiat"
+        "Conversations vocales naturelles en temps réel",
+        "15+ personas avec biographies détaillées", 
+        "Objections contextualisées selon l'entreprise",
+        "Évaluation automatique des performances",
+        "Adaptation intelligente du niveau de difficulté"
       ],
       color: "accent"
     },
     {
       icon: GraduationCap,
-      title: "Plateforme Pédagogique",
-      description: "Outils complets pour les enseignants et formateurs",
+      title: "Bibliothèque de Scénarios Sectoriels",
+      description: "50+ scénarios prêts à l'emploi avec analyses SWOT complètes, données financières et profils détaillés",
       features: [
-        "Création de scénarios personnalisés",
-        "Gestion des groupes d'étudiants",
-        "Suivi des progressions individuelles",
-        "Rapports détaillés de performance",
-        "Intégration LMS (Moodle, Canvas...)"
+        "50+ scénarios métier authentiques",
+        "Données d'entreprises réalistes (CA, budget, timeline)",
+        "Profils psychologiques des interlocuteurs", 
+        "Possibilité de créer vos propres scénarios",
+        "Intégration LMS native"
       ],
       color: "primary"
     },
     {
       icon: BarChart3,
-      title: "Analytics Avancés",
-      description: "Tableaux de bord et métriques de performance",
+      title: "Analytics Pédagogiques Avancées",
+      description: "Tableau de bord complet pour suivre la progression : temps de parole, gestion des objections, taux de conversion",
       features: [
-        "Dashboards en temps réel",
-        "Analyse des techniques utilisées",
+        "Dashboard temps réel par étudiant",
+        "Scoring automatique des compétences",
         "Identification des points faibles",
-        "Comparaisons de cohortes",
-        "Export de données détaillées"
+        "Recommandations pédagogiques personnalisées",
+        "Comparaisons inter-cohortes"
       ],
       color: "success"
     },
@@ -137,8 +137,8 @@ export default function Services() {
               Nos Services Principaux
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Une plateforme technologique complète pour former la nouvelle génération 
-              de négociateurs commerciaux
+              Révolutionnez l'enseignement commercial avec notre simulateur de négociation vocale alimenté par GPT-4o Realtime. 
+              Vos étudiants s'entraînent face à des interlocuteurs IA ultra-réalistes dans des scénarios métier authentiques.
             </p>
           </div>
 

@@ -7,31 +7,17 @@ import { Button } from "@/components/ui/button";
 export default function About() {
   const team = [
     {
-      name: "Dr. Sophie Martin",
-      role: "CEO & Co-fondatrice",
-      speciality: "IA Conversationnelle",
-      description: "15 ans d'expérience en développement d'IA et formation commerciale. Diplômée de l'École Polytechnique.",
+      name: "Gary Bissol",
+      role: "Co-fondateur & CEO",
+      speciality: "Développement & Marketing",
+      description: "Fondateur de Byss Agency en 2021, spécialisé dans le développement d'applications et le marketing digital.",
       linkedin: "#"
     },
     {
-      name: "Marc Dubois",
-      role: "CTO & Co-fondateur", 
-      speciality: "Architecture Technique",
-      description: "Expert en systèmes distribués et APIs temps réel. Ancien Lead Engineer chez Google.",
-      linkedin: "#"
-    },
-    {
-      name: "Dr. Claire Rousseau",
-      role: "Head of Pedagogy",
-      speciality: "Sciences de l'Éducation",
-      description: "Docteure en sciences cognitives, spécialisée dans l'apprentissage par simulation.",
-      linkedin: "#"
-    },
-    {
-      name: "Thomas Weber",
-      role: "Head of Sales",
-      speciality: "Business Development",
-      description: "20 ans dans la vente B2B et la formation commerciale. Ancien VP Sales chez Salesforce.",
+      name: "Johan Chamlong",
+      role: "Co-fondateur & CTO", 
+      speciality: "Formation & Technologie",
+      description: "Expert en formation en ligne et technologies éducatives. Fondateur de Metora en février 2025.",
       linkedin: "#"
     }
   ];
@@ -61,24 +47,29 @@ export default function About() {
 
   const milestones = [
     {
-      year: "2023",
-      title: "Fondation de Byss",
-      description: "Création de l'entreprise avec une vision claire : révolutionner la formation commerciale par l'IA."
+      year: "2021",
+      title: "Fondation de Byss Agency",
+      description: "Gary Bissol fonde Byss Agency, spécialisée dans le développement d'applications et le marketing digital."
     },
     {
-      year: "2024", 
-      title: "Partenariat OpenAI",
-      description: "Premier accès à l'API Realtime GPT-4o pour développer notre simulateur vocal."
+      year: "Mai 2024", 
+      title: "Rencontre des Fondateurs",
+      description: "Gary Bissol et Johan Chamlong se rencontrent et décident d'unir leurs expertises complémentaires."
     },
     {
-      year: "2024",
-      title: "Premiers Déploiements",
-      description: "Lancement pilote dans 5 écoles de commerce prestigieuses avec des résultats exceptionnels."
+      year: "Février 2025",
+      title: "Création de Metora",
+      description: "Lancement de Metora, plateforme de formation en ligne développée par Johan Chamlong."
     },
     {
-      year: "2025",
-      title: "Expansion Européenne",
-      description: "Objectif de déploiement dans 50+ établissements à travers l'Europe."
+      year: "Mars 2025",
+      title: "Développement du Prototype",
+      description: "Alliance Byss Agency × Metora : développement du prototype Byss VNS avec l'API OpenAI GPT-4o Realtime."
+    },
+    {
+      year: "Septembre 2025",
+      title: "Lancement Commercial",
+      description: "Lancement officiel de Byss VNS auprès des écoles de commerce et organismes de formation."
     }
   ];
 
@@ -119,25 +110,25 @@ export default function About() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <Badge className="mb-6 bg-accent/10 text-accent border-accent/20">Notre Mission</Badge>
-              <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
-                Révolutionner l'enseignement
-                <span className="text-accent block">commercial</span>
-              </h1>
-              <p className="text-xl text-primary-foreground/80 mb-8 leading-relaxed">
-                Chez Byss, nous croyons que l'IA conversationnelle peut transformer 
-                radicalement la façon dont nous formons les futurs négociateurs commerciaux. 
-                Notre mission : rendre l'apprentissage plus efficace, plus engageant et plus accessible.
-              </p>
+               <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
+                 L'Alliance de l'Innovation
+                 <span className="text-accent block">et de la Formation</span>
+               </h1>
+               <p className="text-xl text-primary-foreground/80 mb-8 leading-relaxed">
+                 Byss Agency et Metora s'unissent pour créer Byss VNS : le premier simulateur vocal 
+                 de négociation commerciale alimenté par l'IA GPT-4o Realtime. Une révolution 
+                 technologique au service de l'excellence pédagogique.
+               </p>
               
               <div className="grid grid-cols-2 gap-6">
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-accent mb-2">50+</div>
-                  <div className="text-sm text-primary-foreground/60">Établissements partenaires</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-accent mb-2">10k+</div>
-                  <div className="text-sm text-primary-foreground/60">Étudiants formés</div>
-                </div>
+                 <div className="text-center">
+                   <div className="text-4xl font-bold text-accent mb-2">2</div>
+                   <div className="text-sm text-primary-foreground/60">Entreprises partenaires</div>
+                 </div>
+                 <div className="text-center">
+                   <div className="text-4xl font-bold text-accent mb-2">1</div>
+                   <div className="text-sm text-primary-foreground/60">Produit révolutionnaire</div>
+                 </div>
               </div>
             </div>
 
@@ -264,8 +255,8 @@ export default function About() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {team.map((member, index) => (
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+             {team.map((member, index) => (
               <Card key={index} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-gradient-card border-0 overflow-hidden">
                 <CardContent className="p-6 text-center">
                   <div className="w-24 h-24 bg-accent/10 rounded-full mx-auto mb-4 flex items-center justify-center">
