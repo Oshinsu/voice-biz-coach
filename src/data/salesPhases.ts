@@ -53,8 +53,8 @@ export const salesPhases: SalesPhase[] = [
       rdv: "Soyez courtois(e) mais professionnel(le). Vous avez du temps mais restez sur vos gardes. Écoutez la présentation de l'interlocuteur avec attention modérée."
     },
     duration: {
-      coldCall: "30 secondes - 2 minutes",
-      rdv: "3-5 minutes"
+      coldCall: "3-5 minutes minimum",
+      rdv: "5-8 minutes"
     }
   },
   {
@@ -94,7 +94,7 @@ export const salesPhases: SalesPhase[] = [
       rdv: "Partagez vos défis en détail. Expliquez le contexte et l'impact. Soyez transparent(e) sur votre situation actuelle et vos besoins."
     },
     duration: {
-      coldCall: "2-4 minutes",
+      coldCall: "5-8 minutes",
       rdv: "8-12 minutes"
     }
   },

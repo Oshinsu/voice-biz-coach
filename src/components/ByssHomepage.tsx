@@ -43,11 +43,9 @@ export function ByssHomepage() {
   const totalCompanies = scenarios.length;
 
   return (
-    <div className="min-h-screen bg-gradient-hero relative overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute inset-0 bg-gradient-mesh opacity-30"></div>
-      <div className="absolute top-20 left-10 w-72 h-72 bg-accent/10 rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-20 right-10 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
+    <div className="min-h-screen bg-background relative">
+      {/* Clean Background */}
+      <div className="absolute inset-0 bg-background"></div>
       
       {/* Enhanced Header */}
       <EnhancedHeader />
@@ -57,63 +55,58 @@ export function ByssHomepage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-left">
-              <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 rounded-full px-5 py-3 mb-8 animate-bounce-gentle hover:bg-accent/15 transition-all duration-300 cursor-pointer group">
-                <Zap className="h-5 w-5 text-accent group-hover:scale-110 transition-transform" />
+              <div className="inline-flex items-center gap-2 bg-accent/10 border border-accent/20 rounded-lg px-4 py-2 mb-8">
+                <Zap className="h-5 w-5 text-accent" />
                 <span className="text-sm font-medium text-accent">Powered by OpenAI GPT-4o Realtime</span>
-                <div className="w-2 h-2 bg-accent rounded-full animate-pulse ml-2"></div>
               </div>
               
-              <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground mb-6 animate-fade-in leading-tight">
-                <span className="text-accent bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent">Byss VNS</span><br />
-                <span className="relative">
-                  Virtual Negotiation
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary-foreground to-accent bg-clip-text text-transparent blur-sm"></div>
-                </span>
-                <span className="text-accent block bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent">Simulator</span>
+              <h1 className="text-5xl md:text-7xl font-bold text-primary mb-6 leading-tight">
+                <span className="text-accent">Byss VNS</span><br />
+                <span className="text-primary">Virtual Negotiation</span><br />
+                <span className="text-accent">Simulator</span>
               </h1>
               
-              <p className="text-xl text-primary-foreground/80 mb-8 max-w-2xl animate-slide-up leading-relaxed">
+              <p className="text-xl text-muted-foreground mb-8 max-w-2xl leading-relaxed">
                 Formez vos étudiants aux techniques de négociation commerciale avec notre simulateur vocal IA de pointe. 
                 Une technologie révolutionnaire pour l'enseignement commercial moderne.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 mb-12 animate-scale-in">
-                <Button size="lg" className="bg-gradient-cta hover:shadow-lg hover:shadow-accent/30 text-accent-foreground group text-lg px-8 py-4 hover:scale-105 transition-all duration-300" asChild>
+              <div className="flex flex-col sm:flex-row gap-4 mb-12">
+                <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground px-8 py-4" asChild>
                   <Link to="/scenarios">
                       Découvrir la plateforme  
-                      <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
                   </Button>
-                <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:border-primary-foreground/50 text-lg px-8 py-4 backdrop-blur-sm transition-all duration-300" asChild>
+                <Button size="lg" variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-8 py-4" asChild>
                   <Link to="/auth">
                     Essai gratuit
                   </Link>
                 </Button>
               </div>
 
-              <div className="flex flex-wrap items-center gap-6 text-primary-foreground/60">
-                <div className="flex items-center gap-2 animate-slide-in-left">
+              <div className="flex flex-wrap items-center gap-6 text-muted-foreground">
+                <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-accent" />
                   <span>IA vocale la plus avancée</span>
                 </div>
-                <div className="flex items-center gap-2 animate-slide-in-left" style={{ animationDelay: '200ms' }}>
+                <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-accent" />
                   <span>Scénarios ultra-réalistes</span>
                 </div>
-                <div className="flex items-center gap-2 animate-slide-in-left" style={{ animationDelay: '400ms' }}>
+                <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-accent" />
                   <span>Analytics en temps réel</span>
                 </div>
               </div>
             </div>
 
-            <div className="relative animate-fade-in">
-              <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-primary/10 to-accent-light/20 rounded-3xl blur-3xl animate-pulse-glow"></div>
-              <Card className="relative bg-gradient-to-br from-card/90 to-card/70 backdrop-blur-lg border-0 shadow-2xl rounded-3xl overflow-hidden hover:shadow-accent/20 transition-all duration-500 group">
+            <div className="relative">
+              <Card className="bg-card border border-border shadow-lg rounded-lg">
                 <CardContent className="p-8">
                   <div className="space-y-6">
-                    <div className="flex items-center gap-4 p-4 bg-gradient-to-r from-accent/10 to-accent/5 rounded-xl border border-accent/20">
-                      <div className="p-3 bg-gradient-cta rounded-full shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <div className="flex items-center gap-4 p-4 bg-accent/10 rounded-lg border border-accent/20">
+                      <div className="p-3 bg-accent rounded-lg">
                         <Mic className="h-6 w-6 text-accent-foreground" />
                       </div>
                       <div>
@@ -121,7 +114,7 @@ export function ByssHomepage() {
                         <p className="text-sm text-muted-foreground">Négociation avec TechCorp</p>
                       </div>
                       <div className="ml-auto">
-                        <div className="w-3 h-3 bg-success rounded-full animate-pulse"></div>
+                        <div className="w-3 h-3 bg-success rounded-full"></div>
                       </div>
                     </div>
                     
@@ -130,25 +123,24 @@ export function ByssHomepage() {
                         <span className="text-sm text-muted-foreground font-medium">Progression globale</span>
                         <span className="text-sm font-bold text-accent">68%</span>
                       </div>
-                      <div className="w-full h-3 bg-muted rounded-full overflow-hidden relative">
-                        <div className="h-full bg-gradient-to-r from-accent to-accent-light rounded-full transition-all duration-1000 ease-out" style={{ width: '68%' }}></div>
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12 animate-pulse"></div>
+                      <div className="w-full h-3 bg-muted rounded-full overflow-hidden">
+                        <div className="h-full bg-accent rounded-full" style={{ width: '68%' }}></div>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                      <div className="text-center p-4 bg-gradient-to-br from-success/10 to-success/5 rounded-xl border border-success/20 hover:bg-success/15 transition-colors">
+                      <div className="text-center p-4 bg-success/10 rounded-lg border border-success/20">
                         <div className="text-2xl font-bold text-success">85%</div>
                         <div className="text-xs text-muted-foreground">Taux de réussite</div>
                       </div>
-                      <div className="text-center p-4 bg-gradient-to-br from-accent/10 to-accent/5 rounded-xl border border-accent/20 hover:bg-accent/15 transition-colors">
+                      <div className="text-center p-4 bg-accent/10 rounded-lg border border-accent/20">
                         <div className="text-2xl font-bold text-accent">12</div>
                         <div className="text-xs text-muted-foreground">Objections gérées</div>
                       </div>
                     </div>
 
                     <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                      <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-accent rounded-full"></div>
                       <span>Simulation en temps réel</span>
                     </div>
                   </div>
@@ -182,9 +174,9 @@ export function ByssHomepage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-gradient-card border-0">
+            <Card className="bg-card border border-border shadow-md hover:shadow-lg transition-shadow duration-300">
               <CardContent className="p-8 text-center">
-                <div className="p-4 bg-accent/10 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="p-4 bg-accent/10 rounded-lg w-16 h-16 mx-auto mb-6 flex items-center justify-center">
                   <Brain className="h-8 w-8 text-accent" />
                 </div>
                 <h3 className="text-xl font-bold mb-4">IA Conversationnelle</h3>
@@ -195,9 +187,9 @@ export function ByssHomepage() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-gradient-card border-0">
+            <Card className="bg-card border border-border shadow-md hover:shadow-lg transition-shadow duration-300">
               <CardContent className="p-8 text-center">
-                <div className="p-4 bg-accent/10 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="p-4 bg-accent/10 rounded-lg w-16 h-16 mx-auto mb-6 flex items-center justify-center">
                   <BarChart3 className="h-8 w-8 text-accent" />
                 </div>
                 <h3 className="text-xl font-bold mb-4">Analytics Avancés</h3>
@@ -208,9 +200,9 @@ export function ByssHomepage() {
               </CardContent>
             </Card>
 
-            <Card className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-gradient-card border-0">
+            <Card className="bg-card border border-border shadow-md hover:shadow-lg transition-shadow duration-300">
               <CardContent className="p-8 text-center">
-                <div className="p-4 bg-accent/10 rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <div className="p-4 bg-accent/10 rounded-lg w-16 h-16 mx-auto mb-6 flex items-center justify-center">
                   <GraduationCap className="h-8 w-8 text-accent" />
                 </div>
                 <h3 className="text-xl font-bold mb-4">Pédagogie Innovante</h3>
@@ -225,107 +217,6 @@ export function ByssHomepage() {
       </section>
 
 
-      {/* Scenarios Section */}
-      <section className="py-20 px-6 bg-gradient-to-br from-background via-background/95 to-accent/5">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <Badge className="mb-4 bg-accent/10 text-accent border-accent/20 animate-bounce-gentle">
-              Scénarios d'entraînement
-            </Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6 animate-fade-in">
-              Maîtrisez tous les{" "}
-              <span className="bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent">
-                contextes commerciaux
-              </span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed animate-slide-up">
-              Découvrez nos scénarios de vente réalistes conçus pour développer vos compétences 
-              dans différents secteurs et situations commerciales.
-            </p>
-          </div>
-
-          <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-12">
-            {scenarios.slice(0, 6).map((scenario, index) => (
-              <Card 
-                key={scenario.id} 
-                className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-gradient-card border-0"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <CardContent className="p-6">
-                  <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-foreground group-hover:text-accent transition-colors line-clamp-2">
-                      {scenario.title}
-                    </h3>
-                    <Badge 
-                      className={`ml-2 text-xs ${
-                        scenario.difficulty === 'Facile' ? 'bg-green-100 text-green-800 border-green-200' :
-                        scenario.difficulty === 'Moyen' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' :
-                        'bg-red-100 text-red-800 border-red-200'
-                      }`}
-                    >
-                      {scenario.difficulty}
-                    </Badge>
-                  </div>
-                  
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
-                    {scenario.description}
-                  </p>
-                  
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center gap-2">
-                      <Building className="h-3 w-3 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground line-clamp-1">
-                        {scenario.company.name}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Target className="h-3 w-3 text-muted-foreground" />
-                      <span className="text-xs text-muted-foreground">
-                        {scenario.expectedRevenue}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-center justify-between mb-4 p-2 bg-background/50 rounded">
-                    <div className="text-center">
-                      <div className="text-sm font-bold text-accent">{scenario.probability}%</div>
-                      <div className="text-xs text-muted-foreground">Succès</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-sm font-bold text-foreground">{scenario.objectives.length}</div>
-                      <div className="text-xs text-muted-foreground">Objectifs</div>
-                    </div>
-                  </div>
-                  
-                  <Button 
-                    className="w-full bg-gradient-cta hover:shadow-lg hover:shadow-accent/30 text-accent-foreground transition-all duration-300 hover:scale-105"
-                    asChild
-                  >
-                    <Link to="/auth">
-                      Commencer
-                      <ArrowRight className="ml-1 h-3 w-3" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="border-accent/30 hover:bg-accent/10 hover:border-accent text-accent hover:text-accent transition-all duration-300"
-              asChild
-            >
-              <Link to="/scenarios">
-                Voir tous les scénarios
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </section>
 
       {/* Trust Elements */}
       <TrustElements />
