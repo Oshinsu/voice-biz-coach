@@ -199,14 +199,16 @@ export const scenarios: Scenario[] = [
       ]
     },
     probableObjections: [
-      "Le budget est-il justifié comparé aux méthodes actuelles gratuites ?",
-      "Nos professeurs vont-ils réussir à adopter cette technologie ?",
-      "Comment mesurer concrètement l'amélioration des résultats étudiants ?",
-      "Que se passe-t-il si la technologie dysfonctionne en plein cours ?",
-      "N'est-ce pas trop complexe pour nos étudiants moins à l'aise avec la tech ?",
-      "Avez-vous des références d'autres écoles qui utilisent déjà votre solution ?",
-      "Comment garantir la protection des données étudiantes ?",
-      "Le contrat peut-il être adapté si les résultats ne sont pas au rendez-vous ?"
+      "Le budget est-il justifié comparé aux méthodes actuelles gratuites ? Comment prouver concrètement que 25€/étudiant génèrera plus de valeur que les jeux de rôles traditionnels qui ne coûtent rien ?",
+      "Nos professeurs vont-ils réussir à adopter cette technologie ? Certains ont plus de 55 ans et sont peu à l'aise avec le digital. Combien d'heures de formation faudra-t-il ? Et si ils résistent au changement ?",
+      "Comment mesurer concrètement l'amélioration des résultats étudiants ? Sur quels KPIs ? Comment comparer avec les promotions précédentes ? Avez-vous des études longitudinales sur 3-5 ans ?",
+      "Que se passe-t-il si la technologie dysfonctionne en plein cours ? Avez-vous un plan de continuité ? Comment gérer 50 étudiants frustrés si l'IA ne répond plus ? Quel est votre taux de disponibilité ?",
+      "N'est-ce pas trop complexe pour nos étudiants moins à l'aise avec la tech ? Comment adaptez-vous l'interface pour différents niveaux ? Et pour les étudiants dyslexiques ou avec troubles de l'attention ?",
+      "Avez-vous des références d'autres écoles qui utilisent déjà votre solution ? Surtout en France ? Pouvons-nous parler directement aux directeurs pédagogiques ? Depuis combien de temps l'utilisent-ils ?",
+      "Comment garantir la protection des données étudiantes ? Êtes-vous conformes RGPD ? Où sont hébergées les données ? Qui y a accès ? Quelle est votre politique de rétention ?",
+      "Le contrat peut-il être adapté si les résultats ne sont pas au rendez-vous ? Y a-t-il des clauses de performance ? Pouvons-nous arrêter en cours d'année ? Proposez-vous une garantie 'satisfait ou remboursé' ?",
+      "Comment intégrer cela avec notre LMS Moodle existant ? Nos étudiants devront-ils jongler entre deux plateformes ? Les notes remontent-elles automatiquement ? Et la synchronisation des classes ?",
+      "Et si mes collègues professeurs voient cela comme une menace à leur emploi ? Comment les rassurer ? L'IA va-t-elle remplacer l'humain ? Comment valoriser leur expertise pédagogique avec votre outil ?"
     ],
     successCriteria: [
       "Accord Dr. Rousseau pour présentation au Comité de Direction",
@@ -229,7 +231,7 @@ export const scenarios: Scenario[] = [
   {
     id: "kpi-performance",
     title: "Optimisation Analytics E-commerce",
-    description: "Vendre une plateforme d'analytics avancée à un e-commerce en croissance",
+    description: "Vendre une plateforme d'analytics avancée à un e-commerce en croissance rapide avec des défis d'attribution multi-canal",
     difficulty: "Moyen",
     probability: 75,
     company: {
@@ -368,7 +370,18 @@ export const scenarios: Scenario[] = [
         "ROAS stagnant alors que budgets publicitaires augmentent (impact: 8/10, probabilité: 8/10)"
       ]
     },
-    probableObjections: ["C'est trop cher pour nous", "Google Analytics suffit"],
+    probableObjections: [
+      "C'est trop cher pour nous, 599€/mois ça représente 7k€/an soit plus que notre budget total analytics actuel. Comment justifier cette dépense à Clara notre CEO ?",
+      "Google Analytics 4 suffit largement pour nos besoins, c'est gratuit et on a déjà 5 ans d'historique. Pourquoi compliquer avec un nouvel outil quand GA4 fait déjà l'attribution ?",
+      "On n'a pas le temps de former l'équipe sur un nouvel outil maintenant, surtout avec le lancement collection printemps qui arrive. Jules et Amélie sont déjà surchargés.",
+      "Comment être sûr que vos prédictions IA sont fiables ? On a testé un outil de prédiction de churn l'an dernier qui s'est planté, on a perdu confiance dans ces technologies.",
+      "Et si on migre et qu'on perd nos données historiques ? Ou que l'intégration avec Shopify Plus casse quelque chose dans notre tunnel de conversion actuel ?",
+      "Vous dites 24h de setup mais combien de temps réel pour que l'IA soit calibrée correctement ? Et le temps de former l'équipe, de migrer nos dashboards Excel ?",
+      "On a déjà Klaviyo pour la segmentation client et Google Ads pour l'optimisation des budgets. En quoi votre solution fait mieux que ces outils spécialisés ?",
+      "Comment garantir que les données de nos clients (lifestyle, achats) restent confidentielles ? Êtes-vous conformes RGPD ? Où sont hébergées les données ?",
+      "Et si votre startup ferme dans 2 ans ? On sera bloqués avec un outil qu'on ne maîtrise pas. Quelle garantie de pérennité avez-vous ?",
+      "Vos 47% d'amélioration ROAS, c'est sur quelle typologie de clients ? Des e-commerces mode comme nous ? Avec quel budget publicitaire ? Pouvez-vous nous donner des références exactes ?"
+    ],
     successCriteria: ["Démonstration des pertes actuelles", "ROI chiffré présenté"],
     tools: ["calc_kpi", "score_phase"]
   },
@@ -514,7 +527,18 @@ export const scenarios: Scenario[] = [
         "Manque de visibilité nuit à la trésorerie prévisionnelle (impact: 7/10, probabilité: 9/10)"
       ]
     },
-    probableObjections: ["On s'en sort bien avec Excel", "C'est compliqué à mettre en place"],
+    probableObjections: [
+      "On s'en sort très bien avec nos 4 Excel actuels, chaque commercial maîtrise sa méthode. Pourquoi changer un système qui fonctionne depuis 8 ans ?",
+      "49€/utilisateur/mois pour 10 personnes, ça fait 490€/mois soit 6k€/an. C'est énorme pour une PME de notre taille ! Excel ne coûte rien en plus d'Office 365.",
+      "C'est sûrement compliqué à mettre en place et nos commerciaux n'ont pas le temps de se former. Ils sont sur le terrain 80% du temps chez les clients.",
+      "Comment migrer 3 ans de données client sans rien perdre ? Et si on se trompe dans l'import ? On ne peut pas se permettre de perdre l'historique de nos plus gros clients.",
+      "Nos commerciaux sont déjà efficaces avec leurs méthodes personnelles. Paul fait 120% de ses objectifs avec son Excel, pourquoi le contraindre à changer ?",
+      "En cas de panne internet ou de bug de votre plateforme, on fait comment ? Avec Excel au moins on a le contrôle et ça marche même hors ligne.",
+      "Thomas (notre CTO) va râler sur encore un nouvel abonnement SaaS. On a déjà Office 365, Teams, notre ERP Sage... Combien d'outils en plus ?",
+      "Vos 35% d'amélioration du taux de conversion, c'est mesuré comment ? Sur quelle période ? Avec quels types d'entreprises ? Nous on fait du service, pas du produit.",
+      "Et la formation de mes 3 nouveaux commerciaux qu'on recrute ? Il faudra les former sur votre outil en plus de nos process métier. Ça rallonge l'onboarding.",
+      "Si ça marche pas, on peut annuler ? Y a-t-il une période d'essai ? Et pour récupérer nos données si on veut arrêter ?"
+    ],
     successCriteria: ["Démonstration pipeline visuel", "Calcul gain productivité"],
     tools: ["demo_crm", "calc_productivite"]
   },
@@ -599,7 +623,18 @@ export const scenarios: Scenario[] = [
       opportunities: ["Négociation directe", "Flexibilité"],
       threats: ["Dépendance fournisseurs", "Manque d'optimisation"]
     },
-    probableObjections: ["Nos fournisseurs actuels nous conviennent", "C'est trop cher pour nous"],
+    probableObjections: [
+      "Nos fournisseurs actuels nous conviennent parfaitement depuis 15 ans, on a des relations de confiance avec eux. Pourquoi bouleverser des partenariats qui marchent ?",
+      "5000€/mois c'est énorme pour notre taille ! Ça représente 60k€/an soit 0,24% de notre CA. Comment justifier cette dépense face aux actionnaires familiaux qui demandent 8% d'économies ?",
+      "Notre équipe achats a 48 ans de moyenne d'âge et maîtrise parfaitement les négociations directes. Ils vont résister à ce changement de méthode après 20 ans d'expérience.",
+      "Comment être sûr que vos 50 000 fournisseurs sont aussi fiables que nos partenaires actuels ? Nous ne pouvons pas nous permettre une rupture sur les pièces critiques pour Renault.",
+      "Et la confidentialité ? Nos prix négociés et nos plans industriels ne peuvent pas être visibles sur une plateforme externe. Comment garantir la sécurité de ces données sensibles ?",
+      "Vos 15% d'économies, c'est calculé sur quoi ? Nous négocions déjà serré et nos fournisseurs locaux nous font des conditions préférentielles qu'une plateforme n'aura jamais.",
+      "3 mois d'implémentation c'est impossible ! On ne peut pas arrêter nos approvisionnements pendant la montée en charge. Et former 6 acheteurs qui travaillent encore avec des catalogues papier ?",
+      "Qu'est-ce qui nous garantit que cette marketplace existera encore dans 5 ans ? Si vous fermez, on se retrouve sans fournisseurs et on a perdu nos relations historiques.",
+      "On fait de la métallurgie de précision, pas du commodity. Nos pièces nécessitent des adaptations techniques que seuls nos fournisseurs historiques maîtrisent vraiment.",
+      "Et en cas de litige qualité ou de retard livraison ? Avec nos fournisseurs actuels, j'appelle directement le patron. Sur votre plateforme, qui sera responsable ?"
+    ],
     successCriteria: ["Audit coûts actuels", "Démonstration ROI 15%"],
     tools: ["audit_achats", "calc_economies"]
   },
@@ -660,7 +695,18 @@ export const scenarios: Scenario[] = [
       opportunities: ["Qualité pédagogique", "Réseautage"],
       threats: ["Coûts croissants", "Indisponibilité"]
     },
-    probableObjections: ["La formation présentielle est plus efficace", "C'est trop cher par utilisateur"],
+    probableObjections: [
+      "La formation présentielle reste plus efficace pour nos métiers complexes. Nos collaborateurs ont besoin d'interaction humaine pour maîtriser les réglementations financières. Comment l'IA peut-elle remplacer l'expertise d'un formateur senior ?",
+      "40€/mois/utilisateur pour 500 personnes, ça fait 20k€/mois soit 240k€/an ! C'est plus cher que nos formations actuelles. Comment justifier cette explosion des coûts au COMEX ?",
+      "Nos équipes vont-elles vraiment utiliser cette plateforme ? On a déjà essayé des outils digitaux qui sont restés vides. Comment garantir l'adoption par 800 collaborateurs de générations différentes ?",
+      "Comment mesurer concrètement l'efficacité vs nos formations présentielles ? Avec nos organismes actuels, on a des évaluations à chaud et à froid, des certifications reconnues. Qu'est-ce qui prouve que l'IA fait mieux ?",
+      "Et l'intégration avec notre SIRH ? On a un système complexe avec Workday, nos données RH sont sensibles. Combien de temps et de ressources IT pour connecter tout ça ?",
+      "Vos 5000 formations, sont-elles adaptées à la finance ? Nous avons des besoins très spécifiques : réglementation MIFID, Bâle III, RGPD financier. Avez-vous l'expertise métier nécessaire ?",
+      "En cas de contrôle AMF ou ACPR, comment prouver que nos collaborateurs ont bien été formés ? Nos organismes actuels nous délivrent des attestations officielles reconnues par les régulateurs.",
+      "6 semaines d'implémentation pendant que nos équipes doivent continuer à se former ? On a des obligations légales de formation continue qu'on ne peut pas interrompre.",
+      "Et la confidentialité de nos données ? Nos stratégies d'investissement et nos méthodes sont confidentielles. Comment garantir que vos algorithmes IA ne les exploitent pas pour d'autres clients ?",
+      "Si votre plateforme tombe en panne un jour d'examen ou de certification obligatoire ? Avec nos organismes, on a toujours une solution de secours. Quel est votre plan de continuité ?"
+    ],
     successCriteria: ["Calcul économies vs présentiel", "Démonstration engagement"],
     tools: ["calc_formation", "demo_ia"]
   },
@@ -721,7 +767,18 @@ export const scenarios: Scenario[] = [
       opportunities: ["Économies immédiates", "Facilité"],
       threats: ["Vulnérabilités", "Non-conformité"]
     },
-    probableObjections: ["On n'a jamais eu de problème", "C'est trop cher pour notre taille"],
+    probableObjections: [
+      "On n'a jamais eu de problème de sécurité en 15 ans d'existence ! Notre antivirus et firewall basiques ont toujours suffi. Pourquoi investir dans quelque chose qu'on n'a jamais eu besoin ?",
+      "499€/mois c'est démesuré pour une PME de 75 personnes ! Ça représente 6k€/an soit 0,05% de notre CA. Nos clients ne nous demandent pas de certification cybersécurité, pourquoi dépenser autant ?",
+      "Nos ingénieurs sont assez intelligents pour ne pas cliquer sur des emails suspects. Et nos données techniques sont déjà protégées par mot de passe. En quoi votre solution fait mieux ?",
+      "Comment être sûr que votre monitoring 24/7 ne va pas ralentir nos systèmes ? Nos postes de conception CAO ont besoin de toute la puissance disponible, on ne peut pas se permettre de pertes de performance.",
+      "Et vos sauvegardes cloud ? Nos plans industriels pour Safran et Thales sont ultra-confidentiels. Comment garantir qu'ils ne seront pas accessibles depuis l'extérieur ou par vos équipes ?",
+      "Vos formations utilisateurs, c'est du temps perdu ! Nos ingénieurs travaillent 50h/semaine sur des projets urgents. Ils n'ont pas 4 heures à perdre en sensibilisation cybersécurité.",
+      "4 semaines d'implémentation pendant lesquelles on risque des dysfonctionnements ? On a des délais serrés avec nos clients défense. Un bug dans nos systèmes nous coûterait plus cher qu'un hypothétique piratage.",
+      "Et si votre solution nous fait rater une certification ISO 27001 qu'on n'a même pas ? Nos clients actuels ne l'exigent pas, pourquoi compliquer nos process avec des normes qu'on ne maîtrise pas ?",
+      "Comment prouver que 'éviter 1 incident = 500% ROI' ? C'est du marketing ! Vous ne pouvez pas quantifier quelque chose qui n'est jamais arrivé. Et si l'incident n'arrive jamais ?",
+      "Notre DSI Pierre maîtrise parfaitement nos systèmes actuels. Pourquoi le forcer à apprendre vos outils alors qu'il gère déjà la production, les sauvegardes et la maintenance ?"
+    ],
     successCriteria: ["Audit sécurité", "Calcul coût incident"],
     tools: ["audit_securite", "calc_risque"]
   },
@@ -782,7 +839,18 @@ export const scenarios: Scenario[] = [
       opportunities: ["Pas de disruption", "Équipes formées"],
       threats: ["Perte compétitivité", "Maintenance coûteuse"]
     },
-    probableObjections: ["Notre ERP actuel fonctionne encore", "L'investissement est trop important"],
+    probableObjections: [
+      "Notre ERP legacy fonctionne encore parfaitement après 20 ans ! Il est amorti, nos équipes le maîtrisent, pourquoi investir 432k€ dans quelque chose qui marche déjà ?",
+      "12 000€/mois pendant 36 mois c'est colossal ! Ça représente 1,2% de notre CA. Comment justifier cet investissement pharaonique alors qu'on demande 5% d'économies à tous les services ?",
+      "12 mois d'implémentation c'est inacceptable ! On ne peut pas arrêter la production pendant un an. Nos clients auto comme PSA ne nous pardonneraient aucun retard de livraison.",
+      "Comment migrer 20 ans de données historiques sans les corrompre ? On a l'historique de tous nos moules, nos gammes de fabrication, nos temps de cycle. Une erreur nous coûterait des millions.",
+      "Vos 20% de gains de productivité, on les voit où concrètement ? Nos opérateurs à l'injection connaissent leurs machines par cœur. Un MES ne les rendra pas plus rapides !",
+      "Et la formation de 200 employés dont 150 en production ? Certains travaillent chez nous depuis 30 ans avec leurs habitudes. Comment les convaincre d'utiliser des tablettes tactiles ?",
+      "Votre solution va-t-elle s'intégrer avec nos 15 machines d'injection qui ont 10-25 ans ? Certaines n'ont même pas d'interface numérique. Combien coûtera la mise aux normes ?",
+      "En cas de bug de votre système, comment on fait ? Avec notre ERP actuel, notre informaticien Pierre peut tout réparer. Avec votre cloud, on dépend de votre support à distance.",
+      "Et nos spécificités plasturgie ? On fait du bi-injection, du surmoulage, des inserts métalliques. Votre ERP généraliste connaît-il vraiment nos contraintes techniques ?",
+      "Si dans 5 ans vous êtes rachetés par Oracle ou SAP, qu'est-ce qui nous garantit que les tarifs ne vont pas exploser ? On sera prisonniers de votre plateforme sans possibilité de retour."
+    ],
     successCriteria: ["Audit performance actuelle", "Business case ROI 20%"],
     tools: ["audit_erp", "calc_productivite"]
   }

@@ -90,9 +90,9 @@ PROBABILITÉ DE SUCCÈS : ${scenario.probability}%
    ${scenario.probableObjections.map(obj => `- ${obj}`).join('\n')}
 
 4. **Adaptation selon la difficulté** :
-   ${difficultyLevel === 'facile' ? '- Montrez-vous curieux et posez des questions constructives\n   - Exprimez un intérêt modéré mais restez prudent\n   - Soulevez des objections techniques précises mais surmontables' : 
-     difficultyLevel === 'moyen' ? '- Alternez entre intérêt et scepticisme\n   - Posez des questions de défiance mais restez ouvert\n   - Mentionnez vos contraintes mais laissez des ouvertures' :
-     '- Montrez-vous difficile et multipliez les objections\n   - Référez-vous fréquemment à votre solution actuelle\n   - Exprimez des doutes sur la faisabilité et le ROI'}
+    ${difficultyLevel === 'facile' ? '- Montrez-vous ouvert et curieux mais posez des questions légitimes sur budget, formation et ROI\n   - Exprimez des préoccupations réalistes sur l\'adoption par votre équipe\n   - Demandez des preuves concrètes et des références clients similaires\n   - Négociez les conditions mais restez dans un esprit constructif' : 
+     difficultyLevel === 'moyen' ? '- Alternez entre intérêt et scepticisme selon les arguments\n   - Posez des questions de défiance mais restez ouvert si les réponses convainquent\n   - Mentionnez vos contraintes mais laissez des ouvertures pour négocier\n   - Comparez avec votre solution actuelle et les alternatives' :
+     '- Montrez-vous très difficile et multipliez les objections complexes\n   - Référez-vous constamment à votre solution actuelle qui "fonctionne bien"\n   - Exprimez des doutes profonds sur la faisabilité, le ROI et les risques\n   - Demandez des garanties fortes et remettez en question chaque affirmation'}
 
 5. **Références sectorielles et géographiques** :
    - Mentionnez les spécificités de votre secteur : ${company.sector}
