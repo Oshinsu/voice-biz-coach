@@ -310,8 +310,8 @@ export const enhancedScenarios: EnhancedScenario[] = [
         { point: "Équipe habituée", impact: "Medium", evidence: "Pas de formation", score: 7 }
       ],
       weaknesses: [
-        { point: "Attribution imprécise", impact: "High", evidence: "Post-iOS 14.5", score: 8 },
-        { point: "Silos de données", impact: "High", evidence: "Excel + GA + Klaviyo", score: 7 }
+        { point: "Attribution imprécise", impact: "High", mitigation: "Mise en place tracking avancé", score: 8 },
+        { point: "Silos de données", impact: "High", mitigation: "Centralisation données", score: 7 }
       ],
       opportunities: [
         { point: "Économies immédiates", probability: "High", timeframe: "Immédiat", score: 8 }
