@@ -1,7 +1,7 @@
-import { MetoraHomepage } from "@/components/MetoraHomepage";
+import { ByssHomepage } from "@/components/ByssHomepage";
 
 const Index = () => {
-  return <MetoraHomepage />;
+  return <ByssHomepage />;
 };
 
 export default Index;
