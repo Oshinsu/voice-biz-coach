@@ -44,6 +44,51 @@ export type Database = {
         }
         Relationships: []
       }
+      personas: {
+        Row: {
+          budget: string
+          communication_style: string
+          company_size: string
+          created_at: string
+          decision_process: string
+          id: string
+          objection_style: string
+          pain_points: string[]
+          priorities: string[]
+          sector: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          budget: string
+          communication_style: string
+          company_size: string
+          created_at?: string
+          decision_process: string
+          id: string
+          objection_style: string
+          pain_points: string[]
+          priorities: string[]
+          sector: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          budget?: string
+          communication_style?: string
+          company_size?: string
+          created_at?: string
+          decision_process?: string
+          id?: string
+          objection_style?: string
+          pain_points?: string[]
+          priorities?: string[]
+          sector?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -76,6 +121,57 @@ export type Database = {
           last_name?: string | null
           organization?: string | null
           school_name?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      scenarios: {
+        Row: {
+          available_tools: string[]
+          budget_range: string
+          company_name: string
+          company_sector: string
+          company_size: string
+          created_at: string
+          description: string
+          difficulty: string
+          id: string
+          main_objectives: string[]
+          pain_points: string[]
+          success_probability: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          available_tools: string[]
+          budget_range: string
+          company_name: string
+          company_sector: string
+          company_size: string
+          created_at?: string
+          description: string
+          difficulty: string
+          id: string
+          main_objectives: string[]
+          pain_points: string[]
+          success_probability: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          available_tools?: string[]
+          budget_range?: string
+          company_name?: string
+          company_sector?: string
+          company_size?: string
+          created_at?: string
+          description?: string
+          difficulty?: string
+          id?: string
+          main_objectives?: string[]
+          pain_points?: string[]
+          success_probability?: number
+          title?: string
           updated_at?: string
         }
         Relationships: []
