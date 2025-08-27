@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { consolidatedScenarios, Scenario, Interlocutor, Product, Stakeholder } from '@/data/consolidatedScenarios';
+import { consolidatedScenarios, Scenario, Interlocutor, Product, Stakeholder } from '@/data/scenarios';
 
 // Re-export types for compatibility
 export type { Interlocutor, Product, Stakeholder, Scenario };
