@@ -275,17 +275,17 @@ function generatePhaseSpecificBehavior(phase: string, type: 'cold-call' | 'rdv',
  */
 async function getInterlocutorData(scenarioId: string) {
   try {
-    // Tentative de récupération depuis Supabase
-    const { supabase } = await import('@/integrations/supabase/client');
-    const { data } = await (supabase as any)
-      .from('interlocutors')
-      .select('*')
-      .eq('scenario_id', scenarioId)
-      .single();
-    return data;
-  } catch (error) {
     console.log('Utilisation des données fallback pour l\'interlocuteur');
-    // Fallback avec données du scénario consolidé
+    // Utilisation directe des données du scénario consolidé (pas de table interlocutors)
+    return {
+      name: "Contact Commercial",
+      role: "Responsable",
+      personality: "professionnel",
+      communication_style: "direct",
+      decision_power: "medium"
+    };
+  } catch (error) {
+    console.log('Erreur lors de la récupération des données interlocuteur:', error);
     return {
       name: "Contact Commercial",
       role: "Responsable",

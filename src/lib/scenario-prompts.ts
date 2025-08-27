@@ -33,13 +33,9 @@ interface ScenarioData {
 // Utility function to get interlocutor data
 const getInterlocutorForScenario = async (scenarioId: string) => {
   try {
-    const { supabase } = await import('@/integrations/supabase/client');
-    const { data } = await (supabase as any)
-      .from('interlocutors')
-      .select('*')
-      .eq('scenario_id', scenarioId)
-      .single();
-    return data;
+    console.log('No interlocutor data found, using fallback');
+    // Table interlocutors n'existe pas - utilisation directe des données scénario
+    return null;
   } catch (error) {
     console.log('No interlocutor data found, using fallback');
     return null;

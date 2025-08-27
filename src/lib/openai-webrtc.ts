@@ -48,6 +48,8 @@ export class RealtimeWebRTCCoach {
     try {
       const selectedVoice = voice && WEBRTC_CONFIG.supportedVoices.includes(voice) ? voice : WEBRTC_CONFIG.voice;
       
+      console.log('🎯 Création session éphémère avec:', { instructions: instructions?.substring(0, 100), voice: selectedVoice });
+      
       const { data, error } = await import('@/integrations/supabase/client').then(m => m.supabase.functions.invoke('openai-realtime', {
         body: { 
           instructions,
@@ -56,24 +58,27 @@ export class RealtimeWebRTCCoach {
         }
       }));
 
+      console.log('📡 Réponse Supabase:', data);
+
       if (error) {
-        console.error("Erreur Supabase Edge Function:", error);
+        console.error("❌ Erreur Supabase Edge Function:", error);
         throw new Error(`Erreur lors de la création de la session: ${error.message}`);
       }
 
       if (!data?.client_secret?.value) {
-        throw new Error("Réponse invalide de la session OpenAI");
+        console.error('❌ Pas de client_secret dans la réponse:', data);
+        throw new Error("Réponse invalide de la session OpenAI - pas de token");
       }
 
       this.ephemeralKey = data.client_secret.value;
-      console.log("Session éphémère créée avec succès:", {
+      console.log("✅ Session éphémère créée avec succès:", {
         voice: selectedVoice,
         model: WEBRTC_CONFIG.model,
         expires: data.expires_at
       });
       return this.ephemeralKey;
     } catch (error) {
-      console.error("Erreur création session éphémère:", error);
+      console.error("💥 Erreur création session éphémère:", error);
       throw error;
     }
   }
@@ -81,12 +86,21 @@ export class RealtimeWebRTCCoach {
   // Connexion WebRTC avec l'API Realtime (Version 2025)
   async connect(instructions?: string, voice?: string): Promise<void> {
     try {
-      // Créer une session éphémère via Supabase avec voix optionnelle
+      console.log('🚀 Démarrage connexion WebRTC...');
+      
+      if (this.peerConnection) {
+        console.log('🔄 Nettoyage connexion existante');
+        this.disconnect();
+      }
+
+      console.log('📞 Création session éphémère...');
       await this.createEphemeralSession(instructions, voice);
       
       if (!this.ephemeralKey) {
         throw new Error("Impossible de créer une session éphémère");
       }
+
+      console.log('🔑 Token éphémère reçu');
 
       // Configuration RTCPeerConnection
       this.peerConnection = new RTCPeerConnection();
@@ -501,15 +515,21 @@ export const DEFAULT_SALES_PROMPT = `Tu es un assistant commercial qui aide à l
 export function handleWebRTCError(error: any): string {
   console.error("Erreur WebRTC Realtime API:", error);
   
-  if (error.includes("authentication") || error.includes("401")) {
-    return "Erreur d'authentification. Vérifiez votre clé API.";
-  } else if (error.includes("rate_limit") || error.includes("429")) {
+  // Conversion sécurisée de l'erreur en string
+  const errorString = error?.message || error?.toString() || String(error);
+  const errorStringLower = errorString.toLowerCase();
+  
+  if (errorStringLower.includes("authentication") || errorStringLower.includes("401")) {
+    return "Erreur d'authentification. Vérifiez votre clé API OpenAI.";
+  } else if (errorStringLower.includes("rate_limit") || errorStringLower.includes("429")) {
     return "Limite de débit atteinte. Veuillez réessayer plus tard.";
-  } else if (error.includes("network") || error.includes("connection")) {
+  } else if (errorStringLower.includes("network") || errorStringLower.includes("connection")) {
     return "Erreur de connexion. Vérifiez votre connexion internet.";
-  } else if (error.includes("microphone") || error.includes("getUserMedia")) {
+  } else if (errorStringLower.includes("microphone") || errorStringLower.includes("getusermedia")) {
     return "Erreur d'accès au microphone. Vérifiez les permissions.";
+  } else if (errorStringLower.includes("websocket") || errorStringLower.includes("webrtc")) {
+    return "Erreur de connexion WebRTC. Réessayez dans quelques secondes.";
   } else {
-    return "Une erreur inattendue s'est produite. Veuillez réessayer.";
+    return `Erreur: ${errorString}`;
   }
 }
