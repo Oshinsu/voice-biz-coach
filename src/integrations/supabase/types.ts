@@ -14,6 +14,74 @@ export type Database = {
   }
   public: {
     Tables: {
+      interlocutors: {
+        Row: {
+          background: string | null
+          communication_style: string | null
+          concerns: string[] | null
+          created_at: string
+          decision_power: string | null
+          decision_process: string | null
+          experience: string | null
+          id: string
+          linkedin_profile: Json | null
+          motivations: string[] | null
+          name: string
+          personality: string | null
+          priorities: string[] | null
+          psychology_profile: Json | null
+          role: string
+          scenario_id: string
+          updated_at: string
+        }
+        Insert: {
+          background?: string | null
+          communication_style?: string | null
+          concerns?: string[] | null
+          created_at?: string
+          decision_power?: string | null
+          decision_process?: string | null
+          experience?: string | null
+          id?: string
+          linkedin_profile?: Json | null
+          motivations?: string[] | null
+          name: string
+          personality?: string | null
+          priorities?: string[] | null
+          psychology_profile?: Json | null
+          role: string
+          scenario_id: string
+          updated_at?: string
+        }
+        Update: {
+          background?: string | null
+          communication_style?: string | null
+          concerns?: string[] | null
+          created_at?: string
+          decision_power?: string | null
+          decision_process?: string | null
+          experience?: string | null
+          id?: string
+          linkedin_profile?: Json | null
+          motivations?: string[] | null
+          name?: string
+          personality?: string | null
+          priorities?: string[] | null
+          psychology_profile?: Json | null
+          role?: string
+          scenario_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interlocutors_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: false
+            referencedRelation: "scenarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       navigation_items: {
         Row: {
           created_at: string
@@ -88,6 +156,74 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      products: {
+        Row: {
+          competitive_advantages: string[] | null
+          created_at: string
+          description: string | null
+          id: string
+          implementation_time: string | null
+          key_features: string[] | null
+          market_positioning: Json | null
+          marketing_plan: Json | null
+          name: string
+          pricing_enterprise: string | null
+          pricing_professional: string | null
+          pricing_starter: string | null
+          roi: string | null
+          scenario_id: string
+          target_segments: string[] | null
+          technical_specs: Json | null
+          updated_at: string
+        }
+        Insert: {
+          competitive_advantages?: string[] | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          implementation_time?: string | null
+          key_features?: string[] | null
+          market_positioning?: Json | null
+          marketing_plan?: Json | null
+          name: string
+          pricing_enterprise?: string | null
+          pricing_professional?: string | null
+          pricing_starter?: string | null
+          roi?: string | null
+          scenario_id: string
+          target_segments?: string[] | null
+          technical_specs?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          competitive_advantages?: string[] | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          implementation_time?: string | null
+          key_features?: string[] | null
+          market_positioning?: Json | null
+          marketing_plan?: Json | null
+          name?: string
+          pricing_enterprise?: string | null
+          pricing_professional?: string | null
+          pricing_starter?: string | null
+          roi?: string | null
+          scenario_id?: string
+          target_segments?: string[] | null
+          technical_specs?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "products_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: false
+            referencedRelation: "scenarios"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -202,6 +338,106 @@ export type Database = {
           value?: Json
         }
         Relationships: []
+      }
+      stakeholders: {
+        Row: {
+          approach: string | null
+          concerns: string[] | null
+          created_at: string
+          id: string
+          influence: string | null
+          name: string
+          role: string
+          scenario_id: string
+          support: string | null
+          updated_at: string
+        }
+        Insert: {
+          approach?: string | null
+          concerns?: string[] | null
+          created_at?: string
+          id?: string
+          influence?: string | null
+          name: string
+          role: string
+          scenario_id: string
+          support?: string | null
+          updated_at?: string
+        }
+        Update: {
+          approach?: string | null
+          concerns?: string[] | null
+          created_at?: string
+          id?: string
+          influence?: string | null
+          name?: string
+          role?: string
+          scenario_id?: string
+          support?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stakeholders_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: false
+            referencedRelation: "scenarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      swot_analyses: {
+        Row: {
+          analysis_type: string
+          created_at: string
+          id: string
+          market_data: Json | null
+          opportunities: Json | null
+          pestel_analysis: Json | null
+          porter_analysis: Json | null
+          scenario_id: string
+          strengths: Json | null
+          threats: Json | null
+          updated_at: string
+          weaknesses: Json | null
+        }
+        Insert: {
+          analysis_type: string
+          created_at?: string
+          id?: string
+          market_data?: Json | null
+          opportunities?: Json | null
+          pestel_analysis?: Json | null
+          porter_analysis?: Json | null
+          scenario_id: string
+          strengths?: Json | null
+          threats?: Json | null
+          updated_at?: string
+          weaknesses?: Json | null
+        }
+        Update: {
+          analysis_type?: string
+          created_at?: string
+          id?: string
+          market_data?: Json | null
+          opportunities?: Json | null
+          pestel_analysis?: Json | null
+          porter_analysis?: Json | null
+          scenario_id?: string
+          strengths?: Json | null
+          threats?: Json | null
+          updated_at?: string
+          weaknesses?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "swot_analyses_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: false
+            referencedRelation: "scenarios"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       training_sessions: {
         Row: {
