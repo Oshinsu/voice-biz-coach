@@ -1,0 +1,36 @@
+-- Enrichissement scénarios restants partie 2
+-- CRM Révolutionnaire Agence (TechFlow Digital)
+INSERT INTO interlocutors (scenario_id, name, role, personality, communication_style, decision_power, priorities, concerns, motivations, experience) VALUES
+('digital-agency', 'Émilie Leblanc', 'CEO', 'Visionnaire et orientée croissance, très exigeante sur les résultats', 'Inspirante et directe', 'Décideuse finale', ARRAY['Croissance agence', 'Satisfaction client', 'Efficacité opérationnelle'], ARRAY['Adoption équipe', 'ROI incertain', 'Complexité changement'], ARRAY['Excellence service', 'Croissance sustainable', 'Innovation continue'], '10 ans CEO agence digitale'),
+('digital-agency', 'Julien Moreau', 'Directeur Commercial', 'Pragmatique et orienté performance, focus sur les résultats', 'Analytique et persuasif', 'Influenceur clé', ARRAY['Pipeline commercial', 'Conversion leads', 'Productivité équipe'], ARRAY['Changement processus', 'Formation équipe', 'Performance'], ARRAY['Optimiser ventes', 'Excellence commerciale', 'Résultats équipe'], '8 ans direction commerciale');
+
+INSERT INTO products (scenario_id, name, description, pricing_starter, pricing_professional, pricing_enterprise, key_features, competitive_advantages, roi, implementation_time) VALUES
+('digital-agency', 'AgencyFlow CRM', 'CRM nouvelle génération spécialement conçu pour les agences digitales', '€199/mois - 5 utilisateurs', '€499/mois - 20 utilisateurs', '€999/mois - Utilisateurs illimités + IA', ARRAY['Pipeline visuel avancé', 'Automatisation workflow', 'Facturation intégrée', 'Gestion projets', 'Analytics ROI client', 'API complète'], ARRAY['Spécialisé agences', 'Interface intuitive', 'Automatisation poussée', 'Intégration complète', 'Support expert'], '+50% productivité commerciale, +35% taux closing, -40% temps admin', '2-3 semaines avec migration'),
+('digital-agency', 'AgencyAI Insights', 'Suite d''intelligence artificielle pour optimiser performance agence', '€299/mois - Analytics de base', '€699/mois - IA prédictive', '€1,299/mois - Automation complète', ARRAY['Prédiction churn client', 'Optimisation pricing', 'Recommandations IA', 'Alertes intelligentes', 'Reporting auto', 'Intégration CRM'], ARRAY['IA spécialisée agences', 'Prédictions précises', 'ROI mesurable', 'Automatisation avancée'], '+25% rétention client, +30% marge projet, +40% efficacité', '3-4 semaines');
+
+INSERT INTO swot_analyses (scenario_id, analysis_type, strengths, weaknesses, opportunities, threats) VALUES
+('digital-agency', 'product', '{"points": ["Spécialisation agences", "Innovation IA", "Interface excellente", "Intégration complète"]}', '{"points": ["Marché compétitif", "Dépendance adoption", "Coût développement"]}', '{"points": ["Croissance agences", "Digitalisation PME", "Automation trend"]}', '{"points": ["CRM établis", "Concurrents SaaS", "Économie incertaine"]}');
+
+INSERT INTO stakeholders (scenario_id, name, role, influence, support, concerns, approach) VALUES
+('digital-agency', 'Alexandre Dubois', 'CTO TechFlow', 'Élevée', 'Favorable', ARRAY['Intégration technique', 'Sécurité'], 'Validation technique et architecture'),
+('digital-agency', 'Sarah Martin', 'Directrice Opérations', 'Moyenne', 'Neutre', ARRAY['Formation équipe', 'Productivité'], 'Accompagnement changement'),
+('digital-agency', 'Kevin Rousseau', 'Account Manager Senior', 'Moyenne', 'Réservé', ARRAY['Facilité usage', 'Performance'], 'Démonstration bénéfices concrets'),
+('digital-agency', 'Marine Lecomte', 'Responsable Finance', 'Élevée', 'Neutre', ARRAY['Budget', 'ROI'], 'Justification financière détaillée');
+
+-- Solution IA Prédictive FinTech (MoneyFlow)
+INSERT INTO interlocutors (scenario_id, name, role, personality, communication_style, decision_power, priorities, concerns, motivations, experience) VALUES
+('fintech-startup', 'Thomas Chen', 'CTO', 'Technique et innovant, très exigeant sur la qualité', 'Précis et analytique', 'Décideur technique', ARRAY['Performance algorithmes', 'Scalabilité', 'Innovation'], ARRAY['Complexité intégration', 'Performance', 'Coût développement'], ARRAY['Excellence technique', 'Innovation continue', 'Leadership tech'], '12 ans CTO fintech'),
+('fintech-startup', 'Laura Dupont', 'Head of Risk', 'Rigoureuse et orientée conformité, très prudente', 'Méthodique et détaillée', 'Validation risque', ARRAY['Conformité réglementaire', 'Gestion risque', 'Précision modèles'], ARRAY['Régulation', 'Faux positifs', 'Validation modèles'], ARRAY['Conformité parfaite', 'Maîtrise risque', 'Précision maximale'], '8 ans gestion risque fintech');
+
+INSERT INTO products (scenario_id, name, description, pricing_starter, pricing_professional, pricing_enterprise, key_features, competitive_advantages, roi, implementation_time) VALUES
+('fintech-startup', 'CreditAI Engine', 'Solution d''IA prédictive avancée pour scoring crédit nouvelle génération', '€15,000/mois - 10K scores/mois', '€45,000/mois - 100K scores/mois', '€125,000/mois - Unlimited + consulting', ARRAY['Machine Learning avancé', 'Données alternatives', 'API temps réel', 'Conformité RGPD', 'Monitoring continu', 'Explicabilité IA'], ARRAY['Algorithmes propriétaires', 'Données innovantes', 'Précision supérieure', 'Conformité native', 'Support expert'], '+40% précision scoring, -60% défaut, +25% approbations', '8-12 semaines avec validation'),
+('fintech-startup', 'RiskShield Pro', 'Plateforme de monitoring et gestion risque temps réel', '€8,000/mois - Monitoring de base', '€25,000/mois - Analytics avancées', '€60,000/mois - IA prédictive risque', ARRAY['Monitoring temps réel', 'Alertes intelligentes', 'Dashboard risque', 'Stress testing', 'Regulatory reporting', 'API complète'], ARRAY['Temps réel complet', 'IA prédictive', 'Conformité intégrée', 'Interface intuitive'], '-75% incidents risque, +90% détection early warning', '6-8 semaines');
+
+INSERT INTO swot_analyses (scenario_id, analysis_type, strengths, weaknesses, opportunities, threats) VALUES
+('fintech-startup', 'market', '{"points": ["Innovation IA", "Expertise fintech", "Données alternatives", "Précision supérieure"]}', '{"points": ["Régulation stricte", "Validation longue", "Coût R&D élevé"]}', '{"points": ["Fintech en croissance", "Open banking", "IA mainstream"]}', '{"points": ["Régulation changeante", "Concurrents tech", "Crise économique"]}');
+
+INSERT INTO stakeholders (scenario_id, name, role, influence, support, concerns, approach) VALUES
+('fintech-startup', 'Marie Leroy', 'CEO MoneyFlow', 'Très élevée', 'Favorable', ARRAY['Innovation', 'Croissance'], 'Vision stratégique et innovation'),
+('fintech-startup', 'Pierre Dubois', 'Head of Product', 'Élevée', 'Très favorable', ARRAY['Roadmap produit', 'UX'], 'Innovation produit et différenciation'),
+('fintech-startup', 'Camille Martin', 'Compliance Officer', 'Moyenne', 'Neutre', ARRAY['Conformité', 'Audit'], 'Validation réglementaire stricte'),
+('fintech-startup', 'Maxime Rousseau', 'Data Scientist Lead', 'Moyenne', 'Très favorable', ARRAY['Qualité données', 'Modèles'], 'Excellence technique et innovation');
