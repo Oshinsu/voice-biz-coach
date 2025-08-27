@@ -1,0 +1,103 @@
+-- Insert the 6 original scenarios into the scenarios table
+INSERT INTO public.scenarios (
+  id, title, description, difficulty, company_name, company_sector, 
+  company_size, budget_range, success_probability, main_objectives, 
+  available_tools, pain_points
+) VALUES 
+(
+  'byss-vns-school',
+  'Byss VNS pour École Commerce',
+  'Vendre Byss VNS à l''École Supérieure de Commerce d''Aix-en-Provence pour moderniser l''enseignement commercial',
+  'Moyen',
+  'ESCAP - École Supérieure de Commerce d''Aix-en-Provence',
+  'Enseignement Supérieur - Commerce',
+  'Institution de taille moyenne (2500 étudiants, 150 professeurs)',
+  '150 000€ - 300 000€ pour solutions pédagogiques innovantes',
+  68,
+  ARRAY['Démontrer l''impact pédagogique supérieur de Byss VNS vs méthodes traditionnelles', 'Prouver l''facilité d''adoption par les professeurs', 'Présenter un ROI clair en termes d''employabilité étudiante', 'Rassurer sur le support technique et pédagogique', 'Obtenir un accord pour un pilote département avant déploiement complet'],
+  ARRAY['Calculateur ROI Éducatif (employabilité, satisfaction, ranking)', 'Comparateur vs solutions concurrentes', 'Audit pédagogique méthodes actuelles', 'Planificateur implémentation académique', 'Simulateur budget départemental'],
+  ARRAY['Méthodes d''enseignement commercial traditionnelles dépassées', 'Manque d''engagement des étudiants en cours de vente', 'Difficulté à évaluer les compétences pratiques de négociation', 'Pression croissante pour moderniser l''approche pédagogique', 'Concurrence avec écoles plus digitalisées']
+),
+(
+  'kpi-performance',
+  'Optimisation Analytics E-commerce',
+  'Vendre une plateforme d''analytics avancée à un e-commerce en croissance rapide avec des défis d''attribution multi-canal',
+  'Moyen',
+  'ModaStyle',
+  'E-commerce Mode',
+  '50 employés',
+  '15-25k€/an pour analytics (budget total marketing 1M€)',
+  75,
+  ARRAY['Démontrer la valeur du tracking unifié', 'Quantifier les pertes actuelles'],
+  ARRAY['Calculateur de perte revenue attribution', 'Audit complet setup tracking actuel', 'Benchmark concurrentiel secteur mode', 'Simulateur ROI DataTrack vs status quo', 'Roadmap optimisation budgets publicitaires'],
+  ARRAY['Attribution marketing fragmentée : impossible de savoir si une vente vient de Google, Facebook, email ou influenceurs', 'Taux de churn de 23% sans comprendre les signaux précurseurs de départ', 'Budget publicitaire de 80k€/mois mal optimisé faute de visibilité cross-canal', 'Équipe marketing frustrée de passer 40% de son temps sur des rapports manuels', 'Retours produits de 12% avec peu d''insights sur les raisons', 'Saisonnalité imprévisible malgré 5 ans d''historique']
+),
+(
+  'digital-agency',
+  'CRM Révolutionnaire Agence',
+  'Convaincre l''agence digitale TechFlow d''adopter notre CRM nouvelle génération pour optimiser leur gestion client et croissance',
+  'Difficile',
+  'TechFlow Digital',
+  'Services Digitaux',
+  '75 employés',
+  '50-80k€ budget CRM et outils client',
+  45,
+  ARRAY['Démontrer l''amélioration de productivité vs CRM actuel', 'Prouver le ROI sur la rétention client', 'Rassurer sur la migration des données', 'Négocier une phase pilote'],
+  ARRAY['Audit CRM actuel vs meilleures pratiques', 'Calculateur productivité équipe commerciale', 'Plan de migration données personnalisé', 'ROI simulator retention client', 'Comparatif feature par feature vs Salesforce'],
+  ARRAY['CRM Salesforce trop complexe et cher pour leurs besoins', 'Perte de temps énorme en saisie administrative', 'Pas de visibilité temps réel sur pipeline commercial', 'Difficulté à tracker satisfaction client sur projets longs', 'Équipe commerciale frustrée par la lourdeur des process', 'Churn client de 15% sans early warning system']
+),
+(
+  'fintech-startup',
+  'Solution IA Prédictive FinTech',
+  'Vendre notre solution d''IA prédictive à MoneyFlow, startup fintech en croissance pour optimiser leurs algorithmes de scoring crédit',
+  'Facile',
+  'MoneyFlow',
+  'FinTech',
+  '35 employés',
+  '200-400k€ budget technologie IA',
+  85,
+  ARRAY['Prouver l''amélioration des modèles de scoring', 'Démontrer la conformité réglementaire', 'Quantifier la réduction du risque de défaut', 'Négocier un POC sur données historiques'],
+  ARRAY['Audit algorithmes scoring actuels', 'Benchmark performance vs modèles standards', 'Analysis compliance GDPR et directive EU IA', 'Simulateur réduction taux défaut', 'Roadmap intégration technique'],
+  ARRAY['Modèles de scoring crédit peu sophistiqués basés sur règles simples', 'Taux de défaut de 3.2% supérieur à la moyenne marché (2.1%)', 'Manque de données alternatives pour évaluer les profils atypiques', 'Pression réglementaire croissante sur l''explicabilité des décisions', 'Concurrence agressive sur le pricing nécessitant optimisation marges', 'Croissance rapide nécessitant scalabilité des algorithmes']
+),
+(
+  'manufacturing-iot',
+  'IoT Industriel Manufacture',
+  'Implémenter notre solution IoT industrielle chez MetalCorp pour optimiser leur chaîne de production et maintenance prédictive',
+  'Difficile',
+  'MetalCorp Industries',
+  'Métallurgie',
+  '450 employés',
+  '800k€-1.2M€ budget transformation digitale',
+  55,
+  ARRAY['Démontrer le ROI sur réduction des arrêts production', 'Prouver la facilité d''intégration avec systèmes existants', 'Rassurer sur la cybersécurité industrielle', 'Négocier un pilote sur une ligne de production'],
+  ARRAY['Audit infrastructure technique existante', 'Calculateur ROI maintenance prédictive', 'Plan déploiement par phases', 'Assessment cybersécurité industrielle', 'Benchmark performance vs concurrence'],
+  ARRAY['Arrêts de production non planifiés coûtant 50k€/jour', 'Maintenance préventive sur-dimensionnée gaspillant ressources', 'Manque de visibilité temps réel sur performance machines', 'Équipes maintenance débordées en mode réactif', 'Pression clients sur délais et qualité constante', 'Concurrence internationale nécessitant optimisation coûts']
+),
+(
+  'retail-personalization',
+  'Personnalisation Retail IA',
+  'Convaincre la chaîne de magasins SportZone d''adopter notre solution de personnalisation IA pour booster leurs ventes et fidélisation',
+  'Facile',
+  'SportZone',
+  'Retail Sport',
+  '120 magasins, 2800 employés',
+  '300-500k€ budget expérience client digital',
+  78,
+  ARRAY['Démontrer l''augmentation du panier moyen', 'Prouver l''amélioration de la fidélisation', 'Quantifier l''optimisation des stocks', 'Négocier un pilote sur 10 magasins test'],
+  ARRAY['Audit parcours client actuel', 'Simulateur impact panier moyen', 'Analysis données CRM pour potentiel personnalisation', 'Benchmark vs enseignes concurrentes', 'Calculateur ROI fidélisation client'],
+  ARRAY['Panier moyen stagnant malgré inflation', 'Taux de fidélisation client de 35% en baisse', 'Stocks mal optimisés avec 15% de démarque inconnue', 'Expérience client standardisée peu différenciante', 'Concurrence e-commerce agressive sur les prix', 'Équipes vendeurs manquent d''outils pour personnaliser conseil']
+)
+ON CONFLICT (id) DO UPDATE SET
+  title = EXCLUDED.title,
+  description = EXCLUDED.description,
+  difficulty = EXCLUDED.difficulty,
+  company_name = EXCLUDED.company_name,
+  company_sector = EXCLUDED.company_sector,
+  company_size = EXCLUDED.company_size,
+  budget_range = EXCLUDED.budget_range,
+  success_probability = EXCLUDED.success_probability,
+  main_objectives = EXCLUDED.main_objectives,
+  available_tools = EXCLUDED.available_tools,
+  pain_points = EXCLUDED.pain_points,
+  updated_at = now();
