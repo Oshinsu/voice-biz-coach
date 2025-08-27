@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -58,6 +59,23 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
   const companySwot = scenario.swot_analyses?.find(s => s.analysis_type === 'company') || null;
   const productSwot = scenario.swot_analyses?.find(s => s.analysis_type === 'product') || null;
   const stakeholders = scenario.stakeholders || [];
+
+  // Helper function to safely render SWOT items
+  const renderSwotItems = (items: any) => {
+    if (!items) return [];
+    
+    // If it's an array of strings
+    if (Array.isArray(items)) {
+      return items;
+    }
+    
+    // If it's an object with string values
+    if (typeof items === 'object' && items !== null) {
+      return Object.values(items).filter(item => typeof item === 'string');
+    }
+    
+    return [];
+  };
 
   return (
     <div className="space-y-6">
@@ -143,20 +161,12 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
                         Forces
                       </h5>
                       <ul className="text-sm space-y-1">
-                        {companySwot.strengths && typeof companySwot.strengths === 'object' 
-                          ? Object.entries(companySwot.strengths).map(([key, value], index) => (
-                              <li key={index} className="flex items-start gap-2">
-                                <CheckCircle className="h-3 w-3 mt-1 text-green-600 flex-shrink-0" />
-                                {value as string}
-                              </li>
-                            ))
-                          : companySwot.strengths?.map?.((strength: string, index: number) => (
-                              <li key={index} className="flex items-start gap-2">
-                                <CheckCircle className="h-3 w-3 mt-1 text-green-600 flex-shrink-0" />
-                                {strength}
-                              </li>
-                            ))
-                        }
+                        {renderSwotItems(companySwot.strengths).map((strength: string, index: number) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <CheckCircle className="h-3 w-3 mt-1 text-green-600 flex-shrink-0" />
+                            {strength}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                     
@@ -166,20 +176,12 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
                         Faiblesses
                       </h5>
                       <ul className="text-sm space-y-1">
-                        {companySwot.weaknesses && typeof companySwot.weaknesses === 'object' 
-                          ? Object.entries(companySwot.weaknesses).map(([key, value], index) => (
-                              <li key={index} className="flex items-start gap-2">
-                                <XCircle className="h-3 w-3 mt-1 text-red-600 flex-shrink-0" />
-                                {value as string}
-                              </li>
-                            ))
-                          : companySwot.weaknesses?.map?.((weakness: string, index: number) => (
-                              <li key={index} className="flex items-start gap-2">
-                                <XCircle className="h-3 w-3 mt-1 text-red-600 flex-shrink-0" />
-                                {weakness}
-                              </li>
-                            ))
-                        }
+                        {renderSwotItems(companySwot.weaknesses).map((weakness: string, index: number) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <XCircle className="h-3 w-3 mt-1 text-red-600 flex-shrink-0" />
+                            {weakness}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                     
@@ -189,20 +191,12 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
                         Opportunités
                       </h5>
                       <ul className="text-sm space-y-1">
-                        {companySwot.opportunities && typeof companySwot.opportunities === 'object' 
-                          ? Object.entries(companySwot.opportunities).map(([key, value], index) => (
-                              <li key={index} className="flex items-start gap-2">
-                                <Plus className="h-3 w-3 mt-1 text-blue-600 flex-shrink-0" />
-                                {value as string}
-                              </li>
-                            ))
-                          : companySwot.opportunities?.map?.((opportunity: string, index: number) => (
-                              <li key={index} className="flex items-start gap-2">
-                                <Plus className="h-3 w-3 mt-1 text-blue-600 flex-shrink-0" />
-                                {opportunity}
-                              </li>
-                            ))
-                        }
+                        {renderSwotItems(companySwot.opportunities).map((opportunity: string, index: number) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <Plus className="h-3 w-3 mt-1 text-blue-600 flex-shrink-0" />
+                            {opportunity}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                     
@@ -212,20 +206,12 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
                         Menaces
                       </h5>
                       <ul className="text-sm space-y-1">
-                        {companySwot.threats && typeof companySwot.threats === 'object' 
-                          ? Object.entries(companySwot.threats).map(([key, value], index) => (
-                              <li key={index} className="flex items-start gap-2">
-                                <Minus className="h-3 w-3 mt-1 text-orange-600 flex-shrink-0" />
-                                {value as string}
-                              </li>
-                            ))
-                          : companySwot.threats?.map?.((threat: string, index: number) => (
-                              <li key={index} className="flex items-start gap-2">
-                                <Minus className="h-3 w-3 mt-1 text-orange-600 flex-shrink-0" />
-                                {threat}
-                              </li>
-                            ))
-                        }
+                        {renderSwotItems(companySwot.threats).map((threat: string, index: number) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <Minus className="h-3 w-3 mt-1 text-orange-600 flex-shrink-0" />
+                            {threat}
+                          </li>
+                        ))}
                       </ul>
                     </div>
                   </div>
