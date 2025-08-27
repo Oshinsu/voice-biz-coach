@@ -27,6 +27,8 @@ export interface Product {
   competitive_advantages?: string[];
   roi?: string;
   implementation_time?: string;
+  target_segments?: string[];
+  technical_specs?: any;
 }
 
 export interface SwotAnalysis {

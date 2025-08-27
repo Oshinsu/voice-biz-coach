@@ -25,7 +25,7 @@ export const MarketAnalysis: React.FC<MarketAnalysisProps> = ({ swotAnalyses = [
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Globe className="h-5 w-5" />
-            Vue d'ensemble du marché EdTech
+            Vue d'ensemble du marché
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -121,24 +121,24 @@ export const MarketAnalysis: React.FC<MarketAnalysisProps> = ({ swotAnalyses = [
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Target className="h-5 w-5" />
-            Opportunité marché - Simulation commerciale
+            Opportunité de marché
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <h4 className="font-semibold text-blue-800 mb-2">Marché Addressable Total (TAM)</h4>
+            <h4 className="font-semibold text-blue-800 mb-2">Marché Addressable</h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
               <div>
-                <p className="text-2xl font-bold text-blue-900">€2.8Md</p>
-                <p className="text-sm text-blue-700">Formation commerciale globale</p>
+                <p className="text-2xl font-bold text-blue-900">€1.2Md</p>
+                <p className="text-sm text-blue-700">Marché total (TAM)</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-blue-900">€450M</p>
-                <p className="text-sm text-blue-700">EdTech simulation (SAM)</p>
+                <p className="text-2xl font-bold text-blue-900">€200M</p>
+                <p className="text-sm text-blue-700">Marché serviceable (SAM)</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-blue-900">€85M</p>
-                <p className="text-sm text-blue-700">France écoles commerce (SOM)</p>
+                <p className="text-2xl font-bold text-blue-900">€50M</p>
+                <p className="text-sm text-blue-700">Marché obtainable (SOM)</p>
               </div>
             </div>
           </div>
@@ -257,32 +257,32 @@ export const MarketAnalysis: React.FC<MarketAnalysisProps> = ({ swotAnalyses = [
               </div>
             </div>
 
-            {/* Byss Position */}
+            {/* Notre Position */}
             <div className="p-4 border-2 border-green-200 rounded-lg">
               <h4 className="font-semibold text-green-800 mb-2 flex items-center gap-2">
                 <Award className="h-4 w-4" />
-                Position Byss VNS
+                Notre position
               </h4>
               <div className="space-y-3">
                 <div className="p-2 bg-green-50 rounded">
-                  <p className="font-medium text-sm">Innovation IA</p>
+                  <p className="font-medium text-sm">Innovation produit</p>
                   <div className="flex justify-between text-xs mt-1">
                     <span>Score:</span>
-                    <span className="font-medium">9.2/10</span>
+                    <span className="font-medium">8.5/10</span>
                   </div>
                 </div>
                 <div className="p-2 bg-green-50 rounded">
-                  <p className="font-medium text-sm">Facilité usage</p>
+                  <p className="font-medium text-sm">Expérience utilisateur</p>
                   <div className="flex justify-between text-xs mt-1">
                     <span>Score:</span>
-                    <span className="font-medium">8.8/10</span>
+                    <span className="font-medium">8.2/10</span>
                   </div>
                 </div>
                 <div className="p-2 bg-green-50 rounded">
-                  <p className="font-medium text-sm">Part marché FR</p>
+                  <p className="font-medium text-sm">Part de marché</p>
                   <div className="flex justify-between text-xs mt-1">
                     <span>Actuelle:</span>
-                    <span className="font-medium">15%</span>
+                    <span className="font-medium">5%</span>
                   </div>
                 </div>
               </div>
@@ -294,31 +294,31 @@ export const MarketAnalysis: React.FC<MarketAnalysisProps> = ({ swotAnalyses = [
           {/* Competitive Advantages */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold mb-3">Avantages compétitifs Byss</h4>
+              <h4 className="font-semibold mb-3">Nos avantages compétitifs</h4>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">IA conversationnelle avancée (GPT-4+)</span>
+                  <span className="text-sm">Technologie de pointe</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">Interface utilisateur intuitive</span>
+                  <span className="text-sm">Interface utilisateur moderne</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">Analytics comportementaux détaillés</span>
+                  <span className="text-sm">Analytics avancés</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">Intégration LMS native</span>
+                  <span className="text-sm">Intégrations flexibles</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">Support client premium</span>
+                  <span className="text-sm">Support client réactif</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">Personnalisation scénarios</span>
+                  <span className="text-sm">Solution personnalisable</span>
                 </div>
               </div>
             </div>
