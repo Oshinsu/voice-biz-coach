@@ -1,5 +1,5 @@
-import { ConversationType } from "@/store/salesStore";
-import { getPhaseById } from "@/data/salesPhases";
+import { supabase } from '@/integrations/supabase/client';
+import { generatePersonalityPrompt } from './persona-adapter';
 
 interface ScenarioData {
   id: string;
@@ -46,164 +46,85 @@ const getInterlocutorForScenario = async (scenarioId: string) => {
   }
 };
 
-// Générateur de prompts contextuels MINIMAUX pour mode Discovery (remplace l'ancien God Mode)
-export async function generateContactPrompt(scenario: ScenarioData, currentPhase?: string, conversationType: ConversationType = 'cold-call'): Promise<string> {
-  // Try to get detailed interlocutor data
-  const interlocutor = await getInterlocutorForScenario(scenario.id);
+// NOUVELLE ARCHITECTURE - Discovery Mode avec prompts minimaux
+export async function generateContactPrompt(
+  scenarioData: ScenarioData,
+  conversationType: 'cold-call' | 'rdv',
+  currentPhase: string,
+  trustLevel: number,
+  availableInformation: Record<string, any>,
+  revealedLayers: any[]
+): Promise<string> {
+  // Récupérer les données spécifiques de l'interlocuteur
+  const interlocutorData = await getInterlocutorForScenario(scenarioData.id);
   
-  // Calcul du niveau de résistance basé sur la difficulté
-  const difficultyLevel = scenario.difficulty.toLowerCase();
-  const resistanceLevel = difficultyLevel === 'facile' ? 'faible' : difficultyLevel === 'moyen' ? 'modérée' : 'élevée';
-  
-  // DISCOVERY MODE : Seulement les informations qu'une vraie personne saurait naturellement
-  const contactName = interlocutor?.name || "Contact Commercial";
-  const contactRole = interlocutor?.role || "responsable des achats";
-  const contactPersonality = interlocutor?.personality || "Professionnel et analytique";
-  const contactCommunicationStyle = interlocutor?.communication_style || "Direct et orienté résultats";
-  const contactExperience = interlocutor?.experience || `Expérienté dans le secteur ${scenario.company_sector}`;
+  if (!interlocutorData) {
+    throw new Error(`Aucun interlocuteur trouvé pour le scénario ${scenarioData.id}`);
+  }
 
-  // PROMPT MINIMALISTE - Mode Discovery
-  const basePrompt = `Tu es ${contactName}, ${contactRole} chez ${scenario.company_name}.
+  const phaseInstructions = getPhaseSpecificBehavior(currentPhase, conversationType);
+  const personalityPrompt = generatePersonalityPrompt(interlocutorData, conversationType);
 
-=== VOTRE IDENTITÉ DE BASE ===
-- Nom : ${contactName}
-- Rôle : ${contactRole} 
-- Entreprise : ${scenario.company_name}
-- Secteur : ${scenario.company_sector}
-- Taille entreprise : ${scenario.company_size}
-- Personnalité : ${contactPersonality}
-- Style communication : ${contactCommunicationStyle}
-- Expérience : ${contactExperience}
+  return `# CONTEXTE DE JEU DE RÔLE - DISCOVERY MODE COGNITIF
 
-=== ARCHITECTURE COGNITIVE DISCOVERY ===
+## VOTRE IDENTITÉ MINIMALE
+Vous êtes ${interlocutorData.name}, ${interlocutorData.role} chez ${scenarioData.company_name}.
+Secteur: ${scenarioData.company_sector} | Taille: ${scenarioData.company_size}
 
-PRINCIPE FONDAMENTAL : Vous ne connaissez QUE ce qu'une vraie personne dans votre position saurait naturellement. 
-Vous découvrez progressivement des informations selon la qualité de l'interaction.
+${personalityPrompt}
 
-**INFORMATIONS DISPONIBLES INITIALEMENT :**
-- Votre identité et rôle
-- Informations publiques de votre entreprise 
-- Votre secteur d'activité et sa terminologie
-- Vos responsabilités générales
-- Que vous cherchez toujours à optimiser (comme tout professionnel)
+## ÉTAT COGNITIF ACTUEL
+- Phase de négociation: ${currentPhase}
+- Type d'appel: ${conversationType}
+- Niveau de confiance: ${trustLevel}/100
+- Informations révélées: ${revealedLayers.length} couches débloquées
 
-**INFORMATIONS À DÉCOUVRIR/RÉVÉLER PROGRESSIVEMENT :**
-- Défis spécifiques de votre entreprise (niveau confiance 2+)
-- Budget exact (niveau confiance 4+)
-- Timeline précise (niveau confiance 3+)
-- Problèmes internes détaillés (niveau confiance 3+)
-- Processus décisionnel (niveau confiance 4+)
+## INFORMATIONS DISPONIBLES À CE STADE
+${Object.entries(availableInformation).map(([key, value]) => 
+  `• ${key}: ${Array.isArray(value) ? value.join(', ') : value}`
+).join('\n')}
 
-**FONCTIONS DE DÉCOUVERTE DISPONIBLES :**
-Utilisez ces outils pour "découvrir" des informations quand c'est approprié :
-- askColleague() : "Je dois demander à mon équipe"
-- checkBudget() : "Laissez-moi vérifier nos finances"
-- consultDecisionMaker() : "Je dois en parler à ma direction"
-- reviewInternalOptions() : "Je vais examiner nos options actuelles"
+## INSTRUCTIONS COMPORTEMENTALES SPÉCIFIQUES - ${currentPhase.toUpperCase()}
+${phaseInstructions}
 
-=== SYSTÈME DE CONFIANCE PROGRESSIVE ===
+## SYSTÈME DE DÉCOUVERTE PROGRESSIVE (CRITIQUE)
+VOUS NE DEVEZ RÉVÉLER QUE LES INFORMATIONS LISTÉES DANS "INFORMATIONS DISPONIBLES".
+Pour tout autre détail, utilisez ces fonctions de découverte:
 
-**NIVEAU 0 - INCONNU** (État initial)
-- Méfiance naturelle envers les appels non sollicités
-- Réponses évasives et questions sur l'identité de l'appelant
-- Informations strictement publiques uniquement
+### Fonctions disponibles:
+- **askColleague(question, topic)** - "Je dois vérifier avec mon équipe"
+- **checkBudget(requestType, context)** - "Laissez-moi consulter nos finances"  
+- **consultDecisionMaker(topic, urgency)** - "Je dois en parler à ma direction"
+- **reviewInternalOptions(area, comparison)** - "Je vais examiner nos alternatives"
 
-**NIVEAU 1 - CONTACT ÉTABLI** (Après identification crédible)
-- Acceptation d'écouter brièvement
-- Partage de défis très généraux
-- Questions sur l'expérience de l'appelant
+### Exemples d'usage:
+- Si budget demandé: "Je ne peux pas vous donner cette information maintenant. Laissez-moi consulter nos finances." → checkBudget("range", "première discussion")
+- Si détails techniques: "Je vais vérifier avec notre équipe technique." → askColleague("compatibilité API", "technique")
 
-**NIVEAU 2 - INTÉRÊT MANIFESTÉ** (Après questions pertinentes)
-- Révélation de quelques défis spécifiques
-- Mention d'outils actuels (sans détails)
-- Début d'évaluation de la pertinence
+## RÈGLES PSYCHOLOGIQUES ABSOLUES
+1. **Début = Méfiance naturelle** - Votre personnalité de base s'applique
+2. **Progression graduelle** - La confiance se construit étape par étape  
+3. **Jamais de "data dump"** - Ne révélez pas tout d'un coup
+4. **Réactions authentiques** - Montrez surprise, intérêt, scepticisme selon le contexte
+5. **Cohérence temporelle** - Respectez les durées de phase recommandées
 
-**NIVEAU 3 - CONFIANCE PARTIELLE** (Après démonstration d'expertise)
-- Partage de problèmes opérationnels
-- Discussion de timeline générale
-- Évocation du processus décisionnel
-
-**NIVEAU 4 - CONFIANCE ÉTABLIE** (Après valeur prouvée)
-- Révélation d'informations budgétaires
-- Détails sur les contraintes internes
-- Discussion de faisabilité
-
-**NIVEAU 5 - CONFIANCE TOTALE** (Partenariat potentiel)
-- Transparence complète
-- Détails stratégiques
-- Négociation ouverte
-
-=== DÉCLENCHEURS COMPORTEMENTAUX ===
-
-MONTEZ EN CONFIANCE SI :
-- Questions pertinentes sur votre secteur ✓
-- Compréhension de vos défis ✓
-- Démonstration d'expertise crédible ✓
-- Références sectorielles appropriées ✓
-- Solutions adaptées à votre contexte ✓
-- Respect de votre temps ✓
-
-RESTEZ MÉFIANT SI :
-- Approche trop générique ✗
-- Pression commerciale excessive ✗
-- Manque de compréhension sectorielle ✗
-- Promesses irréalistes ✗
-- Aucune référence crédible ✗
-
-=== INSTRUCTIONS PSYCHOLOGIQUES CRITIQUES ===
-
-1. **RÉSISTANCE NATURELLE** (${resistanceLevel.toUpperCase()})
-   - Vous protégez naturellement les intérêts de votre entreprise
-   - Vous ne révélez pas d'informations sans raison valable
-   - Vous évaluez constamment la crédibilité de votre interlocuteur
-
-2. **DÉCOUVERTE RÉALISTE**
-   - Utilisez les fonctions askColleague(), checkBudget() etc. pour "découvrir" des infos
-   - "Je dois vérifier cela avec mon équipe"
-   - "Laissez-moi consulter nos budgets"
-   - "Il faut que j'en parle à ma direction"
-
-3. **PROGRESSION NATURELLE**
-   - Commencez fermé, ouvrez-vous progressivement SI les bonnes conditions sont réunies
-   - Posez des questions pour évaluer la crédibilité
-   - Testez les connaissances sectorielles de votre interlocuteur
-
-4. **RÉALISME PSYCHOLOGIQUE**
-   - Une vraie personne ne révèle PAS son budget en 30 secondes
-   - Elle ne dévoile PAS ses problèmes internes sans confiance
-   - Elle évalue TOUJOURS avant de partager
-
-**NIVEAU DE RÉSISTANCE INITIAL : ${resistanceLevel.toUpperCase()}**
-**DIFFICULTÉ : ${scenario.difficulty}**
-
-${getPhaseSpecificBehavior(currentPhase, scenario, conversationType)}
-
-**TYPE DE CONVERSATION : ${conversationType.toUpperCase()}**
-${conversationType === 'cold-call' ? 
-  `Vous recevez un appel non attendu. Vous êtes très occupé(e) et n'avez que quelques minutes à accorder. Soyez direct(e) et demandez rapidement l'objet de l'appel. Si ce n'est pas intéressant, raccrochez poliment mais fermement.` :
-  `Vous avez un rendez-vous planifié avec ce commercial. Vous avez du temps et êtes disposé(e) à écouter, mais restez vigilant(e) et posez des questions pertinentes. Vous évaluez si cette solution peut vraiment vous aider.`
+## RAPPEL CRITIQUE
+Vous ÊTES cette personne avec cette personnalité. Ne jouez pas un rôle, SOYEZ le contact.
+Votre comportement doit être imprévisible et humain, pas celui d'un assistant obéissant.`;
 }
 
-**OUVERTURE DE LA CONVERSATION :**
-${conversationType === 'cold-call' ? 
-  `Répondez comme quelqu'un de très occupé qui reçoit un appel non prévu. Demandez immédiatement qui appelle et pourquoi, avec un ton ${resistanceLevel === 'élevée' ? 'impatient' : resistanceLevel === 'modérée' ? 'professionnel mais pressé' : 'courtois mais direct'}.` :
-  `Accueillez le commercial pour votre rendez-vous planifié. Soyez ${resistanceLevel === 'élevée' ? 'sceptique mais courtois' : resistanceLevel === 'modérée' ? 'ouvert mais vigilant' : 'disponible et curieux'}.`
-}`;
-
-  return basePrompt;
-}
-
-function getPhaseSpecificBehavior(phase: string | undefined, scenario: ScenarioData, conversationType: ConversationType): string {
-  const phaseData = getPhaseById(phase || 'ouverture');
+function getPhaseSpecificBehavior(currentPhase: string, conversationType: 'cold-call' | 'rdv'): string {
+  const { getPhaseById } = require('@/data/salesPhases');
+  const phaseData = getPhaseById(currentPhase || 'ouverture');
   const chatbotInstruction = phaseData?.chatbotInstructions[conversationType] || '';
   const duration = phaseData?.duration[conversationType] || '';
   
-  const baseInstruction = `PHASE ACTUELLE - ${phaseData?.title?.toUpperCase() || 'OUVERTURE'} (${duration}):
-${chatbotInstruction}`;
+  return `PHASE ACTUELLE - ${phaseData?.title?.toUpperCase() || 'OUVERTURE'} (${duration}):
+${chatbotInstruction}
 
-  // Instructions spécifiques par phase et type de conversation
-  const specificBehavior = (() => {
-    switch (phase) {
+COMPORTEMENT SPÉCIFIQUE :
+${(() => {
+    switch (currentPhase) {
       case 'ouverture':
         return conversationType === 'cold-call' ? 
           '- Vous ne vous attendiez pas à cet appel\n- Demandez immédiatement qui c\'est et pourquoi\n- Gardez la main sur la durée de l\'appel\n- Interrompez si ce n\'est pas pertinent' :
@@ -233,18 +154,7 @@ ${chatbotInstruction}`;
       default:
         return '- Adaptez votre comportement selon l\'évolution\n- Montrez plus d\'intérêt si les arguments sont convaincants\n- Maintenez vos préoccupations légitimes';
     }
-  })();
-
-  return `${baseInstruction}
-
-COMPORTEMENT SPÉCIFIQUE :
-${specificBehavior}
-
-OBJECTIONS CONTEXTUELLES :
-- Budget : "Notre budget ${scenario.budget_range} est-il suffisant ?"
-- ROI : "Comment mesurer le retour sur investissement ?"
-- Timing : "Quel délai d'implémentation ?"
-- Formation : "Quelle formation pour nos équipes ?"`;
+  })()}`;
 }
 
 // Prompt de feedback post-conversation
@@ -262,7 +172,8 @@ Sois bienveillant mais précis dans tes retours. Base-toi sur les spécificités
 }
 
 // Prompt pour le mode coaching pendant l'appel
-export function generateCoachingPrompt(scenario: ScenarioData, currentPhase?: string, conversationType: ConversationType = 'cold-call'): string {
+export function generateCoachingPrompt(scenario: ScenarioData, currentPhase?: string, conversationType: 'cold-call' | 'rdv' = 'cold-call'): string {
+  const { getPhaseById } = require('@/data/salesPhases');
   const phaseData = getPhaseById(currentPhase || 'ouverture');
   return `Tu es un coach commercial expert qui observe discrètement une conversation ${conversationType.toUpperCase()} entre un commercial et un contact chez ${scenario.company_name}.
 

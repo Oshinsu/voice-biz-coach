@@ -80,6 +80,7 @@ export const TRUST_LEVELS: TrustLevel[] = [
 // Couches d'information par niveau de confiance avec adaptation aux types d'appel
 export function createInformationLayers(scenarioData: any, interlocutorData: any, conversationType: 'cold-call' | 'rdv' = 'cold-call'): InformationLayer[] {
   const trustMultiplier = conversationType === 'cold-call' ? 1.4 : 1.0; // Cold call = 40% plus exigeant
+  
   return [
     {
       level: 0,
@@ -97,18 +98,23 @@ export function createInformationLayers(scenarioData: any, interlocutorData: any
     },
     {
       level: 1,
-      name: "CONTEXTE_GENERAL",
-      description: "Informations générales après établissement du contact",
+      name: "CONTACT_ETABLI",
+      description: "Présentation crédible, identité vérifiée",
       unlockConditions: ["trust_level_1", "legitimate_interest"],
       informationType: 'general',
       content: {
-        generalChallenges: [
-          "Nous cherchons toujours à optimiser nos processus",
-          "L'efficacité est importante pour nous",
-          "Nous évaluons régulièrement nos outils"
+        generalChallenges: conversationType === 'cold-call' ? [
+          "Nous regardons toujours les nouvelles solutions",
+          "L'innovation nous intéresse"
+        ] : [
+          "Nous cherchons activement des solutions",
+          "L'efficacité est prioritaire pour nous", 
+          "Nous évaluons plusieurs approches"
         ],
-        currentTools: scenarioData.available_tools?.slice(0, 2) || [],
-        publicObjectives: ["Amélioration continue", "Optimisation des coûts"]
+        currentTools: scenarioData.available_tools?.slice(0, conversationType === 'cold-call' ? 1 : 2) || [],
+        publicObjectives: conversationType === 'cold-call' ? 
+          ["Amélioration continue"] : 
+          ["Amélioration continue", "Optimisation des coûts", "Innovation"]
       }
     },
     {

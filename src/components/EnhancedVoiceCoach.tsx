@@ -86,8 +86,13 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
 
       setIsConnecting(true);
       
+      // Variables par défaut pour la cognitive discovery
+      const trustLevel = 0;
+      const availableInformation = {};
+      const revealedLayers = [];
+      
       // Instructions contextuelles - le coach joue le rôle du contact
-      const contactPrompt = await generateContactPrompt(scenario, currentPhase);
+      const contactPrompt = await generateContactPrompt(scenario, 'rdv', 'ouverture', trustLevel, availableInformation, revealedLayers);
       await coach.connect(contactPrompt);
 
     } catch (error) {

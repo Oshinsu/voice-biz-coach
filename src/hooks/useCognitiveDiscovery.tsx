@@ -13,9 +13,9 @@ export function useCognitiveDiscovery({ scenarioData, interlocutorData }: UseCog
   const [revealedLayers, setRevealedLayers] = useState<any[]>([]);
 
   // Initialize cognitive manager
-  const initializeCognitive = useCallback(() => {
+  const initializeCognitive = useCallback((conversationType: 'cold-call' | 'rdv' = 'cold-call') => {
     if (!cognitiveManagerRef.current) {
-      cognitiveManagerRef.current = new CognitiveStateManager(scenarioData, interlocutorData);
+      cognitiveManagerRef.current = new CognitiveStateManager(scenarioData, interlocutorData, conversationType);
       updateState();
     }
   }, [scenarioData, interlocutorData]);
