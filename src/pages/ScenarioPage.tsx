@@ -65,7 +65,7 @@ export default function ScenarioPage() {
         <ScenarioDetails scenario={scenario} />
       </div>
 
-      {/* Voice Coach */}
+      {/* Voice Coach Widget */}
       <EnhancedVoiceCoach scenario={scenario} />
     </div>
   );
