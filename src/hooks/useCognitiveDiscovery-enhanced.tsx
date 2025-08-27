@@ -74,7 +74,7 @@ export function useCognitiveDiscoveryEnhanced({
         id: 'business_context',
         type: 'business',
         content: {
-          main_challenges: scenarioData.pain_points.slice(0, 2),
+          main_challenges: scenarioData.company.painPoints.slice(0, 2),
           team_size: scenarioData.company.size,
           general_priorities: "Améliorer notre efficacité opérationnelle"
         },
@@ -85,7 +85,7 @@ export function useCognitiveDiscoveryEnhanced({
         id: 'technical_details',
         type: 'technical',
         content: {
-          current_tools: scenarioData.current_solution || "Solutions diverses",
+          current_tools: scenarioData.company.currentSolution || "Solutions diverses",
           technical_constraints: "Nous avons quelques limitations techniques",
           integration_concerns: "L'intégration est un point important pour nous"
         },
@@ -96,7 +96,7 @@ export function useCognitiveDiscoveryEnhanced({
         id: 'financial_scope',
         type: 'financial',
         content: {
-          budget_range: scenarioData.budget_range,
+          budget_range: scenarioData.company.budget,
           decision_timeline: conversationType === 'cold-call' ? "À évaluer" : "Trimestre en cours",
           financial_constraints: "Le budget doit être justifié"
         },
@@ -296,7 +296,7 @@ export function useCognitiveDiscoveryEnhanced({
           "Le budget n'est pas encore défini." : 
           "Nous avons un budget alloué mais je dois vérifier les détails.",
         medium: "Nous avons effectivement prévu un budget dans cette gamme.",
-        high: `Notre budget est de ${scenarioData.budget_range} pour ce type de projet.`
+        high: `Notre budget est de ${scenarioData.company.budget} pour ce type de projet.`
       },
       consultDecisionMaker: {
         low: "Je dois en parler à ma direction avant de pouvoir vous donner une réponse.",
@@ -306,7 +306,7 @@ export function useCognitiveDiscoveryEnhanced({
       reviewInternalOptions: {
         low: "Nous utilisons actuellement d'autres solutions.",
         medium: "Nos outils actuels ont certaines limitations que votre solution pourrait résoudre.",
-        high: `Nous utilisons ${scenarioData.current_solution || 'des outils variés'} mais nous cherchons à évoluer.`
+        high: `Nous utilisons ${scenarioData.company.currentSolution || 'des outils variés'} mais nous cherchons à évoluer.`
       }
     };
 

@@ -73,7 +73,7 @@ Vous êtes **${contactData.name}**, ${contactData.role} chez **${scenarioData.co
 - Secteur: ${scenarioData.company.sector} 
 - Taille: ${scenarioData.company.size}
 - Chiffre d'affaires: ${scenarioData.company.revenue || 'Non spécifié'}
-- Problématiques actuelles: ${scenarioData.pain_points.slice(0, 3).join(', ')}
+- Problématiques actuelles: ${scenarioData.company.painPoints.slice(0, 3).join(', ')}
 
 ${personalityPrompt}
 
@@ -182,7 +182,7 @@ function generateCognitiveContext(trustLevel: number, revealedCount: number): st
  */
 function generateDiscoveryInstructions(availableInfo: Record<string, any>, scenario: EnhancedScenarioData): string {
   const availableKeys = Object.keys(availableInfo);
-  const scenarioPainPoints = scenario.pain_points || [];
+  const scenarioPainPoints = scenario.company.painPoints || [];
   
   return `**INFORMATIONS DISPONIBLES ACTUELLEMENT:**
 ${availableKeys.length > 0 ? 
