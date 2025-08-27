@@ -17,12 +17,12 @@ export const ObjectionStrategy: React.FC = () => {
       objection: "Le coût est trop élevé pour notre budget actuel",
       responses: [
         "Calculons ensemble le coût de ne pas agir : perte de compétitivité, baisse d'attractivité...",
-        "Notre pilote gratuit 6 mois vous permet de mesurer le ROI avant investissement",
-        "Le coût par étudiant (250€/an) est inférieur à un manuel spécialisé premium",
-        "Financement étalé possible + réduction 30% première année"
+        "Notre pilote gratuit vous permet de mesurer le ROI avant investissement",
+        "Investissement rentabilisé en 6-8 mois via réduction des défauts",
+        "Financement étalé possible + réduction première année"
       ],
-      evidence: "École similaire: ROI de 340% en 2 ans via amélioration taux d'emploi diplômés",
-      nextStep: "Préparation business case avec données financières ESCAP"
+      evidence: "Fintech similaire: ROI de 340% en 18 mois via réduction taux défaut crédit",
+      nextStep: "Préparation business case avec données financières spécifiques"
     },
     {
       category: "Technique",
@@ -35,7 +35,7 @@ export const ObjectionStrategy: React.FC = () => {
         "Pas de modification infrastructure requise, déploiement cloud sécurisé",
         "99.9% uptime garanti avec redondance multi-zones"
       ],
-      evidence: "HEC: intégration complète réalisée en 3 jours avec 0 interruption de service",
+      evidence: "Fintech leader: intégration complète réalisée en 48h avec 0 interruption de service",
       nextStep: "Audit technique gratuit avec votre DSI"
     },
     {
@@ -44,13 +44,13 @@ export const ObjectionStrategy: React.FC = () => {
       color: "yellow",
       objection: "Nos professeurs ne sont pas prêts pour ce changement",
       responses: [
-        "Programme de formation professeurs en 3 étapes sur 6 mois",
-        "Support pédagogique dédié avec best practices intégrées",
-        "Interface intuitive : 89% des professeurs autonomes en <2h",
+        "Programme de formation équipes techniques en 3 étapes sur 6 semaines",
+        "Support technique dédié avec best practices intégrées",
+        "Interface intuitive : 89% des utilisateurs autonomes en <2h",
         "Champions internes identifiés pour accompagner le changement"
       ],
-      evidence: "ESSEC: 95% satisfaction professeurs après 3 mois d'utilisation",
-      nextStep: "Workshop découverte pour équipe pédagogique volontaire"
+      evidence: "Fintech major: 95% satisfaction équipes techniques après 3 mois d'utilisation",
+      nextStep: "Workshop découverte pour équipe technique volontaire"
     },
     {
       category: "Efficacité",

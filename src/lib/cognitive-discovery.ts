@@ -25,6 +25,10 @@ export interface CognitiveState {
   revealedLayers: number[];
   behavioralTriggers: string[];
   lastInteraction: Date;
+  currentPhase: string;
+  conversationType: 'cold-call' | 'rdv';
+  timeSpentInPhase: number;
+  phaseStartTime: Date;
 }
 
 // Système de niveaux de confiance
@@ -73,8 +77,9 @@ export const TRUST_LEVELS: TrustLevel[] = [
   }
 ];
 
-// Couches d'information par niveau de confiance
-export function createInformationLayers(scenarioData: any, interlocutorData: any): InformationLayer[] {
+// Couches d'information par niveau de confiance avec adaptation aux types d'appel
+export function createInformationLayers(scenarioData: any, interlocutorData: any, conversationType: 'cold-call' | 'rdv' = 'cold-call'): InformationLayer[] {
+  const trustMultiplier = conversationType === 'cold-call' ? 1.4 : 1.0; // Cold call = 40% plus exigeant
   return [
     {
       level: 0,
@@ -266,16 +271,20 @@ export class CognitiveStateManager {
   private state: CognitiveState;
   private informationLayers: InformationLayer[];
 
-  constructor(scenarioData: any, interlocutorData: any) {
+  constructor(scenarioData: any, interlocutorData: any, conversationType: 'cold-call' | 'rdv' = 'cold-call') {
     this.state = {
       trustLevel: 0,
       acquiredInformation: {},
       conversationMemory: [],
       revealedLayers: [0], // Toujours révéler le niveau public
       behavioralTriggers: [],
-      lastInteraction: new Date()
+      lastInteraction: new Date(),
+      currentPhase: 'ouverture',
+      conversationType,
+      timeSpentInPhase: 0,
+      phaseStartTime: new Date()
     };
-    this.informationLayers = createInformationLayers(scenarioData, interlocutorData);
+    this.informationLayers = createInformationLayers(scenarioData, interlocutorData, conversationType);
   }
 
   // Ajouter un déclencheur comportemental
