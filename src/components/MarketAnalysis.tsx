@@ -8,8 +8,16 @@ import {
   Target, Zap, Shield, AlertTriangle, CheckCircle,
   Building, Award, Lightbulb, ArrowUp, ArrowDown
 } from 'lucide-react';
+import { SwotAnalysis } from '@/hooks/useScenarios';
 
-export const MarketAnalysis: React.FC = () => {
+interface MarketAnalysisProps {
+  swotAnalyses?: SwotAnalysis[];
+}
+
+export const MarketAnalysis: React.FC<MarketAnalysisProps> = ({ swotAnalyses = [] }) => {
+  // For now keeping static data until SWOT analyses have the market_data and porter_analysis fields
+  // const marketData = swotAnalyses.find(s => s.analysis_type === 'market')?.market_data;
+  // const porterData = swotAnalyses.find(s => s.analysis_type === 'market')?.porter_analysis;
   return (
     <div className="space-y-6">
       {/* Market Overview */}

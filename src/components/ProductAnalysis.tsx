@@ -8,8 +8,14 @@ import {
   CheckCircle, AlertTriangle, Users, BarChart3,
   Lightbulb, Award, Shield, Globe
 } from 'lucide-react';
+import { Product } from '@/hooks/useScenarios';
 
-export const ProductAnalysis: React.FC = () => {
+interface ProductAnalysisProps {
+  products?: Product[];
+}
+
+export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({ products = [] }) => {
+  const mainProduct = products[0]; // Get the first product for main display
   return (
     <div className="space-y-6">
       {/* Product Overview */}
@@ -17,7 +23,7 @@ export const ProductAnalysis: React.FC = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Package className="h-5 w-5" />
-            Byss VNS - Vue d'ensemble produit
+            {mainProduct?.name || 'Produit'} - Vue d'ensemble
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -42,10 +48,7 @@ export const ProductAnalysis: React.FC = () => {
           <div>
             <h4 className="font-semibold mb-3">Description du produit</h4>
             <p className="text-sm text-muted-foreground">
-              Byss VNS (Virtual Negotiation System) est une plateforme d'apprentissage immersive 
-              qui utilise l'intelligence artificielle pour simuler des scénarios de négociation 
-              commerciale réalistes. Elle permet aux étudiants de s'entraîner dans un environnement 
-              sécurisé avec des feedbacks en temps réel.
+              {mainProduct?.description || 'Description du produit non disponible.'}
             </p>
           </div>
         </CardContent>

@@ -3,17 +3,33 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { scenarios } from "@/data/scenarios";
+import { useScenarios } from "@/hooks/useScenarios";
 import { EnhancedHeader } from "./EnhancedHeader";
 import { EnhancedStats } from "./EnhancedStats";
 import { TrustElements } from "./TrustElements";
 
 export function ByssHomepage() {
-  const totalRevenue = scenarios.reduce((sum, scenario) => 
-    sum + parseFloat(scenario.expectedRevenue.replace(/[€,]/g, '')), 0
-  );
-  const avgSuccessRate = Math.round(scenarios.reduce((sum, s) => sum + s.probability, 0) / scenarios.length);
+  const { scenarios, loading } = useScenarios();
+  
+  const totalRevenue = scenarios.reduce((sum, scenario) => {
+    const revenue = scenario.expected_revenue ? 
+      parseFloat(scenario.expected_revenue.replace(/[€,]/g, '')) : 0;
+    return sum + revenue;
+  }, 0);
+  const avgSuccessRate = scenarios.length > 0 ? 
+    Math.round(scenarios.reduce((sum, s) => sum + s.success_probability, 0) / scenarios.length) : 0;
   const totalCompanies = scenarios.length;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+          <p className="mt-4 text-muted-foreground">Chargement des données...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">

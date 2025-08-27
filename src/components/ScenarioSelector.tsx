@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { scenarios } from "@/data/scenarios";
+import { useScenarios } from "@/hooks/useScenarios";
 import { personas } from "@/data/personas";
 import { useSalesStore } from "@/store/salesStore";
 import { Calculator, TrendingUp, Target, Zap, Phone, Calendar, Lock } from "lucide-react";
@@ -46,6 +46,7 @@ const getScenarioIcon = (scenarioId: string) => {
 };
 
 export const ScenarioSelector = () => {
+  const { scenarios, loading } = useScenarios();
   const {
     selectedScenario,
     selectedPersona,
@@ -167,18 +168,18 @@ export const ScenarioSelector = () => {
                 {(() => {
                   const scenario = scenarios.find(s => s.id === localScenario);
                   return scenario ? (
-                    <div className="space-y-2">
-                      <p className="text-sm text-muted-foreground">
-                        {scenario.description}
-                      </p>
-                      <div className="flex flex-wrap gap-1">
-                        {scenario.tools.map((tool) => (
-                          <Badge key={tool} variant="secondary" className="text-xs">
-                            {tool.replace('_', ' ')}
-                          </Badge>
-                        ))}
+                       <div className="space-y-2">
+                        <p className="text-sm text-muted-foreground">
+                          {scenario.description}
+                        </p>
+                        <div className="flex flex-wrap gap-1">
+                          {scenario.available_tools.map((tool) => (
+                            <Badge key={tool} variant="secondary" className="text-xs">
+                              {tool.replace('_', ' ')}
+                            </Badge>
+                          ))}
+                        </div>
                       </div>
-                    </div>
                   ) : null;
                 })()}
               </CardContent>

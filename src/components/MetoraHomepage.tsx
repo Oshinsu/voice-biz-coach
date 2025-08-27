@@ -3,16 +3,16 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { scenarios } from "@/data/scenarios";
+import { useScenarios } from "@/hooks/useScenarios";
 
 const getScenarioIcon = (scenarioId: string) => {
   const iconMap: { [key: string]: any } = {
-    "kpi-performance": BarChart3,
-    "saas-crm": Users,
-    "marketplace-b2b": Target,
-    "formation-digitale": TrendingUp,
-    "cybersecurite-pme": Zap,
-    "erp-manufacturing": BarChart3,
+    "retail-personalization": BarChart3,
+    "digital-agency": Users,
+    "fintech-startup": Target,
+    "saas-hr-tool": TrendingUp,
+    "byss-vns-school": Zap,
+    "consulting-firm": BarChart3,
   };
   return iconMap[scenarioId] || BarChart3;
 };
@@ -31,11 +31,27 @@ const getDifficultyColor = (difficulty: string) => {
 };
 
 export function MetoraHomepage() {
-  const totalRevenue = scenarios.reduce((sum, scenario) => 
-    sum + parseFloat(scenario.expectedRevenue.replace(/[€,]/g, '')), 0
-  );
-  const avgSuccessRate = Math.round(scenarios.reduce((sum, s) => sum + s.probability, 0) / scenarios.length);
+  const { scenarios, loading } = useScenarios();
+  
+  const totalRevenue = scenarios.reduce((sum, scenario) => {
+    const revenue = scenario.expected_revenue ? 
+      parseFloat(scenario.expected_revenue.replace(/[€,]/g, '')) : 0;
+    return sum + revenue;
+  }, 0);
+  const avgSuccessRate = scenarios.length > 0 ? 
+    Math.round(scenarios.reduce((sum, s) => sum + s.success_probability, 0) / scenarios.length) : 0;
   const totalCompanies = scenarios.length;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-hero flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-accent"></div>
+          <p className="mt-4 text-primary-foreground/80">Chargement des scénarios...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-hero">
@@ -110,75 +126,79 @@ export function MetoraHomepage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {scenarios.map((scenario, index) => {
-              const Icon = getScenarioIcon(scenario.id);
-              return (
-                <Card 
-                  key={scenario.id} 
-                  className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-gradient-card border-0 animate-fade-in"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <CardHeader className="space-y-4">
-                    <div className="flex items-start justify-between">
-                      <div className="p-3 bg-primary/10 rounded-lg">
-                        <Icon className="h-6 w-6 text-primary" />
+          {loading ? (
+            <div className="col-span-full text-center">Chargement des scénarios...</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {scenarios.map((scenario, index) => {
+                const Icon = getScenarioIcon(scenario.id);
+                return (
+                  <Card 
+                    key={scenario.id} 
+                    className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 bg-gradient-card border-0 animate-fade-in"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <CardHeader className="space-y-4">
+                      <div className="flex items-start justify-between">
+                        <div className="p-3 bg-primary/10 rounded-lg">
+                          <Icon className="h-6 w-6 text-primary" />
+                        </div>
+                        <Badge className={getDifficultyColor(scenario.difficulty)}>
+                          {scenario.difficulty}
+                        </Badge>
                       </div>
-                      <Badge className={getDifficultyColor(scenario.difficulty)}>
-                        {scenario.difficulty}
-                      </Badge>
-                    </div>
-                    <div>
-                      <CardTitle className="text-xl mb-2 group-hover:text-primary transition-colors">
-                        {scenario.title}
-                      </CardTitle>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {scenario.description}
-                      </p>
-                    </div>
-                  </CardHeader>
+                      <div>
+                        <CardTitle className="text-xl mb-2 group-hover:text-primary transition-colors">
+                          {scenario.title}
+                        </CardTitle>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          {scenario.description}
+                        </p>
+                      </div>
+                    </CardHeader>
 
-                  <CardContent className="space-y-4">
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Entreprise</span>
-                        <span className="font-medium">{scenario.company.name}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Secteur</span>
-                        <span className="font-medium">{scenario.company.sector}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">CA visé</span>
-                        <span className="font-medium text-accent">{scenario.expectedRevenue}</span>
-                      </div>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">Probabilité</span>
-                        <div className="flex items-center gap-2">
-                          <div className="w-20 h-2 bg-muted rounded-full overflow-hidden">
-                            <div 
-                              className="h-full bg-accent transition-all duration-500"
-                              style={{ width: `${scenario.probability}%` }}
-                            />
+                    <CardContent className="space-y-4">
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Entreprise</span>
+                          <span className="font-medium">{scenario.company_name}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Secteur</span>
+                          <span className="font-medium">{scenario.company_sector}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">CA visé</span>
+                          <span className="font-medium text-accent">{scenario.expected_revenue || 'Non défini'}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Probabilité</span>
+                          <div className="flex items-center gap-2">
+                            <div className="w-20 h-2 bg-muted rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-accent transition-all duration-500"
+                                style={{ width: `${scenario.success_probability}%` }}
+                              />
+                            </div>
+                            <span className="font-medium text-accent">{scenario.success_probability}%</span>
                           </div>
-                          <span className="font-medium text-accent">{scenario.probability}%</span>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="pt-4 border-t">
-                      <Link to={`/scenario/${scenario.id}`}>
-                        <Button className="w-full bg-primary hover:bg-primary-dark text-primary-foreground group">
-                          Commencer le scénario
-                          <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                      <div className="pt-4 border-t">
+                        <Link to={`/scenario/${scenario.id}`}>
+                          <Button className="w-full bg-primary hover:bg-primary-dark text-primary-foreground group">
+                            Commencer le scénario
+                            <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                          </Button>
+                        </Link>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 
