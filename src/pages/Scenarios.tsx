@@ -118,25 +118,25 @@ const Scenarios = () => {
                       <div className="flex items-center gap-2">
                         <Building className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                         <span className="text-sm text-foreground font-medium line-clamp-1">
-                          {scenario.company_name}
+                          {scenario.company_name || scenario.company?.name}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                         <span className="text-sm text-muted-foreground">
-                          {scenario.company_sector}
+                          {scenario.company_sector || scenario.company?.sector}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Users className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                         <span className="text-sm text-muted-foreground line-clamp-1">
-                          {scenario.company_size}
+                          {scenario.company_size || scenario.company?.size}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <DollarSign className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                         <span className="text-sm text-muted-foreground">
-                          {scenario.budget_range}
+                          {scenario.budget_range || scenario.company?.budget}
                         </span>
                       </div>
                     </div>
@@ -144,15 +144,15 @@ const Scenarios = () => {
                     {/* Stats */}
                     <div className="flex items-center justify-between mb-6 p-3 bg-background/50 rounded-lg">
                       <div className="text-center">
-                        <div className="text-lg font-bold text-accent">{scenario.success_probability}%</div>
+                        <div className="text-lg font-bold text-accent">{scenario.success_probability || scenario.probability}%</div>
                         <div className="text-xs text-muted-foreground">Probabilité</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-lg font-bold text-foreground">{scenario.main_objectives.length}</div>
+                        <div className="text-lg font-bold text-foreground">{(scenario.main_objectives || scenario.objectives || []).length}</div>
                         <div className="text-xs text-muted-foreground">Objectifs</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-lg font-bold text-foreground">{scenario.available_tools.length}</div>
+                        <div className="text-lg font-bold text-foreground">{(scenario.available_tools || scenario.tools || []).length}</div>
                         <div className="text-xs text-muted-foreground">Outils</div>
                       </div>
                     </div>
@@ -161,15 +161,15 @@ const Scenarios = () => {
                     <div className="mb-6">
                       <h4 className="text-sm font-semibold text-foreground mb-2">Enjeux principaux :</h4>
                       <div className="space-y-1">
-                        {scenario.pain_points.slice(0, 2).map((point, idx) => (
+                        {(scenario.pain_points || scenario.company?.painPoints || []).slice(0, 2).map((point, idx) => (
                           <div key={idx} className="text-xs text-muted-foreground flex items-start gap-2">
                             <div className="w-1 h-1 bg-accent rounded-full mt-2 flex-shrink-0"></div>
                             <span className="line-clamp-1">{point}</span>
                           </div>
                         ))}
-                        {scenario.pain_points.length > 2 && (
+                        {(scenario.pain_points || scenario.company?.painPoints || []).length > 2 && (
                           <div className="text-xs text-accent font-medium">
-                            +{scenario.pain_points.length - 2} autres enjeux...
+                            +{(scenario.pain_points || scenario.company?.painPoints || []).length - 2} autres enjeux...
                           </div>
                         )}
                       </div>
