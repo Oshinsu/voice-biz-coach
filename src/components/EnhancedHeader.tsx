@@ -4,12 +4,14 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { useNavigation } from "@/hooks/useNavigation";
 
 export function EnhancedHeader() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const { user } = useAuth();
+  const { navigationItems } = useNavigation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,14 +22,11 @@ export function EnhancedHeader() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Simple navigation without Supabase
-  const navigation = [
-    { name: "Accueil", href: "/", current: location.pathname === "/" },
-    { name: "Scénarios", href: "/scenarios", current: location.pathname === "/scenarios" },
-    { name: "Services", href: "/services", current: location.pathname === "/services" },
-    { name: "Qui sommes-nous", href: "/about", current: location.pathname === "/about" },
-    { name: "Contact", href: "/contact", current: location.pathname === "/contact" }
-  ];
+  // Use Supabase navigation items with current state
+  const navigation = navigationItems.map(item => ({
+    ...item,
+    current: location.pathname === item.href
+  }));
 
   return (
     <header className={cn(
@@ -59,7 +58,7 @@ export function EnhancedHeader() {
           <nav className="hidden lg:flex items-center gap-8">
             {navigation.map((item) => (
               <Link
-                key={item.name}
+                key={item.id}
                 to={item.href}
                 className={cn(
                   "relative px-3 py-2 text-sm font-medium transition-all duration-300 group",
@@ -127,7 +126,7 @@ export function EnhancedHeader() {
             <nav className="space-y-3">
               {navigation.map((item) => (
                 <Link
-                  key={item.name}
+                  key={item.id}
                   to={item.href}
                   className={cn(
                     "block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300",

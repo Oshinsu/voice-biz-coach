@@ -1,4 +1,3 @@
-import { scenarios } from "@/data/scenarios";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -6,18 +5,46 @@ import { EnhancedHeader } from "@/components/EnhancedHeader";
 import { Link } from "react-router-dom";
 import { 
   Building, Users, TrendingUp, Target, ArrowRight, 
-  Star, MapPin, Calendar, DollarSign 
+  Star, MapPin, Calendar, DollarSign, Loader2, AlertCircle 
 } from "lucide-react";
+import { useScenarios } from "@/hooks/useScenarios";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const Scenarios = () => {
+  const { scenarios, loading, error } = useScenarios();
+
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "Facile": return "bg-green-100 text-green-800 border-green-200";
-      case "Moyen": return "bg-yellow-100 text-yellow-800 border-yellow-200";
-      case "Difficile": return "bg-red-100 text-red-800 border-red-200";
+      case "Débutant": return "bg-green-100 text-green-800 border-green-200";
+      case "Intermédiaire": return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "Avancé": return "bg-red-100 text-red-800 border-red-200";
       default: return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background">
+        <EnhancedHeader />
+        <div className="pt-24 px-6">
+          <Alert className="max-w-2xl mx-auto">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Erreur lors du chargement des scénarios: {error}
+            </AlertDescription>
+          </Alert>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -91,25 +118,25 @@ const Scenarios = () => {
                       <div className="flex items-center gap-2">
                         <Building className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                         <span className="text-sm text-foreground font-medium line-clamp-1">
-                          {scenario.company.name}
+                          {scenario.company_name}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                         <span className="text-sm text-muted-foreground">
-                          {scenario.company.sector} • {scenario.company.location}
+                          {scenario.company_sector}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Users className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                         <span className="text-sm text-muted-foreground line-clamp-1">
-                          {scenario.company.size}
+                          {scenario.company_size}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
                         <DollarSign className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                         <span className="text-sm text-muted-foreground">
-                          {scenario.expectedRevenue}
+                          {scenario.budget_range}
                         </span>
                       </div>
                     </div>
@@ -117,15 +144,15 @@ const Scenarios = () => {
                     {/* Stats */}
                     <div className="flex items-center justify-between mb-6 p-3 bg-background/50 rounded-lg">
                       <div className="text-center">
-                        <div className="text-lg font-bold text-accent">{scenario.probability}%</div>
+                        <div className="text-lg font-bold text-accent">{scenario.success_probability}%</div>
                         <div className="text-xs text-muted-foreground">Probabilité</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-lg font-bold text-foreground">{scenario.objectives.length}</div>
+                        <div className="text-lg font-bold text-foreground">{scenario.main_objectives.length}</div>
                         <div className="text-xs text-muted-foreground">Objectifs</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-lg font-bold text-foreground">{scenario.tools.length}</div>
+                        <div className="text-lg font-bold text-foreground">{scenario.available_tools.length}</div>
                         <div className="text-xs text-muted-foreground">Outils</div>
                       </div>
                     </div>
@@ -134,15 +161,15 @@ const Scenarios = () => {
                     <div className="mb-6">
                       <h4 className="text-sm font-semibold text-foreground mb-2">Enjeux principaux :</h4>
                       <div className="space-y-1">
-                        {scenario.company.painPoints.slice(0, 2).map((point, idx) => (
+                        {scenario.pain_points.slice(0, 2).map((point, idx) => (
                           <div key={idx} className="text-xs text-muted-foreground flex items-start gap-2">
                             <div className="w-1 h-1 bg-accent rounded-full mt-2 flex-shrink-0"></div>
                             <span className="line-clamp-1">{point}</span>
                           </div>
                         ))}
-                        {scenario.company.painPoints.length > 2 && (
+                        {scenario.pain_points.length > 2 && (
                           <div className="text-xs text-accent font-medium">
-                            +{scenario.company.painPoints.length - 2} autres enjeux...
+                            +{scenario.pain_points.length - 2} autres enjeux...
                           </div>
                         )}
                       </div>
