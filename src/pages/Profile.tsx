@@ -124,20 +124,11 @@ export default function Profile() {
 
       if (statsError) throw statsError;
       
-      // Fetch recent sessions
-      const { data: sessionsData, error: sessionsError } = await supabase
-        .from('training_sessions')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(10);
-
-      if (sessionsError) throw sessionsError;
-
+      // Since training_sessions table was removed, use empty data
       setProfile(profileData);
       setUserRole(roleData);
       setUserStats(statsData);
-      setRecentSessions(sessionsData || []);
+      setRecentSessions([]);
       
       setEditedProfile({
         first_name: profileData.first_name || '',

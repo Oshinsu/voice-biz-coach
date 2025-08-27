@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Scenario as StaticScenario } from '@/data/scenarios';
+import { Scenario as StaticScenario } from '@/data/consolidatedScenarios';
 import { Scenario as SupabaseScenario } from '@/hooks/useScenarios';
 import { Persona } from '@/data/personas';
 import { SalesPhase } from '@/data/salesPhases';

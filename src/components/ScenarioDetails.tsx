@@ -35,17 +35,27 @@ interface ScenarioDetailsProps {
     title: string;
     description: string;
     difficulty: string;
-    company_name: string;
-    company_sector: string;
-    company_size: string;
-    budget_range: string;
-    success_probability: number;
-    main_objectives: string[];
-    available_tools: string[];
-    pain_points: string[];
-    interlocutors?: any[];
-    products?: any[];
-    swot_analyses?: any[];
+    company: {
+      name: string;
+      sector: string;
+      size: string;
+      revenue: string;
+      location: string;
+      description: string;
+      painPoints: string[];
+      currentSolution: string;
+      budget: string;
+      timeline: string;
+    };
+    interlocutor: any;
+    product: any;
+    objectives: string[];
+    swot: any;
+    competitorSwot: any;
+    probableObjections: string[];
+    successCriteria: string[];
+    tools: string[];
+    probability: number;
     stakeholders?: any[];
   };
 }
@@ -54,10 +64,10 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
   const [loading, setLoading] = React.useState(false);
 
   // Get data from scenario props (already loaded by useScenarios)
-  const interlocutor = scenario.interlocutors?.[0] || null;
-  const product = scenario.products?.[0] || null;
-  const companySwot = scenario.swot_analyses?.find(s => s.analysis_type === 'company') || null;
-  const productSwot = scenario.swot_analyses?.find(s => s.analysis_type === 'product') || null;
+  const interlocutor = scenario.interlocutor || null;
+  const product = scenario.product || null;
+  const companySwot = scenario.swot || null;
+  const productSwot = scenario.competitorSwot || null;
   const stakeholders = scenario.stakeholders || [];
 
   // Helper function to safely render SWOT items
@@ -85,7 +95,7 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <Building2 className="h-5 w-5" />
-              {scenario.company_name}
+              {scenario.company.name}
             </CardTitle>
             <Badge variant={scenario.difficulty === 'Facile' ? 'secondary' : scenario.difficulty === 'Moyen' ? 'default' : 'destructive'}>
               {scenario.difficulty}
@@ -99,22 +109,22 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
             <div className="text-center p-3 bg-primary/5 rounded-lg">
               <TrendingUp className="h-6 w-6 mx-auto mb-1 text-primary" />
               <p className="text-xs text-muted-foreground">Probabilité</p>
-              <p className="text-lg font-bold">{scenario.success_probability}%</p>
+              <p className="text-lg font-bold">{scenario.probability}%</p>
             </div>
             <div className="text-center p-3 bg-secondary/5 rounded-lg">
               <Building className="h-6 w-6 mx-auto mb-1 text-secondary" />
               <p className="text-xs text-muted-foreground">Secteur</p>
-              <p className="text-sm font-medium">{scenario.company_sector}</p>
+              <p className="text-sm font-medium">{scenario.company.sector}</p>
             </div>
             <div className="text-center p-3 bg-accent/5 rounded-lg">
               <DollarSign className="h-6 w-6 mx-auto mb-1 text-accent" />
               <p className="text-xs text-muted-foreground">Budget</p>
-              <p className="text-sm font-medium">{scenario.budget_range}</p>
+              <p className="text-sm font-medium">{scenario.company.budget}</p>
             </div>
             <div className="text-center p-3 bg-muted/5 rounded-lg">
               <Users className="h-6 w-6 mx-auto mb-1" />
               <p className="text-xs text-muted-foreground">Taille</p>
-              <p className="text-sm font-medium">{scenario.company_size}</p>
+              <p className="text-sm font-medium">{scenario.company.size}</p>
             </div>
           </div>
         </CardContent>
@@ -143,7 +153,7 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
               <div>
                 <h4 className="font-semibold mb-3">Description</h4>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  {scenario.company_name} est une entreprise du secteur {scenario.company_sector} de taille {scenario.company_size}. 
+                  {scenario.company.name} est une entreprise du secteur {scenario.company.sector} de taille {scenario.company.size}. 
                   Elle opère dans un environnement concurrentiel où l'innovation et l'efficacité opérationnelle sont essentielles pour maintenir sa position sur le marché.
                 </p>
               </div>
@@ -241,7 +251,7 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
                   Points de douleur identifiés
                 </h4>
                 <div className="grid gap-3">
-                  {scenario.pain_points.map((pain, index) => (
+                  {scenario.company.painPoints.map((pain, index) => (
                     <div key={index} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
                       <AlertCircle className="h-4 w-4 mt-0.5 text-orange-500 flex-shrink-0" />
                       <span className="text-sm">{pain}</span>
@@ -354,11 +364,11 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
         </TabsContent>
 
         <TabsContent value="product" className="space-y-6">
-          <ProductAnalysis products={scenario.products} />
+          <ProductAnalysis products={[scenario.product]} />
         </TabsContent>
 
         <TabsContent value="analysis" className="space-y-6">
-          <MarketAnalysis swotAnalyses={scenario.swot_analyses} />
+          <MarketAnalysis swotAnalyses={[scenario.swot, scenario.competitorSwot]} />
         </TabsContent>
 
         <TabsContent value="objectives" className="space-y-6">
@@ -373,7 +383,7 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
               <div>
                 <h4 className="font-semibold mb-3">Objectifs principaux</h4>
                 <div className="grid gap-3">
-                  {scenario.main_objectives.map((objective, index) => (
+                  {scenario.objectives.map((objective, index) => (
                     <div key={index} className="flex items-start gap-3 p-3 bg-primary/5 rounded-lg">
                       <Target className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
                       <span className="text-sm">{objective}</span>
@@ -388,7 +398,7 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
                   Outils disponibles
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {scenario.available_tools.map((tool, index) => (
+                  {scenario.tools.map((tool, index) => (
                     <div key={index} className="flex items-center gap-3 p-3 border rounded-lg">
                       <Wrench className="h-4 w-4 text-secondary" />
                       <span className="text-sm">{tool}</span>

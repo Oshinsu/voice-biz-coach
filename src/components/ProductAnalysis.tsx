@@ -36,7 +36,7 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({ products = [] 
             <div className="text-center p-4 bg-secondary/5 rounded-lg">
               <Users className="h-8 w-8 mx-auto mb-2 text-secondary" />
               <p className="text-sm text-muted-foreground">Segment cible</p>
-              <p className="text-2xl font-bold">{mainProduct?.target_segments?.[0] || 'Enterprise'}</p>
+              <p className="text-2xl font-bold">{mainProduct?.targetSegments?.[0] || 'Enterprise'}</p>
             </div>
             <div className="text-center p-4 bg-accent/5 rounded-lg">
               <Award className="h-8 w-8 mx-auto mb-2 text-accent" />
@@ -67,8 +67,8 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({ products = [] 
             <div>
               <h4 className="font-semibold mb-3">Spécifications techniques</h4>
               <div className="space-y-2 text-sm">
-                {mainProduct?.technical_specs && typeof mainProduct.technical_specs === 'object' ? (
-                  Object.entries(mainProduct.technical_specs).map(([key, value]) => (
+                {mainProduct?.technicalSpecs && typeof mainProduct.technicalSpecs === 'object' ? (
+                  Object.entries(mainProduct.technicalSpecs).map(([key, value]) => (
                     <p key={key}><span className="font-medium">{key}:</span> {String(value)}</p>
                   ))
                 ) : (
@@ -85,7 +85,7 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({ products = [] 
             <div>
               <h4 className="font-semibold mb-3">Fonctionnalités clés</h4>
               <div className="space-y-2">
-                {mainProduct?.key_features?.map((feature, index) => (
+                {mainProduct?.keyFeatures?.map((feature, index) => (
                   <div key={index} className="flex items-start gap-2">
                     <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
                     <p className="text-sm">{feature}</p>
@@ -125,7 +125,7 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({ products = [] 
             <div className="p-4 border rounded-lg">
               <div className="text-center mb-4">
                 <h4 className="font-semibold">Starter</h4>
-                <p className="text-3xl font-bold mt-2">{mainProduct?.pricing_starter || '99€'}</p>
+                <p className="text-3xl font-bold mt-2">{mainProduct?.pricing?.starter || '99€'}</p>
                 <p className="text-sm text-muted-foreground">par mois</p>
               </div>
               <ul className="text-sm space-y-1">
@@ -142,7 +142,7 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({ products = [] 
               </Badge>
               <div className="text-center mb-4">
                 <h4 className="font-semibold">Professional</h4>
-                <p className="text-3xl font-bold mt-2">{mainProduct?.pricing_professional || '299€'}</p>
+                <p className="text-3xl font-bold mt-2">{mainProduct?.pricing?.professional || '299€'}</p>
                 <p className="text-sm text-muted-foreground">par mois</p>
               </div>
               <ul className="text-sm space-y-1">
@@ -157,7 +157,7 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({ products = [] 
             <div className="p-4 border rounded-lg">
               <div className="text-center mb-4">
                 <h4 className="font-semibold">Enterprise</h4>
-                <p className="text-3xl font-bold mt-2">{mainProduct?.pricing_enterprise || 'Sur mesure'}</p>
+                <p className="text-3xl font-bold mt-2">{mainProduct?.pricing?.enterprise || 'Sur mesure'}</p>
                 <p className="text-sm text-muted-foreground">contact</p>
               </div>
               <ul className="text-sm space-y-1">
@@ -170,11 +170,11 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({ products = [] 
             </div>
           </div>
           
-          {mainProduct?.implementation_time && (
+          {mainProduct?.implementationTime && (
             <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <h4 className="font-semibold text-blue-800 mb-2">Mise en œuvre</h4>
               <p className="text-sm text-blue-700">
-                Temps d'implémentation estimé : {mainProduct.implementation_time}
+                Temps d'implémentation estimé : {mainProduct.implementationTime}
               </p>
             </div>
           )}
@@ -195,7 +195,7 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({ products = [] 
               <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
                 <h4 className="font-semibold text-green-800 mb-2">Forces</h4>
                 <ul className="text-sm text-green-700 space-y-1">
-                  {mainProduct?.competitive_advantages?.map((advantage, index) => (
+                  {mainProduct?.competitiveAdvantages?.map((advantage, index) => (
                     <li key={index}>• {advantage}</li>
                   )) || (
                     <>
@@ -345,7 +345,7 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({ products = [] 
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {mainProduct?.target_segments?.map((segment, index) => (
+            {mainProduct?.targetSegments?.map((segment, index) => (
               <div key={index} className="p-4 border rounded-lg">
                 <h4 className="font-semibold mb-2">{segment}</h4>
                 <p className="text-sm text-muted-foreground mb-2">

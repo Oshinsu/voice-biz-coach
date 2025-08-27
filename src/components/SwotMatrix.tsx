@@ -2,11 +2,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { TrendingUp, TrendingDown, AlertTriangle, Target } from "lucide-react";
-import { DetailedSwotAnalysis } from "@/data/enrichedScenarios";
+import { SwotAnalysis } from '@/data/consolidatedScenarios';
 
 interface SwotMatrixProps {
   title: string;
-  swot: DetailedSwotAnalysis;
+  swot: SwotAnalysis;
   variant?: "default" | "competitive";
 }
 
@@ -29,31 +29,10 @@ export function SwotMatrix({ title, swot, variant = "default" }: SwotMatrixProps
     }
   };
 
-  const averageScore = (items: { score: number }[]) => 
-    items.reduce((sum, item) => sum + item.score, 0) / items.length;
-
   return (
     <div className="space-y-6">
       <div className="text-center">
         <h3 className="text-2xl font-bold mb-2">{title}</h3>
-        <div className="grid grid-cols-4 gap-4 max-w-2xl mx-auto">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-success">{averageScore(swot.strengths).toFixed(1)}</div>
-            <div className="text-sm text-muted-foreground">Forces</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-destructive">{averageScore(swot.weaknesses).toFixed(1)}</div>
-            <div className="text-sm text-muted-foreground">Faiblesses</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-accent">{averageScore(swot.opportunities).toFixed(1)}</div>
-            <div className="text-sm text-muted-foreground">Opportunités</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-warning">{averageScore(swot.threats).toFixed(1)}</div>
-            <div className="text-sm text-muted-foreground">Menaces</div>
-          </div>
-        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -65,17 +44,10 @@ export function SwotMatrix({ title, swot, variant = "default" }: SwotMatrixProps
               Forces
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-2">
             {swot.strengths.map((strength, index) => (
-              <div key={index} className="space-y-2">
-                <div className="flex items-start justify-between">
-                  <span className="text-sm font-medium flex-1">{strength.item}</span>
-                  <Badge className={getImpactColor(strength.impact)} variant="secondary">
-                    {strength.impact}
-                  </Badge>
-                </div>
-                <div className="text-xs text-muted-foreground">Probabilité: {strength.probability}</div>
-                <Progress value={strength.score * 10} className="h-2" />
+              <div key={index} className="text-sm">
+                • {strength}
               </div>
             ))}
           </CardContent>
@@ -89,17 +61,10 @@ export function SwotMatrix({ title, swot, variant = "default" }: SwotMatrixProps
               Faiblesses
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-2">
             {swot.weaknesses.map((weakness, index) => (
-              <div key={index} className="space-y-2">
-                <div className="flex items-start justify-between">
-                  <span className="text-sm font-medium flex-1">{weakness.item}</span>
-                  <Badge className={getImpactColor(weakness.impact)} variant="secondary">
-                    {weakness.impact}
-                  </Badge>
-                </div>
-                <div className="text-xs text-muted-foreground">Probabilité: {weakness.probability}</div>
-                <Progress value={weakness.score * 10} className="h-2" />
+              <div key={index} className="text-sm">
+                • {weakness}
               </div>
             ))}
           </CardContent>
@@ -113,17 +78,10 @@ export function SwotMatrix({ title, swot, variant = "default" }: SwotMatrixProps
               Opportunités
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-2">
             {swot.opportunities.map((opportunity, index) => (
-              <div key={index} className="space-y-2">
-                <div className="flex items-start justify-between">
-                  <span className="text-sm font-medium flex-1">{opportunity.item}</span>
-                  <Badge className={getProbabilityColor(opportunity.probability)} variant="secondary">
-                    {opportunity.probability}
-                  </Badge>
-                </div>
-                <div className="text-xs text-muted-foreground">Impact: {opportunity.impact}</div>
-                <Progress value={opportunity.score * 10} className="h-2" />
+              <div key={index} className="text-sm">
+                • {opportunity}
               </div>
             ))}
           </CardContent>
@@ -137,17 +95,10 @@ export function SwotMatrix({ title, swot, variant = "default" }: SwotMatrixProps
               Menaces
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-2">
             {swot.threats.map((threat, index) => (
-              <div key={index} className="space-y-2">
-                <div className="flex items-start justify-between">
-                  <span className="text-sm font-medium flex-1">{threat.item}</span>
-                  <Badge className={getProbabilityColor(threat.probability)} variant="secondary">
-                    {threat.probability}
-                  </Badge>
-                </div>
-                <div className="text-xs text-muted-foreground">Impact: {threat.impact}</div>
-                <Progress value={threat.score * 10} className="h-2" />
+              <div key={index} className="text-sm">
+                • {threat}
               </div>
             ))}
           </CardContent>

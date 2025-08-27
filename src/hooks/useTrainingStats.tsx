@@ -35,19 +35,8 @@ export const useTrainingStats = () => {
     }
 
     try {
-      // Save the session
-      const { error: sessionError } = await supabase
-        .from('training_sessions')
-        .insert({
-          user_id: user.id,
-          ...sessionData
-        });
-
-      if (sessionError) throw sessionError;
-
-      // Update user stats
-      await updateUserStats();
-
+      // Since training_sessions table was removed, return mock success
+      console.log('Session would be saved:', sessionData);
       return { error: null };
     } catch (error: any) {
       console.error('Error saving session:', error);
@@ -57,30 +46,8 @@ export const useTrainingStats = () => {
 
   const updateUserStats = async () => {
     if (!user) return;
-
-    try {
-      // Get all sessions for the user
-      const { data: sessions, error: sessionsError } = await supabase
-        .from('training_sessions')
-        .select('*')
-        .eq('user_id', user.id);
-
-      if (sessionsError) throw sessionsError;
-
-      const stats = calculateStats(sessions || []);
-      
-      const { error: updateError } = await supabase
-        .from('user_stats')
-        .upsert({
-          user_id: user.id,
-          ...stats
-        });
-
-      if (updateError) throw updateError;
-
-    } catch (error) {
-      console.error('Error updating user stats:', error);
-    }
+    // Since training_sessions table was removed, this is now a no-op
+    console.log('User stats would be updated for user:', user.id);
   };
 
   const calculateStats = (sessions: TrainingSession[]) => {
