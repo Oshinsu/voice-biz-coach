@@ -27,9 +27,9 @@ const conversationTypeOptions = [
 ];
 
 const difficultyOptions = [
-  { value: 'facile', label: 'Facile', description: 'Prospect coopératif' },
-  { value: 'moyen', label: 'Moyen', description: 'Quelques objections' },
-  { value: 'difficile', label: 'Difficile', description: 'Prospect sceptique' }
+  { value: 'facile', label: 'Débutant', description: 'Prospect coopératif' },
+  { value: 'moyen', label: 'Intermédiaire', description: 'Quelques objections' },
+  { value: 'difficile', label: 'Avancé', description: 'Prospect sceptique' }
 ];
 
 const getScenarioIcon = (scenarioId: string) => {

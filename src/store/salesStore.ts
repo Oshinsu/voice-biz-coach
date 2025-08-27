@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Scenario } from '@/data/scenarios';
+import { Scenario as StaticScenario } from '@/data/scenarios';
+import { Scenario as SupabaseScenario } from '@/hooks/useScenarios';
 import { Persona } from '@/data/personas';
 import { SalesPhase } from '@/data/salesPhases';
 
@@ -37,7 +38,7 @@ export interface SalesState {
   mode: Mode;
   conversationType: ConversationType;
   currentPhase: string;
-  selectedScenario: Scenario | null;
+  selectedScenario: StaticScenario | SupabaseScenario | null;
   selectedPersona: Persona | null;
   difficulty: 'facile' | 'moyen' | 'difficile';
   
@@ -63,7 +64,7 @@ export interface SalesState {
   setMode: (mode: Mode) => void;
   setConversationType: (type: ConversationType) => void;
   setCurrentPhase: (phase: string) => void;
-  setScenario: (scenario: Scenario | null) => void;
+  setScenario: (scenario: StaticScenario | SupabaseScenario | null) => void;
   setPersona: (persona: Persona | null) => void;
   setDifficulty: (difficulty: 'facile' | 'moyen' | 'difficile') => void;
   

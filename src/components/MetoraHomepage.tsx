@@ -19,11 +19,11 @@ const getScenarioIcon = (scenarioId: string) => {
 
 const getDifficultyColor = (difficulty: string) => {
   switch (difficulty) {
-    case "Facile":
+    case "Débutant":
       return "bg-success text-success-foreground";
-    case "Moyen":
+    case "Intermédiaire":
       return "bg-warning text-warning-foreground";
-    case "Difficile":
+    case "Avancé":
       return "bg-destructive text-destructive-foreground";
     default:
       return "bg-muted text-muted-foreground";

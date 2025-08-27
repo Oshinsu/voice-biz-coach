@@ -1,18 +1,20 @@
 import { useParams, Navigate, Link } from "react-router-dom";
-import { ArrowLeft, Building2, User, Package, Target, TrendingUp, AlertCircle, Calculator, BarChart3 } from "lucide-react";
+import { ArrowLeft, Building2, User, Package, Target, TrendingUp, AlertCircle, Calculator, BarChart3, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getScenarioById } from "@/data/scenarios";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useScenarios } from "@/hooks/useScenarios";
 import { useSalesStore } from "@/store/salesStore";
 import { useEffect, useState } from "react";
 import { EnhancedVoiceCoach } from "@/components/EnhancedVoiceCoach";
 
 export default function ScenarioPage() {
   const { id } = useParams();
+  const { scenarios, loading, error, getScenarioById } = useScenarios();
   const scenario = id ? getScenarioById(id) : null;
   const { setScenario } = useSalesStore();
   const [activeSection, setActiveSection] = useState("company");
@@ -23,15 +25,37 @@ export default function ScenarioPage() {
     }
   }, [scenario, setScenario]);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10 flex items-center justify-center">
+        <div className="flex items-center gap-2">
+          <Loader2 className="h-6 w-6 animate-spin" />
+          <span>Chargement du scénario...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10 flex items-center justify-center">
+        <Alert className="max-w-md">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
+
   if (!scenario) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/scenarios" replace />;
   }
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case "Facile": return "bg-green-100 text-green-800";
-      case "Moyen": return "bg-orange-100 text-orange-800";
-      case "Difficile": return "bg-red-100 text-red-800";
+      case "Débutant": return "bg-green-100 text-green-800";
+      case "Intermédiaire": return "bg-orange-100 text-orange-800";
+      case "Avancé": return "bg-red-100 text-red-800";
       default: return "bg-gray-100 text-gray-800";
     }
   };
@@ -51,7 +75,7 @@ export default function ScenarioPage() {
         <div className="container mx-auto px-6 py-6">
           <div className="flex items-center justify-between mb-6">
             <Button variant="ghost" asChild>
-              <Link to="/" className="flex items-center gap-2">
+              <Link to="/scenarios" className="flex items-center gap-2">
                 <ArrowLeft className="h-4 w-4" />
                 Retour aux scénarios
               </Link>
@@ -70,8 +94,8 @@ export default function ScenarioPage() {
               <Card className="bg-gradient-to-br from-primary/10 to-primary/5">
                 <CardContent className="p-4">
                   <div className="text-center">
-                    <p className="text-sm text-muted-foreground">CA Visé</p>
-                    <p className="text-2xl font-bold text-primary">{scenario.expectedRevenue}</p>
+                    <p className="text-sm text-muted-foreground">Probabilité</p>
+                    <p className="text-2xl font-bold text-primary">{scenario.success_probability}%</p>
                   </div>
                 </CardContent>
               </Card>
@@ -79,8 +103,8 @@ export default function ScenarioPage() {
               <Card className="bg-gradient-to-br from-success/10 to-success/5">
                 <CardContent className="p-4">
                   <div className="text-center">
-                    <p className="text-sm text-muted-foreground">Probabilité</p>
-                    <p className="text-2xl font-bold text-success">{scenario.probability}%</p>
+                    <p className="text-sm text-muted-foreground">Secteur</p>
+                    <p className="text-2xl font-bold text-success">{scenario.company_sector}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -89,7 +113,7 @@ export default function ScenarioPage() {
                 <CardContent className="p-4">
                   <div className="text-center">
                     <p className="text-sm text-muted-foreground">Budget Client</p>
-                    <p className="text-2xl font-bold text-accent">{scenario.company.budget}</p>
+                    <p className="text-2xl font-bold text-accent">{scenario.budget_range}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -97,8 +121,8 @@ export default function ScenarioPage() {
               <Card className="bg-gradient-to-br from-warning/10 to-warning/5">
                 <CardContent className="p-4">
                   <div className="text-center">
-                    <p className="text-sm text-muted-foreground">Timeline</p>
-                    <p className="text-2xl font-bold text-warning">{scenario.company.timeline}</p>
+                    <p className="text-sm text-muted-foreground">Taille</p>
+                    <p className="text-2xl font-bold text-warning">{scenario.company_size}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -158,7 +182,7 @@ export default function ScenarioPage() {
                 Objectif principal
               </h3>
               <p className="text-xs text-muted-foreground">
-                {scenario.salesGoal}
+                {scenario.main_objectives[0] || "Voir détails du scénario"}
               </p>
             </div>
           </div>
@@ -184,31 +208,19 @@ export default function ScenarioPage() {
                       <TableBody>
                         <TableRow>
                           <TableCell className="font-medium">Nom</TableCell>
-                          <TableCell>{scenario.company.name}</TableCell>
+                          <TableCell>{scenario.company_name}</TableCell>
                         </TableRow>
                         <TableRow>
                           <TableCell className="font-medium">Secteur</TableCell>
-                          <TableCell>{scenario.company.sector}</TableCell>
+                          <TableCell>{scenario.company_sector}</TableCell>
                         </TableRow>
                         <TableRow>
                           <TableCell className="font-medium">Taille</TableCell>
-                          <TableCell>{scenario.company.size}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="font-medium">Chiffre d'affaires</TableCell>
-                          <TableCell>{scenario.company.revenue}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="font-medium">Localisation</TableCell>
-                          <TableCell>{scenario.company.location}</TableCell>
+                          <TableCell>{scenario.company_size}</TableCell>
                         </TableRow>
                         <TableRow>
                           <TableCell className="font-medium">Budget</TableCell>
-                          <TableCell className="font-bold text-success">{scenario.company.budget}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="font-medium">Timeline</TableCell>
-                          <TableCell className="font-bold text-warning">{scenario.company.timeline}</TableCell>
+                          <TableCell className="font-bold text-success">{scenario.budget_range}</TableCell>
                         </TableRow>
                       </TableBody>
                     </Table>
@@ -222,13 +234,17 @@ export default function ScenarioPage() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <h4 className="font-medium mb-2">Activité principale</h4>
-                      <p className="text-sm text-muted-foreground">{scenario.company.description}</p>
+                      <h4 className="font-medium mb-2">Description</h4>
+                      <p className="text-sm text-muted-foreground">{scenario.description}</p>
                     </div>
                     
                     <div>
-                      <h4 className="font-medium mb-2">Solution actuelle</h4>
-                      <Badge variant="outline">{scenario.company.currentSolution}</Badge>
+                      <h4 className="font-medium mb-2">Objectifs principaux</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {scenario.main_objectives.slice(0, 2).map((objective, index) => (
+                          <Badge key={index} variant="outline">{objective}</Badge>
+                        ))}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -243,7 +259,7 @@ export default function ScenarioPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {scenario.company.painPoints.map((pain, index) => (
+                      {scenario.pain_points.map((pain, index) => (
                         <div key={index} className="p-4 bg-destructive/5 border border-destructive/20 rounded-lg">
                           <div className="flex items-start gap-3">
                             <div className="w-6 h-6 rounded-full bg-destructive/20 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -264,106 +280,38 @@ export default function ScenarioPage() {
             <div className="space-y-6">
               <div className="flex items-center gap-2 mb-6">
                 <User className="h-6 w-6 text-primary" />
-                <h2 className="text-2xl font-bold">Profil du contact</h2>
+                <h2 className="text-2xl font-bold">Informations entreprise</h2>
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Informations personnelles */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Informations personnelles</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Table>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell className="font-medium">Nom</TableCell>
-                          <TableCell>{scenario.interlocutor.name}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="font-medium">Poste</TableCell>
-                          <TableCell>{scenario.interlocutor.role}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="font-medium">Expérience</TableCell>
-                          <TableCell>{scenario.interlocutor.experience}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell className="font-medium">Pouvoir de décision</TableCell>
-                          <TableCell className="font-bold text-primary">{scenario.interlocutor.decisionPower}</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-
-                {/* Profil psychologique */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Profil psychologique</CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div>
-                      <h4 className="font-medium mb-2">Personnalité</h4>
-                      <p className="text-sm text-muted-foreground">{scenario.interlocutor.personality}</p>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Détails complémentaires</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <h4 className="font-medium mb-2">Outils disponibles</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {scenario.available_tools.map((tool, index) => (
+                        <Badge key={index} variant="secondary" className="bg-primary/10 text-primary">
+                          {tool}
+                        </Badge>
+                      ))}
                     </div>
-                    
-                    <div>
-                      <h4 className="font-medium mb-2">Style de communication</h4>
-                      <p className="text-sm text-muted-foreground">{scenario.interlocutor.communicationStyle}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Priorités et motivations */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-success">Priorités & Motivations</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="font-medium mb-2">Priorités</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {scenario.interlocutor.priorities.map((priority, index) => (
-                            <Badge key={index} variant="secondary" className="bg-success/10 text-success">
-                              {priority}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <h4 className="font-medium mb-2">Motivations</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {scenario.interlocutor.motivations.map((motivation, index) => (
-                            <Badge key={index} variant="secondary" className="bg-primary/10 text-primary">
-                              {motivation}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Préoccupations */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-destructive">Préoccupations</CardTitle>
-                  </CardHeader>
-                  <CardContent>
+                  </div>
+                  
+                  <div>
+                    <h4 className="font-medium mb-2">Objectifs principaux</h4>
                     <div className="space-y-2">
-                      {scenario.interlocutor.concerns.map((concern, index) => (
-                        <div key={index} className="flex items-center gap-2 p-2 bg-destructive/5 rounded">
-                          <AlertCircle className="h-4 w-4 text-destructive" />
-                          <span className="text-sm">{concern}</span>
+                      {scenario.main_objectives.map((objective, index) => (
+                        <div key={index} className="flex items-start gap-2 p-2 bg-success/5 rounded">
+                          <Target className="h-4 w-4 text-success mt-0.5" />
+                          <span className="text-sm">{objective}</span>
                         </div>
                       ))}
                     </div>
-                  </CardContent>
-                </Card>
-              </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
           )}
 
@@ -371,98 +319,67 @@ export default function ScenarioPage() {
             <div className="space-y-6">
               <div className="flex items-center gap-2 mb-6">
                 <Package className="h-6 w-6 text-primary" />
-                <h2 className="text-2xl font-bold">Notre Produit</h2>
+                <h2 className="text-2xl font-bold">Analyse du scénario</h2>
               </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Informations produit */}
+                {/* Métriques clés */}
                 <Card className="lg:col-span-2">
                   <CardHeader>
-                    <CardTitle>{scenario.product.name}</CardTitle>
+                    <CardTitle>Métriques de performance</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-4">{scenario.product.description}</p>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <h4 className="font-medium mb-2">ROI</h4>
-                        <Badge className="bg-success/10 text-success">{scenario.product.roi}</Badge>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="text-center p-4 bg-primary/5 rounded-lg">
+                        <p className="text-sm text-muted-foreground">Probabilité de succès</p>
+                        <p className="text-2xl font-bold text-primary">{scenario.success_probability}%</p>
                       </div>
-                      <div>
-                        <h4 className="font-medium mb-2">Implémentation</h4>
-                        <Badge className="bg-warning/10 text-warning">{scenario.product.implementationTime}</Badge>
+                      <div className="text-center p-4 bg-success/5 rounded-lg">
+                        <p className="text-sm text-muted-foreground">Difficulté</p>
+                        <Badge className={getDifficultyColor(scenario.difficulty)}>{scenario.difficulty}</Badge>
+                      </div>
+                      <div className="text-center p-4 bg-accent/5 rounded-lg">
+                        <p className="text-sm text-muted-foreground">Budget disponible</p>
+                        <p className="text-lg font-bold text-accent">{scenario.budget_range}</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
 
-                {/* Pricing */}
+                {/* Outils disponibles */}
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Calculator className="h-5 w-5" />
-                      Grille tarifaire
+                      Outils disponibles
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Plan</TableHead>
-                          <TableHead>Prix</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell>Starter</TableCell>
-                          <TableCell className="font-medium">{scenario.product.pricing.starter}</TableCell>
-                        </TableRow>
-                        <TableRow className="bg-primary/5">
-                          <TableCell>Professional</TableCell>
-                          <TableCell className="font-bold text-primary">{scenario.product.pricing.professional}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>Enterprise</TableCell>
-                          <TableCell className="font-medium">{scenario.product.pricing.enterprise}</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </CardContent>
-                </Card>
-
-                {/* Fonctionnalités */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Fonctionnalités clés</CardTitle>
-                  </CardHeader>
-                  <CardContent>
                     <div className="space-y-2">
-                      {scenario.product.keyFeatures.map((feature, index) => (
+                      {scenario.available_tools.map((tool, index) => (
                         <div key={index} className="flex items-center gap-2 p-2 bg-primary/5 rounded">
-                          <Target className="h-4 w-4 text-primary" />
-                          <span className="text-sm">{feature}</span>
+                          <Calculator className="h-4 w-4 text-primary" />
+                          <span className="text-sm">{tool}</span>
                         </div>
                       ))}
                     </div>
                   </CardContent>
                 </Card>
 
-                {/* Avantages concurrentiels */}
-                <Card className="lg:col-span-2">
+                {/* Points de douleur */}
+                <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <TrendingUp className="h-5 w-5 text-success" />
-                      Avantages concurrentiels
+                      <AlertCircle className="h-5 w-5 text-destructive" />
+                      Points de douleur
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {scenario.product.competitiveAdvantages.map((advantage, index) => (
-                        <div key={index} className="p-4 bg-success/5 border border-success/20 rounded-lg">
-                          <div className="flex items-start gap-3">
-                            <TrendingUp className="h-5 w-5 text-success mt-0.5" />
-                            <p className="text-sm">{advantage}</p>
-                          </div>
+                    <div className="space-y-2">
+                      {scenario.pain_points.slice(0, 3).map((pain, index) => (
+                        <div key={index} className="flex items-start gap-2 p-2 bg-destructive/5 rounded">
+                          <AlertCircle className="h-4 w-4 text-destructive mt-0.5" />
+                          <span className="text-sm">{pain}</span>
                         </div>
                       ))}
                     </div>
@@ -476,159 +393,74 @@ export default function ScenarioPage() {
             <div className="space-y-6">
               <div className="flex items-center gap-2 mb-6">
                 <BarChart3 className="h-6 w-6 text-primary" />
-                <h2 className="text-2xl font-bold">Analyses SWOT</h2>
+                <h2 className="text-2xl font-bold">Vue d'ensemble</h2>
               </div>
 
-              <Tabs defaultValue="notre-produit" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="notre-produit">Notre Produit</TabsTrigger>
-                  <TabsTrigger value="leur-situation">Leur Situation</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="notre-produit" className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Forces */}
-                    <Card className="border-success/20">
-                      <CardHeader>
-                        <CardTitle className="text-success">Forces</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {scenario.swot.strengths.map((strength, index) => (
-                            <div key={index} className="flex items-start gap-2 p-2 bg-success/5 rounded">
-                              <div className="w-2 h-2 bg-success rounded-full mt-2"></div>
-                              <span className="text-sm">{strength}</span>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Objectifs détaillés */}
+                <Card className="lg:col-span-2">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Target className="h-5 w-5 text-primary" />
+                      Objectifs détaillés
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {scenario.main_objectives.map((objective, index) => (
+                        <div key={index} className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                          <div className="flex items-start gap-3">
+                            <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                              <span className="text-xs font-bold text-primary">{index + 1}</span>
                             </div>
-                          ))}
+                            <p className="text-sm">{objective}</p>
+                          </div>
                         </div>
-                      </CardContent>
-                    </Card>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
 
-                    {/* Faiblesses */}
-                    <Card className="border-destructive/20">
-                      <CardHeader>
-                        <CardTitle className="text-destructive">Faiblesses</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {scenario.swot.weaknesses.map((weakness, index) => (
-                            <div key={index} className="flex items-start gap-2 p-2 bg-destructive/5 rounded">
-                              <div className="w-2 h-2 bg-destructive rounded-full mt-2"></div>
-                              <span className="text-sm">{weakness}</span>
-                            </div>
-                          ))}
+                {/* Outils disponibles */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Calculator className="h-5 w-5 text-success" />
+                      Outils d'aide à la vente
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {scenario.available_tools.map((tool, index) => (
+                        <div key={index} className="flex items-center gap-3 p-3 bg-success/5 rounded-lg">
+                          <Calculator className="h-4 w-4 text-success" />
+                          <span className="text-sm font-medium">{tool}</span>
                         </div>
-                      </CardContent>
-                    </Card>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
 
-                    {/* Opportunités */}
-                    <Card className="border-primary/20">
-                      <CardHeader>
-                        <CardTitle className="text-primary">Opportunités</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {scenario.swot.opportunities.map((opportunity, index) => (
-                            <div key={index} className="flex items-start gap-2 p-2 bg-primary/5 rounded">
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                              <span className="text-sm">{opportunity}</span>
-                            </div>
-                          ))}
+                {/* Points de douleur complets */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <AlertCircle className="h-5 w-5 text-destructive" />
+                      Défis à relever
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {scenario.pain_points.map((pain, index) => (
+                        <div key={index} className="flex items-start gap-3 p-3 bg-destructive/5 rounded-lg">
+                          <AlertCircle className="h-4 w-4 text-destructive mt-0.5" />
+                          <span className="text-sm">{pain}</span>
                         </div>
-                      </CardContent>
-                    </Card>
-
-                    {/* Menaces */}
-                    <Card className="border-warning/20">
-                      <CardHeader>
-                        <CardTitle className="text-warning">Menaces</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {scenario.swot.threats.map((threat, index) => (
-                            <div key={index} className="flex items-start gap-2 p-2 bg-warning/5 rounded">
-                              <div className="w-2 h-2 bg-warning rounded-full mt-2"></div>
-                              <span className="text-sm">{threat}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="leur-situation" className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Forces concurrence */}
-                    <Card className="border-success/20">
-                      <CardHeader>
-                        <CardTitle className="text-success">Forces actuelles</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {scenario.competitorSwot.strengths.map((strength, index) => (
-                            <div key={index} className="flex items-start gap-2 p-2 bg-success/5 rounded">
-                              <div className="w-2 h-2 bg-success rounded-full mt-2"></div>
-                              <span className="text-sm">{strength}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    {/* Faiblesses concurrence */}
-                    <Card className="border-destructive/20">
-                      <CardHeader>
-                        <CardTitle className="text-destructive">Faiblesses</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {scenario.competitorSwot.weaknesses.map((weakness, index) => (
-                            <div key={index} className="flex items-start gap-2 p-2 bg-destructive/5 rounded">
-                              <div className="w-2 h-2 bg-destructive rounded-full mt-2"></div>
-                              <span className="text-sm">{weakness}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    {/* Opportunités concurrence */}
-                    <Card className="border-primary/20">
-                      <CardHeader>
-                        <CardTitle className="text-primary">Opportunités</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {scenario.competitorSwot.opportunities.map((opportunity, index) => (
-                            <div key={index} className="flex items-start gap-2 p-2 bg-primary/5 rounded">
-                              <div className="w-2 h-2 bg-primary rounded-full mt-2"></div>
-                              <span className="text-sm">{opportunity}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-
-                    {/* Menaces concurrence */}
-                    <Card className="border-warning/20">
-                      <CardHeader>
-                        <CardTitle className="text-warning">Menaces</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          {scenario.competitorSwot.threats.map((threat, index) => (
-                            <div key={index} className="flex items-start gap-2 p-2 bg-warning/5 rounded">
-                              <div className="w-2 h-2 bg-warning rounded-full mt-2"></div>
-                              <span className="text-sm">{threat}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </TabsContent>
-              </Tabs>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           )}
 
@@ -636,56 +468,68 @@ export default function ScenarioPage() {
             <div className="space-y-6">
               <div className="flex items-center gap-2 mb-6">
                 <AlertCircle className="h-6 w-6 text-primary" />
-                <h2 className="text-2xl font-bold">Objections Probables</h2>
+                <h2 className="text-2xl font-bold">Conseils pour ce scénario</h2>
               </div>
 
-              <div className="space-y-4">
-                {scenario.probableObjections.map((objection, index) => (
-                  <Card key={index} className="border-l-4 border-l-destructive">
-                    <CardContent className="p-6">
-                      <div className="flex items-start gap-4">
-                        <div className="p-2 bg-destructive/10 rounded-lg">
-                          <AlertCircle className="h-5 w-5 text-destructive" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-medium mb-2">Objection #{index + 1}</h3>
-                          <p className="text-muted-foreground italic">"{objection}"</p>
-                          
-                          {/* Réponse suggérée */}
-                          <div className="mt-4 p-4 bg-success/5 border border-success/20 rounded-lg">
-                            <h4 className="font-medium text-success mb-2">Réponse suggérée :</h4>
-                            <p className="text-sm text-muted-foreground">
-                              {index === 0 && "Je comprends votre préoccupation sur le coût. Regardons ensemble le ROI que vous pourriez obtenir..."}
-                              {index === 1 && "C'est une excellente base que vous avez avec Google Analytics. Notre solution va plus loin en..."}
-                              {index > 1 && "Analysons ensemble cette objection et trouvons la meilleure approche pour y répondre."}
-                            </p>
-                          </div>
+              <div className="grid grid-cols-1 gap-6">
+                {/* Conseils stratégiques */}
+                <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-primary">
+                      <Target className="h-5 w-5" />
+                      Approche recommandée
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3 p-3 bg-primary/5 rounded-lg">
+                        <span className="flex-shrink-0 w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center text-xs font-bold text-primary">1</span>
+                        <div>
+                          <h4 className="font-medium">Qualification initiale</h4>
+                          <p className="text-sm text-muted-foreground">Comprendre leurs défis actuels et leurs contraintes budgétaires</p>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                      <div className="flex items-start gap-3 p-3 bg-primary/5 rounded-lg">
+                        <span className="flex-shrink-0 w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center text-xs font-bold text-primary">2</span>
+                        <div>
+                          <h4 className="font-medium">Démonstration ciblée</h4>
+                          <p className="text-sm text-muted-foreground">Adapter la présentation aux points de douleur identifiés</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3 p-3 bg-primary/5 rounded-lg">
+                        <span className="flex-shrink-0 w-6 h-6 bg-primary/20 rounded-full flex items-center justify-center text-xs font-bold text-primary">3</span>
+                        <div>
+                          <h4 className="font-medium">Négociation finale</h4>
+                          <p className="text-sm text-muted-foreground">Présenter une proposition personnalisée avec ROI clairement défini</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
 
-              {/* Critères de succès */}
-              <Card className="bg-gradient-to-r from-success/5 to-success/10 border-success/20">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-success">
-                    <Target className="h-5 w-5" />
-                    Critères de succès
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {scenario.successCriteria.map((criteria, index) => (
-                      <div key={index} className="flex items-center gap-2 p-2 bg-success/5 rounded">
-                        <Target className="h-4 w-4 text-success" />
-                        <span className="text-sm">{criteria}</span>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                {/* Points d'attention */}
+                <Card className="bg-gradient-to-r from-warning/5 to-warning/10 border-warning/20">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-warning">
+                      <AlertCircle className="h-5 w-5" />
+                      Points d'attention
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {scenario.difficulty === "Débutant" && (
+                        <p className="text-sm">Ce scénario est idéal pour s'entraîner aux techniques de base de vente et de qualification.</p>
+                      )}
+                      {scenario.difficulty === "Intermédiaire" && (
+                        <p className="text-sm">Scénario nécessitant une bonne maîtrise des objections et des techniques de négociation.</p>
+                      )}
+                      {scenario.difficulty === "Avancé" && (
+                        <p className="text-sm">Scénario complexe demandant des compétences avancées en vente consultative et gestion des parties prenantes.</p>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           )}
         </main>
