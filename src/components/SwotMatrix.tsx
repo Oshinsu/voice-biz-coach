@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { TrendingUp, TrendingDown, AlertTriangle, Target } from "lucide-react";
-import { SwotAnalysis } from '@/data/consolidatedScenarios';
+import { SwotAnalysis } from '@/data/scenarios';
 
 interface SwotMatrixProps {
   title: string;
