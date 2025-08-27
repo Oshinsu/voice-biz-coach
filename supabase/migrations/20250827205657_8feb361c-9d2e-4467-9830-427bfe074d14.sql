@@ -1,0 +1,34 @@
+-- Enrichissement scénario: SaaS RH - Outil de gestion des talents (TechGrow Solutions)
+INSERT INTO interlocutors (scenario_id, name, role, personality, communication_style, decision_power, priorities, concerns, motivations, experience) VALUES
+('saas-hr-tool', 'Camille Dubois', 'Directrice RH', 'Stratégique et orientée data, très soucieuse de l''expérience employé', 'Directe et collaborative', 'Décideuse finale', ARRAY['Performance équipes', 'Engagement collaborateurs', 'Évolutivité'], ARRAY['Complexité adoption', 'ROI incertain', 'Résistance changement'], ARRAY['Améliorer rétention', 'Optimiser recrutement', 'Digitaliser RH'], '6 ans en scale-up, experte transformation RH'),
+('saas-hr-tool', 'Nicolas Leroux', 'CTO', 'Technique et sécuritaire, focus sur l''intégration et les performances', 'Analytique et précis', 'Validation technique', ARRAY['Sécurité données', 'Intégration API', 'Performance'], ARRAY['Sécurité RGPD', 'Complexité technique', 'Maintenance'], ARRAY['Architecture scalable', 'Sécurité maximale', 'Efficacité technique'], '10 ans CTO, expert systèmes RH');
+
+INSERT INTO products (scenario_id, name, description, pricing_starter, pricing_professional, pricing_enterprise, key_features, competitive_advantages, roi, implementation_time) VALUES
+('saas-hr-tool', 'TalentFlow Pro', 'Suite RH complète avec IA pour optimiser recrutement, performance et engagement', '€299/mois - Jusqu''à 50 employés', '€799/mois - Jusqu''à 200 employés', '€1,999/mois - Employés illimités + AI avancée', ARRAY['Recrutement IA', 'Évaluation performance', 'Engagement tracking', 'Analytics prédictifs', 'SIRH intégré', 'Mobile app'], ARRAY['IA propriétaire RH', 'Interface intuitive', 'Conformité RGPD native', 'Intégration 200+ outils', 'Support français'], '+40% efficacité recrutement, -25% turnover, +35% engagement', '2-4 semaines avec migration données');
+
+INSERT INTO swot_analyses (scenario_id, analysis_type, strengths, weaknesses, opportunities, threats) VALUES
+('saas-hr-tool', 'product', '{"points": ["IA avancée spécialisée RH", "Interface utilisateur excellente", "Conformité RGPD native", "Support client français"]}', '{"points": ["Prix premium", "Courbe apprentissage", "Dépendance cloud"]}', '{"points": ["Marché RH tech en croissance", "Digitalisation post-COVID", "IA en expansion"]}', '{"points": ["Concurrents établis", "Régulations changeantes", "Saturation marché"]}');
+
+INSERT INTO stakeholders (scenario_id, name, role, influence, support, concerns, approach) VALUES
+('saas-hr-tool', 'Alexandre Martin', 'CEO TechGrow', 'Très élevée', 'Favorable', ARRAY['Budget', 'ROI'], 'ROI et vision stratégique'),
+('saas-hr-tool', 'Sophie Bernard', 'Directrice Financière', 'Élevée', 'Neutre', ARRAY['Coût total', 'Budget IT'], 'Analyse coût-bénéfice détaillée'),
+('saas-hr-tool', 'Julien Moreau', 'Responsable IT', 'Moyenne', 'Favorable', ARRAY['Intégration', 'Sécurité'], 'Validation technique approfondie'),
+('saas-hr-tool', 'Marie Rousseau', 'Manager Équipe', 'Moyenne', 'Réservée', ARRAY['Changement processus', 'Formation'], 'Démonstration bénéfices concrets');
+
+-- Enrichissement scénario: Conseil en cybersécurité (Banque Régionale Loire)
+INSERT INTO interlocutors (scenario_id, name, role, personality, communication_style, decision_power, priorities, concerns, motivations, experience) VALUES
+('cybersecurity-consulting', 'Philippe Rousseau', 'DSI', 'Prudent et méthodique, très soucieux de la sécurité', 'Formel et technique', 'Décideur principal', ARRAY['Conformité réglementaire', 'Sécurité maximale', 'Continuité service'], ARRAY['Failles sécurité', 'Conformité ACPR', 'Budget limité'], ARRAY['Protection données', 'Conformité totale', 'Réputation banque'], '15 ans DSI bancaire, expert cybersécurité'),
+('cybersecurity-consulting', 'Isabelle Lecomte', 'Directrice Conformité', 'Rigoureuse et orientée réglementation', 'Précise et documentée', 'Validation réglementaire', ARRAY['Conformité ACPR', 'Audit réussi', 'Documentation'], ARRAY['Non-conformité', 'Sanctions', 'Audit raté'], ARRAY['Zéro défaut conformité', 'Audit sans faille', 'Protection réputation'], '12 ans conformité bancaire');
+
+INSERT INTO products (scenario_id, name, description, pricing_starter, pricing_professional, pricing_enterprise, key_features, competitive_advantages, roi, implementation_time) VALUES
+('cybersecurity-consulting', 'CyberBank Shield', 'Services conseil cybersécurité spécialisés secteur bancaire', '€15,000/mois - Audit + surveillance', '€35,000/mois - Conseil + SOC', '€75,000/mois - Suite complète + support 24/7', ARRAY['Audit conformité ACPR', 'SOC bancaire 24/7', 'Tests intrusion', 'Formation équipes', 'Veille réglementaire', 'Incident response'], ARRAY['Expertise bancaire unique', 'Conformité ACPR garantie', 'Équipe certifiée', 'Références bancaires', 'Support français'], '90% réduction incidents, conformité 100%, -60% temps réponse', '6-8 semaines avec certification'),
+('cybersecurity-consulting', 'ComplianceBot Pro', 'Solution automatisée monitoring conformité temps réel', '€8,000/mois - Monitoring de base', '€20,000/mois - Analytics avancées', '€45,000/mois - IA prédictive + consulting', ARRAY['Monitoring temps réel', 'Alertes automatiques', 'Rapports conformité', 'Dashboard exécutif', 'IA prédictive', 'API intégration'], ARRAY['Automatisation complète', 'IA spécialisée banque', 'Temps réel', 'Prédictif', 'Intégration native'], '70% réduction coûts compliance, 95% automatisation', '4-6 semaines');
+
+INSERT INTO swot_analyses (scenario_id, analysis_type, strengths, weaknesses, opportunities, threats) VALUES
+('cybersecurity-consulting', 'market', '{"points": ["Expertise bancaire reconnue", "Équipe certifiée", "Références solides", "Innovation IA"]}', '{"points": ["Prix élevé", "Dépendance expertise", "Scalabilité limitée"]}', '{"points": ["Réglementation renforcée", "Digitalisation bancaire", "Menaces croissantes"]}', '{"points": ["Concurrents grands groupes", "Réglementation changeante", "Pénurie experts"]}');
+
+INSERT INTO stakeholders (scenario_id, name, role, influence, support, concerns, approach) VALUES
+('cybersecurity-consulting', 'Jean-Claude Morin', 'Directeur Général', 'Très élevée', 'Favorable', ARRAY['Réputation', 'Coût'], 'Vision stratégique et protection'),
+('cybersecurity-consulting', 'Catherine Dubois', 'Directrice Financière', 'Élevée', 'Réservée', ARRAY['Budget IT', 'ROI'], 'Justification financière rigoureuse'),
+('cybersecurity-consulting', 'Marc Lefebvre', 'Responsable Sécurité', 'Moyenne', 'Très favorable', ARRAY['Mise en œuvre', 'Équipe'], 'Expertise technique et support'),
+('cybersecurity-consulting', 'Anne Bertrand', 'Auditrice Interne', 'Moyenne', 'Favorable', ARRAY['Conformité', 'Processus'], 'Validation conformité et processus');
