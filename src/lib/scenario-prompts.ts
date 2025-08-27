@@ -14,36 +14,108 @@ interface ScenarioData {
   main_objectives: string[];
   available_tools: string[];
   pain_points: string[];
+  // Extended fields from new structure
+  sector?: string;
+  size?: string;
+  revenue?: string;
+  location?: string;
+  employees?: string;
+  founded_year?: number;
+  current_solution?: string;
+  timeline_description?: string;
+  sales_goal?: string;
+  expected_revenue?: string;
+  probable_objections?: string[];
+  success_criteria?: string[];
+  tools?: string[];
 }
 
+// Utility function to get interlocutor data
+const getInterlocutorForScenario = async (scenarioId: string) => {
+  try {
+    const { supabase } = await import('@/integrations/supabase/client');
+    const { data } = await (supabase as any)
+      .from('interlocutors')
+      .select('*')
+      .eq('scenario_id', scenarioId)
+      .single();
+    return data;
+  } catch (error) {
+    console.log('No interlocutor data found, using fallback');
+    return null;
+  }
+};
+
 // Générateur de prompts contextuels pour les contacts de scénarios (adapté pour Supabase)
-export function generateContactPrompt(scenario: ScenarioData, currentPhase?: string, conversationType: ConversationType = 'cold-call'): string {
+export async function generateContactPrompt(scenario: ScenarioData, currentPhase?: string, conversationType: ConversationType = 'cold-call'): Promise<string> {
+  // Try to get detailed interlocutor data
+  const interlocutor = await getInterlocutorForScenario(scenario.id);
   
   // Calcul du niveau de résistance basé sur la difficulté
   const difficultyLevel = scenario.difficulty.toLowerCase();
   const resistanceLevel = difficultyLevel === 'facile' ? 'faible' : difficultyLevel === 'moyen' ? 'modérée' : 'élevée';
   
-  const basePrompt = `Tu es Contact Commercial, responsable des achats chez ${scenario.company_name}.
+  // Use enhanced data if available, fallback to basic scenario data
+  const contactName = interlocutor?.name || "Contact Commercial";
+  const contactRole = interlocutor?.role || "responsable des achats";
+  const contactPersonality = interlocutor?.personality || "Professionnel et analytique";
+  const contactCommunicationStyle = interlocutor?.communication_style || "Direct et orienté résultats";
+  const contactExperience = interlocutor?.experience || `Expérimenté dans le secteur ${scenario.company_sector}`;
+  const contactDecisionPower = interlocutor?.decision_power || "Décideur pour les achats dans votre domaine";
+  
+  const contactPriorities = interlocutor?.priorities?.length > 0 
+    ? interlocutor.priorities 
+    : scenario.main_objectives;
+    
+  const contactConcerns = interlocutor?.concerns?.length > 0 
+    ? interlocutor.concerns 
+    : scenario.pain_points;
+    
+  const contactMotivations = interlocutor?.motivations?.length > 0 
+    ? interlocutor.motivations 
+    : [
+      "Optimiser les performances de l'entreprise",
+      "Réduire les coûts opérationnels", 
+      "Améliorer l'efficacité des équipes",
+      "Maintenir un avantage concurrentiel"
+    ];
+
+  // Enhanced company details
+  const companyDetails = scenario.location ? `
+LOCALISATION : ${scenario.location}
+CHIFFRE D'AFFAIRES : ${scenario.revenue || "Non spécifié"}
+FONDÉE EN : ${scenario.founded_year || "Non spécifié"}
+EMPLOYÉS : ${scenario.employees || scenario.company_size}` : "";
+
+  const currentSolution = scenario.current_solution ? `
+SOLUTION ACTUELLE : ${scenario.current_solution}` : "";
+
+  const timeline = scenario.timeline_description ? `
+TIMELINE : ${scenario.timeline_description}` : "";
+
+  // Include probable objections in the prompt for more realistic interactions
+  const probableObjections = scenario.probable_objections?.length > 0 ? `
+OBJECTIONS PROBABLES (à utiliser naturellement si pertinentes) :
+${scenario.probable_objections.slice(0, 3).map(o => `- ${o.substring(0, 100)}...`).join('\n')}` : "";
+
+  const basePrompt = `Tu es ${contactName}, ${contactRole} chez ${scenario.company_name}.
 
 === VOTRE PROFIL PERSONNEL COMPLET ===
 
 PERSONNALITÉ ET COMPORTEMENT :
-- Personnalité : Professionnel et analytique
-- Style de communication : Direct et orienté résultats
-- Expérience : Expérimenté dans le secteur ${scenario.company_sector}
-- Pouvoir de décision : Décideur pour les achats dans votre domaine
+- Personnalité : ${contactPersonality}
+- Style de communication : ${contactCommunicationStyle}
+- Expérience : ${contactExperience}
+- Pouvoir de décision : ${contactDecisionPower}
 
 MOTIVATIONS PROFONDES :
-- Optimiser les performances de l'entreprise
-- Réduire les coûts opérationnels
-- Améliorer l'efficacité des équipes
-- Maintenir un avantage concurrentiel
+${contactMotivations.map(m => `- ${m}`).join('\n')}
 
 VOS PRIORITÉS ACTUELLES :
-${scenario.main_objectives.map(obj => `- ${obj}`).join('\n')}
+${contactPriorities.map(obj => `- ${obj}`).join('\n')}
 
 VOS PRÉOCCUPATIONS ACTUELLES :
-${scenario.pain_points.map(p => `- ${p}`).join('\n')}
+${contactConcerns.map(p => `- ${p}`).join('\n')}
 
 === CONTEXTE ENTREPRISE APPROFONDI ===
 
@@ -52,13 +124,13 @@ INFORMATIONS GÉNÉRALES :
 - Secteur : ${scenario.company_sector}
 - Taille : ${scenario.company_size}
 - Budget disponible : ${scenario.budget_range}
-- Description : ${scenario.description}
+- Description : ${scenario.description}${companyDetails}${currentSolution}${timeline}
 
 PROBLÈMES ACTUELS (ne révéler que progressivement) :
 ${scenario.pain_points.map(p => `- ${p}`).join('\n')}
 
 OUTILS DISPONIBLES :
-${scenario.available_tools.map(tool => `- ${tool}`).join('\n')}
+${scenario.available_tools.map(tool => `- ${tool}`).join('\n')}${probableObjections}
 
 === INSTRUCTIONS COMPORTEMENTALES AVANCÉES ===
 
@@ -80,6 +152,7 @@ PROBABILITÉ DE SUCCÈS : ${scenario.success_probability}%
    - ROI : "Comment mesurer le retour sur investissement ?"
    - Implémentation : "Combien de temps pour une mise en place ?"
    - Formation : "Quelle formation pour nos équipes ?"
+   ${scenario.probable_objections?.length > 0 ? `- Objections spécifiques : Utilisez naturellement ces objections réelles si elles sont pertinentes` : ""}
 
 4. **Adaptation selon la difficulté** :
     ${difficultyLevel === 'facile' ? '- Montrez-vous ouvert et curieux mais posez des questions légitimes sur budget, formation et ROI\n   - Exprimez des préoccupations réalistes sur l\'adoption par votre équipe\n   - Demandez des preuves concrètes et des références clients similaires\n   - Négociez les conditions mais restez dans un esprit constructif' : 

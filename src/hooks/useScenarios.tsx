@@ -1,6 +1,55 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
+export interface Interlocutor {
+  id: string;
+  scenario_id: string;
+  name: string;
+  role: string;
+  personality?: string;
+  communication_style?: string;
+  decision_power?: string;
+  priorities?: string[];
+  concerns?: string[];
+  motivations?: string[];
+  experience?: string;
+}
+
+export interface Product {
+  id: string;
+  scenario_id: string;
+  name: string;
+  description?: string;
+  pricing_starter?: string;
+  pricing_professional?: string;
+  pricing_enterprise?: string;
+  key_features?: string[];
+  competitive_advantages?: string[];
+  roi?: string;
+  implementation_time?: string;
+}
+
+export interface SwotAnalysis {
+  id: string;
+  scenario_id: string;
+  analysis_type: string;
+  strengths?: any;
+  weaknesses?: any;
+  opportunities?: any;
+  threats?: any;
+}
+
+export interface Stakeholder {
+  id: string;
+  scenario_id: string;
+  name: string;
+  role: string;
+  influence?: string;
+  support?: string;
+  concerns?: string[];
+  approach?: string;
+}
+
 export interface Scenario {
   id: string;
   title: string;
@@ -16,6 +65,28 @@ export interface Scenario {
   pain_points: string[];
   created_at: string;
   updated_at: string;
+  // Extended fields
+  sector?: string;
+  size?: string;
+  revenue?: string;
+  location?: string;
+  employees?: string;
+  website?: string;
+  linkedin?: string;
+  founded_year?: number;
+  key_people?: string[];
+  current_solution?: string;
+  timeline_description?: string;
+  sales_goal?: string;
+  expected_revenue?: string;
+  probable_objections?: string[];
+  success_criteria?: string[];
+  tools?: string[];
+  // Related data
+  interlocutors?: Interlocutor[];
+  products?: Product[];
+  swot_analyses?: SwotAnalysis[];
+  stakeholders?: Stakeholder[];
 }
 
 export const useScenarios = () => {
@@ -29,16 +100,19 @@ export const useScenarios = () => {
         setLoading(true);
         setError(null);
 
-        const { data, error } = await supabase
+        // Fetch scenarios with related data
+        const { data: scenariosData, error: scenariosError } = await supabase
           .from('scenarios')
           .select('*')
           .order('created_at', { ascending: false });
 
-        if (error) {
-          throw error;
+        if (scenariosError) {
+          throw scenariosError;
         }
 
-        setScenarios(data || []);
+        // For now, use just the scenarios data since the new tables might not be in types yet
+        // We'll enhance this once the types are updated
+        setScenarios(scenariosData || []);
       } catch (err) {
         console.error('Error fetching scenarios:', err);
         setError(err instanceof Error ? err.message : 'Failed to fetch scenarios');

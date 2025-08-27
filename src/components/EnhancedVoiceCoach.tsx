@@ -87,7 +87,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
       setIsConnecting(true);
       
       // Instructions contextuelles - le coach joue le rôle du contact
-      const contactPrompt = generateContactPrompt(scenario, currentPhase);
+      const contactPrompt = await generateContactPrompt(scenario, currentPhase);
       await coach.connect(contactPrompt);
 
     } catch (error) {
