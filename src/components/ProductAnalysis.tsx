@@ -336,7 +336,7 @@ export const ProductAnalysis: React.FC = () => {
               <div className="space-y-1 text-xs">
                 <p><span className="font-medium">Pain:</span> Méthodes obsolètes</p>
                 <p><span className="font-medium">Gain:</span> Innovation reconnue</p>
-                <p><span className="font-medium">Decision:</span> Budgets < 300k€</p>
+                <p><span className="font-medium">Decision:</span> Budgets moins de 300k€</p>
               </div>
             </div>
             
