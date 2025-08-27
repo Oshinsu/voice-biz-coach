@@ -18,6 +18,8 @@ export interface SessionConfig {
   instructions?: string;
   modalities?: string[];
   temperature?: number;
+  tools?: any[];
+  tool_choice?: string;
   turn_detection?: {
     type: string;
     threshold?: number;
@@ -161,7 +163,7 @@ export class RealtimeWebRTCCoach {
     }
   }
 
-  // Initialiser la session avec les paramètres
+  // Initialiser la session avec les paramètres Discovery Mode
   private initializeSession(instructions?: string): void {
     if (!this.dataChannel) return;
 
@@ -177,6 +179,61 @@ export class RealtimeWebRTCCoach {
         prefix_padding_ms: 300,
         silence_duration_ms: 500,
       },
+      tools: [
+        {
+          type: "function",
+          name: "askColleague",
+          description: "Consulter un collègue pour obtenir des informations spécifiques. Utilisez ceci quand vous devez 'découvrir' une information que vous ne connaissez pas encore.",
+          parameters: {
+            type: "object",
+            properties: {
+              question: { type: "string", description: "Question à poser au collègue" },
+              topic: { type: "string", description: "Sujet de la question (budget, technique, timeline, processus, etc.)" }
+            },
+            required: ["question", "topic"]
+          }
+        },
+        {
+          type: "function", 
+          name: "checkBudget",
+          description: "Vérifier les informations budgétaires disponibles. Utilisez ceci pour 'découvrir' progressivement des détails budgétaires.",
+          parameters: {
+            type: "object", 
+            properties: {
+              requestType: { type: "string", description: "Type de vérification (range, exact, approval)" },
+              context: { type: "string", description: "Contexte de la demande budgétaire" }
+            },
+            required: ["requestType", "context"]
+          }
+        },
+        {
+          type: "function",
+          name: "consultDecisionMaker",
+          description: "Consulter les décideurs pour une information importante. Utilisez ceci pour des décisions qui dépassent votre niveau.",
+          parameters: {
+            type: "object",
+            properties: {
+              topic: { type: "string", description: "Sujet à discuter avec les décideurs" },
+              urgency: { type: "string", description: "Niveau d'urgence (low, medium, high)" }
+            },
+            required: ["topic", "urgency"]
+          }
+        },
+        {
+          type: "function",
+          name: "reviewInternalOptions",
+          description: "Examiner les options internes disponibles. Utilisez ceci pour comparer avec les solutions existantes.",
+          parameters: {
+            type: "object",
+            properties: {
+              area: { type: "string", description: "Domaine à examiner (tools, processes, resources)" },
+              comparison: { type: "string", description: "Élément de comparaison proposé" }
+            },
+            required: ["area", "comparison"]
+          }
+        }
+      ],
+      tool_choice: "auto"
     };
 
     this.sendEvent({
@@ -192,7 +249,7 @@ export class RealtimeWebRTCCoach {
     }
   }
 
-  // Gérer les événements du serveur
+  // Gérer les événements du serveur avec support des fonctions Discovery
   private handleServerEvent(event: RealtimeEvent): void {
     console.log("Événement WebRTC reçu:", event.type);
 
@@ -225,6 +282,11 @@ export class RealtimeWebRTCCoach {
         this.onTranscriptDelta?.(event.delta);
         break;
 
+      case "response.function_call_arguments.done":
+        console.log("Appel de fonction terminé:", event);
+        this.handleFunctionCall(event);
+        break;
+
       case "response.done":
         console.log("Réponse WebRTC terminée");
         this.onResponseCompleted?.(event.response);
@@ -235,6 +297,73 @@ export class RealtimeWebRTCCoach {
         this.onError?.(event.error.message || "Erreur inconnue");
         break;
     }
+  }
+
+  // Gestion des appels de fonctions Discovery
+  private handleFunctionCall(event: any): void {
+    const { call_id, name, arguments: args } = event;
+    console.log(`Fonction Discovery appelée: ${name}`, args);
+    
+    let result = "";
+    const parsedArgs = JSON.parse(args);
+    
+    switch (name) {
+      case "askColleague":
+        result = this.simulateAskColleague(parsedArgs.question, parsedArgs.topic);
+        break;
+      case "checkBudget":
+        result = this.simulateCheckBudget(parsedArgs.requestType, parsedArgs.context);
+        break;
+      case "consultDecisionMaker":
+        result = this.simulateConsultDecisionMaker(parsedArgs.topic, parsedArgs.urgency);
+        break;
+      case "reviewInternalOptions":
+        result = this.simulateReviewOptions(parsedArgs.area, parsedArgs.comparison);
+        break;
+      default:
+        result = "Je dois vérifier cette information et revenir vers vous.";
+    }
+
+    // Envoyer le résultat de la fonction
+    this.sendEvent({
+      type: "conversation.item.create",
+      item: {
+        type: "function_call_output",
+        call_id: call_id,
+        output: result
+      }
+    });
+  }
+
+  // Simulations des fonctions Discovery
+  private simulateAskColleague(question: string, topic: string): string {
+    const responses = {
+      budget: "D'après mon collègue financier, nous avons effectivement un budget alloué pour ce type de projet cette année.",
+      technique: "Mon équipe technique confirme que nous rencontrons quelques limitations avec nos outils actuels.",
+      timeline: "Côté planning, nous pourrions envisager une mise en œuvre au prochain trimestre selon mon responsable projet.",
+      processus: "Le processus habituel nécessite une validation par la direction technique et financière."
+    };
+    return responses[topic as keyof typeof responses] || "Je vais me renseigner et vous tenir informé.";
+  }
+
+  private simulateCheckBudget(requestType: string, context: string): string {
+    if (requestType === "range") {
+      return "Après vérification, nous avons effectivement un budget dans cette gamme de prix.";
+    } else if (requestType === "exact") {
+      return "Je dois faire une demande formelle pour obtenir le montant exact disponible.";
+    }
+    return "Budget en cours de validation par notre service financier.";
+  }
+
+  private simulateConsultDecisionMaker(topic: string, urgency: string): string {
+    if (urgency === "high") {
+      return "Ma direction est intéressée et souhaite plus de détails sur cette proposition.";
+    }
+    return "Je vais présenter votre proposition lors de notre prochaine réunion de direction.";
+  }
+
+  private simulateReviewOptions(area: string, comparison: string): string {
+    return `Après examen de nos ${area} actuels, votre solution semble apporter des améliorations intéressantes par rapport à ce que nous utilisons.`;
   }
 
   // Envoyer un message texte
