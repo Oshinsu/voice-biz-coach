@@ -1,5 +1,5 @@
-import { RealtimeWebRTCCoach, handleWebRTCError } from "@/lib/openai-webrtc";
-import { generateContactPrompt, generateFeedbackPrompt } from "@/lib/scenario-prompts";
+import { RealtimeWebRTCCoach, handleWebRTCError, WEBRTC_CONFIG } from "@/lib/openai-webrtc";
+import { generateEnhancedContactPrompt, generateEnhancedFeedbackPrompt, generateRealtimeCoachingPrompt } from "@/lib/scenario-prompts-enhanced";
 import { useSalesStore } from "@/store/salesStore";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,6 +32,10 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
   const [isInFeedbackMode, setIsInFeedbackMode] = useState(false);
   const [conversationType, setConversationType] = useState<'cold-call' | 'rdv' | null>(null);
   const [showCallTypeSelector, setShowCallTypeSelector] = useState(true);
+  const [selectedVoice, setSelectedVoice] = useState<string>('sage');
+  const [trustLevel, setTrustLevel] = useState(0);
+  const [availableInformation, setAvailableInformation] = useState<Record<string, any>>({});
+  const [revealedLayers, setRevealedLayers] = useState<any[]>([]);
   const voiceCoachRef = useRef<RealtimeWebRTCCoach | null>(null);
 
   const startConversation = async (callType: 'cold-call' | 'rdv') => {
@@ -96,9 +100,18 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
       const availableInformation = {};
       const revealedLayers = [];
       
-      // Instructions contextuelles - le coach joue le rôle du contact
-      const contactPrompt = await generateContactPrompt(scenario, callType, 'ouverture', trustLevel, availableInformation, revealedLayers);
-      await coach.connect(contactPrompt);
+      // Instructions contextuelles améliorées avec la nouvelle API 2025
+      const contactPrompt = await generateEnhancedContactPrompt({
+        conversationType: callType,
+        scenarioData: scenario,
+        currentPhase: 'ouverture',
+        trustLevel: trustLevel,
+        availableInformation: availableInformation,
+        revealedLayers: revealedLayers,
+        voice: selectedVoice
+      });
+      
+      await coach.connect(contactPrompt, selectedVoice);
 
     } catch (error) {
       console.error("Erreur lors de la connexion:", error);
@@ -127,19 +140,19 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
     if (!voiceCoachRef.current || !scenario) return;
     
     setIsInFeedbackMode(true);
-    const feedbackPrompt = generateFeedbackPrompt(scenario);
+    const feedbackPrompt = generateEnhancedFeedbackPrompt(scenario, conversationType!);
     
-    // Créer une nouvelle session avec le prompt de feedback
+    // Créer une nouvelle session avec le prompt de feedback amélioré
     try {
       await voiceCoachRef.current.disconnect();
       
-      // Plus besoin de clé API - utilise Supabase Edge Function
+      // Initialiser nouveau coach avec Edge Function Supabase
       voiceCoachRef.current = new RealtimeWebRTCCoach("");
       const coach = voiceCoachRef.current;
       
-      // Reconfigurer les callbacks
+      // Reconfigurer les callbacks pour le mode feedback
       coach.onSessionReady = () => {
-        addMessage("Coach prêt pour le débrief", "system");
+        addMessage("🎯 Coach commercial prêt pour l'analyse de performance", "system");
       };
       
       coach.onResponseCompleted = (response) => {
@@ -149,7 +162,11 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
         }
       };
       
-      await coach.connect(feedbackPrompt);
+      coach.onError = (error) => {
+        setError(`Erreur mode feedback: ${error}`);
+      };
+      
+      await coach.connect(feedbackPrompt, selectedVoice);
     } catch (error) {
       console.error("Erreur lors du basculement en mode feedback:", error);
       setError("Impossible de basculer en mode feedback");
@@ -176,18 +193,30 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
     if (!scenario) return "Aucun scénario sélectionné";
     
     if (isInFeedbackMode) {
-      return "💬 Mode débrief activé - Analysez votre performance avec le coach";
+      return `💬 Mode analyse activé - Le coach évalue votre performance sur le scénario ${scenario.title}`;
     }
     
-    const phaseAdvice = {
-      ouverture: `🎯 Vous parlez à un contact. Créez du rapport et obtenez quelques minutes d'attention`,
-      decouverte: `🔍 Découvrez les vrais besoins de votre contact. Focus sur: ${scenario.pain_points?.slice(0,2).join(", ") || "les problématiques identifiées"}`,
-      demonstration: `💡 Montrez comment votre solution résout les problèmes de ${scenario.company_name}`, 
-      objections: `⚡ Votre contact peut objecter sur: ${scenario.pain_points?.slice(0,2).join(", ") || "les points de blocage"}`,
-      closing: `🎪 Proposez une prochaine étape concrète à votre contact`
+    // Coaching contextuel intelligent selon la phase et le type d'appel
+    const phaseAdviceEnhanced = {
+      ouverture: conversationType === 'cold-call' ? 
+        `🎯 COLD CALL: Captez l'attention en 30 secondes maximum. Contact: ${scenario.company.name}` :
+        `🎯 RDV: Établissez le cadre et confirmez les attentes. Durée prévue: 30-45 min`,
+      decouverte: conversationType === 'cold-call' ?
+        `🔍 COLD CALL: Une question directe pour identifier LE pain point principal` :
+        `🔍 RDV: Explorez en profondeur: ${scenario.painPoints?.slice(0,2).join(" et ") || "besoins spécifiques"}`,
+      demonstration: conversationType === 'cold-call' ?
+        `💡 COLD CALL: Pas de démo - focalisez sur la value proposition` :
+        `💡 RDV: Démonstration personnalisée selon les besoins révélés`,
+      objections: conversationType === 'cold-call' ?
+        `⚡ COLD CALL: Objectif = obtenir un RDV, pas convaincre totalement` :
+        `⚡ RDV: Levez tous les freins pour avancer vers la décision`,
+      closing: conversationType === 'cold-call' ?
+        `🎪 COLD CALL: "Pouvons-nous prévoir 30 minutes la semaine prochaine?"` :
+        `🎪 RDV: Définissez les étapes suivantes concrètes avec timeline`
     };
 
-    return phaseAdvice[currentPhase as keyof typeof phaseAdvice] || "Continuez la conversation";
+    return phaseAdviceEnhanced[currentPhase as keyof typeof phaseAdviceEnhanced] || 
+           `Phase ${currentPhase} - Adaptez selon l'évolution de la conversation`;
   };
 
   useEffect(() => {
@@ -272,21 +301,38 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
         </CardHeader>
 
         <CardContent className="flex-1 flex flex-col p-4">
-          {/* Coaching contextuel */}
+          {/* Coaching contextuel amélioré */}
           <div className="mb-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
-            <h4 className="text-sm font-medium mb-2">
-              {isInFeedbackMode ? "Analyse de performance" : "Votre contact"}
-            </h4>
-            <p className="text-xs text-muted-foreground">
+            <div className="flex items-start justify-between mb-2">
+              <h4 className="text-sm font-medium">
+                {isInFeedbackMode ? "🎯 Analyse Performance" : "🎙️ Votre Contact"}
+              </h4>
+              {!isInFeedbackMode && (
+                <div className="text-xs text-muted-foreground">
+                  Confiance: {trustLevel}%
+                </div>
+              )}
+            </div>
+            <p className="text-xs text-muted-foreground leading-relaxed">
               {getContextualCoaching()}
             </p>
-            <div className="mt-2 flex items-center gap-2">
+            <div className="mt-3 flex items-center gap-2 flex-wrap">
               <Badge variant="outline" className="text-xs">
-                {isInFeedbackMode ? "Mode Débrief" : `Phase: ${currentPhase}`}
+                {isInFeedbackMode ? "Mode Coach" : `Phase: ${currentPhase}`}
               </Badge>
               {scenario && (
                 <Badge variant="outline" className="text-xs">
                   {scenario.difficulty}
+                </Badge>
+              )}
+              {conversationType && (
+                <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700">
+                  {conversationType === 'cold-call' ? 'Cold Call' : 'RDV'}
+                </Badge>
+              )}
+              {selectedVoice && (
+                <Badge variant="outline" className="text-xs bg-green-50 text-green-700">
+                  Voix: {selectedVoice}
                 </Badge>
               )}
             </div>
@@ -349,24 +395,43 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
             <div className="flex gap-2">
               {!isConnected ? (
                 showCallTypeSelector ? (
-                  <div className="flex flex-col gap-2 w-full">
-                    <p className="text-sm text-muted-foreground mb-2">Choisissez le type d'appel :</p>
-                    <Button 
-                      onClick={() => startConversation('cold-call')} 
-                      disabled={isConnecting}
-                      className="flex-1 gap-2 bg-orange-600 hover:bg-orange-700"
-                    >
-                      <Phone className="h-4 w-4" />
-                      Cold Call (Prospect froid)
-                    </Button>
-                    <Button 
-                      onClick={() => startConversation('rdv')} 
-                      disabled={isConnecting}
-                      className="flex-1 gap-2 bg-green-600 hover:bg-green-700"
-                    >
-                      <PhoneCall className="h-4 w-4" />
-                      RDV (Entretien planifié)
-                    </Button>
+                  <div className="flex flex-col gap-3 w-full">
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-2">Type d'appel :</p>
+                      <div className="grid grid-cols-1 gap-2">
+                        <Button 
+                          onClick={() => startConversation('cold-call')} 
+                          disabled={isConnecting}
+                          className="gap-2 bg-orange-600 hover:bg-orange-700 text-white"
+                        >
+                          <Phone className="h-4 w-4" />
+                          Cold Call (Prospect froid)
+                        </Button>
+                        <Button 
+                          onClick={() => startConversation('rdv')} 
+                          disabled={isConnecting}
+                          className="gap-2 bg-green-600 hover:bg-green-700 text-white"
+                        >
+                          <PhoneCall className="h-4 w-4" />
+                          RDV (Entretien planifié)
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <p className="text-sm text-muted-foreground mb-2">Voix du contact :</p>
+                      <select 
+                        value={selectedVoice} 
+                        onChange={(e) => setSelectedVoice(e.target.value)}
+                        className="w-full p-2 text-xs border rounded bg-background"
+                      >
+                        {WEBRTC_CONFIG.supportedVoices.map(voice => (
+                          <option key={voice} value={voice}>
+                            {voice.charAt(0).toUpperCase() + voice.slice(1)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 ) : (
                   <Button 

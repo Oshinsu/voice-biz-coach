@@ -1,9 +1,10 @@
-// Configuration WebRTC pour l'API Realtime d'OpenAI
+// Configuration WebRTC pour l'API Realtime d'OpenAI (Version 2025)
 export const WEBRTC_CONFIG = {
-  model: "gpt-4o-realtime-preview-2024-12-17",
-  voice: "sage",
+  model: "gpt-4o-realtime-preview-2025-06-03", // Modèle le plus récent
+  voice: "sage", // Voix professionnelle par défaut
   baseUrl: "https://api.openai.com/v1/realtime",
   sessionUrl: "https://api.openai.com/v1/realtime/sessions",
+  supportedVoices: ['alloy', 'ash', 'ballad', 'coral', 'echo', 'sage', 'shimmer', 'verse']
 };
 
 // Types pour les événements WebRTC Realtime
@@ -42,11 +43,17 @@ export class RealtimeWebRTCCoach {
     this.audioElement.autoplay = true;
   }
 
-  // Créer une session éphémère via Supabase Edge Function
-  async createEphemeralSession(instructions?: string): Promise<string> {
+  // Créer une session éphémère via Supabase Edge Function avec voix sélectionnée
+  async createEphemeralSession(instructions?: string, voice?: string): Promise<string> {
     try {
+      const selectedVoice = voice && WEBRTC_CONFIG.supportedVoices.includes(voice) ? voice : WEBRTC_CONFIG.voice;
+      
       const { data, error } = await import('@/integrations/supabase/client').then(m => m.supabase.functions.invoke('openai-realtime', {
-        body: { instructions }
+        body: { 
+          instructions,
+          voice: selectedVoice,
+          model: WEBRTC_CONFIG.model
+        }
       }));
 
       if (error) {
@@ -59,7 +66,11 @@ export class RealtimeWebRTCCoach {
       }
 
       this.ephemeralKey = data.client_secret.value;
-      console.log("Session éphémère créée avec succès via Supabase");
+      console.log("Session éphémère créée avec succès:", {
+        voice: selectedVoice,
+        model: WEBRTC_CONFIG.model,
+        expires: data.expires_at
+      });
       return this.ephemeralKey;
     } catch (error) {
       console.error("Erreur création session éphémère:", error);
@@ -67,11 +78,11 @@ export class RealtimeWebRTCCoach {
     }
   }
 
-  // Connexion WebRTC avec l'API Realtime
-  async connect(instructions?: string): Promise<void> {
+  // Connexion WebRTC avec l'API Realtime (Version 2025)
+  async connect(instructions?: string, voice?: string): Promise<void> {
     try {
-      // Créer une session éphémère via Supabase
-      await this.createEphemeralSession(instructions);
+      // Créer une session éphémère via Supabase avec voix optionnelle
+      await this.createEphemeralSession(instructions, voice);
       
       if (!this.ephemeralKey) {
         throw new Error("Impossible de créer une session éphémère");
@@ -163,7 +174,7 @@ export class RealtimeWebRTCCoach {
     }
   }
 
-  // Initialiser la session avec les paramètres Discovery Mode
+  // Initialiser la session avec paramètres 2025 et Discovery Mode avancé
   private initializeSession(instructions?: string): void {
     if (!this.dataChannel) return;
 
@@ -172,23 +183,30 @@ export class RealtimeWebRTCCoach {
       voice: WEBRTC_CONFIG.voice,
       modalities: ["text", "audio"],
       instructions: instructions || DEFAULT_SALES_PROMPT,
-      temperature: 0.8,
+      // Note: temperature n'est plus supporté dans les nouveaux modèles GPT-4o Realtime 2025
       turn_detection: {
         type: "server_vad",
         threshold: 0.5,
         prefix_padding_ms: 300,
-        silence_duration_ms: 500,
+        silence_duration_ms: 1000, // Augmenté pour éviter les coupures
       },
       tools: [
         {
           type: "function",
           name: "askColleague",
-          description: "Consulter un collègue pour obtenir des informations spécifiques. Utilisez ceci quand vous devez 'découvrir' une information que vous ne connaissez pas encore.",
+          description: "Consulter un collègue pour obtenir des informations spécifiques sur votre entreprise.",
           parameters: {
             type: "object",
             properties: {
-              question: { type: "string", description: "Question à poser au collègue" },
-              topic: { type: "string", description: "Sujet de la question (budget, technique, timeline, processus, etc.)" }
+              question: { 
+                type: "string", 
+                description: "Question précise à poser au collègue" 
+              },
+              topic: { 
+                type: "string", 
+                description: "Domaine concerné",
+                enum: ["budget", "technique", "timeline", "processus", "ressources", "direction"]
+              }
             },
             required: ["question", "topic"]
           }
@@ -196,12 +214,19 @@ export class RealtimeWebRTCCoach {
         {
           type: "function", 
           name: "checkBudget",
-          description: "Vérifier les informations budgétaires disponibles. Utilisez ceci pour 'découvrir' progressivement des détails budgétaires.",
+          description: "Vérifier les informations budgétaires disponibles dans votre organisation.",
           parameters: {
             type: "object", 
             properties: {
-              requestType: { type: "string", description: "Type de vérification (range, exact, approval)" },
-              context: { type: "string", description: "Contexte de la demande budgétaire" }
+              requestType: { 
+                type: "string", 
+                description: "Type de vérification budgétaire",
+                enum: ["range", "exact", "approval", "available"]
+              },
+              context: { 
+                type: "string", 
+                description: "Contexte de la demande budgétaire" 
+              }
             },
             required: ["requestType", "context"]
           }
@@ -209,12 +234,19 @@ export class RealtimeWebRTCCoach {
         {
           type: "function",
           name: "consultDecisionMaker",
-          description: "Consulter les décideurs pour une information importante. Utilisez ceci pour des décisions qui dépassent votre niveau.",
+          description: "Consulter les décideurs de votre entreprise pour une validation ou information importante.",
           parameters: {
             type: "object",
             properties: {
-              topic: { type: "string", description: "Sujet à discuter avec les décideurs" },
-              urgency: { type: "string", description: "Niveau d'urgence (low, medium, high)" }
+              topic: { 
+                type: "string", 
+                description: "Sujet à discuter avec la direction" 
+              },
+              urgency: { 
+                type: "string", 
+                description: "Niveau d'urgence de la consultation",
+                enum: ["low", "medium", "high"]
+              }
             },
             required: ["topic", "urgency"]
           }
@@ -222,12 +254,19 @@ export class RealtimeWebRTCCoach {
         {
           type: "function",
           name: "reviewInternalOptions",
-          description: "Examiner les options internes disponibles. Utilisez ceci pour comparer avec les solutions existantes.",
+          description: "Examiner les options et outils internes disponibles dans votre organisation.",
           parameters: {
             type: "object",
             properties: {
-              area: { type: "string", description: "Domaine à examiner (tools, processes, resources)" },
-              comparison: { type: "string", description: "Élément de comparaison proposé" }
+              area: { 
+                type: "string", 
+                description: "Domaine à examiner",
+                enum: ["tools", "processes", "resources", "systems", "providers"]
+              },
+              comparison: { 
+                type: "string", 
+                description: "Solution proposée à comparer" 
+              }
             },
             required: ["area", "comparison"]
           }
@@ -236,6 +275,8 @@ export class RealtimeWebRTCCoach {
       tool_choice: "auto"
     };
 
+    // Envoyer la configuration de session avec validation
+    console.log("Configuration session WebRTC:", sessionConfig);
     this.sendEvent({
       type: "session.update",
       session: sessionConfig,

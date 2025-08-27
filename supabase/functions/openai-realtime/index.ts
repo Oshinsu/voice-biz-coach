@@ -6,6 +6,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Liste des voix supportées par la nouvelle API Realtime
+const SUPPORTED_VOICES = ['alloy', 'ash', 'ballad', 'coral', 'echo', 'sage', 'shimmer', 'verse'];
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -18,11 +21,18 @@ serve(async (req) => {
       throw new Error('OPENAI_API_KEY is not set');
     }
 
-    const { instructions } = await req.json();
+    const { instructions, voice = 'sage', model = 'gpt-4o-realtime-preview-2025-06-03' } = await req.json();
 
-    console.log('Creating OpenAI Realtime session with instructions:', instructions?.substring(0, 100));
+    // Validation de la voix
+    const selectedVoice = SUPPORTED_VOICES.includes(voice) ? voice : 'sage';
+    
+    console.log('Creating OpenAI Realtime session:', {
+      model,
+      voice: selectedVoice,
+      instructionsLength: instructions?.length || 0
+    });
 
-    // Request an ephemeral token from OpenAI
+    // Request an ephemeral token from OpenAI with latest API
     const response = await fetch("https://api.openai.com/v1/realtime/sessions", {
       method: "POST",
       headers: {
@@ -30,9 +40,22 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o-realtime-preview-2024-12-17",
-        voice: "sage",
-        instructions: instructions || "Tu es un assistant commercial professionnel qui aide à la formation commerciale."
+        model: model,
+        voice: selectedVoice,
+        instructions: instructions || "Tu es un assistant commercial professionnel spécialisé dans la formation commerciale interactive. Tu parles français et tu t'adaptes au contexte de vente donné.",
+        modalities: ["text", "audio"],
+        input_audio_format: "pcm16",
+        output_audio_format: "pcm16",
+        input_audio_transcription: {
+          model: "whisper-1"
+        },
+        turn_detection: {
+          type: "server_vad",
+          threshold: 0.5,
+          prefix_padding_ms: 300,
+          silence_duration_ms: 1000
+        },
+        temperature: 0.8
       }),
     });
 
@@ -43,7 +66,12 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    console.log("Session created successfully:", data.id);
+    console.log("Ephemeral session created successfully:", {
+      sessionId: data.id,
+      expires: data.expires_at,
+      voice: selectedVoice,
+      model: model
+    });
 
     return new Response(JSON.stringify(data), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
