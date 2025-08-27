@@ -41,13 +41,8 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
         return;
       }
 
-      const apiKey = prompt("Entrez votre clé API OpenAI:");
-      if (!apiKey) {
-        setError("Clé API requise");
-        return;
-      }
-
-      voiceCoachRef.current = new RealtimeWebRTCCoach(apiKey);
+      // Plus besoin de clé API - utilise Supabase Edge Function
+      voiceCoachRef.current = new RealtimeWebRTCCoach("");
       
       const coach = voiceCoachRef.current;
       
@@ -125,10 +120,9 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
     // Créer une nouvelle session avec le prompt de feedback
     try {
       await voiceCoachRef.current.disconnect();
-      const apiKey = prompt("Clé API pour le feedback (même que précédemment):");
-      if (!apiKey) return;
       
-      voiceCoachRef.current = new RealtimeWebRTCCoach(apiKey);
+      // Plus besoin de clé API - utilise Supabase Edge Function
+      voiceCoachRef.current = new RealtimeWebRTCCoach("");
       const coach = voiceCoachRef.current;
       
       // Reconfigurer les callbacks

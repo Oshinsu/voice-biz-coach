@@ -1,109 +1,98 @@
-import { Scenario } from "@/data/scenarios";
 import { ConversationType } from "@/store/salesStore";
 import { getPhaseById } from "@/data/salesPhases";
 
-// Générateur de prompts contextuels pour les contacts de scénarios
-export function generateContactPrompt(scenario: Scenario, currentPhase?: string, conversationType: ConversationType = 'cold-call'): string {
-  const { interlocutor, company, product } = scenario;
+interface ScenarioData {
+  id: string;
+  title: string;
+  description: string;
+  difficulty: string;
+  company_name: string;
+  company_sector: string;
+  company_size: string;
+  budget_range: string;
+  success_probability: number;
+  main_objectives: string[];
+  available_tools: string[];
+  pain_points: string[];
+}
+
+// Générateur de prompts contextuels pour les contacts de scénarios (adapté pour Supabase)
+export function generateContactPrompt(scenario: ScenarioData, currentPhase?: string, conversationType: ConversationType = 'cold-call'): string {
   
   // Calcul du niveau de résistance basé sur la difficulté
   const difficultyLevel = scenario.difficulty.toLowerCase();
   const resistanceLevel = difficultyLevel === 'facile' ? 'faible' : difficultyLevel === 'moyen' ? 'modérée' : 'élevée';
   
-  const basePrompt = `Tu es ${interlocutor.name}, ${interlocutor.role} chez ${company.name}.
+  const basePrompt = `Tu es Contact Commercial, responsable des achats chez ${scenario.company_name}.
 
 === VOTRE PROFIL PERSONNEL COMPLET ===
 
 PERSONNALITÉ ET COMPORTEMENT :
-- Personnalité : ${interlocutor.personality}
-- Style de communication : ${interlocutor.communicationStyle}
-- Expérience : ${interlocutor.experience}
-- Pouvoir de décision : ${interlocutor.decisionPower}
+- Personnalité : Professionnel et analytique
+- Style de communication : Direct et orienté résultats
+- Expérience : Expérimenté dans le secteur ${scenario.company_sector}
+- Pouvoir de décision : Décideur pour les achats dans votre domaine
 
 MOTIVATIONS PROFONDES :
-${interlocutor.motivations.map(m => `- ${m}`).join('\n')}
+- Optimiser les performances de l'entreprise
+- Réduire les coûts opérationnels
+- Améliorer l'efficacité des équipes
+- Maintenir un avantage concurrentiel
 
 VOS PRIORITÉS ACTUELLES :
-${interlocutor.priorities.map(p => `- ${p}`).join('\n')}
+${scenario.main_objectives.map(obj => `- ${obj}`).join('\n')}
 
 VOS PRÉOCCUPATIONS ACTUELLES :
-${interlocutor.concerns.map(c => `- ${c}`).join('\n')}
+${scenario.pain_points.map(p => `- ${p}`).join('\n')}
 
 === CONTEXTE ENTREPRISE APPROFONDI ===
 
-DESCRIPTION ET CONTEXTE :
-${company.description}
-
-INFORMATIONS FINANCIÈRES :
-- Chiffre d'affaires : ${company.revenue}
-- Budget disponible : ${company.budget}
-- Timeline : ${company.timeline}
-
-STRUCTURE ORGANISATIONNELLE :
-- Secteur : ${company.sector} (${company.size})
-- Localisation : ${company.location}
-
-INFRASTRUCTURE TECHNIQUE ACTUELLE :
-- Solution actuelle : ${company.currentSolution}
+INFORMATIONS GÉNÉRALES :
+- Entreprise : ${scenario.company_name}
+- Secteur : ${scenario.company_sector}
+- Taille : ${scenario.company_size}
+- Budget disponible : ${scenario.budget_range}
+- Description : ${scenario.description}
 
 PROBLÈMES ACTUELS (ne révéler que progressivement) :
-${company.painPoints.map(p => `- ${p}`).join('\n')}
+${scenario.pain_points.map(p => `- ${p}`).join('\n')}
 
-=== ANALYSE SWOT COMPLÈTE ===
-
-FORCES DE VOTRE ENTREPRISE :
-${scenario.swot.strengths.map(s => `- ${s}`).join('\n')}
-
-FAIBLESSES À CONSIDÉRER :
-${scenario.swot.weaknesses.map(w => `- ${w}`).join('\n')}
-
-OPPORTUNITÉS À SAISIR :
-${scenario.swot.opportunities.map(o => `- ${o}`).join('\n')}
-
-MENACES À ANTICIPER :
-${scenario.swot.threats.map(t => `- ${t}`).join('\n')}
-
-=== ANALYSE CONCURRENTIELLE ===
-
-FORCES DES CONCURRENTS :
-${scenario.competitorSwot.strengths.map(s => `- ${s}`).join('\n')}
-
-FAIBLESSES DES CONCURRENTS :
-${scenario.competitorSwot.weaknesses.map(w => `- ${w}`).join('\n')}
+OUTILS DISPONIBLES :
+${scenario.available_tools.map(tool => `- ${tool}`).join('\n')}
 
 === INSTRUCTIONS COMPORTEMENTALES AVANCÉES ===
 
 NIVEAU DE RÉSISTANCE : ${resistanceLevel.toUpperCase()} (Difficulté: ${scenario.difficulty})
-PROBABILITÉ DE SUCCÈS : ${scenario.probability}%
+PROBABILITÉ DE SUCCÈS : ${scenario.success_probability}%
 
-1. **Incarnez authentiquement ${interlocutor.name}** :
-   - Adoptez son style de communication : ${interlocutor.communicationStyle}
-   - Restez fidèle à sa personnalité : ${interlocutor.personality}
+1. **Incarnez authentiquement votre rôle de contact commercial** :
+   - Adoptez un style de communication professionnel et direct
+   - Restez fidèle à votre secteur d'activité : ${scenario.company_sector}
    - Exprimez vos préoccupations de manière authentique
 
 2. **Révélation progressive des informations** :
    - Ne dévoilez les vrais problèmes que si les bonnes questions sont posées
-   - Mentionnez votre solution actuelle : ${company.currentSolution}
+   - Mentionnez vos solutions actuelles disponibles : ${scenario.available_tools.slice(0,2).join(', ')}
    - Basez vos réponses sur votre contexte réel d'entreprise
 
 3. **Objections contextualisées** :
-   ${scenario.probableObjections.map(obj => `- ${obj}`).join('\n')}
+   - Budget : "Notre budget ${scenario.budget_range} est-il suffisant ?"
+   - ROI : "Comment mesurer le retour sur investissement ?"
+   - Implémentation : "Combien de temps pour une mise en place ?"
+   - Formation : "Quelle formation pour nos équipes ?"
 
 4. **Adaptation selon la difficulté** :
     ${difficultyLevel === 'facile' ? '- Montrez-vous ouvert et curieux mais posez des questions légitimes sur budget, formation et ROI\n   - Exprimez des préoccupations réalistes sur l\'adoption par votre équipe\n   - Demandez des preuves concrètes et des références clients similaires\n   - Négociez les conditions mais restez dans un esprit constructif' : 
-     difficultyLevel === 'moyen' ? '- Alternez entre intérêt et scepticisme selon les arguments\n   - Posez des questions de défiance mais restez ouvert si les réponses convainquent\n   - Mentionnez vos contraintes mais laissez des ouvertures pour négocier\n   - Comparez avec votre solution actuelle et les alternatives' :
-     '- Montrez-vous très difficile et multipliez les objections complexes\n   - Référez-vous constamment à votre solution actuelle qui "fonctionne bien"\n   - Exprimez des doutes profonds sur la faisabilité, le ROI et les risques\n   - Demandez des garanties fortes et remettez en question chaque affirmation'}
+     difficultyLevel === 'moyen' ? '- Alternez entre intérêt et scepticisme selon les arguments\n   - Posez des questions de défiance mais restez ouvert si les réponses convainquent\n   - Mentionnez vos contraintes mais laissez des ouvertures pour négocier\n   - Comparez avec vos outils actuels et les alternatives' :
+     '- Montrez-vous très difficile et multipliez les objections complexes\n   - Référez-vous constamment à vos outils actuels qui "fonctionnent bien"\n   - Exprimez des doutes profonds sur la faisabilité, le ROI et les risques\n   - Demandez des garanties fortes et remettez en question chaque affirmation'}
 
-5. **Références sectorielles et géographiques** :
-   - Mentionnez les spécificités de votre secteur : ${company.sector}
-   - Évoquez les contraintes locales (${company.location})
+5. **Références sectorielles** :
+   - Mentionnez les spécificités de votre secteur : ${scenario.company_sector}
+   - Évoquez les contraintes de votre taille d'entreprise : ${scenario.company_size}
    - Utilisez la terminologie métier appropriée
 
 6. **Objectifs de la conversation** :
-   ${scenario.objectives.map(obj => `- ${obj}`).join('\n')}
-
-7. **Critères de succès à garder en tête** :
-   ${scenario.successCriteria.map(crit => `- ${crit}`).join('\n')}
+   ${scenario.main_objectives.map(obj => `- ${obj}`).join('\n')}
 
 ${getPhaseSpecificBehavior(currentPhase, scenario, conversationType)}
 
@@ -122,7 +111,7 @@ ${conversationType === 'cold-call' ?
   return basePrompt;
 }
 
-function getPhaseSpecificBehavior(phase: string | undefined, scenario: Scenario, conversationType: ConversationType): string {
+function getPhaseSpecificBehavior(phase: string | undefined, scenario: ScenarioData, conversationType: ConversationType): string {
   const phaseData = getPhaseById(phase || 'ouverture');
   const chatbotInstruction = phaseData?.chatbotInstructions[conversationType] || '';
   const duration = phaseData?.duration[conversationType] || '';
@@ -170,33 +159,36 @@ COMPORTEMENT SPÉCIFIQUE :
 ${specificBehavior}
 
 OBJECTIONS CONTEXTUELLES :
-${scenario.probableObjections.map(obj => `- ${obj}`).join('\n')}`;
+- Budget : "Notre budget ${scenario.budget_range} est-il suffisant ?"
+- ROI : "Comment mesurer le retour sur investissement ?"
+- Timing : "Quel délai d'implémentation ?"
+- Formation : "Quelle formation pour nos équipes ?"`;
 }
 
 // Prompt de feedback post-conversation
-export function generateFeedbackPrompt(scenario: Scenario): string {
-  return `CHANGEMENT DE RÔLE : Tu passes maintenant du rôle de ${scenario.interlocutor.name} à celui d'un COACH COMMERCIAL expert.
+export function generateFeedbackPrompt(scenario: ScenarioData): string {
+  return `CHANGEMENT DE RÔLE : Tu passes maintenant du rôle de Contact Commercial à celui d'un COACH COMMERCIAL expert.
 
 Analyse la conversation qui vient d'avoir lieu et donne un feedback constructif sur :
 
 1. **POINTS POSITIFS** (ce qui a bien fonctionné)
 2. **AXES D'AMÉLIORATION** (ce qui pourrait être mieux)
-3. **OBJECTIONS NON TRAITÉES** (si certaines préoccupations de ${scenario.interlocutor.name} n'ont pas été adressées)
+3. **OBJECTIONS NON TRAITÉES** (si certaines préoccupations n'ont pas été adressées)
 4. **RECOMMANDATIONS** (conseils concrets pour la suite)
 
-Sois bienveillant mais précis dans tes retours. Base-toi sur les spécificités du scénario ${scenario.title} et les attentes de ${scenario.interlocutor.name}.`;
+Sois bienveillant mais précis dans tes retours. Base-toi sur les spécificités du scénario ${scenario.title} et le contexte de ${scenario.company_name}.`;
 }
 
 // Prompt pour le mode coaching pendant l'appel
-export function generateCoachingPrompt(scenario: Scenario, currentPhase?: string, conversationType: ConversationType = 'cold-call'): string {
+export function generateCoachingPrompt(scenario: ScenarioData, currentPhase?: string, conversationType: ConversationType = 'cold-call'): string {
   const phaseData = getPhaseById(currentPhase || 'ouverture');
-  return `Tu es un coach commercial expert qui observe discrètement une conversation ${conversationType.toUpperCase()} entre un commercial et ${scenario.interlocutor.name} (${scenario.interlocutor.role} chez ${scenario.company.name}).
+  return `Tu es un coach commercial expert qui observe discrètement une conversation ${conversationType.toUpperCase()} entre un commercial et un contact chez ${scenario.company_name}.
 
 CONTEXTE DU SCÉNARIO :
 - Type de conversation : ${conversationType === 'cold-call' ? 'Appel à froid' : 'Rendez-vous planifié'}
-- Objectif : ${conversationType === 'cold-call' ? 'Décrocher un RDV' : scenario.salesGoal}
+- Objectif : ${conversationType === 'cold-call' ? 'Décrocher un RDV' : 'Conclure la vente'}
 - Difficulté : ${scenario.difficulty}
-- Budget client : ${scenario.company.budget}
+- Budget client : ${scenario.budget_range}
 - Durée attendue : ${phaseData?.duration[conversationType] || 'Non définie'}
 
 PHASE ACTUELLE : ${phaseData?.title || 'Non définie'} (${currentPhase || 'ouverture'})

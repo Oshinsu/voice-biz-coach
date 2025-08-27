@@ -40,27 +40,24 @@ export class RealtimeWebRTCCoach {
     this.audioElement.autoplay = true;
   }
 
-  // Créer une session éphémère
-  async createEphemeralSession(): Promise<string> {
+  // Créer une session éphémère via Supabase Edge Function
+  async createEphemeralSession(instructions?: string): Promise<string> {
     try {
-      const response = await fetch(WEBRTC_CONFIG.sessionUrl, {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${this.apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: WEBRTC_CONFIG.model,
-          voice: WEBRTC_CONFIG.voice,
-        }),
-      });
+      const { data, error } = await import('@/integrations/supabase/client').then(m => m.supabase.functions.invoke('openai-realtime', {
+        body: { instructions }
+      }));
 
-      if (!response.ok) {
-        throw new Error(`Erreur lors de la création de la session: ${response.status}`);
+      if (error) {
+        console.error("Erreur Supabase Edge Function:", error);
+        throw new Error(`Erreur lors de la création de la session: ${error.message}`);
       }
 
-      const data = await response.json();
+      if (!data?.client_secret?.value) {
+        throw new Error("Réponse invalide de la session OpenAI");
+      }
+
       this.ephemeralKey = data.client_secret.value;
+      console.log("Session éphémère créée avec succès via Supabase");
       return this.ephemeralKey;
     } catch (error) {
       console.error("Erreur création session éphémère:", error);
@@ -71,8 +68,8 @@ export class RealtimeWebRTCCoach {
   // Connexion WebRTC avec l'API Realtime
   async connect(instructions?: string): Promise<void> {
     try {
-      // Créer une session éphémère
-      await this.createEphemeralSession();
+      // Créer une session éphémère via Supabase
+      await this.createEphemeralSession(instructions);
       
       if (!this.ephemeralKey) {
         throw new Error("Impossible de créer une session éphémère");
