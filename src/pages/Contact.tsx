@@ -6,8 +6,72 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+
+const contactSchema = z.object({
+  firstName: z.string().min(2, "Le prénom doit contenir au moins 2 caractères"),
+  lastName: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
+  email: z.string().email("Email invalide"),
+  phone: z.string().optional(),
+  institution: z.string().min(2, "Le nom de l'institution est requis"),
+  role: z.string().min(1, "Veuillez sélectionner votre fonction"),
+  students: z.string().optional(),
+  timeline: z.string().optional(),
+  message: z.string().optional(),
+});
+
+type ContactFormData = z.infer<typeof contactSchema>;
 
 export default function Contact() {
+  const { toast } = useToast();
+  const { 
+    register, 
+    handleSubmit, 
+    setValue, 
+    reset,
+    formState: { errors, isSubmitting } 
+  } = useForm<ContactFormData>({
+    resolver: zodResolver(contactSchema)
+  });
+
+  const onSubmit = async (data: ContactFormData) => {
+    try {
+      const formattedData = {
+        name: `${data.firstName} ${data.lastName}`,
+        email: data.email,
+        phone: data.phone || '',
+        institution: data.institution,
+        role: data.role,
+        studentCount: data.students || '',
+        timeline: data.timeline || '',
+        message: data.message || '',
+      };
+
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: formattedData
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Message envoyé !",
+        description: "Nous vous contacterons dans les plus brefs délais.",
+      });
+      
+      reset();
+    } catch (error) {
+      console.error('Error sending contact email:', error);
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue. Veuillez réessayer.",
+        variant: "destructive",
+      });
+    }
+  };
   return (
     <div className="min-h-screen bg-background">
       {/* Header Navigation */}
@@ -69,94 +133,128 @@ export default function Contact() {
                   </p>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">Prénom *</Label>
-                      <Input id="firstName" placeholder="Votre prénom" />
+                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="firstName">Prénom *</Label>
+                        <Input 
+                          id="firstName" 
+                          {...register('firstName')}
+                          placeholder="Votre prénom" 
+                        />
+                        {errors.firstName && <p className="text-sm text-destructive">{errors.firstName.message}</p>}
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="lastName">Nom *</Label>
+                        <Input 
+                          id="lastName" 
+                          {...register('lastName')}
+                          placeholder="Votre nom" 
+                        />
+                        {errors.lastName && <p className="text-sm text-destructive">{errors.lastName.message}</p>}
+                      </div>
                     </div>
+
                     <div className="space-y-2">
-                      <Label htmlFor="lastName">Nom *</Label>
-                      <Input id="lastName" placeholder="Votre nom" />
+                      <Label htmlFor="email">Email professionnel *</Label>
+                      <Input 
+                        id="email" 
+                        type="email" 
+                        {...register('email')}
+                        placeholder="votre.email@etablissement.edu" 
+                      />
+                      {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
                     </div>
-                  </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email professionnel *</Label>
-                    <Input id="email" type="email" placeholder="votre.email@etablissement.edu" />
-                  </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Téléphone</Label>
+                      <Input 
+                        id="phone" 
+                        type="tel" 
+                        {...register('phone')}
+                        placeholder="+33 1 23 45 67 89" 
+                      />
+                    </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="phone">Téléphone</Label>
-                    <Input id="phone" type="tel" placeholder="+33 1 23 45 67 89" />
-                  </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="institution">Établissement *</Label>
+                      <Input 
+                        id="institution" 
+                        {...register('institution')}
+                        placeholder="Nom de votre école/université" 
+                      />
+                      {errors.institution && <p className="text-sm text-destructive">{errors.institution.message}</p>}
+                    </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="institution">Établissement *</Label>
-                    <Input id="institution" placeholder="Nom de votre école/université" />
-                  </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="role">Votre fonction *</Label>
+                      <Select onValueChange={(value) => setValue('role', value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionnez votre fonction" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="director">Directeur/Directrice</SelectItem>
+                          <SelectItem value="dean">Doyen</SelectItem>
+                          <SelectItem value="professor">Professeur/Enseignant</SelectItem>
+                          <SelectItem value="coordinator">Coordinateur pédagogique</SelectItem>
+                          <SelectItem value="it">Responsable IT</SelectItem>
+                          <SelectItem value="other">Autre</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      {errors.role && <p className="text-sm text-destructive">{errors.role.message}</p>}
+                    </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="role">Votre fonction *</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Sélectionnez votre fonction" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="director">Directeur/Directrice</SelectItem>
-                        <SelectItem value="dean">Doyen</SelectItem>
-                        <SelectItem value="professor">Professeur/Enseignant</SelectItem>
-                        <SelectItem value="coordinator">Coordinateur pédagogique</SelectItem>
-                        <SelectItem value="it">Responsable IT</SelectItem>
-                        <SelectItem value="other">Autre</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="students">Nombre d'étudiants concernés</Label>
+                      <Select onValueChange={(value) => setValue('students', value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Estimez le nombre d'étudiants" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="50">Moins de 50</SelectItem>
+                          <SelectItem value="200">50 - 200</SelectItem>
+                          <SelectItem value="500">200 - 500</SelectItem>
+                          <SelectItem value="1000">500 - 1000</SelectItem>
+                          <SelectItem value="1000+">Plus de 1000</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="students">Nombre d'étudiants concernés</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Estimez le nombre d'étudiants" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="50">Moins de 50</SelectItem>
-                        <SelectItem value="200">50 - 200</SelectItem>
-                        <SelectItem value="500">200 - 500</SelectItem>
-                        <SelectItem value="1000">500 - 1000</SelectItem>
-                        <SelectItem value="1000+">Plus de 1000</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="timeline">Calendrier de déploiement souhaité</Label>
+                      <Select onValueChange={(value) => setValue('timeline', value)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Quand souhaitez-vous déployer ?" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="immediate">Immédiatement</SelectItem>
+                          <SelectItem value="q1">Prochain trimestre</SelectItem>
+                          <SelectItem value="semester">Prochain semestre</SelectItem>
+                          <SelectItem value="year">Année prochaine</SelectItem>
+                          <SelectItem value="exploring">En phase d'exploration</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="timeline">Calendrier de déploiement souhaité</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Quand souhaitez-vous déployer ?" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="immediate">Immédiatement</SelectItem>
-                        <SelectItem value="q1">Prochain trimestre</SelectItem>
-                        <SelectItem value="semester">Prochain semestre</SelectItem>
-                        <SelectItem value="year">Année prochaine</SelectItem>
-                        <SelectItem value="exploring">En phase d'exploration</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="message">Message</Label>
+                      <Textarea 
+                        id="message" 
+                        {...register('message')}
+                        placeholder="Décrivez-nous vos besoins spécifiques, vos objectifs pédagogiques, ou toute question particulière..."
+                        className="min-h-[120px]"
+                      />
+                    </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Message</Label>
-                    <Textarea 
-                      id="message" 
-                      placeholder="Décrivez-nous vos besoins spécifiques, vos objectifs pédagogiques, ou toute question particulière..."
-                      className="min-h-[120px]"
-                    />
-                  </div>
-
-                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground text-lg py-3">
-                    Envoyer la demande
-                    <Send className="ml-2 h-5 w-5" />
-                  </Button>
+                    <Button 
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="w-full bg-accent hover:bg-accent/90 text-accent-foreground text-lg py-3"
+                    >
+                      {isSubmitting ? "Envoi en cours..." : "Envoyer la demande"}
+                      {!isSubmitting && <Send className="ml-2 h-5 w-5" />}
+                    </Button>
+                  </form>
 
                   <p className="text-xs text-muted-foreground text-center">
                     En envoyant ce formulaire, vous acceptez que nous utilisions vos données 
