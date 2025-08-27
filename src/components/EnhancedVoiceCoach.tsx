@@ -56,7 +56,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
         setIsConnected(true);
         setIsConnecting(false);
         setIsInFeedbackMode(false);
-        addMessage(`${scenario.interlocutor.name} est maintenant en ligne`, "system");
+        addMessage(`Contact est maintenant en ligne`, "system");
       };
 
       coach.onSpeechStarted = () => {
@@ -174,11 +174,11 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
     }
     
     const phaseAdvice = {
-      ouverture: `🎯 Vous parlez à ${scenario.interlocutor.name}. Créez du rapport et obtenez quelques minutes d'attention`,
-      decouverte: `🔍 Découvrez les vrais besoins de ${scenario.interlocutor.name}. Focus sur: ${scenario.interlocutor.priorities.slice(0,2).join(", ")}`,
-      demonstration: `💡 Montrez comment ${scenario.product.name} résout les problèmes de ${scenario.company.name}`, 
-      objections: `⚡ ${scenario.interlocutor.name} peut objecter sur: ${scenario.interlocutor.concerns.slice(0,2).join(", ")}`,
-      closing: `🎪 Proposez une prochaine étape concrète à ${scenario.interlocutor.name}`
+      ouverture: `🎯 Vous parlez à un contact. Créez du rapport et obtenez quelques minutes d'attention`,
+      decouverte: `🔍 Découvrez les vrais besoins de votre contact. Focus sur: ${scenario.pain_points?.slice(0,2).join(", ") || "les problématiques identifiées"}`,
+      demonstration: `💡 Montrez comment votre solution résout les problèmes de ${scenario.company_name}`, 
+      objections: `⚡ Votre contact peut objecter sur: ${scenario.pain_points?.slice(0,2).join(", ") || "les points de blocage"}`,
+      closing: `🎪 Proposez une prochaine étape concrète à votre contact`
     };
 
     return phaseAdvice[currentPhase as keyof typeof phaseAdvice] || "Continuez la conversation";
@@ -215,7 +215,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
               <div className="flex items-center gap-2">
                 <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-gray-400'}`} />
                 <span className="text-sm font-medium">
-                  {scenario?.interlocutor.name || "Contact"}
+                  Contact
                 </span>
               </div>
               <div className="flex gap-1">
@@ -230,7 +230,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
           </CardHeader>
           <CardContent className="pt-0">
             <div className="text-xs text-muted-foreground">
-              {isConnected ? `${scenario?.interlocutor.role} - En ligne` : "Hors ligne"}
+              {isConnected ? `${scenario?.company_name} - En ligne` : "Hors ligne"}
             </div>
           </CardContent>
         </Card>
@@ -246,7 +246,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
             <div className="flex items-center gap-2">
               <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-gray-400'}`} />
               <CardTitle className="text-lg">
-                {isInFeedbackMode ? "Coach Commercial" : (scenario?.interlocutor.name || "Contact")}
+                {isInFeedbackMode ? "Coach Commercial" : "Contact"}
               </CardTitle>
             </div>
             <div className="flex gap-1">
@@ -260,7 +260,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
           </div>
           {scenario && !isInFeedbackMode && (
             <div className="text-sm text-muted-foreground">
-              {scenario.interlocutor.role} chez {scenario.company.name}
+              Contact commercial chez {scenario.company_name}
             </div>
           )}
         </CardHeader>
@@ -302,7 +302,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
               }`}>
                 {message.sender === 'contact' && (
                   <div className="text-xs font-medium text-blue-700 mb-1">
-                    {scenario?.interlocutor.name}
+                    Contact
                   </div>
                 )}
                 {message.sender === 'coach' && (
