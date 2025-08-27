@@ -47,40 +47,14 @@ interface Product {
 }
 
 export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) => {
-  const [interlocutor, setInterlocutor] = useState<Interlocutor | null>(null);
-  const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchEnhancedData = async () => {
-      try {
-        setLoading(true);
-        
-        // Fetch interlocutor data
-        const { data: interlocutorData } = await (supabase as any)
-          .from('interlocutors')
-          .select('*')
-          .eq('scenario_id', scenario.id)
-          .single();
-        
-        // Fetch product data
-        const { data: productData } = await (supabase as any)
-          .from('products')
-          .select('*')
-          .eq('scenario_id', scenario.id)
-          .single();
-
-        setInterlocutor(interlocutorData);
-        setProduct(productData);
-      } catch (error) {
-        console.log('Enhanced data not available, using basic scenario data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEnhancedData();
-  }, [scenario.id]);
+  // Get data from scenario props (already loaded by useScenarios)
+  const interlocutor = scenario.interlocutors?.[0] || null;
+  const product = scenario.products?.[0] || null;
+  const companySwot = scenario.swot_analyses?.find(s => s.analysis_type === 'company') || null;
+  const productSwot = scenario.swot_analyses?.find(s => s.analysis_type === 'product') || null;
+  const stakeholders = scenario.stakeholders || [];
 
   if (loading) {
     return <div className="p-4 text-center">Chargement des détails...</div>;

@@ -100,7 +100,7 @@ export const useScenarios = () => {
         setLoading(true);
         setError(null);
 
-        // Fetch scenarios with related data
+        // Fetch scenarios with all related data
         const { data: scenariosData, error: scenariosError } = await supabase
           .from('scenarios')
           .select('*')
@@ -110,9 +110,27 @@ export const useScenarios = () => {
           throw scenariosError;
         }
 
-        // For now, use just the scenarios data since the new tables might not be in types yet
-        // We'll enhance this once the types are updated
-        setScenarios(scenariosData || []);
+        // Fetch related data for each scenario
+        const scenariosWithData = await Promise.all(
+          (scenariosData || []).map(async (scenario) => {
+            const [interlocutorsRes, productsRes, swotRes, stakeholdersRes] = await Promise.all([
+              supabase.from('interlocutors').select('*').eq('scenario_id', scenario.id),
+              supabase.from('products').select('*').eq('scenario_id', scenario.id),
+              supabase.from('swot_analyses').select('*').eq('scenario_id', scenario.id),
+              supabase.from('stakeholders').select('*').eq('scenario_id', scenario.id)
+            ]);
+
+            return {
+              ...scenario,
+              interlocutors: interlocutorsRes.data || [],
+              products: productsRes.data || [],
+              swot_analyses: swotRes.data || [],
+              stakeholders: stakeholdersRes.data || []
+            };
+          })
+        );
+
+        setScenarios(scenariosWithData);
       } catch (err) {
         console.error('Error fetching scenarios:', err);
         setError(err instanceof Error ? err.message : 'Failed to fetch scenarios');
