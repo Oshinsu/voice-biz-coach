@@ -30,9 +30,11 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
   const [error, setError] = useState<string | null>(null);
   const [currentPhase, setCurrentPhase] = useState("ouverture");
   const [isInFeedbackMode, setIsInFeedbackMode] = useState(false);
+  const [conversationType, setConversationType] = useState<'cold-call' | 'rdv' | null>(null);
+  const [showCallTypeSelector, setShowCallTypeSelector] = useState(true);
   const voiceCoachRef = useRef<RealtimeWebRTCCoach | null>(null);
 
-  const startConversation = async () => {
+  const startConversation = async (callType: 'cold-call' | 'rdv') => {
     try {
       setError(null);
       
@@ -40,6 +42,9 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
         setError("Aucun scénario sélectionné");
         return;
       }
+
+      setConversationType(callType);
+      setShowCallTypeSelector(false);
 
       // Plus besoin de clé API - utilise Supabase Edge Function
       voiceCoachRef.current = new RealtimeWebRTCCoach("");
@@ -92,7 +97,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
       const revealedLayers = [];
       
       // Instructions contextuelles - le coach joue le rôle du contact
-      const contactPrompt = await generateContactPrompt(scenario, 'rdv', 'ouverture', trustLevel, availableInformation, revealedLayers);
+      const contactPrompt = await generateContactPrompt(scenario, callType, 'ouverture', trustLevel, availableInformation, revealedLayers);
       await coach.connect(contactPrompt);
 
     } catch (error) {
@@ -113,6 +118,8 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
     setIsSpeaking(false);
     setIsMuted(false);
     setIsInFeedbackMode(false);
+    setConversationType(null);
+    setShowCallTypeSelector(true);
     addMessage("Conversation terminée", "system");
   };
 
@@ -341,14 +348,37 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
 
             <div className="flex gap-2">
               {!isConnected ? (
-                <Button 
-                  onClick={startConversation} 
-                  disabled={isConnecting}
-                  className="flex-1 gap-2"
-                >
-                  <Phone className="h-4 w-4" />
-                  {isConnecting ? "Connexion..." : "Appeler le contact"}
-                </Button>
+                showCallTypeSelector ? (
+                  <div className="flex flex-col gap-2 w-full">
+                    <p className="text-sm text-muted-foreground mb-2">Choisissez le type d'appel :</p>
+                    <Button 
+                      onClick={() => startConversation('cold-call')} 
+                      disabled={isConnecting}
+                      className="flex-1 gap-2 bg-orange-600 hover:bg-orange-700"
+                    >
+                      <Phone className="h-4 w-4" />
+                      Cold Call (Prospect froid)
+                    </Button>
+                    <Button 
+                      onClick={() => startConversation('rdv')} 
+                      disabled={isConnecting}
+                      className="flex-1 gap-2 bg-green-600 hover:bg-green-700"
+                    >
+                      <PhoneCall className="h-4 w-4" />
+                      RDV (Entretien planifié)
+                    </Button>
+                  </div>
+                ) : (
+                  <Button 
+                    onClick={() => setShowCallTypeSelector(true)} 
+                    disabled={isConnecting}
+                    variant="outline"
+                    className="flex-1 gap-2"
+                  >
+                    <Phone className="h-4 w-4" />
+                    Choisir type d'appel
+                  </Button>
+                )
               ) : (
                 <>
                   <Button 
