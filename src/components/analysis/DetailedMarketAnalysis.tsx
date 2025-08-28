@@ -24,6 +24,45 @@ interface DetailedMarketAnalysisProps {
 
 const getMarketData = (scenarioId: string) => {
   const marketDataMap: Record<string, any> = {
+    'byss-vns-school': {
+      sector: 'EdTech - Enseignement Supérieur',
+      totalMarketSize: '€15.2Md',
+      growth: '+18.5%',
+      playerCount: '3,400+',
+      averageSize: '250 étudiants',
+      segmentation: [
+        { name: 'Business Schools', value: 28, revenue: '€4.3Md' },
+        { name: 'Universités', value: 45, revenue: '€6.8Md' },
+        { name: 'Formations Professionnelles', value: 27, revenue: '€4.1Md' }
+      ],
+      growthTrends: [
+        { year: '2022', market: 11500, digital: 8200 },
+        { year: '2023', market: 13200, digital: 10100 },
+        { year: '2024', market: 15200, digital: 12800 },
+        { year: '2025', market: 18000, digital: 16200 },
+        { year: '2026', market: 21500, digital: 20100 }
+      ],
+      painPoints: [
+        { issue: 'Enseignement pratique commercial', impact: 92, cost: '€85k/an' },
+        { issue: 'Évaluation soft skills', impact: 88, cost: '€65k/an' },
+        { issue: 'Engagement étudiants', impact: 75, cost: '€45k/an' },
+        { issue: 'ROI formation mesurable', impact: 82, cost: '€55k/an' },
+        { issue: 'Scaling formations qualitatives', impact: 89, cost: '€95k/an' }
+      ],
+      tools: [
+        { category: 'LMS', adoption: 95, satisfaction: 68 },
+        { category: 'Simulations Business', adoption: 45, satisfaction: 55 },
+        { category: 'Analytics Pédagogiques', adoption: 35, satisfaction: 60 },
+        { category: 'IA Conversationnelle', adoption: 15, satisfaction: 85 },
+        { category: 'Assessment Tools', adoption: 78, satisfaction: 52 }
+      ],
+      financialMetrics: [
+        { metric: 'Satisfaction étudiants', value: '73%', target: '90%', gap: -17 },
+        { metric: 'Employabilité 6 mois', value: '84%', target: '95%', gap: -11 },
+        { metric: 'ROI innovation péda', value: '12%', target: '25%', gap: -13 },
+        { metric: 'Engagement cours', value: '68%', target: '85%', gap: -17 }
+      ]
+    },
     'digital-agency': {
       sector: 'Agences Digitales',
       totalMarketSize: '€4.2Md',
@@ -101,6 +140,84 @@ const getMarketData = (scenarioId: string) => {
         { metric: 'LTV/CAC', value: '3.2x', target: '5x', gap: -1.8 },
         { metric: 'Churn mensuel', value: '8%', target: '3%', gap: 5 },
         { metric: 'ARR growth', value: '45%', target: '80%', gap: -35 }
+      ]
+    },
+    'cybersecurity-consulting': {
+      sector: 'Cybersécurité',
+      totalMarketSize: '€12.8Md',
+      growth: '+22.1%',
+      playerCount: '4,200+',
+      averageSize: '85 employés',
+      segmentation: [
+        { name: 'Consulting', value: 42, revenue: '€5.4Md' },
+        { name: 'Solutions techniques', value: 35, revenue: '€4.5Md' },
+        { name: 'Formation & Audit', value: 23, revenue: '€2.9Md' }
+      ],
+      growthTrends: [
+        { year: '2022', market: 8500, digital: 7200 },
+        { year: '2023', market: 10200, digital: 9100 },
+        { year: '2024', market: 12800, digital: 11800 },
+        { year: '2025', market: 15600, digital: 14900 },
+        { year: '2026', market: 19100, digital: 18400 }
+      ],
+      painPoints: [
+        { issue: 'Pénurie experts cybersécurité', impact: 95, cost: '€150k/an' },
+        { issue: 'Évolution menaces constante', impact: 88, cost: '€85k/an' },
+        { issue: 'Conformité réglementaire', impact: 82, cost: '€120k/an' },
+        { issue: 'Formation équipes', impact: 75, cost: '€65k/an' },
+        { issue: 'ROI sécurité difficile', impact: 70, cost: '€45k/an' }
+      ],
+      tools: [
+        { category: 'SIEM/SOC', adoption: 85, satisfaction: 72 },
+        { category: 'Pentest Tools', adoption: 78, satisfaction: 80 },
+        { category: 'Compliance', adoption: 92, satisfaction: 65 },
+        { category: 'Formation', adoption: 45, satisfaction: 58 },
+        { category: 'Risk Assessment', adoption: 68, satisfaction: 70 }
+      ],
+      financialMetrics: [
+        { metric: 'Taux utilisation experts', value: '92%', target: '85%', gap: 7 },
+        { metric: 'Marge consulting', value: '35%', target: '40%', gap: -5 },
+        { metric: 'Délai intervention', value: '24h', target: '12h', gap: 12 },
+        { metric: 'Satisfaction client', value: '88%', target: '95%', gap: -7 }
+      ]
+    },
+    'manufacturing-iot': {
+      sector: 'IoT Industriel',
+      totalMarketSize: '€45.6Md',
+      growth: '+16.8%',
+      playerCount: '12,000+',
+      averageSize: '320 employés',
+      segmentation: [
+        { name: 'Automotive', value: 38, revenue: '€17.3Md' },
+        { name: 'Process Manufacturing', value: 34, revenue: '€15.5Md' },
+        { name: 'Énergie & Utilities', value: 28, revenue: '€12.8Md' }
+      ],
+      growthTrends: [
+        { year: '2022', market: 32000, digital: 28500 },
+        { year: '2023', market: 38200, digital: 35100 },
+        { year: '2024', market: 45600, digital: 42800 },
+        { year: '2025', market: 54200, digital: 51900 },
+        { year: '2026', market: 64800, digital: 62300 }
+      ],
+      painPoints: [
+        { issue: 'Intégration systèmes legacy', impact: 89, cost: '€180k/an' },
+        { issue: 'Sécurité IoT', impact: 85, cost: '€145k/an' },
+        { issue: 'Maintenance prédictive', impact: 78, cost: '€95k/an' },
+        { issue: 'Interopérabilité', impact: 82, cost: '€125k/an' },
+        { issue: 'ROI transformation', impact: 75, cost: '€85k/an' }
+      ],
+      tools: [
+        { category: 'Plateformes IoT', adoption: 68, satisfaction: 65 },
+        { category: 'Analytics', adoption: 72, satisfaction: 70 },
+        { category: 'Cybersécurité', adoption: 85, satisfaction: 68 },
+        { category: 'Edge Computing', adoption: 45, satisfaction: 75 },
+        { category: 'Digital Twin', adoption: 35, satisfaction: 80 }
+      ],
+      financialMetrics: [
+        { metric: 'ROI projets IoT', value: '18%', target: '30%', gap: -12 },
+        { metric: 'Temps déploiement', value: '14 mois', target: '8 mois', gap: 6 },
+        { metric: 'Taux adoption', value: '65%', target: '85%', gap: -20 },
+        { metric: 'Économies opérationnelles', value: '12%', target: '20%', gap: -8 }
       ]
     }
   };
