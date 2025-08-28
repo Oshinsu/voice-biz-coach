@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { useScenarios } from '@/hooks/useScenarios';
 import { 
   Target, TrendingUp, Zap, Rocket,
   CheckCircle, AlertCircle, Clock, DollarSign
@@ -22,185 +23,112 @@ interface AnsoffMatrixProps {
   scenarioId: string;
 }
 
-const getAnsoffData = (scenarioId: string) => {
-  const ansoffDataMap: Record<string, any> = {
-    'digital-agency': {
-      company: 'Pixel Perfect Agency',
-      strategies: {
-        penetration: {
-          title: 'Pénétration de marché',
-          description: 'Augmenter la part de marché avec les services actuels',
-          risk: 'Faible' as const,
-          potential: 85,
-          timeframe: '3-6 mois',
-          investment: '50K-100K€',
-          examples: [
-            'Campagnes acquisition clients existants',
-            'Programme referral clients satisfaits',
-            'Optimisation pricing et packages',
-            'Amélioration process vente'
-          ],
-          kpis: [
-            'Nombre nouveaux clients/mois',
-            'Taux conversion prospects',
-            'Chiffre affaires par client',
-            'NPS et satisfaction client'
-          ]
-        },
-        productDev: {
-          title: 'Développement produits',
-          description: 'Nouveaux services pour clients actuels',
-          risk: 'Moyen' as const,
-          potential: 75,
-          timeframe: '6-12 mois',
-          investment: '150K-300K€',
-          examples: [
-            'Services IA et automation marketing',
-            'Consulting transformation digitale',
-            'Formation équipes clients',
-            'Solutions e-commerce avancées'
-          ],
-          kpis: [
-            'Revenu par nouveau service',
-            'Taux adoption clients existants',
-            'Marge services premium',
-            'Time-to-market nouveaux services'
-          ]
-        },
-        marketDev: {
-          title: 'Développement marché',
-          description: 'Services actuels vers nouveaux segments',
-          risk: 'Moyen' as const,
-          potential: 70,
-          timeframe: '9-15 mois',
-          investment: '200K-400K€',
-          examples: [
-            'Expansion secteurs industriels',
-            'Marché entreprises internationales',
-            'Startups en hypercroissance',
-            'Secteur public et collectivités'
-          ],
-          kpis: [
-            'Pénétration nouveaux segments',
-            'Coût acquisition nouveau marché',
-            'Temps cycle vente segment',
-            'Retour investissement expansion'
-          ]
-        },
-        diversification: {
-          title: 'Diversification',
-          description: 'Nouveaux services pour nouveaux marchés',
-          risk: 'Élevé' as const,
-          potential: 60,
-          timeframe: '18-36 mois',
-          investment: '500K-1M€',
-          examples: [
-            'Plateforme SaaS propriétaire',
-            'Acquisition agences complémentaires',
-            'Services blockchain/Web3',
-            'Consulting cybersécurité'
-          ],
-          kpis: [
-            'ROI nouvelles activités',
-            'Synergies cross-selling',
-            'Part CA nouvelles activités',
-            'Risque cannibalisation'
-          ]
-        }
-      }
-    },
-    'fintech-startup': {
-      company: 'PaySecure AI',
-      strategies: {
-        penetration: {
-          title: 'Pénétration de marché',
-          description: 'Croissance dans la détection de fraude FinTech',
-          risk: 'Faible' as const,
-          potential: 90,
-          timeframe: '3-6 mois',
-          investment: '200K-500K€',
-          examples: [
-            'Optimisation algorithmes existants',
-            'Amélioration UX platform',
-            'Programme partenaires FinTech',
-            'Pricing compétitif agressif'
-          ],
-          kpis: [
-            'Nombre transactions traitées',
-            'Taux détection fraude',
-            'Temps response API',
-            'NRR (Net Revenue Retention)'
-          ]
-        },
-        productDev: {
-          title: 'Développement produits',
-          description: 'Extensions IA pour clients FinTech actuels',
-          risk: 'Moyen' as const,
-          potential: 85,
-          timeframe: '6-9 mois',
-          investment: '500K-1M€',
-          examples: [
-            'Credit scoring intelligent',
-            'Prédiction churn clients',
-            'Optimisation pricing dynamique',
-            'Compliance automation'
-          ],
-          kpis: [
-            'ARR nouveaux produits',
-            'Expansion revenue clients',
-            'Time-to-value produits',
-            'Adoption rate features'
-          ]
-        },
-        marketDev: {
-          title: 'Développement marché',
-          description: 'IA anti-fraude vers nouveaux secteurs',
-          risk: 'Moyen' as const,
-          potential: 75,
-          timeframe: '12-18 mois',
-          investment: '800K-1.5M€',
-          examples: [
-            'E-commerce et retail',
-            'Assurance et insurtech',
-            'Gaming et betting',
-            'Télécommunications'
-          ],
-          kpis: [
-            'Pénétration nouveaux secteurs',
-            'Coût acquisition marché',
-            'Customisation par secteur',
-            'ROI expansion géographique'
-          ]
-        },
-        diversification: {
-          title: 'Diversification',
-          description: 'Nouveaux cas usage IA pour nouveaux marchés',
-          risk: 'Élevé' as const,
-          potential: 65,
-          timeframe: '24-36 mois',
-          investment: '2M-5M€',
-          examples: [
-            'IA prédictive supply chain',
-            'Solutions IA healthcare',
-            'Platform IA no-code',
-            'Services consulting IA'
-          ],
-          kpis: [
-            'Diversification revenue',
-            'Market share nouveaux segments',
-            'Synergies technologiques',
-            'Retour investissement R&D'
-          ]
-        }
+const getAnsoffData = (scenarioId: string, scenario: any) => {
+  // Check if scenario has growth strategies data
+  if (scenario?.salesStrategy?.growthStrategies) {
+    return {
+      company: scenario.company.name,
+      strategies: scenario.salesStrategy.growthStrategies
+    };
+  }
+
+  // Generate default Ansoff strategies based on scenario context
+  const company = scenario?.company?.name || 'Entreprise';
+  const sector = scenario?.company?.sector || 'secteur';
+  
+  const defaultStrategies = {
+    company,
+    strategies: {
+      penetration: {
+        title: 'Pénétration de marché',
+        description: `Augmenter la part de marché ${sector} avec l'offre actuelle`,
+        risk: 'Faible' as const,
+        potential: 80,
+        timeframe: '3-6 mois',
+        investment: '50K-150K€',
+        examples: [
+          'Optimisation stratégie commerciale existante',
+          'Amélioration taux conversion prospects',
+          'Programme fidélisation clients actuels',
+          'Expansion géographique ciblée'
+        ],
+        kpis: [
+          'Croissance CA clients existants',
+          'Taux conversion lead-to-customer',
+          'Part de marché relative',
+          'Satisfaction client (NPS)'
+        ]
+      },
+      productDev: {
+        title: 'Développement produits',
+        description: 'Nouveaux services pour la base clients actuelle',
+        risk: 'Moyen' as const,
+        potential: 70,
+        timeframe: '6-12 mois',
+        investment: '100K-300K€',
+        examples: [
+          'Extensions fonctionnelles produit principal',
+          'Services complémentaires haute valeur',
+          'Modules premium personnalisés',
+          'Solutions intégrées end-to-end'
+        ],
+        kpis: [
+          'Revenus nouveaux produits/services',
+          'Taux adoption base installée',
+          'Time-to-market innovations',
+          'Cross-sell ratio moyen'
+        ]
+      },
+      marketDev: {
+        title: 'Développement marché',
+        description: 'Expansion vers nouveaux segments avec offre actuelle',
+        risk: 'Moyen' as const,
+        potential: 65,
+        timeframe: '9-18 mois',
+        investment: '200K-500K€',
+        examples: [
+          'Ciblage nouveaux secteurs d\'activité',
+          'Expansion internationale ciblée',
+          'Segments clients différents',
+          'Nouveaux canaux de distribution'
+        ],
+        kpis: [
+          'Pénétration nouveaux segments',
+          'Coût acquisition nouveaux marchés',
+          'ROI expansion géographique',
+          'Adaptation produit-marché'
+        ]
+      },
+      diversification: {
+        title: 'Diversification',
+        description: 'Nouveaux produits pour nouveaux marchés',
+        risk: 'Élevé' as const,
+        potential: 50,
+        timeframe: '18-36 mois',
+        investment: '500K-1M€',
+        examples: [
+          'Acquisition sociétés complémentaires',
+          'Développement plateformes nouvelles',
+          'Partenariats stratégiques majeurs',
+          'Innovation technologique disruptive'
+        ],
+        kpis: [
+          'ROI investissements diversification',
+          'Synergies activités nouvelles/existantes',
+          'Time-to-profitability nouvelles activités',
+          'Risque dilution focus métier'
+        ]
       }
     }
   };
 
-  return ansoffDataMap[scenarioId] || ansoffDataMap['digital-agency'];
+  return defaultStrategies;
 };
 
 export const AnsoffMatrix: React.FC<AnsoffMatrixProps> = ({ scenarioId }) => {
-  const data = getAnsoffData(scenarioId);
+  const { getScenarioById } = useScenarios();
+  const scenario = getScenarioById(scenarioId);
+  const data = getAnsoffData(scenarioId, scenario);
   
   const getRiskColor = (risk: string) => {
     switch (risk) {

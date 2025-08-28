@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { useScenarios } from '@/hooks/useScenarios';
 import { 
   Shield, Zap, Users, Building2, Target,
   ArrowUp, ArrowDown, ArrowLeft, ArrowRight,
@@ -20,145 +21,89 @@ interface PorterMatrixProps {
   scenarioId: string;
 }
 
-const getPorterData = (scenarioId: string) => {
-  const porterDataMap: Record<string, any> = {
-    'digital-agency': {
-      centerCompany: 'Pixel Perfect Agency',
-      forces: {
-        suppliers: {
-          name: 'Pouvoir fournisseurs',
-          intensity: 'Moyenne' as const,
-          score: 60,
-          factors: [
-            'Développeurs freelances nombreux',
-            'Outils SaaS standardisés',
-            'Quelques plateformes dominantes (Adobe, Google)',
-            'Coûts switching modérés'
-          ],
-          impact: 'Négociation possible sur tarifs, dépendance outils majeurs'
-        },
-        buyers: {
-          name: 'Pouvoir clients',
-          intensity: 'Forte' as const,
-          score: 85,
-          factors: [
-            'Clients informés et exigeants',
-            'Alternatives nombreuses',
-            'Comparaison facile des prestations',
-            'Négociation sur prix fréquente'
-          ],
-          impact: 'Pression forte sur prix et qualité, fidélisation critique'
-        },
-        newEntrants: {
-          name: 'Nouveaux entrants',
-          intensity: 'Forte' as const,
-          score: 80,
-          factors: [
-            'Barrières entrée faibles',
-            'Investissement initial limité',
-            'Formation accessible',
-            'Marché attractif en croissance'
-          ],
-          impact: 'Concurrence intensifiée, différenciation nécessaire'
-        },
-        substitutes: {
-          name: 'Produits substituts',
-          intensity: 'Moyenne' as const,
-          score: 65,
-          factors: [
-            'Solutions internes clients',
-            'Freelances indépendants',
-            'Outils no-code/low-code',
-            'IA génératives émergentes'
-          ],
-          impact: 'Menace croissante IA, positionnement conseil à renforcer'
-        },
-        rivalry: {
-          name: 'Rivalité concurrentielle',
-          intensity: 'Forte' as const,
-          score: 90,
-          factors: [
-            'Marché fragmenté',
-            'Différenciation difficile',
-            'Guerre des prix',
-            'Clients volatiles'
-          ],
-          impact: 'Compétition acharnée, innovation constante requise'
-        }
-      }
-    },
-    'fintech-startup': {
-      centerCompany: 'PaySecure AI',
-      forces: {
-        suppliers: {
-          name: 'Pouvoir fournisseurs',
-          intensity: 'Forte' as const,
-          score: 85,
-          factors: [
-            'Cloud providers concentrés (AWS, GCP)',
-            'APIs bancaires limitées',
-            'Talents IA rares et chers',
-            'Compliance providers spécialisés'
-          ],
-          impact: 'Coûts élevés, dépendance critique infrastructure'
-        },
-        buyers: {
-          name: 'Pouvoir clients',
-          intensity: 'Moyenne' as const,
-          score: 70,
-          factors: [
-            'Switching costs élevés',
-            'Conformité réglementaire critique',
-            'ROI mesurable requis',
-            'Négociation sur SLA'
-          ],
-          impact: 'Fidélisation possible si performance, exigences qualité'
-        },
-        newEntrants: {
-          name: 'Nouveaux entrants',
-          intensity: 'Moyenne' as const,
-          score: 55,
-          factors: [
-            'Barrières réglementaires hautes',
-            'Investissement R&D important',
-            'Expertise technique requise',
-            'Certification conformité longue'
-          ],
-          impact: 'Protection relative, mais BigTech menaçant'
-        },
-        substitutes: {
-          name: 'Produits substituts',
-          intensity: 'Moyenne' as const,
-          score: 60,
-          factors: [
-            'Solutions bancaires intégrées',
-            'Systèmes legacy améliorés',
-            'Approches règles vs IA',
-            'Solutions open source'
-          ],
-          impact: 'Différenciation IA critique, performance clé'
-        },
-        rivalry: {
-          name: 'Rivalité concurrentielle',
-          intensity: 'Forte' as const,
-          score: 80,
-          factors: [
-            'FinTech nombreuses',
-            'BigTech entrantes',
-            'Innovation rapide',
-            'Course aux talents'
-          ],
-          impact: 'Innovation continue vitale, alliances stratégiques'
-        }
+const getPorterData = (scenarioId: string, scenario: any) => {
+  // Check if scenario has Porter data
+  if (scenario?.marketData?.competitiveForces) {
+    return {
+      centerCompany: scenario.company.name,
+      forces: scenario.marketData.competitiveForces
+    };
+  }
+
+  // Fallback data for scenarios without specific Porter data
+  const defaultPorterData = {
+    centerCompany: scenario?.company?.name || 'Entreprise',
+    forces: {
+      suppliers: {
+        name: 'Pouvoir fournisseurs',
+        intensity: 'Moyenne' as const,
+        score: 60,
+        factors: [
+          'Fournisseurs diversifiés disponibles',
+          'Concurrence modérée entre fournisseurs',
+          'Coûts de changement acceptables',
+          'Qualité standardisée du marché'
+        ],
+        impact: 'Négociation équilibrée, choix stratégiques possibles'
+      },
+      buyers: {
+        name: 'Pouvoir clients',
+        intensity: 'Forte' as const,
+        score: 75,
+        factors: [
+          'Clients informés et comparatifs',
+          'Alternatives multiples disponibles',
+          'Sensibilité prix élevée',
+          'Exigences qualité croissantes'
+        ],
+        impact: 'Pression forte sur prix et valeur, différenciation critique'
+      },
+      newEntrants: {
+        name: 'Nouveaux entrants',
+        intensity: 'Moyenne' as const,
+        score: 65,
+        factors: [
+          'Barrières à l\'entrée modérées',
+          'Capital initial requis raisonnable',
+          'Savoir-faire accessible',
+          'Marché en croissance attractif'
+        ],
+        impact: 'Veille concurrentielle nécessaire, innovation continue'
+      },
+      substitutes: {
+        name: 'Produits substituts',
+        intensity: 'Moyenne' as const,
+        score: 55,
+        factors: [
+          'Solutions alternatives émergentes',
+          'Technologies disruptives potentielles',
+          'Changement comportements clients',
+          'Innovation technologique rapide'
+        ],
+        impact: 'Adaptation constante, positionnement valeur renforcé'
+      },
+      rivalry: {
+        name: 'Rivalité concurrentielle',
+        intensity: 'Forte' as const,
+        score: 80,
+        factors: [
+          'Concurrents nombreux et actifs',
+          'Différenciation complexe',
+          'Compétition sur plusieurs leviers',
+          'Marché mature et disputé'
+        ],
+        impact: 'Innovation et excellence opérationnelle requises'
       }
     }
   };
 
-  return porterDataMap[scenarioId] || porterDataMap['digital-agency'];
+  return defaultPorterData;
 };
 
 export const PorterMatrix: React.FC<PorterMatrixProps> = ({ scenarioId }) => {
-  const data = getPorterData(scenarioId);
+  const { getScenarioById } = useScenarios();
+  const scenario = getScenarioById(scenarioId);
+  const data = getPorterData(scenarioId, scenario);
   
   const getIntensityColor = (intensity: string) => {
     switch (intensity) {

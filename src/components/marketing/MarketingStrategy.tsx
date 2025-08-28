@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useScenarios } from '@/hooks/useScenarios';
 import { 
   Target, Megaphone, Users, Zap, DollarSign, 
   TrendingUp, Calendar, CheckCircle, ArrowRight,
@@ -13,205 +14,117 @@ interface MarketingStrategyProps {
   scenarioId: string;
 }
 
-const getMarketingStrategy = (scenarioId: string) => {
-  const strategyMap: Record<string, any> = {
-    'digital-agency': {
-      company: 'Pixel Perfect Agency',
-      positioning: {
-        value_proposition: "L'agence digitale qui transforme vos ambitions business en croissance mesurable",
-        target_persona: "Dirigeants PME/ETI ambitieux cherchant croissance digitale rentable",
-        differentiation: [
-          "ROI client garanti avec indicateurs précis",
-          "Approche data-driven unique sur le marché",
-          "Équipe senior avec 8+ ans d'expérience",
-          "Process propriétaires éprouvés"
-        ],
-        competitive_advantage: "Seule agence garantissant +25% croissance CA digital ou remboursement"
-      },
-      communication_strategy: {
-        brand_voice: "Expert, rassurant, orienté résultats",
-        key_messages: [
-          "Croissance digitale garantie et mesurable",
-          "L'expertise qui transforme les visiteurs en clients",
-          "Votre partenaire de croissance digitale durable",
-          "ROI transparent, résultats prouvés"
-        ],
-        content_pillars: [
-          "Success stories clients avec chiffres",
-          "Insights sectoriels et benchmarks",
-          "Guides pratiques marketing digital",
-          "Behind-the-scenes expertise équipe"
-        ]
-      },
-      acquisition_channels: [
-        {
-          channel: 'LinkedIn Ads B2B',
-          budget: '15K€/mois',
-          roi: '4.2x',
-          volume: '120 leads/mois',
-          strategy: 'Ciblage dirigeants PME avec content à forte valeur'
-        },
-        {
-          channel: 'Google Ads',
-          budget: '12K€/mois',
-          roi: '3.8x',
-          volume: '90 leads/mois',
-          strategy: 'Mots-clés Intent commercial + extensions avis clients'
-        },
-        {
-          channel: 'Content Marketing',
-          budget: '8K€/mois',
-          roi: '5.1x',
-          volume: '200 leads/mois',
-          strategy: 'Études de cas détaillées + SEO technique'
-        },
-        {
-          channel: 'Referral Program',
-          budget: '5K€/mois',
-          roi: '8.2x',
-          volume: '40 leads/mois',
-          strategy: 'Commission 15% clients satisfaits + dashboard suivi'
-        },
-        {
-          channel: 'Events & Webinars',
-          budget: '6K€/mois',
-          roi: '3.5x',
-          volume: '60 leads/mois',
-          strategy: 'Workshops gratuits + networking ciblé dirigeants'
-        }
+const getMarketingStrategy = (scenarioId: string, scenario: any) => {
+  // Check if scenario has marketing mix data
+  if (scenario?.salesStrategy?.marketingMix) {
+    return {
+      company: scenario.company.name,
+      ...scenario.salesStrategy.marketingMix
+    };
+  }
+
+  // Generate default marketing strategy based on scenario context
+  const company = scenario?.company?.name || 'Entreprise';
+  const productName = scenario?.product?.name || 'Solution';
+  const sector = scenario?.company?.sector || 'marché';
+  const productDesc = scenario?.product?.description || 'Notre solution innovante';
+
+  const defaultStrategy = {
+    company,
+    positioning: {
+      value_proposition: `${productName} - la solution qui transforme votre ${sector}`,
+      target_persona: scenario?.interlocutor?.role || 'Décideurs métier et technique',
+      differentiation: scenario?.product?.competitiveAdvantages || [
+        'Innovation technologique avancée',
+        'Expertise sectorielle approfondie',
+        'ROI mesurable et prouvé',
+        'Support client premium'
       ],
-      retention_strategy: {
-        onboarding: "Kick-off 48h + roadmap 90 jours + KPIs définis",
-        engagement: [
-          "Reporting mensuel avec benchmarks secteur",
-          "Sessions stratégie trimestrielles",
-          "Accès exclusif insights marché",
-          "Programme formation équipes internes"
-        ],
-        expansion: [
-          "Audit opportunités complémentaires",
-          "Upsell services premium basé performance",
-          "Cross-sell autres départements",
-          "Partenariats long terme"
-        ]
-      },
-      kpis: {
-        acquisition: [
-          { name: 'CAC', current: '2,800€', target: '2,200€', trend: 'down' },
-          { name: 'LTV', current: '15,400€', target: '18,000€', trend: 'up' },
-          { name: 'Conversion Rate', current: '3.2%', target: '4.5%', trend: 'up' },
-          { name: 'Pipeline Velocity', current: '45 jours', target: '35 jours', trend: 'down' }
-        ],
-        retention: [
-          { name: 'NRR', current: '118%', target: '130%', trend: 'up' },
-          { name: 'Churn Rate', current: '8%', target: '5%', trend: 'down' },
-          { name: 'NPS Score', current: '67', target: '75', trend: 'up' },
-          { name: 'Expansion Revenue %', current: '35%', target: '45%', trend: 'up' }
-        ]
-      }
+      competitive_advantage: `La seule solution ${sector} combinant performance et simplicité d'usage`
     },
-    'fintech-startup': {
-      company: 'PaySecure AI',
-      positioning: {
-        value_proposition: "L'IA anti-fraude qui protège votre croissance FinTech",
-        target_persona: "CTOs et Risk Managers FinTech en hypercroissance",
-        differentiation: [
-          "99.94% précision vs 96-98% concurrence",
-          "50ms latence vs 200-500ms marché",
-          "12 modèles ML spécialisés vs modèle unique",
-          "API-first avec intégration 24h"
-        ],
-        competitive_advantage: "Seule solution combinant vitesse et précision pour scale FinTech"
-      },
-      communication_strategy: {
-        brand_voice: "Technique, innovant, fiable",
-        key_messages: [
-          "L'IA qui apprend plus vite que les fraudeurs",
-          "Scale your FinTech, secure your growth",
-          "Real-time protection, real business impact",
-          "Built by FinTech, for FinTech"
-        ],
-        content_pillars: [
-          "Technical deep-dives et benchmarks",
-          "Fraud trends et threat intelligence",
-          "Integration guides et documentation",
-          "Customer success stories avec métriques"
-        ]
-      },
-      acquisition_channels: [
-        {
-          channel: 'FinTech Events',
-          budget: '25K€/mois',
-          roi: '6.5x',
-          volume: '80 leads/mois',
-          strategy: 'Sponsoring + speaking + demos live produit'
-        },
-        {
-          channel: 'Developer Marketing',
-          budget: '18K€/mois',
-          roi: '5.8x',
-          volume: '150 leads/mois',
-          strategy: 'Open source tools + API documentation + hackathons'
-        },
-        {
-          channel: 'Partnerships',
-          budget: '20K€/mois',
-          roi: '7.2x',
-          volume: '60 leads/mois',
-          strategy: 'Intégrations natives + co-marketing + referrals'
-        },
-        {
-          channel: 'LinkedIn Targeted',
-          budget: '12K€/mois',
-          roi: '4.1x',
-          volume: '100 leads/mois',
-          strategy: 'Account-based marketing CTOs FinTech scale-ups'
-        },
-        {
-          channel: 'Content SEO',
-          budget: '10K€/mois',
-          roi: '8.9x',
-          volume: '220 leads/mois',
-          strategy: 'Technical content + fraud prevention guides'
-        }
+    communication_strategy: {
+      brand_voice: 'Expert, fiable, orienté résultats',
+      key_messages: [
+        `${productName} révolutionne votre ${sector}`,
+        'Performance mesurable, résultats garantis',
+        'L\'expertise qui fait la différence',
+        'Votre partenaire de transformation'
       ],
-      retention_strategy: {
-        onboarding: "Technical integration en 24h + training équipe + monitoring setup",
-        engagement: [
-          "Threat intelligence weekly reports",
-          "Performance dashboards temps réel",
-          "Quarterly business reviews avec ROI",
-          "Accès prioritaire nouvelles features"
-        ],
-        expansion: [
-          "Additional use cases (KYC, credit scoring)",
-          "Multi-region deployment",
-          "Custom model training",
-          "Dedicated support tier"
-        ]
+      content_pillars: [
+        'Success stories et études de cas',
+        'Insights sectoriels et bonnes pratiques',
+        'Guides techniques et formations',
+        'Vision et innovation produit'
+      ]
+    },
+    acquisition_channels: [
+      {
+        channel: 'Digital Marketing',
+        budget: '10K€/mois',
+        roi: '4.5x',
+        volume: '100 leads/mois',
+        strategy: 'SEO/SEA ciblé + content marketing'
       },
-      kpis: {
-        acquisition: [
-          { name: 'CAC', current: '8,500€', target: '6,000€', trend: 'down' },
-          { name: 'LTV', current: '125,000€', target: '180,000€', trend: 'up' },
-          { name: 'Time to Value', current: '3 days', target: '1 day', trend: 'down' },
-          { name: 'Trial to Paid', current: '28%', target: '40%', trend: 'up' }
-        ],
-        retention: [
-          { name: 'NRR', current: '145%', target: '160%', trend: 'up' },
-          { name: 'Logo Churn', current: '2%', target: '1%', trend: 'down' },
-          { name: 'API Adoption', current: '85%', target: '95%', trend: 'up' },
-          { name: 'Support CSAT', current: '4.6/5', target: '4.8/5', trend: 'up' }
-        ]
+      {
+        channel: 'Events & Networking',
+        budget: '8K€/mois',
+        roi: '3.2x',
+        volume: '50 leads/mois',
+        strategy: 'Conférences sectorielles + webinars'
+      },
+      {
+        channel: 'Partenariats',
+        budget: '5K€/mois',
+        roi: '6.8x',
+        volume: '30 leads/mois',
+        strategy: 'Réseau partenaires et referrals'
+      },
+      {
+        channel: 'Sales Direct',
+        budget: '12K€/mois',
+        roi: '5.1x',
+        volume: '80 leads/mois',
+        strategy: 'Prospection directe et account-based marketing'
       }
+    ],
+    retention_strategy: {
+      onboarding: 'Accompagnement dédié 60 jours + formation équipe',
+      engagement: [
+        'Support client réactif et expert',
+        'Updates produit réguliers',
+        'Webinars techniques mensuels',
+        'Communauté utilisateurs'
+      ],
+      expansion: [
+        'Analyse besoins évolutifs',
+        'Modules complémentaires',
+        'Services professionnels',
+        'Montée en gamme progressive'
+      ]
+    },
+    kpis: {
+      acquisition: [
+        { name: 'CAC', current: '2,500€', target: '2,000€', trend: 'down' },
+        { name: 'LTV', current: '12,000€', target: '15,000€', trend: 'up' },
+        { name: 'Conversion Rate', current: '2.8%', target: '4.0%', trend: 'up' },
+        { name: 'Pipeline Velocity', current: '60 jours', target: '45 jours', trend: 'down' }
+      ],
+      retention: [
+        { name: 'NRR', current: '110%', target: '125%', trend: 'up' },
+        { name: 'Churn Rate', current: '12%', target: '8%', trend: 'down' },
+        { name: 'NPS Score', current: '65', target: '75', trend: 'up' },
+        { name: 'Support CSAT', current: '4.2/5', target: '4.6/5', trend: 'up' }
+      ]
     }
   };
 
-  return strategyMap[scenarioId] || strategyMap['digital-agency'];
+  return defaultStrategy;
 };
 
 export const MarketingStrategy: React.FC<MarketingStrategyProps> = ({ scenarioId }) => {
-  const strategy = getMarketingStrategy(scenarioId);
+  const { getScenarioById } = useScenarios();
+  const scenario = getScenarioById(scenarioId);
+  const strategy = getMarketingStrategy(scenarioId, scenario);
   
   const getTrendIcon = (trend: string) => {
     return trend === 'up' ? 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useScenarios } from '@/hooks/useScenarios';
 import { 
   Star, DollarSign, HelpCircle, Minus,
   TrendingUp, TrendingDown, ArrowRight
@@ -20,124 +21,69 @@ interface BCGMatrixProps {
   scenarioId: string;
 }
 
-const getBCGData = (scenarioId: string) => {
-  const bcgDataMap: Record<string, any> = {
-    'digital-agency': {
-      company: 'Pixel Perfect Agency',
-      products: [
-        {
-          name: 'Web Development',
-          marketShare: 15,
-          marketGrowth: 25,
-          revenue: '1.2M€',
-          description: 'Sites web et applications sur-mesure',
-          strategy: 'Investir massivement pour maintenir leadership',
-          quadrant: 'Star' as const
-        },
-        {
-          name: 'SEO/SEA Services',
-          marketShare: 25,
-          marketGrowth: 8,
-          revenue: '2.1M€',
-          description: 'Référencement et publicité en ligne',
-          strategy: 'Exploiter pour financer croissance autres activités',
-          quadrant: 'Cash Cow' as const
-        },
-        {
-          name: 'Social Media Management',
-          marketShare: 5,
-          marketGrowth: 35,
-          revenue: '400K€',
-          description: 'Gestion réseaux sociaux et community management',
-          strategy: 'Analyser potentiel et décider investissement',
-          quadrant: 'Question Mark' as const
-        },
-        {
-          name: 'Print Design',
-          marketShare: 30,
-          marketGrowth: -5,
-          revenue: '300K€',
-          description: 'Design graphique traditionnel et impression',
-          strategy: 'Désinvestir progressivement ou abandonner',
-          quadrant: 'Dog' as const
-        },
-        {
-          name: 'E-commerce Solutions',
-          marketShare: 8,
-          marketGrowth: 40,
-          revenue: '600K€',
-          description: 'Plateformes de vente en ligne complètes',
-          strategy: 'Investir sélectivement selon ROI',
-          quadrant: 'Question Mark' as const
-        },
-        {
-          name: 'Content Marketing',
-          marketShare: 20,
-          marketGrowth: 12,
-          revenue: '800K€',
-          description: 'Création contenu et stratégies éditoriales',
-          strategy: 'Maintenir position et optimiser rentabilité',
-          quadrant: 'Cash Cow' as const
-        }
-      ]
-    },
-    'fintech-startup': {
-      company: 'PaySecure AI',
-      products: [
-        {
-          name: 'Fraud Detection API',
-          marketShare: 12,
-          marketGrowth: 55,
-          revenue: '2.8M€',
-          description: 'IA de détection fraude temps réel',
-          strategy: 'Investir massivement - produit phare',
-          quadrant: 'Star' as const
-        },
-        {
-          name: 'KYC Automation',
-          marketShare: 18,
-          marketGrowth: 15,
-          revenue: '1.5M€',
-          description: 'Vérification identité automatisée',
-          strategy: 'Exploiter stabilité pour R&D autres produits',
-          quadrant: 'Cash Cow' as const
-        },
-        {
-          name: 'Credit Scoring ML',
-          marketShare: 3,
-          marketGrowth: 45,
-          revenue: '400K€',
-          description: 'Évaluation risque crédit par ML',
-          strategy: 'Évaluer potentiel marché avant investissement',
-          quadrant: 'Question Mark' as const
-        },
-        {
-          name: 'Legacy Integration',
-          marketShare: 35,
-          marketGrowth: -10,
-          revenue: '600K€',
-          description: 'Connecteurs systèmes bancaires anciens',
-          strategy: 'Maintenir pour clients existants uniquement',
-          quadrant: 'Dog' as const
-        },
-        {
-          name: 'Compliance Monitoring',
-          marketShare: 7,
-          marketGrowth: 30,
-          revenue: '800K€',
-          description: 'Surveillance réglementaire automatisée',
-          strategy: 'Investir si synergies avec fraud detection',
-          quadrant: 'Question Mark' as const
-        }
-      ]
-    }
-  };
+const getBCGData = (scenarioId: string, scenario: any) => {
+  // Check if scenario has product portfolio data
+  if (scenario?.marketData?.productPortfolio) {
+    return {
+      company: scenario.company.name,
+      products: scenario.marketData.productPortfolio
+    };
+  }
 
-  return bcgDataMap[scenarioId] || bcgDataMap['digital-agency'];
+  // Generate default BCG portfolio based on product information
+  const company = scenario?.company?.name || 'Entreprise';
+  const productName = scenario?.product?.name || 'Solution principale';
+  const productDesc = scenario?.product?.description || 'Produit/service principal de l\'entreprise';
+  
+  const defaultProducts = [
+    {
+      name: productName,
+      marketShare: 12,
+      marketGrowth: 35,
+      revenue: scenario?.expectedRevenue || '500K€',
+      description: productDesc,
+      strategy: 'Investir pour transformer en leader de marché',
+      quadrant: 'Star' as const
+    },
+    {
+      name: 'Offre traditionnelle',
+      marketShare: 25,
+      marketGrowth: 8,
+      revenue: '800K€',
+      description: 'Services/produits établis et matures',
+      strategy: 'Exploiter pour financer innovation',
+      quadrant: 'Cash Cow' as const
+    },
+    {
+      name: 'Innovation émergente',
+      marketShare: 5,
+      marketGrowth: 45,
+      revenue: '200K€',
+      description: 'Nouveaux segments et opportunités',
+      strategy: 'Évaluer potentiel avant investissement massif',
+      quadrant: 'Question Mark' as const
+    },
+    {
+      name: 'Legacy',
+      marketShare: 30,
+      marketGrowth: -5,
+      revenue: '300K€',
+      description: 'Produits/services en déclin',
+      strategy: 'Maintenir minimum ou abandonner progressivement',
+      quadrant: 'Dog' as const
+    }
+  ];
+
+  return {
+    company,
+    products: defaultProducts
+  };
 };
 
 export const BCGMatrix: React.FC<BCGMatrixProps> = ({ scenarioId }) => {
-  const data = getBCGData(scenarioId);
+  const { getScenarioById } = useScenarios();
+  const scenario = getScenarioById(scenarioId);
+  const data = getBCGData(scenarioId, scenario);
   
   const getQuadrantIcon = (quadrant: string) => {
     switch (quadrant) {
