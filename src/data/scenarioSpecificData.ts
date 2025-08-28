@@ -1,252 +1,109 @@
-// Scenario-specific market analyses, objectives, and objections
-// This file contains detailed, context-specific content for each scenario
+// Données spécifiques par scénario pour personnaliser l'expérience d'apprentissage
 
-export interface ScenarioMarketData {
+interface ScenarioMarketData {
   marketOverview: {
-    size: string;
-    growth: string;
-    keyPlayers: string[];
-    trends: string[];
-    regulations?: string[];
+    marketSize: string;
+    growthRate: string;
+    budgetRange?: string;
+    expectedROI?: string;
+    timeline?: string;
+    keyPlayers?: string[];
+    currentProcessingTime?: string;
+    errorRate?: string;
+    costPerTransaction?: string;
   };
-  competitiveLandscape: {
-    directCompetitors: Array<{
-      name: string;
-      marketShare: string;
-      strengths: string[];
-      weaknesses: string[];
-    }>;
-    indirectCompetitors: string[];
-    competitiveAdvantages: string[];
-    marketGaps: string[];
-  };
-  opportunity: {
-    tam: string;
-    sam: string;
-    som: string;
-    growthDrivers: string[];
-    marketSegments: Array<{
-      name: string;
-      size: string;
-      growth: string;
-    }>;
-  };
+  technicalChallenges?: string[];
 }
 
-export interface ScenarioObjectives {
+interface ScenarioObjectives {
   coldCall: {
-    primary: string[];
-    secondary: string[];
-    success_metrics: string[];
+    primary: string;
+    secondary: string;
+    successMetrics: string;
   };
-  meeting: {
-    discovery: string[];
-    demo: string[];
-    closing: string[];
-    success_metrics: string[];
+  rdv: {
+    primary: string;
+    secondary: string;
+    successMetrics: string;
   };
 }
 
-export interface ScenarioObjections {
+interface ScenarioObjections {
   category: string;
   objection: string;
-  frequency: "Très fréquente" | "Fréquente" | "Occasionnelle";
+  frequency: 'Très fréquente' | 'Fréquente' | 'Occasionnelle';
   responses: string[];
   evidence: string;
   nextStep: string;
   persona_adaptation?: string;
 }
 
-// KPI Performance scenario specific data
-export const kpiPerformanceData = {
-  marketData: {
-    marketOverview: {
-      size: "Le marché européen de l'EdTech dans l'enseignement supérieur représente 8,2 milliards d'euros",
-      growth: "Croissance annuelle de 16,3% avec une accélération post-COVID",
-      keyPlayers: [
-        "Blackboard (leader LMS - 32% PDM)",
-        "Canvas by Instructure (20% PDM)",
-        "Moodle (15% PDM)",
-        "D2L Brightspace (8% PDM)"
-      ],
-      trends: [
-        "Micro-learning et formations courtes (+47% en 2024)",
-        "Gamification pédagogique (+35% adoption)",
-        "IA adaptative pour personnalisation (+28% demande)",
-        "Réalité virtuelle pour soft skills (+22% intérêt)",
-        "Analytics pédagogiques avancées (+31% demande)"
-      ],
-      regulations: [
-        "RGPD strict sur données étudiants",
-        "Certifications qualité (Qualiopi obligatoire)",
-        "Accessibilité numérique (RGAA 4.1)"
-      ]
-    },
-    competitiveLandscape: {
-      directCompetitors: [
-        {
-          name: "Articulate 360",
-          marketShare: "18% sur simulation business",
-          strengths: ["Interface intuitive", "Bibliothèque templates", "Support technique excellent"],
-          weaknesses: ["Prix élevé (2400€/an)", "Pas de focus métier spécifique", "Analytics basiques"]
-        },
-        {
-          name: "iSpring Solutions",
-          marketShare: "12% sur simulation B2B",
-          strengths: ["Intégration PowerPoint", "Rapid learning", "Prix compétitif"],
-          weaknesses: ["Limité sur IA adaptative", "Pas de coaching temps réel", "Support français faible"]
-        },
-        {
-          name: "Gomo Learning",
-          marketShare: "8% sur e-learning interactif",
-          strengths: ["Responsive design", "Cloud native", "Collaboration équipes"],
-          weaknesses: ["Pas de spécialisation commerciale", "Analytics limitées", "Coût par apprenant élevé"]
-        }
-      ],
-      indirectCompetitors: [
-        "Formations présentielles traditionnelles",
-        "Coaching commercial externe",
-        "Plateformes généralistes (LinkedIn Learning, Coursera)",
-        "Solutions internes développées"
-      ],
-      competitiveAdvantages: [
-        "IA conversationnelle spécialisée en négociation commerciale",
-        "Scenarios hyper-réalistes basés sur vraies données sectorielles",
-        "Coaching temps réel avec feedback personnalisé",
-        "Analytics prédictives sur performance commerciale",
-        "ROI mesurable et rapide (6-8 mois)",
-        "Intégration native avec CRM (Salesforce, HubSpot, Pipedrive)"
-      ],
-      marketGaps: [
-        "Manque de solutions spécialisées en simulation commerciale B2B",
-        "Peu d'outils avec IA vraiment conversationnelle",
-        "Analytics pédagogiques insuffisamment développées",
-        "Gap entre formation théorique et pratique terrain"
-      ]
-    },
-    opportunity: {
-      tam: "8,2 Md€ (EdTech enseignement supérieur Europe)",
-      sam: "1,1 Md€ (Formation commerciale et soft skills)",
-      som: "180 M€ (Écoles commerce + formations spécialisées)",
-      growthDrivers: [
-        "Digitalisation forcée post-COVID (+43% budget digital)",
-        "Guerre des talents nécessitant formation différenciante",
-        "Exigences étudiants pour expérience immersive",
-        "Pression employabilité et insertion professionnelle",
-        "Besoins entreprises partenaires plus spécialisés"
-      ],
-      marketSegments: [
-        {
-          name: "Écoles de commerce (Tier 1)",
-          size: "85 M€",
-          growth: "+18% annuel"
-        },
-        {
-          name: "Écoles de commerce (Tier 2-3)",
-          size: "45 M€", 
-          growth: "+22% annuel"
-        },
-        {
-          name: "Universités - Masters spécialisés",
-          size: "35 M€",
-          growth: "+15% annuel"
-        },
-        {
-          name: "Organismes formation continue",
-          size: "25 M€",
-          growth: "+25% annuel"
-        }
-      ]
-    }
-  } as ScenarioMarketData,
+// ============= KPI PERFORMANCE (ÉCOLE DE COMMERCE) =============
+const kpiPerformanceData = {
+  marketOverview: {
+    marketSize: "2.1B€ marché EdTech France",
+    growthRate: "+15.8% CAGR",
+    budgetRange: "150K-500K€",
+    expectedROI: "22%",
+    timeline: "Rentrée 2025",
+    currentProcessingTime: "6-8h",
+    errorRate: "12-15%",
+    costPerTransaction: "45€"
+  },
 
   objectives: {
     coldCall: {
-      primary: [
-        "Obtenir un RDV de 45min avec le Directeur Pédagogique dans les 10 jours",
-        "Identifier le processus décisionnel et les autres stakeholders impliqués",
-        "Qualifier le budget disponible et la temporalité du projet"
-      ],
-      secondary: [
-        "Comprendre les enjeux spécifiques de modernisation pédagogique",
-        "Identifier les frustrations avec les outils actuels",
-        "Évaluer le niveau de maturité digitale de l'équipe"
-      ],
-      success_metrics: [
-        "RDV confirmé dans l'agenda",
-        "Contact direct décideur identifié", 
-        "Budget qualifié (+/- 50K€)",
-        "Timeline projet définie (3-6 mois)"
-      ]
+      primary: "Identifier les défis pédagogiques actuels",
+      secondary: "Évaluer l'ouverture à l'innovation",
+      successMetrics: "RDV avec responsable pédagogique obtenu"
     },
-    meeting: {
-      discovery: [
-        "Cartographier l'écosystème pédagogique actuel complet",
-        "Identifier 3-5 pain points prioritaires avec impact business",
-        "Définir les critères de succès et métriques de mesure",
-        "Comprendre l'expérience étudiante actuelle vs souhaitée"
-      ],
-      demo: [
-        "Démontrer la valeur via un cas d'usage concret ESCAP",
-        "Faire tester l'interface par le prospect (hands-on 15min)",
-        "Présenter le ROI calculé spécifiquement pour ESCAP",
-        "Obtenir l'accord pour un pilote gratuit 6 semaines"
-      ],
-      closing: [
-        "Négocier les termes du contrat (durée, périmètre, prix)",
-        "Valider le budget et obtenir l'accord de principe",
-        "Planifier les étapes de déploiement et formation équipes",
-        "Signer le contrat ou obtenir un engagement ferme avec timeline"
-      ],
-      success_metrics: [
-        "Stakeholders décisionnels tous impliqués",
-        "Business case validé avec ROI >200%",
-        "Pilote approuvé avec ressources allouées",
-        "Planning projet défini avec milestones"
-      ]
+    rdv: {
+      primary: "Démontrer l'impact sur l'engagement étudiant",
+      secondary: "Présenter le ROI pédagogique mesurable",
+      successMetrics: "Autorisation pilote sur 1 département"
     }
-  } as ScenarioObjectives,
+  },
 
   objections: [
     {
       category: "Budget / ROI",
-      objection: "Le coût est trop élevé pour notre budget pédagogique actuel",
+      objection: "Le budget formation est serré cette année",
       frequency: "Très fréquente" as const,
       responses: [
-        "Calculons ensemble le coût de l'immobilisme : perte d'attractivité étudiants, baisse classements, démotivation équipes...",
-        "Notre pilote gratuit 6 semaines vous permet de mesurer le ROI exact avant tout investissement",
-        "Investissement rentabilisé en 8-12 mois via amélioration satisfaction étudiants et différenciation concurrentielle",
-        "Financement étalé possible + réduction 25% première année pour early adopters"
+        "ROI 22% dès la première année : 150K€ investis = 183K€ de valeur générée",
+        "Pilote gratuit 3 mois : validation concrète avant tout engagement",
+        "Économies : -40% temps préparation cours, +60% efficacité pédagogique",
+        "Budget étalé possible : 30% année 1, 70% après validation résultats"
       ],
-      evidence: "HEC Paris : ROI de 280% en 18 mois via augmentation attractivité programmes et réduction coûts formation",
-      nextStep: "Préparation business case détaillé avec données financières spécifiques ESCAP",
-      persona_adaptation: "Pour Directeur Pédagogique : focus impact satisfaction étudiants. Pour DG : focus différenciation concurrentielle"
+      evidence: "EM Lyon : ROI 31% première année + 89% satisfaction étudiants",
+      nextStep: "Simulation ROI personnalisée ESCAP avec vos coûts actuels",
+      persona_adaptation: "Focus ROI chiffré pour DG, bénéfices pédagogiques pour directeur académique"
     },
     {
       category: "Résistance au changement",
-      objection: "Nos professeurs ne sont pas prêts pour ce type d'innovation",
-      frequency: "Très fréquente" as const,
+      objection: "Les professeurs ne sont pas prêts pour ces outils",
+      frequency: "Fréquente" as const,
       responses: [
-        "Programme d'accompagnement équipes en 3 étapes sur 8 semaines avec formation dédiée",
-        "Interface intuitive : 92% des professeurs autonomes en moins de 2 heures selon nos études",
-        "Champions internes identifiés pour porter le changement et former leurs collègues",
-        "Support technique dédié avec hotline française et best practices intégrées"
+        "Formation complète incluse : 16h réparties sur 2 mois",
+        "Champions internes : 2-3 professeurs early adopters formés en priorité",
+        "Accompagnement individuel : 1h/semaine/professeur pendant 6 semaines",
+        "Interface intuitive : 94% professeurs autonomes après 3 sessions"
       ],
-      evidence: "ESSEC : 96% satisfaction équipes professorales après 3 mois d'utilisation et formation adaptée",
-      nextStep: "Workshop découverte pour équipe volontaire + rencontre avec professeur ESSEC utilisateur",
-      persona_adaptation: "Rassurer sur accompagnement humain et technique, pas juste outil"
+      evidence: "KEDGE : 97% adoption professeurs en 4 mois, 0 résistance après formation",
+      nextStep: "Rencontre avec vos professeurs les plus innovants pour témoignage",
+      persona_adaptation: "Rassurer sur accompagnement et progressivité"
     },
     {
       category: "Efficacité pédagogique",
-      objection: "Comment prouver que c'est plus efficace que nos méthodes actuelles ?",
-      frequency: "Fréquente" as const,
+      objection: "Est-ce que ça améliore vraiment l'apprentissage ?",
+      frequency: "Très fréquente" as const,
       responses: [
-        "Analytics détaillés : progression compétences, temps engagement, scores performance, comparaisons cohortes",
-        "Méthodologie d'évaluation validée scientifiquement (3 études peer-reviewed publiées)",
-        "A/B testing possible : comparaison groupe témoin vs groupe utilisant la solution",
-        "Certification compétences avec badges reconnus par 40+ entreprises partenaires"
+        "+73% engagement étudiant vs cours magistraux traditionnels",
+        "+45% rétention des compétences à 6 mois (vs +12% méthodes classiques)",
+        "Évaluation continue : tracking progression en temps réel",
+        "Personnalisation : adaptation niveau et rythme de chaque étudiant"
       ],
-      evidence: "Étude KEDGE 2024 : +73% compétences négociation vs méthodes traditionnelles sur cohorte 200 étudiants",
+      evidence: "ESSEC : +67% réussite aux évaluations commerciales, +52% satisfaction étudiants",
       nextStep: "Protocole de mesure d'impact personnalisé ESCAP avec KPIs définis ensemble",
       persona_adaptation: "Mettre l'accent sur rigueur scientifique et mesures objectives"
     },
@@ -323,12 +180,306 @@ export const kpiPerformanceData = {
   ] as ScenarioObjections[]
 };
 
-// Function to get scenario-specific data
-export const getScenarioData = (scenarioId: string) => {
-  switch (scenarioId) {
-    case 'kpi-performance':
-      return kpiPerformanceData;
-    default:
-      return kpiPerformanceData; // Fallback for now
-  }
+// ============= FINTECH STARTUP =============
+const fintechStartupData = {
+  marketOverview: {
+    marketSize: "15.2B$ marché global fintech",
+    growthRate: "+22% CAGR",
+    budgetRange: "2M-5M€",
+    expectedROI: "35%",
+    timeline: "Q2 2025",
+    keyPlayers: ["Stripe", "Adyen", "Checkout.com"]
+  },
+  
+  objectives: {
+    coldCall: {
+      primary: "Identifier le pain point principal en détection de fraude",
+      secondary: "Évaluer budget R&D disponible", 
+      successMetrics: "RDV avec CTO + CRO obtenu"
+    },
+    rdv: {
+      primary: "Quantifier les pertes actuelles liées à la fraude",
+      secondary: "Comprendre stack technique et contraintes",
+      successMetrics: "Proof of concept approuvé avec timeline"
+    }
+  },
+  
+  objections: [
+    {
+      category: "Performance IA",
+      objection: "Vos algorithmes sont-ils meilleurs que nos modèles internes ?",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Notre ensemble de 12 modèles ML spécialisés vs modèle unique classique",
+        "99.94% précision vs 96-98% standard industrie",
+        "50ms temps de réponse vs 200-500ms solutions traditionnelles",
+        "Learning continu : amélioration 0.2% précision/mois automatique"
+      ],
+      evidence: "Klarna : réduction 67% faux positifs et +23% détection vraie fraude en 6 mois",
+      nextStep: "Benchmark live sur vos données historiques anonymisées",
+      persona_adaptation: "Focus technique pour CTO, impact business pour CEO"
+    },
+    {
+      category: "Conformité réglementaire",
+      objection: "Comment assurez-vous la conformité PCI DSS et GDPR ?",
+      frequency: "Fréquente" as const,
+      responses: [
+        "Certification PCI DSS Level 1 + audits trimestriels PwC",
+        "GDPR by design : privacy differential, chiffrement end-to-end",
+        "Hosting Europe (AWS Frankfurt) + data residency garantie",
+        "Explainabilité IA pour audits régulateurs (ACPR/AMF compliant)"
+      ],
+      evidence: "Revolut : validation ACPR en 3 mois vs 12-18 mois habituels",
+      nextStep: "Audit sécurité gratuit par notre RSSI certifié CISSP",
+      persona_adaptation: "Rassurer sur conformité pour CRO, détails techniques pour DSI"
+    },
+    {
+      category: "Scalabilité",
+      objection: "Votre solution peut-elle gérer notre croissance ?",
+      frequency: "Fréquente" as const,
+      responses: [
+        "Architecture cloud-native : auto-scaling 0 à 100K TPS en 30 secondes",
+        "Références : Revolut (150M transactions/jour), N26 (45M users)",
+        "Multi-cloud : AWS + GCP redondance, 99.99% SLA garanti",
+        "Performance linéaire : coût par transaction diminue avec le volume"
+      ],
+      evidence: "Monzo : passage de 1M à 50M transactions/mois sans dégradation performance",
+      nextStep: "Test de charge gratuit sur votre architecture cible",
+      persona_adaptation: "Aspects techniques pour CTO, economics pour CFO"
+    }
+  ] as ScenarioObjections[]
+};
+
+// ============= RETAIL PERSONALIZATION =============
+const retailPersonalizationData = {
+  marketOverview: {
+    marketSize: "943B$ e-commerce mondial",
+    growthRate: "+14.7% CAGR",
+    budgetRange: "500K-1.5M€",
+    expectedROI: "25%",
+    timeline: "Q3 2025"
+  },
+  
+  objections: [
+    {
+      category: "ROI personnalisation",
+      objection: "Le ROI de la personnalisation est-il vraiment prouvé ?",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "+28% conversion rate moyenne avec notre IA vs +12% outils basiques",
+        "+42% panier moyen grâce recommandations cross-sell intelligentes", 
+        "ROI 4.2x en moyenne sur 12 mois (investissement 300K€ = +1.26M€ CA)",
+        "98% clients voient amélioration dès mois 2"
+      ],
+      evidence: "La Redoute : +34% CA online et +52% taux de rétention en 8 mois",
+      nextStep: "Simulation ROI personnalisée avec vos métriques actuelles",
+      persona_adaptation: "Focus chiffres pour CFO, expérience client pour CMO"
+    },
+    {
+      category: "Complexité technique",
+      objection: "L'intégration sera trop complexe avec notre stack existant",
+      frequency: "Fréquente" as const,
+      responses: [
+        "API-first : intégration 24-48h avec Shopify, Magento, WooCommerce, custom",
+        "Pas de migration data : connexion directe à vos bases existantes",
+        "Mode SaaS : zéro infrastructure à gérer de votre côté",
+        "Support technique 24/7 pendant onboarding (2-3 semaines)"
+      ],
+      evidence: "Sézane : intégration Shopify Plus en 36h, live en production sans interruption",
+      nextStep: "Audit technique gratuit de votre architecture actuelle",
+      persona_adaptation: "Simplicité pour équipes métier, robustesse pour IT"
+    }
+  ] as ScenarioObjections[]
+};
+
+// ============= DIGITAL AGENCY =============
+const digitalAgencyData = {
+  marketOverview: {
+    marketSize: "567B$ services digitaux",
+    growthRate: "+11.2% CAGR", 
+    budgetRange: "200K-800K€",
+    expectedROI: "30%"
+  },
+  objections: [
+    {
+      category: "Différenciation compétitive",
+      objection: "Qu'est-ce qui vous différencie des autres agences ?",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Approche data-driven : 47 KPIs trackés vs 8-12 agences traditionnelles",
+        "Stack propriétaire : automation 78% tâches répétitives", 
+        "ROI clients : +156% performance moyenne vs -23% agences classiques",
+        "Équipe senior : 8.3 ans expérience moyenne vs 4.2 ans marché"
+      ],
+      evidence: "Sézane : +89% qualified leads et -34% cost per acquisition en 6 mois",
+      nextStep: "Audit gratuit de votre performance digitale actuelle",
+      persona_adaptation: "Preuves techniques pour CMO, ROI pour CEO"
+    },
+    {
+      category: "Engagement long terme",
+      objection: "Comment s'assurer d'un partenariat durable ?",
+      frequency: "Fréquente" as const,
+      responses: [
+        "Contrats performance : paiement lié aux résultats obtenus",
+        "Transparence totale : accès direct à tous dashboards et data",
+        "Équipe dédiée : même interlocuteurs sur toute la durée",
+        "Formation incluse : autonomisation progressive de vos équipes"
+      ],
+      evidence: "94% de nos clients nous font confiance depuis 3+ ans",
+      nextStep: "Rencontre avec clients référents pour témoignage direct",
+      persona_adaptation: "Sécuriser la relation pour dirigeants"
+    }
+  ] as ScenarioObjections[]
+};
+
+// ============= CYBERSECURITY CONSULTING =============
+const cybersecurityConsultingData = {
+  objections: [
+    {
+      category: "Expertise sectorielle",
+      objection: "Avez-vous l'expertise spécifique à notre secteur ?",
+      frequency: "Fréquente" as const,
+      responses: [
+        "15+ années cybersécurité financière : banques, assurance, fintech",
+        "Certifications : CISSP, CISM, ISO 27001 Lead Auditor",
+        "Connaissance réglementaire : NIS2, DORA, PCI DSS expert",
+        "200+ audits menés : secteur bancaire, 97% taux de conformité atteint"
+      ],
+      evidence: "Crédit Agricole : 100% conformité DORA anticipée + 0 incidents majeurs sur 24 mois",
+      nextStep: "Présentation de nos cas clients bancaires similaires",
+      persona_adaptation: "Expertises techniques pour RSSI, conformité pour DG"
+    },
+    {
+      category: "Coût / Budget",
+      objection: "Les audits de sécurité coûtent très cher",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "ROI prouvé : 1€ investi en audit = 15€ économisés en incidents évités",
+        "Approche modulaire : commencer par l'essentiel, étalement possible",
+        "Subventions disponibles : BPI France cybersécurité jusqu'à 50%",
+        "Coût incident majeur : 2.5M€ moyenne vs 50K€ audit complet"
+      ],
+      evidence: "Société Générale : audit 80K€ a permis d'éviter incident estimé à 12M€",
+      nextStep: "Évaluation gratuite de votre niveau de risque actuel",
+      persona_adaptation: "ROI pour direction, impacts techniques pour RSSI"
+    }
+  ] as ScenarioObjections[]
+};
+
+// ============= SAAS HR TOOL =============
+const saasHrToolData = {
+  objections: [
+    {
+      category: "Adoption utilisateur",
+      objection: "Comment garantir l'adoption par nos équipes RH ?",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Taux adoption moyen 94% vs 67% solutions RH traditionnelles",
+        "Interface intuitive : 2h formation vs 2-3 jours outils complexes",
+        "Support dédié : success manager assigné pendant 12 mois",
+        "Change management inclus : méthodologie éprouvée sur 150+ déploiements"
+      ],
+      evidence: "BNP Paribas : 97% adoption en 3 mois sur 2400 utilisateurs RH",
+      nextStep: "Démonstration UX avec vos cas d'usage réels",
+      persona_adaptation: "Simplicité pour utilisateurs RH, ROI pour DRH"
+    },
+    {
+      category: "Intégration SIRH",
+      objection: "L'intégration avec notre SIRH actuel sera compliquée",
+      frequency: "Fréquente" as const,
+      responses: [
+        "Connecteurs natifs : Workday, SuccessFactors, ADP, Cegid Meta4",
+        "API RESTful ouverte : intégration custom en 3-5 jours",
+        "Migration data sécurisée : 99.98% intégrité garantie",
+        "Mode hybrid : coexistence temporaire pendant transition"
+      ],
+      evidence: "L'Oréal : intégration SuccessFactors en 4 jours, 0 perte de data",
+      nextStep: "Audit technique gratuit de votre SIRH actuel",
+      persona_adaptation: "Simplicité technique pour IT, continuité pour RH"
+    }
+  ] as ScenarioObjections[]
+};
+
+// ============= MANUFACTURING IOT =============
+const manufacturingIotData = {
+  objections: [
+    {
+      category: "Intégration systèmes legacy",
+      objection: "Comment intégrer avec nos équipements industriels existants ?",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Connecteurs natifs : 200+ protocoles industriels (Modbus, OPC-UA, MQTT...)",
+        "Gateway IoT propriétaire : retrofit équipements anciens sans modification",
+        "API universelle : intégration ERP/MES en 48-72h",
+        "Backward compatibility : équipements 15+ ans supportés"
+      ],
+      evidence: "Michelin : intégration 847 machines sur 12 sites en 4 mois sans arrêt production",
+      nextStep: "Audit technique gratuit de votre parc machines",
+      persona_adaptation: "Compatibilité technique pour ingénieurs, ROI pour direction industrielle"
+    },
+    {
+      category: "Sécurité industrielle",
+      objection: "L'IoT représente un risque de sécurité pour nos lignes",
+      frequency: "Fréquente" as const,
+      responses: [
+        "Réseau séparé : segmentation totale IT/OT avec firewall industriel",
+        "Chiffrement bout en bout : AES-256 + certificats X.509",
+        "Conformité IEC 62443 : standard cybersécurité industriel",
+        "Monitoring 24/7 : détection anomalies et réponse automatique"
+      ],
+      evidence: "Airbus : déploiement sur lignes A350 sans incident sécurité depuis 2 ans",
+      nextStep: "Audit sécurité gratuit de votre architecture industrielle",
+      persona_adaptation: "Sécurité technique pour RSSI, continuité pour production"
+    }
+  ] as ScenarioObjections[]
+};
+
+// ============= INDUSTRIAL MARKETPLACE =============
+const industrialMarketplaceData = {
+  objections: [
+    {
+      category: "Réseau fournisseurs",
+      objection: "Avez-vous suffisamment de fournisseurs dans notre secteur ?",
+      frequency: "Fréquente" as const,
+      responses: [
+        "12 000+ fournisseurs industriels qualifiés dans 47 secteurs",
+        "Network effects : +340 nouveaux fournisseurs/mois organiquement",
+        "Scoring qualité : 98.7% livraisons conformes sur 2.1M commandes", 
+        "Spécialisation : 2400+ fournisseurs spécialisés votre secteur exact"
+      ],
+      evidence: "Bouygues Construction : 67% réduction délais approvisionnement et -23% coûts sur 18 mois",
+      nextStep: "Mapping personnalisé fournisseurs disponibles pour vos besoins",
+      persona_adaptation: "Réseau pour acheteurs, economics pour direction achats"
+    },
+    {
+      category: "Contrôle qualité",
+      objection: "Comment vous assurez-vous de la qualité des fournisseurs ?",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Due diligence complète : audit financier, technique, compliance",
+        "Scoring dynamique : 47 critères trackés en temps réel",
+        "Reviews clients : notation transparente par pairs",
+        "Garantie qualité : remboursement intégral si non-conformité"
+      ],
+      evidence: "Vinci : 99.2% satisfaction fournisseurs vs 87% processus traditionnel",
+      nextStep: "Démonstration du processus de qualification fournisseurs",
+      persona_adaptation: "Processus pour qualité, résultats pour achats"
+    }
+  ] as ScenarioObjections[]
+};
+
+// ============= EXPORT FUNCTION =============
+export const getScenarioData = (scenarioId: string): any => {
+  const dataMap = {
+    'kpi-performance': kpiPerformanceData,
+    'fintech-startup': fintechStartupData,
+    'retail-personalization': retailPersonalizationData,
+    'digital-agency': digitalAgencyData,
+    'cybersecurity-consulting': cybersecurityConsultingData,
+    'saas-hr-tool': saasHrToolData,
+    'manufacturing-iot': manufacturingIotData,
+    'industrial-marketplace': industrialMarketplaceData
+  };
+  
+  return dataMap[scenarioId as keyof typeof dataMap] || kpiPerformanceData;
 };

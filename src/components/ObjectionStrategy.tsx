@@ -17,6 +17,21 @@ export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({
   scenarioId = 'kpi-performance' 
 }) => {
   const scenarioData = getScenarioData(scenarioId);
+  
+  // Vérification que nous avons des objections pour ce scénario
+  if (!scenarioData?.objections || !Array.isArray(scenarioData.objections)) {
+    return (
+      <div className="p-6 text-center">
+        <p className="text-muted-foreground">
+          Objections contextuelles en cours de développement pour ce scénario...
+        </p>
+        <p className="text-sm text-muted-foreground mt-2">
+          Scénario: {scenarioId}
+        </p>
+      </div>
+    );
+  }
+
   const objections = scenarioData.objections.map((obj, index) => ({
     ...obj,
     icon: getIconForCategory(obj.category),
@@ -163,9 +178,14 @@ export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({
       {/* Objection Handling Matrix */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <AlertTriangle className="h-5 w-5" />
-            Matrice de gestion des objections
+          <CardTitle className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5" />
+              Objections contextuelles - {scenarioId}
+            </div>
+            <Badge variant="outline" className="text-xs">
+              {objections.length} objections identifiées
+            </Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
