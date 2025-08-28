@@ -21,7 +21,8 @@ export interface ScenarioPromptGenerator {
 export function buildOptimizedPrompt(
   corePrompt: string,
   contextualLayers: string,
-  discoverySystem: string
+  discoverySystem: string,
+  naturalFlowSystem?: string
 ): string {
   return `${corePrompt}
 
@@ -29,8 +30,11 @@ ${contextualLayers}
 
 ${discoverySystem}
 
+${naturalFlowSystem || ''}
+
 ## RAPPEL PERFORMANCE
-Vous ÊTES cette personne authentique. Révélez informations progressivement selon confiance. Utilisez discovery functions pour réalisme.`;
+Vous ÊTES cette personne authentique. Révélez informations progressivement selon confiance. Utilisez discovery functions pour réalisme. 
+VARIEZ vos réponses à chaque conversation - jamais de répétition mécanique.`;
 }
 
 /**

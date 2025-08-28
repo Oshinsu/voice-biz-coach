@@ -55,6 +55,12 @@ export class ContextualDiscoveryManager {
   getSectoralDiscoveryConfig(): SectoralDiscoveryConfig {
     const sector = this.scenario.company.sector;
     
+    const scenarioId = this.scenario.id?.toLowerCase() || '';
+    
+    if (scenarioId.includes('byss') || scenarioId.includes('school')) {
+      return this.getEducationDiscoveryConfig();
+    }
+    
     switch (sector) {
       case 'Finance':
       case 'Fintech':
@@ -71,6 +77,136 @@ export class ContextualDiscoveryManager {
       default:
         return this.getGenericDiscoveryConfig();
     }
+  }
+
+  /**
+   * DISCOVERY EDTECH SPÉCIALISÉ - BYSS VNS
+   */
+  private getEducationDiscoveryConfig(): SectoralDiscoveryConfig {
+    return {
+      sectorId: 'education',
+      sectorName: 'EdTech & Business Schools',
+      discoveryLayers: [
+        {
+          id: 'surface_education',
+          level: 1,
+          category: 'business',
+          information: {
+            currentSetup: "3 simulateurs déployés (finance, stratégie, négociation)",
+            studentVolume: "9000 étudiants, programme Grande École",
+            mainChallenges: ["Engagement étudiant", "Différenciation vs HEC/ESSEC", "ROI pédagogique"],
+            basicInterest: "Recherche solution soft skills communication/vente"
+          },
+          trustRequired: 5,
+          triggerConditions: ['pedagogical_questions', 'student_engagement_discussion']
+        },
+        {
+          id: 'operational_education',
+          level: 2,
+          category: 'technical',
+          information: {
+            currentBudget: "800K€ alloués innovation pédagogique 2024",
+            techEcosystem: "LMS Canvas, simulateurs existants, plateforme vidéo",
+            facultyAdoption: "Resistance au changement, besoin formation",
+            metrics: "Satisfaction étudiants 82%, adoption tech 65%"
+          },
+          trustRequired: 20,
+          triggerConditions: ['budget_context', 'implementation_questions']
+        },
+        {
+          id: 'strategic_education',
+          level: 3,
+          category: 'strategic',
+          information: {
+            competitivePressure: "HEC lance simulateur IA Q2 2025, ESSEC investit 2M€",
+            strategicGoals: "+25% engagement étudiant, -30% heures coaching",
+            accreditation: "Critères EQUIS/AACSB innovation pédagogique",
+            timeline: "Déploiement souhaité septembre 2025"
+          },
+          trustRequired: 40,
+          triggerConditions: ['competitive_analysis', 'strategic_discussion']
+        },
+        {
+          id: 'decision_education',
+          level: 4,
+          category: 'financial',
+          information: {
+            detailedBudget: "300K€ disponibles immédiatement, 500K€ validation Dean",
+            decisionMakers: "Emmanuel Métais (Dean), Frédéric Fréry (DG Académique)",
+            timeline: "Décision janvier, déploiement septembre 2025",
+            alternatives: "Évaluation Capsim, Marketplace Simulations depuis octobre"
+          },
+          trustRequired: 60,
+          triggerConditions: ['budget_approval', 'vendor_comparison']
+        },
+        {
+          id: 'confidential_education',
+          level: 5,
+          category: 'strategic',
+          information: {
+            internalProject: "Projet IA générative pour personnalisation pédagogique",
+            boardPressure: "Objectif top 5 européen d'ici 2027",
+            partnerships: "Discussions partenariat tech avec Microsoft/Google",
+            concerns: "Résistance faculté seniors, budget serré post-COVID"
+          },
+          trustRequired: 80,
+          triggerConditions: ['deep_trust', 'strategic_alignment']
+        }
+      ],
+      specificFunctions: [
+        {
+          name: "getCurrentSimulators",
+          description: "Consulter l'utilisation des simulateurs actuels",
+          sectorSpecific: true,
+          responseTemplates: {
+            low_trust: "Nous avons quelques outils en place...",
+            medium_trust: "Nos simulateurs finance et stratégie sont bien adoptés, mais manquent soft skills...",
+            high_trust: "Voici les métriques détaillées d'usage: Finance sim 85% adoption, Stratégie 78%, mais zéro sur communication..."
+          },
+          delayRange: [1, 3],
+          trustImpact: 8
+        },
+        {
+          name: "getStudentFeedback",
+          description: "Accéder aux retours étudiants sur innovation pédagogique",
+          sectorSpecific: true,
+          responseTemplates: {
+            low_trust: "Les étudiants sont demandeurs d'innovation...",
+            medium_trust: "82% satisfaction globale, mais ils réclament plus d'interactivité...",
+            high_trust: "Feedback détaillé: 'Plus de pratique conversationnelle' revient dans 67% des évaluations..."
+          },
+          delayRange: [2, 4],
+          trustImpact: 6
+        },
+        {
+          name: "checkBudgetEducation",
+          description: "Vérifier la disponibilité budgétaire pour innovation",
+          sectorSpecific: true,
+          responseTemplates: {
+            low_trust: "Le budget innovation existe, mais je dois vérifier les allocations...",
+            medium_trust: "800K€ cette année, dont 300K€ encore disponibles...",
+            high_trust: "Budget détaillé: 300K€ disponibles immédiatement, 500K€ avec validation Dean possible..."
+          },
+          delayRange: [2, 5],
+          trustImpact: 10
+        },
+        {
+          name: "consultFaculty",
+          description: "Consulter l'équipe pédagogique sur adoption nouvelle solution",
+          sectorSpecific: true,
+          responseTemplates: {
+            low_trust: "L'équipe est généralement ouverte aux innovations...",
+            medium_trust: "Mitigé - les jeunes profs sont enthousiastes, les seniors plus réticents...",
+            high_trust: "Frédéric Fréry supporte, mais il faut convaincre 3-4 professeurs influents qui résistent au changement..."
+          },
+          delayRange: [3, 6],
+          trustImpact: 12
+        }
+      ],
+      budgetRanges: ["100-300K€", "300-600K€", "600K-1M€"],
+      decisionTimelines: ["Janvier 2025", "Mars 2025", "Septembre 2025"],
+      stakeholderHierarchy: ["Directrice Innovation", "Directeur Académique", "Dean", "Conseil"]
+    };
   }
 
   /**

@@ -10,6 +10,7 @@ import {
 } from './core/base-prompt-generator';
 import { generateContextualLayers } from './core/contextual-layers';
 import { generateDiscoverySystem } from './core/discovery-system';
+import { NaturalFlowGenerator } from './core/natural-flow-system';
 
 // Import des générateurs de prompts par scénario
 import { KpiPerformancePromptGenerator } from './scenarios/kpi-performance';
@@ -64,8 +65,11 @@ export function generateOptimizedScenarioPrompt({
   // 4. Intégrer le système discovery (200-300 tokens)
   const discoverySystem = generateDiscoverySystem(scenarioId, trustLevel);
   
-  // 5. Assembler le prompt final optimisé
-  return buildOptimizedPrompt(corePrompt, contextualLayers, discoverySystem);
+  // 5. Ajouter le système de flow naturel pour Byss VNS
+  const naturalFlowSystem = generateNaturalFlowEnhancement(scenarioId, agentType, conversationType, trustLevel);
+  
+  // 6. Assembler le prompt final optimisé
+  return buildOptimizedPrompt(corePrompt, contextualLayers, discoverySystem, naturalFlowSystem);
 }
 
 /**
@@ -80,6 +84,57 @@ export function getAvailableScenarios(): string[] {
  */
 export function isValidScenario(scenarioId: string): boolean {
   return scenarioId in scenarioGenerators;
+}
+
+/**
+ * Génère les améliorations de flow naturel
+ */
+function generateNaturalFlowEnhancement(
+  scenarioId: string, 
+  agentType: string, 
+  conversationType: 'cold-call' | 'rdv',
+  trustLevel: number
+): string {
+  if (!scenarioId.includes('byss-vns-school') || agentType !== 'contact_principal') {
+    return '';
+  }
+  
+  const triggers = NaturalFlowGenerator.generateCuriosityTriggers(scenarioId, agentType);
+  const reactions = NaturalFlowGenerator.generateEmotionalReactions(scenarioId);
+  const transitions = NaturalFlowGenerator.generateTopicTransitions(scenarioId);
+  
+  return `
+## SYSTÈME DE FLOW NATUREL ACTIVÉ
+
+### RÉACTIONS SPONTANÉES DISPONIBLES
+${Object.entries(reactions).map(([emotion, responses]) => 
+  `**${emotion.toUpperCase()}**: ${responses.slice(0, 2).join(' | ')}`
+).join('\n')}
+
+### TRANSITIONS NATURELLES
+${Object.entries(transitions).map(([transition, phrases]) =>
+  `**${transition.replace('_', ' → ')}**: "${phrases[0]}"`
+).join('\n')}
+
+### TRIGGERS DE CURIOSITÉ
+- Si mention business school → "Vous travaillez avec quelles autres écoles ?"
+- Si métriques concrètes → "Nos étudiants ont exactement ce problème..."
+- Si vague/généraliste → "En quoi vous êtes différents ?"
+
+### RÈGLES DE VARIABILITÉ
+- Ne jamais répéter exactement la même formulation
+- Adapter ton énergie selon le flow de la conversation
+- Poser des questions de suivi naturelles
+- Réagir émotionnellement aux bonnes surprises
+
+### CALIBRAGE TRUSTLEVEL
+- 0-20: Curiosité prudente, questions de vérification
+- 21-40: Intérêt croissant, partage d'enjeux généraux  
+- 41-60: Confiance établie, détails opérationnels
+- 61-80: Collaboration active, informations sensibles
+- 81-100: Partenariat, accès complet aux données
+
+**RAPPEL CRITIQUE**: Tu es authentiquement Sophie, pas un script. Varie tes réponses, montre de vraies émotions, pose des questions uniques.`;
 }
 
 /**
