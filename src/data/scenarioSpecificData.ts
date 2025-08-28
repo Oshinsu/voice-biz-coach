@@ -59,41 +59,48 @@ interface ScenarioObjections {
 const kpiPerformanceData = {
   salesStrategy: {
     approach: {
-      title: 'Approche consultative',
-      description: 'Audit pédagogique et benchmark'
+      title: 'Approche consultative expert',
+      description: 'Audit pédagogique 360° et benchmark concurrentiel approfondi'
     },
     evidence: {
-      title: 'Preuves sociales',
-      description: 'Cas clients ESSEC, KEDGE'
+      title: 'Preuves sociales écoles tier 1',
+      description: 'ESSEC, KEDGE, SKEMA : +67% engagement étudiant'
     },
     pilot: {
-      title: 'Pilote risk-free',
-      description: 'Test 3 mois département'
+      title: 'Pilote académique risk-free',
+      description: 'Test 6 mois département avec garantie résultats'
     },
     sequence: [
-      'Audit pédagogique gratuit + benchmark concurrence',
-      'Démonstration personnalisée avec cas ESCAP',
-      'Proposition pilote 6 mois département test',
-      'Présentation résultats + business case complet',
-      'Négociation contrat + déploiement global'
+      'Audit pédagogique 360° : méthodes actuelles vs meilleures pratiques secteur',
+      'Benchmark concurrentiel : analyse 15 écoles tier 1-2 équipées',
+      'Workshop direction : définition KPIs pédagogiques et business',
+      'Démonstration immersive : simulation cours avec étudiants volontaires',
+      'Business case personnalisé : ROI sur 3 ans avec scénarios conservateur/optimiste',
+      'Pilote département : déploiement 6 mois avec accompagnement quotidien',
+      'Mesure impact : analytics pédagogiques et satisfaction étudiants/professeurs',
+      'Scaling strategy : roadmap déploiement autres départements'
     ],
     leveragePoints: [
-      'Pression concurrentielle (HEC/ESSEC équipées)',
-      'Attentes génération Z étudiants',
-      'Demandes entreprises partenaires',
-      'Objectifs digitaux direction générale',
-      'ROI mesurable et rapide (6-12 mois)'
+      'Urgence compétitive : 73% écoles tier 1 équipées vs 31% en 2023',
+      'Révolution pédagogique GenZ : 89% étudiants exigent interactivité digitale',
+      'Exigences entreprises partenaires : soft skills + compétences tech',
+      'Mandats direction : digitalisation et excellence pédagogique 2025',
+      'ROI prouvé et rapide : payback 8-14 mois, impact visible dès semestre 1'
     ]
   },
   marketOverview: {
-    marketSize: "2.1B€ marché EdTech France",
-    growthRate: "+15.8% CAGR",
-    budgetRange: "150K-500K€",
-    expectedROI: "22%",
-    timeline: "Rentrée 2025",
-    currentProcessingTime: "6-8h",
-    errorRate: "12-15%",
-    costPerTransaction: "45€"
+    marketSize: "2.1B€ EdTech France, 78B$ mondial",
+    growthRate: "+15.8% CAGR France, +18.3% mondial",
+    budgetRange: "150K-500K€ écoles, jusqu'à 2M€ universités",
+    expectedROI: "22% an 1, 45% cumulé 3 ans",
+    timeline: "Rentrée septembre 2025 (décision avant avril)",
+    keyPlayers: ["Articulate", "Cornerstone", "360Learning", "Rise Up"],
+    marketPenetration: "31% écoles équipées solutions immersives",
+    studentSatisfaction: "+67% vs cours magistraux",
+    teacherAdoption: "94% après formation",
+    currentProcessingTime: "6-8h préparation cours",
+    errorRate: "12-15% évaluations inadaptées",
+    costPerTransaction: "45€ par étudiant/cours"
   },
 
   objectives: {
@@ -229,39 +236,48 @@ const kpiPerformanceData = {
 const fintechStartupData = {
   salesStrategy: {
     approach: {
-      title: 'Technical Deep Dive',
-      description: 'Analyse algorithmes et stack'
+      title: 'Technical Deep Dive Expert',
+      description: 'Analyse exhaustive algorithmes ML et architecture micro-services'
     },
     evidence: {
-      title: 'Performance benchmarks',
-      description: 'Tests sur données réelles'
+      title: 'Performance benchmarks en production',
+      description: 'Tests live sur 50M+ transactions avec comparaisons A/B'
     },
     pilot: {
-      title: 'Proof of concept',
-      description: 'Intégration sandbox 30j'
+      title: 'Proof of concept risk-free',
+      description: 'Intégration sandbox 45j avec garantie performance'
     },
     sequence: [
-      'Audit technique et évaluation stack IA actuel',
-      'Benchmark performance sur données historiques',
-      'Proof of concept intégration sandbox',
-      'Validation conformité et sécurité',
-      'Déploiement production et scaling'
+      'Audit technique complet : stack ML actuel, data pipeline, modèles en production',
+      'Assessment security & compliance : PCI DSS, GDPR, Open Banking API',
+      'Benchmark performance : tests comparatifs sur 6 mois données historiques',
+      'Architecture review : scalabilité, latence, coûts infrastructure cloud',
+      'POC intégration sandbox : API testing, load testing, fraud simulation',
+      'Validation business case : ROI, réduction faux positifs, impact UX',
+      'Go-live production : déploiement graduel avec monitoring 24/7',
+      'Optimization continue : A/B testing et amélioration algorithmes'
     ],
     leveragePoints: [
-      'Pression réglementaire PCI DSS/GDPR',
-      'Concurrence neo-banques innovantes',
-      'Coûts croissants de la fraude',
-      'Objectifs croissance aggressive',
-      'Time-to-market critique'
+      'Urgence réglementaire : PCI DSS Level 1 + Open Banking + DORA 2025',
+      'Guerre concurrentielle : Revolut, N26, Monzo innovation perpétuelle',
+      'Explosion fraude : +156% tentatives 2024, coût moyen 2.1M€/incident',
+      'Hypercroissance : scaling 10x volumes sans dégradation performance',
+      'Investor pressure : metrics de fraud detection dans due diligence levées'
     ]
   },
   marketOverview: {
-    marketSize: "15.2B$ marché global fintech",
-    growthRate: "+22% CAGR",
-    budgetRange: "2M-5M€",
-    expectedROI: "35%",
-    timeline: "Q2 2025",
-    keyPlayers: ["Stripe", "Adyen", "Checkout.com"]
+    marketSize: "15.2B$ global fintech, 890M€ France",
+    growthRate: "+22% CAGR global, +31% CAGR France",
+    budgetRange: "2M-5M€ R&D (dont 30-40% sécurité/compliance)",
+    expectedROI: "35% an 1, 180% cumulé 3 ans",
+    timeline: "Q2 2025 (deadline DORA compliance)",
+    keyPlayers: ["Stripe", "Adyen", "Checkout.com", "Klarna", "PayPal"],
+    fraudLosses: "4.7B$ pertes fraude 2024, +23% vs 2023",
+    regulatoryFines: "127M€ amendes ACPR/AMF 2024",
+    customerAcquisition: "89€ CAC moyen, +45% vs banques",
+    transactionLatency: "127ms moyenne vs 67ms néobanques leader",
+    falsePositiveRate: "12-18% vs 3-5% meilleures solutions",
+    complianceDelay: "14 mois average regulatory approval"
   },
   
   objectives: {
@@ -327,38 +343,48 @@ const fintechStartupData = {
 const retailPersonalizationData = {
   salesStrategy: {
     approach: {
-      title: 'ROI-driven analysis',
-      description: 'Audit conversion et UX'
+      title: 'ROI-driven omnichannel analysis',
+      description: 'Audit conversion 360° et UX journey mapping complet'
     },
     evidence: {
-      title: 'Impact mesurable',
-      description: '+28% conversion clients'
+      title: 'Impact business mesurable',
+      description: '+28% conversion, +42% panier moyen, +52% rétention'
     },
     pilot: {
-      title: 'A/B test magasin',
-      description: 'Validation ROI 60 jours'
+      title: 'A/B test omnicanal risk-free',
+      description: 'Validation ROI 60 jours avec garantie performance'
     },
     sequence: [
-      'Audit UX et analyse funnel conversion',
-      'Évaluation data quality et potentiel IA',
-      'A/B test personnalisation magasin pilote',
-      'Mesure impact business et satisfaction',
-      'Déploiement omnicanal et scaling'
+      'Audit UX omnicanal : web, mobile, magasin + journey mapping client',
+      'Analyse funnel conversion : identification points de friction majeurs',
+      'Data audit 360° : CRM, historique achats, comportements, préférences',
+      'Segmentation IA avancée : personas dynamiques et prédiction intent',
+      'Setup A/B test personnalisation : magasin pilote + contrôle',
+      'Déploiement engine recommandations : temps réel cross-sell/up-sell',
+      'Mesure impact business : conversion, CLV, satisfaction, NPS',
+      'Scaling omnicanal : déploiement tous touchpoints + optimisation'
     ],
     leveragePoints: [
-      'Concurrence Amazon et pure players',
-      'Attentes clients hyper-personnalisées',
-      'Objectifs croissance digital',
-      'Pression marge et rentabilité',
-      'Évolution comportements post-COVID'
+      'Urgence concurrentielle : Amazon Personal Shopper + pure players natifs IA',
+      'Révolution attentes clients : 73% exigent personnalisation temps réel',
+      'Objectifs croissance agressive : +30% e-commerce mandaté direction',
+      'Pression marge critique : inflation + guerre prix = nécessité optimisation',
+      'Transformation post-COVID : 156% augmentation attentes omnicanalité'
     ]
   },
   marketOverview: {
-    marketSize: "943B$ e-commerce mondial",
-    growthRate: "+14.7% CAGR",
-    budgetRange: "500K-1.5M€",
-    expectedROI: "25%",
-    timeline: "Q3 2025"
+    marketSize: "943B$ e-commerce mondial, 156B€ France",
+    growthRate: "+14.7% CAGR mondial, +11.6% France",
+    budgetRange: "500K-1.5M€ (dont 40% tech, 35% data, 25% change)",
+    expectedROI: "25% an 1, 78% cumulé 3 ans",
+    timeline: "Q3 2025 (avant pic saisonnier)",
+    keyPlayers: ["Amazon", "Shopify Plus", "Salesforce Commerce", "Adobe Commerce"],
+    conversionBenchmark: "2.86% moyenne e-commerce vs 4.2% personnalisé",
+    basketValue: "89€ moyenne vs 126€ avec personnalisation",
+    customerRetention: "27% an 1 vs 41% avec personnalisation",
+    dataUtilization: "23% retailers utilisent <30% leur data client",
+    personalizationGap: "67% retailers sans personnalisation temps réel",
+    mobileConversion: "1.84% vs 2.67% desktop (gap personnalisation)"
   },
   
   objectives: {
@@ -424,36 +450,46 @@ const retailPersonalizationData = {
 const digitalAgencyData = {
   salesStrategy: {
     approach: {
-      title: 'Audit productivité',
-      description: 'Analyse workflow agence'
+      title: 'Audit productivité agence expert',
+      description: 'Analyse workflow 360° et benchmark performance concurrentielle'
     },
     evidence: {
-      title: 'ROI client direct',
-      description: 'Amélioration marge 5-8%'
+      title: 'ROI client et marge prouvés',
+      description: '+5-8% marge, +156% performance vs agences classiques'
     },
     pilot: {
-      title: 'Test 1 équipe',
-      description: 'Preuve efficacité rapide'
+      title: 'Test équipe risk-free',
+      description: 'Preuve efficacité 30j sur projet client réel'
     },
     sequence: [
-      'Audit workflow et identification pertes temps',
-      'Démonstration sur vrai projet client',
-      'Test 30 jours équipe pilote',
-      'Mesure impact marge et productivité',
-      'Déploiement global et formation'
+      'Audit workflow complet : mapping processus actuels vs best practices',
+      'Analyse competitive : benchmark 12 agences tier 1 équipées',
+      'Assessment ROI client : impact tools sur performance et satisfaction',
+      'Démonstration live sur projet client réel en cours',
+      'Test 30 jours équipe pilote : validation gains productivité',
+      'Business case personnalisé : ROI marge et différenciation',
+      'Formation équipe et change management',
+      'Déploiement global avec KPIs tracking performance'
     ],
     leveragePoints: [
-      'Concurrence agences réseau mieux organisées',
-      'Attentes clients qualité/réactivité croissantes',
-      'Objectif marge 30% direction',
-      'ROI visible dès premier mois'
+      'Guerre concurrentielle : agences réseau mieux organisées + automation avancée',
+      'Exigences clients croissantes : qualité premium + réactivité + transparence',
+      'Objectif marge critique : 30% imposé direction vs 22% actuel',
+      'Différenciation obligatoire : commoditisation services digitaux',
+      'ROI immédiat : gains visibles dès premier mois déploiement'
     ]
   },
   marketOverview: {
-    marketSize: "567B$ services digitaux",
-    growthRate: "+11.2% CAGR", 
-    budgetRange: "200K-800K€",
-    expectedROI: "30%"
+    marketSize: "567B$ services digitaux, 45B€ France",
+    growthRate: "+11.2% CAGR mondial, +8.7% France",
+    budgetRange: "200K-800K€ (selon taille agence)",
+    expectedROI: "30% an 1, 67% cumulé 3 ans",
+    timeline: "Q1 2025 (avant rush projets printemps)",
+    keyPlayers: ["Publicis", "Havas", "Wunderman Thompson", "agences boutiques"],
+    marginPressure: "Marge moyenne 22% vs 30% objectif direction",
+    clientRetention: "73% vs 89% agences équipées outils performance",
+    timeToDeliver: "23% plus lent vs agences outillées",
+    talentRetention: "67% vs 84% agences avec stack moderne"
   },
   
   objectives: {
