@@ -20,6 +20,7 @@ import { DigitalAgencyPromptGenerator } from './scenarios/digital-agency';
 import { RetailPersonalizationPromptGenerator } from './scenarios/retail-personalization';
 import { IndustrialMarketplacePromptGenerator } from './scenarios/industrial-marketplace';
 import { ManufacturingIotPromptGenerator } from './scenarios/manufacturing-iot';
+import { ByssVnsSchoolPromptGenerator } from './scenarios/byss-vns-school';
 
 /**
  * FACTORY PATTERN - Mapping scénario → générateur
@@ -32,7 +33,8 @@ const scenarioGenerators: Record<string, ScenarioPromptGenerator> = {
   'digital-agency': new DigitalAgencyPromptGenerator(),
   'retail-personalization': new RetailPersonalizationPromptGenerator(),
   'industrial-marketplace': new IndustrialMarketplacePromptGenerator(),
-  'manufacturing-iot': new ManufacturingIotPromptGenerator()
+  'manufacturing-iot': new ManufacturingIotPromptGenerator(),
+  'byss-vns-school': new ByssVnsSchoolPromptGenerator()
 };
 
 /**

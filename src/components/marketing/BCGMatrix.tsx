@@ -106,22 +106,28 @@ export const BCGMatrix: React.FC<BCGMatrixProps> = ({ scenarioId }) => {
   };
 
   const ProductBubble = ({ product }: { product: BCGProduct }) => {
-    const size = Math.max(60, Math.min(120, (parseFloat(product.revenue) * 50)));
+    const baseSize = parseFloat(product.revenue.replace(/[^\d]/g, '')) || 500;
+    const size = Math.max(50, Math.min(100, (baseSize / 10)));
+    
+    // Normalize positions to fit within matrix bounds
+    const leftPosition = Math.min(85, Math.max(5, product.marketShare * 2.5));
+    const bottomPosition = Math.min(85, Math.max(5, Math.abs(product.marketGrowth) * 1.8));
     
     return (
       <div
-        className={`relative flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer ${getQuadrantColor(product.quadrant)}`}
+        className={`absolute flex flex-col items-center justify-center rounded-full border-2 transition-all duration-300 hover:scale-110 hover:shadow-lg cursor-pointer ${getQuadrantColor(product.quadrant)}`}
         style={{
           width: `${size}px`,
           height: `${size}px`,
-          left: `${product.marketShare * 3}%`,
-          bottom: `${product.marketGrowth * 1.5}%`
+          left: `${leftPosition}%`,
+          bottom: `${bottomPosition}%`,
+          transform: 'translate(-50%, 50%)'
         }}
       >
-        <div className="text-center p-2">
+        <div className="text-center p-1">
           {getQuadrantIcon(product.quadrant)}
-          <p className="text-xs font-bold mt-1">{product.name}</p>
-          <p className="text-xs">{product.revenue}</p>
+          <p className="text-xs font-bold mt-1 leading-tight">{product.name}</p>
+          <p className="text-xs leading-tight">{product.revenue}</p>
         </div>
       </div>
     );

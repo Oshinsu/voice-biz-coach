@@ -161,70 +161,74 @@ export const PorterMatrix: React.FC<PorterMatrixProps> = ({ scenarioId }) => {
       </div>
 
       {/* Porter Matrix Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-[600px]">
-        {/* Left Column */}
-        <div className="space-y-6">
-          <div className="flex items-center justify-center h-24">
-            <ArrowLeft className="h-8 w-8 text-primary animate-pulse" />
-          </div>
-          <ForceCard force={data.forces.suppliers} position="left" />
-          <div className="text-center">
-            <Shield className="h-6 w-6 mx-auto text-primary" />
-            <p className="text-xs text-muted-foreground mt-1">Fournisseurs</p>
-          </div>
-        </div>
-
-        {/* Center Column */}
-        <div className="space-y-6">
-          <ForceCard force={data.forces.newEntrants} position="top" />
-          <div className="flex items-center justify-center">
-            <ArrowUp className="h-6 w-6 text-primary" />
-          </div>
-          
-          {/* Center Company */}
-          <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 border-2 border-primary/20">
-            <CardContent className="p-6 text-center">
-              <Building2 className="h-12 w-12 mx-auto mb-3 text-primary" />
-              <h4 className="font-bold text-lg mb-2">{data.centerCompany}</h4>
-              <p className="text-sm text-muted-foreground">Position concurrentielle</p>
-              <div className="mt-4 grid grid-cols-2 gap-2 text-xs">
-                <div className="bg-white/50 p-2 rounded">
-                  <p className="font-semibold">Avantage</p>
-                  <p>Innovation</p>
-                </div>
-                <div className="bg-white/50 p-2 rounded">
-                  <p className="font-semibold">Défi</p>
-                  <p>Scalabilité</p>
-                </div>
+      <div className="relative max-w-6xl mx-auto">
+        <div className="grid grid-cols-3 gap-4 min-h-[500px] items-center">
+          {/* Top Force - New Entrants */}
+          <div className="col-start-2 col-end-3">
+            <div className="flex flex-col items-center space-y-2">
+              <div className="w-full max-w-xs">
+                <ForceCard force={data.forces.newEntrants} position="top" />
               </div>
-            </CardContent>
-          </Card>
-
-          <div className="flex items-center justify-center">
-            <ArrowDown className="h-6 w-6 text-primary" />
+              <ArrowDown className="h-6 w-6 text-primary" />
+            </div>
           </div>
-          <ForceCard force={data.forces.substitutes} position="bottom" />
+
+          {/* Middle Row: Suppliers, Company, Buyers */}
+          <div className="col-start-1 col-end-2 flex flex-col items-center space-y-2">
+            <div className="w-full max-w-xs">
+              <ForceCard force={data.forces.suppliers} position="left" />
+            </div>
+            <div className="flex items-center gap-2">
+              <Shield className="h-5 w-5 text-primary" />
+              <span className="text-xs text-muted-foreground">Fournisseurs</span>
+            </div>
+          </div>
+
+          {/* Center Company */}
+          <div className="col-start-2 col-end-3 flex justify-center">
+            <div className="flex items-center gap-4">
+              <ArrowRight className="h-6 w-6 text-primary" />
+              <Card className="bg-gradient-to-br from-primary/10 to-secondary/10 border-2 border-primary/20 w-48">
+                <CardContent className="p-4 text-center">
+                  <Building2 className="h-8 w-8 mx-auto mb-2 text-primary" />
+                  <h4 className="font-bold text-sm mb-1">{data.centerCompany}</h4>
+                  <p className="text-xs text-muted-foreground">Position concurrentielle</p>
+                </CardContent>
+              </Card>
+              <ArrowLeft className="h-6 w-6 text-primary" />
+            </div>
+          </div>
+
+          <div className="col-start-3 col-end-4 flex flex-col items-center space-y-2">
+            <div className="w-full max-w-xs">
+              <ForceCard force={data.forces.buyers} position="right" />
+            </div>
+            <div className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-primary" />
+              <span className="text-xs text-muted-foreground">Clients</span>
+            </div>
+          </div>
+
+          {/* Bottom Force - Substitutes */}
+          <div className="col-start-2 col-end-3">
+            <div className="flex flex-col items-center space-y-2">
+              <ArrowUp className="h-6 w-6 text-primary" />
+              <div className="w-full max-w-xs">
+                <ForceCard force={data.forces.substitutes} position="bottom" />
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* Right Column */}
-        <div className="space-y-6">
-          <div className="flex items-center justify-center h-24">
-            <ArrowRight className="h-8 w-8 text-primary animate-pulse" />
+        {/* Rivalry at bottom */}
+        <div className="mt-6 text-center">
+          <div className="max-w-xs mx-auto">
+            <ForceCard force={data.forces.rivalry} position="center" />
           </div>
-          <ForceCard force={data.forces.buyers} position="right" />
-          <div className="text-center">
-            <Users className="h-6 w-6 mx-auto text-primary" />
-            <p className="text-xs text-muted-foreground mt-1">Clients</p>
+          <div className="mt-2 flex items-center justify-center gap-2">
+            <Zap className="h-5 w-5 text-orange-500" />
+            <p className="text-sm font-medium text-orange-700">Rivalité sectorielle</p>
           </div>
-        </div>
-      </div>
-
-      {/* Rivalry at bottom */}
-      <div className="text-center">
-        <ForceCard force={data.forces.rivalry} position="center" />
-        <div className="mt-2 flex items-center justify-center gap-2">
-          <Zap className="h-5 w-5 text-orange-500" />
-          <p className="text-sm font-medium text-orange-700">Rivalité sectorielle</p>
         </div>
       </div>
 
