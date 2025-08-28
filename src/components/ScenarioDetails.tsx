@@ -29,6 +29,7 @@ import { ProductAnalysis } from './ProductAnalysis';
 import { MarketAnalysis } from './MarketAnalysis';
 import { ObjectionStrategy } from './ObjectionStrategy';
 import { ScenarioObjectives } from './ScenarioObjectives';
+import { ScenarioInitialInfo } from './ScenarioInitialInfo';
 
 interface ScenarioDetailsProps {
   scenario: {
@@ -132,8 +133,9 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
       </Card>
 
       {/* Detailed tabs */}
-      <Tabs defaultValue="company" className="w-full">
-        <TabsList className="grid w-full grid-cols-6">
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="grid w-full grid-cols-7">
+          <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
           <TabsTrigger value="company">Entreprise</TabsTrigger>
           <TabsTrigger value="contact">Contact</TabsTrigger>
           <TabsTrigger value="product">Produit</TabsTrigger>
@@ -141,6 +143,10 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
           <TabsTrigger value="objectives">Objectifs</TabsTrigger>
           <TabsTrigger value="objections">Objections</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="overview" className="space-y-6">
+          <ScenarioInitialInfo scenarioId={scenario.id} scenario={scenario} />
+        </TabsContent>
 
         <TabsContent value="company" className="space-y-6">
           <Card>

@@ -298,7 +298,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
           </CardHeader>
           <CardContent className="pt-0">
             <div className="text-xs text-muted-foreground">
-              {isConnected ? `${scenario?.company_name} - En ligne` : "Hors ligne"}
+              {isConnected ? `${scenario?.company?.name || 'Entreprise'} - En ligne` : "Hors ligne"}
             </div>
           </CardContent>
         </Card>
@@ -328,7 +328,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
           </div>
           {scenario && !isInFeedbackMode && (
             <div className="text-sm text-muted-foreground">
-              Contact commercial chez {scenario.company_name}
+              {scenario.company?.name ? `Contact commercial chez ${scenario.company.name}` : "Contact commercial"}
             </div>
           )}
         </CardHeader>

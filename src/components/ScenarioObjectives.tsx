@@ -1,211 +1,211 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Target, 
-  Phone, 
-  Calendar, 
-  Search, 
-  Presentation, 
-  HandshakeIcon,
-  CheckCircle,
-  TrendingUp,
-  Users,
-  Clock
-} from 'lucide-react';
+import { Target, Phone, Calendar, CheckCircle, TrendingUp, Users } from 'lucide-react';
 import { getScenarioData } from '@/data/scenarioSpecificData';
 
 interface ScenarioObjectivesProps {
-  scenarioId?: string;
+  scenarioId: string;
 }
 
-export const ScenarioObjectives: React.FC<ScenarioObjectivesProps> = ({ 
-  scenarioId = 'kpi-performance' 
-}) => {
+export const ScenarioObjectives: React.FC<ScenarioObjectivesProps> = ({ scenarioId }) => {
   const scenarioData = getScenarioData(scenarioId);
-  const { objectives } = scenarioData;
+  
+  if (!scenarioData?.objectives) {
+    return (
+      <Card>
+        <CardContent className="text-center py-8">
+          <Target className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+          <p className="text-muted-foreground">
+            Objectifs spécifiques en cours de développement pour ce scénario...
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
-  const objectiveTypes = [
-    {
-      id: 'cold-call',
-      label: 'Cold Call',
-      icon: Phone,
-      description: 'Appel à froid pour premier contact',
-      objectives: objectives.coldCall,
-      isStructured: true
-    },
-    {
-      id: 'discovery',
-      label: 'RDV Discovery',
-      icon: Search,
-      description: 'Entretien de découverte des besoins',
-      objectives: objectives.meeting.discovery,
-      isStructured: false
-    },
-    {
-      id: 'demo',
-      label: 'RDV Démo',
-      icon: Presentation,
-      description: 'Présentation de la solution',
-      objectives: objectives.meeting.demo,
-      isStructured: false
-    },
-    {
-      id: 'closing',
-      label: 'RDV Closing',
-      icon: HandshakeIcon,
-      description: 'Négociation et signature',
-      objectives: objectives.meeting.closing,
-      isStructured: false
-    }
-  ];
+  const { objectives } = scenarioData;
 
   return (
     <div className="space-y-6">
+      {/* Vue d'ensemble des objectifs */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Target className="h-5 w-5" />
-            Objectifs pédagogiques par type d'interaction
+            Objectifs commerciaux par type d'appel
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Cold Call Objectives */}
+            <div className="p-6 border rounded-lg bg-orange-50/50">
+              <div className="flex items-center gap-2 mb-4">
+                <Phone className="h-5 w-5 text-orange-600" />
+                <h3 className="text-lg font-semibold text-orange-800">Cold Call</h3>
+                <Badge variant="destructive" className="bg-orange-100 text-orange-700">
+                  Appel à froid
+                </Badge>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-medium text-orange-700 mb-2">Objectif Principal</h4>
+                  <p className="text-sm text-gray-700 bg-white/50 p-3 rounded">
+                    {objectives.coldCall.primary}
+                  </p>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium text-orange-700 mb-2">Objectif Secondaire</h4>
+                  <p className="text-sm text-gray-700 bg-white/50 p-3 rounded">
+                    {objectives.coldCall.secondary}
+                  </p>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium text-green-700 mb-2">Critère de Succès</h4>
+                  <div className="flex items-start gap-2 bg-green-50 p-3 rounded">
+                    <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <p className="text-sm text-green-700">
+                      {objectives.coldCall.successMetrics}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* RDV Objectives */}
+            <div className="p-6 border rounded-lg bg-green-50/50">
+              <div className="flex items-center gap-2 mb-4">
+                <Calendar className="h-5 w-5 text-green-600" />
+                <h3 className="text-lg font-semibold text-green-800">RDV Planifié</h3>
+                <Badge variant="default" className="bg-green-100 text-green-700">
+                  Rendez-vous
+                </Badge>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <h4 className="font-medium text-green-700 mb-2">Objectif Principal</h4>
+                  <p className="text-sm text-gray-700 bg-white/50 p-3 rounded">
+                    {objectives.rdv.primary}
+                  </p>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium text-green-700 mb-2">Objectif Secondaire</h4>
+                  <p className="text-sm text-gray-700 bg-white/50 p-3 rounded">
+                    {objectives.rdv.secondary}
+                  </p>
+                </div>
+                
+                <div>
+                  <h4 className="font-medium text-blue-700 mb-2">Critère de Succès</h4>
+                  <div className="flex items-start gap-2 bg-blue-50 p-3 rounded">
+                    <CheckCircle className="h-4 w-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                    <p className="text-sm text-blue-700">
+                      {objectives.rdv.successMetrics}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Métriques de performance */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <TrendingUp className="h-5 w-5" />
+            Métriques de performance adaptées au scénario
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground mb-6">
-            Les objectifs sont adaptés selon le type d'appel et le niveau de progression dans le cycle de vente. 
-            Chaque interaction a des objectifs spécifiques à atteindre pour faire progresser l'opportunité commerciale.
-          </p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="text-center p-4 bg-blue-50 rounded-lg">
+              <div className="text-2xl font-bold text-blue-600">75%</div>
+              <div className="text-sm text-blue-700">Taux de décrochage Cold Call</div>
+              <div className="text-xs text-muted-foreground">Objectif: &gt;80%</div>
+            </div>
+            
+            <div className="text-center p-4 bg-green-50 rounded-lg">
+              <div className="text-2xl font-bold text-green-600">45%</div>
+              <div className="text-sm text-green-700">Conversion RDV → Pilote</div>
+              <div className="text-xs text-muted-foreground">Objectif: &gt;50%</div>
+            </div>
+            
+            <div className="text-center p-4 bg-purple-50 rounded-lg">
+              <div className="text-2xl font-bold text-purple-600">7 min</div>
+              <div className="text-sm text-purple-700">Durée moyenne Cold Call</div>
+              <div className="text-xs text-muted-foreground">Objectif: 5-8 min</div>
+            </div>
+            
+            <div className="text-center p-4 bg-orange-50 rounded-lg">
+              <div className="text-2xl font-bold text-orange-600">21 jours</div>
+              <div className="text-sm text-orange-700">Cycle de vente moyen</div>
+              <div className="text-xs text-muted-foreground">Objectif: &lt;28 jours</div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
-          <Tabs defaultValue="cold-call" className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
-              {objectiveTypes.map((type) => (
-                <TabsTrigger 
-                  key={type.id} 
-                  value={type.id}
-                  className="flex items-center gap-2"
-                >
-                  <type.icon className="h-4 w-4" />
-                  <span className="hidden sm:inline">{type.label}</span>
-                </TabsTrigger>
-              ))}
-            </TabsList>
-
-            {objectiveTypes.map((type) => (
-              <TabsContent key={type.id} value={type.id} className="space-y-6">
-                <div className="p-4 bg-primary/5 rounded-lg">
-                  <div className="flex items-center gap-3 mb-2">
-                    <type.icon className="h-5 w-5 text-primary" />
-                    <h3 className="font-semibold">{type.label}</h3>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{type.description}</p>
-                </div>
-
-                {type.isStructured && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <h4 className="font-semibold mb-3 flex items-center gap-2">
-                        <Target className="h-4 w-4 text-primary" />
-                        Objectifs principaux
-                      </h4>
-                      <div className="space-y-3">
-                        {(type.objectives as any).primary.map((objective: string, index: number) => (
-                          <div key={index} className="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
-                            <CheckCircle className="h-4 w-4 mt-0.5 text-green-600 flex-shrink-0" />
-                            <span className="text-sm">{objective}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold mb-3 flex items-center gap-2">
-                        <TrendingUp className="h-4 w-4 text-secondary" />
-                        Objectifs secondaires
-                      </h4>
-                      <div className="space-y-3">
-                        {(type.objectives as any).secondary.map((objective: string, index: number) => (
-                          <div key={index} className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg">
-                            <CheckCircle className="h-4 w-4 mt-0.5 text-blue-600 flex-shrink-0" />
-                            <span className="text-sm">{objective}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {!type.isStructured && (
-                  <div>
-                    <h4 className="font-semibold mb-3">Objectifs à atteindre</h4>
-                    <div className="space-y-3">
-                      {(type.objectives as string[]).map((objective: string, index: number) => (
-                        <div key={index} className="flex items-start gap-3 p-3 bg-primary/5 rounded-lg">
-                          <Target className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
-                          <span className="text-sm">{objective}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div>
-                  <h4 className="font-semibold mb-3 flex items-center gap-2">
-                    <Users className="h-4 w-4 text-accent" />
-                    Métriques de succès
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {(type.isStructured ? (type.objectives as any).success_metrics : objectives.meeting.success_metrics).map((metric: string, index: number) => (
-                      <div key={index} className="flex items-center gap-3 p-3 border rounded-lg">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                        <span className="text-sm">{metric}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <h4 className="font-semibold text-yellow-800 mb-2 flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    Conseils tactiques pour cette phase
-                  </h4>
-                  <div className="text-sm text-yellow-700">
-                    {type.id === 'cold-call' && (
-                      <ul className="space-y-1">
-                        <li>• Préparer un pitch de 30 secondes maximum</li>
-                        <li>• Identifier rapidement si c'est le bon interlocuteur</li>
-                        <li>• Ne pas vendre la solution mais vendre le RDV</li>
-                        <li>• Utiliser des références crédibles (ESSEC, KEDGE)</li>
-                      </ul>
-                    )}
-                    {type.id === 'discovery' && (
-                      <ul className="space-y-1">
-                        <li>• Poser des questions ouvertes pour comprendre le contexte</li>
-                        <li>• Écouter plus que parler (règle 70/30)</li>
-                        <li>• Identifier les enjeux business, pas juste techniques</li>
-                        <li>• Cartographier tous les stakeholders impliqués</li>
-                      </ul>
-                    )}
-                    {type.id === 'demo' && (
-                      <ul className="space-y-1">
-                        <li>• Adapter la démo aux besoins identifiés en discovery</li>
-                        <li>• Faire manipuler l'outil par le prospect</li>
-                        <li>• Montrer des cas d'usage concrets ESCAP</li>
-                        <li>• Présenter le ROI avec des chiffres précis</li>
-                      </ul>
-                    )}
-                    {type.id === 'closing' && (
-                      <ul className="space-y-1">
-                        <li>• Récapituler tous les bénéfices validés ensemble</li>
-                        <li>• Traiter les dernières objections avec patience</li>
-                        <li>• Proposer des alternatives de closing (assumptif, alternatif)</li>
-                        <li>• Sécuriser les next steps même sans signature immédiate</li>
-                      </ul>
-                    )}
-                  </div>
-                </div>
-              </TabsContent>
-            ))}
-          </Tabs>
+      {/* Conseils tactiques spécifiques au scénario */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Users className="h-5 w-5" />
+            Conseils tactiques pour {scenarioId}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-4 bg-orange-50 rounded-lg">
+              <h4 className="font-semibold text-orange-800 mb-3">Cold Call - Conseils</h4>
+              <ul className="text-sm space-y-2 text-orange-700">
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></span>
+                  Pitch de 30 secondes maximum pour capter l'attention
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></span>
+                  Identifier rapidement le pain point principal
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></span>
+                  Ne pas vendre la solution mais vendre le RDV
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></span>
+                  Utiliser des références crédibles du secteur
+                </li>
+              </ul>
+            </div>
+            
+            <div className="p-4 bg-green-50 rounded-lg">
+              <h4 className="font-semibold text-green-800 mb-3">RDV - Conseils</h4>
+              <ul className="text-sm space-y-2 text-green-700">
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
+                  Discovery approfondie avec questions ouvertes
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
+                  Démonstration personnalisée selon besoins
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
+                  Quantifier ROI avec chiffres précis
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
+                  Cartographier tous les stakeholders
+                </li>
+              </ul>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

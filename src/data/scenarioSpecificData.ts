@@ -260,6 +260,19 @@ const retailPersonalizationData = {
     timeline: "Q3 2025"
   },
   
+  objectives: {
+    coldCall: {
+      primary: "Identifier les défis de personnalisation omnicanalité",
+      secondary: "Évaluer maturité data et IA",
+      successMetrics: "RDV avec directeur digital obtenu"
+    },
+    rdv: {
+      primary: "Démontrer ROI personnalisation sur conversion",
+      secondary: "Présenter intégration stack existant",
+      successMetrics: "Pilote magasin test autorisé"
+    }
+  },
+  
   objections: [
     {
       category: "ROI personnalisation",
@@ -288,6 +301,20 @@ const retailPersonalizationData = {
       evidence: "Sézane : intégration Shopify Plus en 36h, live en production sans interruption",
       nextStep: "Audit technique gratuit de votre architecture actuelle",
       persona_adaptation: "Simplicité pour équipes métier, robustesse pour IT"
+    },
+    {
+      category: "Données clients",
+      objection: "Avons-nous suffisamment de données pour la personnalisation ?",
+      frequency: "Fréquente" as const,
+      responses: [
+        "Minimum viable : 3 mois historique + 1000 clients actifs pour démarrer",
+        "Enrichissement automatique : +67% data clients via comportement temps réel",
+        "Sources multiples : CRM + web + mobile + magasin = vue client 360°",
+        "Cold start : algorithmes performants même avec peu de données initiales"
+      ],
+      evidence: "Darty : amélioration 45% recommandations dès semaine 3 avec données limitées",
+      nextStep: "Audit data gratuit : évaluation potentiel personnalisation",
+      persona_adaptation: "Faisabilité technique pour IT, business case pour marketing"
     }
   ] as ScenarioObjections[]
 };
@@ -300,6 +327,20 @@ const digitalAgencyData = {
     budgetRange: "200K-800K€",
     expectedROI: "30%"
   },
+  
+  objectives: {
+    coldCall: {
+      primary: "Identifier pain points productivité et marge",
+      secondary: "Évaluer appétit innovation outils",
+      successMetrics: "RDV avec COO/CEO obtenu"
+    },
+    rdv: {
+      primary: "Quantifier gains productivité et différenciation",
+      secondary: "Démontrer ROI client et rétention équipe",
+      successMetrics: "Pilote sur 1 client approuvé"
+    }
+  },
+  
   objections: [
     {
       category: "Différenciation compétitive",
@@ -334,6 +375,27 @@ const digitalAgencyData = {
 
 // ============= CYBERSECURITY CONSULTING =============
 const cybersecurityConsultingData = {
+  marketOverview: {
+    marketSize: "345B$ cybersécurité mondiale",
+    growthRate: "+12.5% CAGR",
+    budgetRange: "80K-300K€",
+    expectedROI: "400%",
+    timeline: "Q1 2025 (urgence NIS2)"
+  },
+  
+  objectives: {
+    coldCall: {
+      primary: "Identifier niveau maturité cybersécurité actuel",
+      secondary: "Évaluer urgence conformité réglementaire",
+      successMetrics: "Audit de sécurité gratuit accepté"
+    },
+    rdv: {
+      primary: "Quantifier risques et coûts non-conformité",
+      secondary: "Présenter roadmap conformité NIS2/DORA",
+      successMetrics: "Contrat audit complet signé"
+    }
+  },
+  
   objections: [
     {
       category: "Expertise sectorielle",
@@ -368,6 +430,27 @@ const cybersecurityConsultingData = {
 
 // ============= SAAS HR TOOL =============
 const saasHrToolData = {
+  marketOverview: {
+    marketSize: "320B$ HR tech mondiale",
+    growthRate: "+10.4% CAGR",
+    budgetRange: "50K-200K€",
+    expectedROI: "180%",
+    timeline: "Q2 2024 (avant recrutements été)"
+  },
+  
+  objectives: {
+    coldCall: {
+      primary: "Identifier défis RH hypercroissance scale-up",
+      secondary: "Évaluer douleur processus manuels actuels",
+      successMetrics: "RDV avec DRH + CEO obtenu"
+    },
+    rdv: {
+      primary: "Quantifier coût inefficacités RH actuelles",
+      secondary: "Démontrer ROI automation et analytics",
+      successMetrics: "Pilote département test autorisé"
+    }
+  },
+  
   objections: [
     {
       category: "Adoption utilisateur",
@@ -402,6 +485,27 @@ const saasHrToolData = {
 
 // ============= MANUFACTURING IOT =============
 const manufacturingIotData = {
+  marketOverview: {
+    marketSize: "750B$ Industry 4.0 mondial",
+    growthRate: "+16.9% CAGR",
+    budgetRange: "300K-1.2M€",
+    expectedROI: "220%",
+    timeline: "Q3 2024 (avant pic production)"
+  },
+  
+  objectives: {
+    coldCall: {
+      primary: "Identifier défis OEE et maintenance prédictive",
+      secondary: "Évaluer maturité digitale usine",
+      successMetrics: "Visite site + audit gratuit acceptés"
+    },
+    rdv: {
+      primary: "Quantifier gains OEE et réduction downtimes",
+      secondary: "Démontrer ROI maintenance prédictive",
+      successMetrics: "Pilote ligne production autorisé"
+    }
+  },
+  
   objections: [
     {
       category: "Intégration systèmes legacy",
@@ -436,6 +540,27 @@ const manufacturingIotData = {
 
 // ============= INDUSTRIAL MARKETPLACE =============
 const industrialMarketplaceData = {
+  marketOverview: {
+    marketSize: "12.1T$ procurement B2B mondial",
+    growthRate: "+8.4% CAGR",
+    budgetRange: "200K-800K€",
+    expectedROI: "150%",
+    timeline: "Q4 2024 (optimisation budgets 2025)"
+  },
+  
+  objectives: {
+    coldCall: {
+      primary: "Identifier inefficacités processus achats actuels",
+      secondary: "Évaluer volume et complexité sourcing",
+      successMetrics: "RDV avec directeur achats obtenu"
+    },
+    rdv: {
+      primary: "Quantifier économies et gains efficacité",
+      secondary: "Démontrer intégration ERP et conformité",
+      successMetrics: "Pilote catégorie achats approuvé"
+    }
+  },
+  
   objections: [
     {
       category: "Réseau fournisseurs",
