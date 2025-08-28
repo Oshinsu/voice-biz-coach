@@ -1,5 +1,6 @@
 import { RealtimeWebRTCCoach, handleWebRTCError, WEBRTC_CONFIG } from "@/lib/openai-webrtc";
-import { generateEnhancedContactPrompt, generateEnhancedFeedbackPrompt, generateRealtimeCoachingPrompt } from "@/lib/scenario-prompts-enhanced";
+import { VoiceAgentManager, AgentType } from "@/lib/multi-agent-system";
+import { ContextualDiscoveryManager } from "@/lib/contextual-discovery";
 import { useSalesStore } from "@/store/salesStore";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -36,6 +37,13 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
   const [trustLevel, setTrustLevel] = useState(0);
   const [availableInformation, setAvailableInformation] = useState<Record<string, any>>({});
   const [revealedLayers, setRevealedLayers] = useState<any[]>([]);
+  
+  // Nouveau système multi-agents
+  const [agentManager, setAgentManager] = useState<VoiceAgentManager | null>(null);
+  const [currentAgent, setCurrentAgent] = useState<AgentType>('contact_principal');
+  const [discoveryManager, setDiscoveryManager] = useState<ContextualDiscoveryManager | null>(null);
+  const [agentHistory, setAgentHistory] = useState<Array<{agent: AgentType, action: string, timestamp: Date}>>([]);
+  
   const voiceCoachRef = useRef<RealtimeWebRTCCoach | null>(null);
 
   const startConversation = async (callType: 'cold-call' | 'rdv') => {
@@ -50,68 +58,58 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
       setConversationType(callType);
       setShowCallTypeSelector(false);
 
-      // Plus besoin de clé API - utilise Supabase Edge Function
-      voiceCoachRef.current = new RealtimeWebRTCCoach("");
-      
-      const coach = voiceCoachRef.current;
-      
-      // Configuration des callbacks
-      coach.onSessionReady = () => {
-        setIsConnected(true);
-        setIsConnecting(false);
-        setIsInFeedbackMode(false);
-        addMessage(`Contact est maintenant en ligne`, "system");
+      // Initialisation du système multi-agents enrichi
+      const conversationContext = {
+        scenario,
+        conversationType: callType,
+        currentPhase: 'ouverture',
+        trustLevel: 0,
+        revealedInfo: {},
+        messages: []
       };
 
-      coach.onSpeechStarted = () => {
-        setIsRecording(true);
+      // Création du gestionnaire multi-agents
+      const manager = new VoiceAgentManager(conversationContext);
+      setAgentManager(manager);
+
+      // Configuration des callbacks pour l'interface
+      manager.onAgentSwitch = (fromAgent, toAgent, reason) => {
+        setCurrentAgent(toAgent);
+        addMessage(`🔄 Transfert vers ${getAgentDisplayName(toAgent)} - ${reason}`, "system");
+        setAgentHistory(prev => [...prev, {
+          agent: toAgent,
+          action: `Handoff from ${fromAgent}`,
+          timestamp: new Date()
+        }]);
       };
 
-      coach.onSpeechStopped = () => {
-        setIsRecording(false);
+      manager.onAgentAction = (agent, action, data) => {
+        console.log(`Agent ${agent} - Action: ${action}`, data);
+        setAgentHistory(prev => [...prev, {
+          agent,
+          action,
+          timestamp: new Date()
+        }]);
       };
 
-      coach.onResponseStarted = () => {
-        setIsSpeaking(true);
+      manager.onConversationUpdate = (context) => {
+        setTrustLevel(context.trustLevel);
+        setCurrentPhase(context.currentPhase);
       };
 
-      coach.onResponseCompleted = (response) => {
-        setIsSpeaking(false);
-        if (response?.output?.[0]?.content?.[0]?.text) {
-          const sender = isInFeedbackMode ? "coach" : "contact";
-          addMessage(response.output[0].content[0].text, sender);
-        }
-      };
-
-      coach.onTranscriptDelta = (delta) => {
-        // Optionnel : afficher la transcription en temps réel
-      };
-
-      coach.onError = (error) => {
-        setError(error);
-        setIsConnected(false);
-        setIsConnecting(false);
-      };
+      // Initialisation du discovery manager contextuel
+      const discoveryMgr = new ContextualDiscoveryManager(scenario, 0);
+      setDiscoveryManager(discoveryMgr);
 
       setIsConnecting(true);
       
-      // Variables par défaut pour la cognitive discovery
-      const trustLevel = 0;
-      const availableInformation = {};
-      const revealedLayers = [];
+      // Démarrage de la conversation avec le système multi-agents
+      await manager.startConversation(selectedVoice);
       
-      // Instructions contextuelles améliorées avec la nouvelle API 2025
-      const contactPrompt = await generateEnhancedContactPrompt({
-        conversationType: callType,
-        scenarioData: scenario,
-        currentPhase: 'ouverture',
-        trustLevel: trustLevel,
-        availableInformation: availableInformation,
-        revealedLayers: revealedLayers,
-        voice: selectedVoice
-      });
-      
-      await coach.connect(contactPrompt, selectedVoice);
+      setIsConnected(true);
+      setIsConnecting(false);
+      setIsInFeedbackMode(false);
+      addMessage(`${getAgentDisplayName(currentAgent)} est maintenant en ligne`, "system");
 
     } catch (error) {
       console.error("Erreur lors de la connexion:", error);
@@ -120,11 +118,17 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
     }
   };
 
-  const endConversation = () => {
+  const endConversation = async () => {
+    if (agentManager) {
+      await agentManager.disconnect();
+      setAgentManager(null);
+    }
+    
     if (voiceCoachRef.current) {
       voiceCoachRef.current.disconnect();
       voiceCoachRef.current = null;
     }
+    
     setIsConnected(false);
     setIsConnecting(false);
     setIsRecording(false);
@@ -133,43 +137,45 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
     setIsInFeedbackMode(false);
     setConversationType(null);
     setShowCallTypeSelector(true);
+    setCurrentAgent('contact_principal');
+    setAgentHistory([]);
     addMessage("Conversation terminée", "system");
   };
 
   const startFeedbackMode = async () => {
-    if (!voiceCoachRef.current || !scenario) return;
+    if (!agentManager || !scenario) return;
     
     setIsInFeedbackMode(true);
-    const feedbackPrompt = generateEnhancedFeedbackPrompt(scenario, conversationType!);
     
-    // Créer une nouvelle session avec le prompt de feedback amélioré
     try {
-      await voiceCoachRef.current.disconnect();
-      
-      // Initialiser nouveau coach avec Edge Function Supabase
-      voiceCoachRef.current = new RealtimeWebRTCCoach("");
-      const coach = voiceCoachRef.current;
-      
-      // Reconfigurer les callbacks pour le mode feedback
-      coach.onSessionReady = () => {
-        addMessage("🎯 Coach commercial prêt pour l'analyse de performance", "system");
-      };
-      
-      coach.onResponseCompleted = (response) => {
-        setIsSpeaking(false);
-        if (response?.output?.[0]?.content?.[0]?.text) {
-          addMessage(response.output[0].content[0].text, "coach");
-        }
-      };
-      
-      coach.onError = (error) => {
-        setError(`Erreur mode feedback: ${error}`);
-      };
-      
-      await coach.connect(feedbackPrompt, selectedVoice);
+      await agentManager.switchToAgent('coach', 'Demande d\'analyse de performance');
+      addMessage("🎯 Coach commercial prêt pour l'analyse de performance", "system");
     } catch (error) {
       console.error("Erreur lors du basculement en mode feedback:", error);
       setError("Impossible de basculer en mode feedback");
+    }
+  };
+
+  // Nouvelles fonctions pour la gestion multi-agents
+  const switchToAgent = async (targetAgent: AgentType) => {
+    if (!agentManager) return;
+    
+    try {
+      await agentManager.switchToAgent(targetAgent, 'Sélection manuelle');
+    } catch (error) {
+      console.error("Erreur lors du changement d'agent:", error);
+      setError(`Impossible de basculer vers ${getAgentDisplayName(targetAgent)}`);
+    }
+  };
+
+  const returnToMainContact = async () => {
+    if (!agentManager) return;
+    
+    try {
+      await agentManager.returnToMainContact('Retour au contact principal');
+      setIsInFeedbackMode(false);
+    } catch (error) {
+      console.error("Erreur lors du retour au contact principal:", error);
     }
   };
 
@@ -192,31 +198,57 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
   const getContextualCoaching = () => {
     if (!scenario) return "Aucun scénario sélectionné";
     
-    if (isInFeedbackMode) {
+    const agentDisplayName = getAgentDisplayName(currentAgent);
+    
+    if (currentAgent === 'coach') {
       return `💬 Mode analyse activé - Le coach évalue votre performance sur le scénario ${scenario.title}`;
     }
     
-    // Coaching contextuel intelligent selon la phase et le type d'appel
+    // Coaching contextuel intelligent selon l'agent actuel et la phase
+    const agentAdvice = {
+      contact_principal: `🎙️ Contact principal: ${agentDisplayName} - ${getPhaseAdvice()}`,
+      collegue_technique: `🔧 Expert technique impliqué - Préparez vos questions techniques sur l'architecture et l'intégration`,
+      direction: `👔 Direction en ligne - Focus ROI, budget et décision stratégique`,
+      coach: `🎯 Coach actif - Analyse de performance en cours`
+    };
+
+    const currentAdvice = agentAdvice[currentAgent];
+    const trustInfo = `Confiance: ${trustLevel}% | Informations révélées: ${revealedLayers.length}`;
+    
+    return `${currentAdvice}\n📊 ${trustInfo}`;
+  };
+
+  const getPhaseAdvice = () => {
     const phaseAdviceEnhanced = {
       ouverture: conversationType === 'cold-call' ? 
-        `🎯 COLD CALL: Captez l'attention en 30 secondes maximum. Contact: ${scenario.company.name}` :
-        `🎯 RDV: Établissez le cadre et confirmez les attentes. Durée prévue: 30-45 min`,
+        `Captez l'attention en 30 secondes maximum` :
+        `Établissez le cadre et confirmez les attentes`,
       decouverte: conversationType === 'cold-call' ?
-        `🔍 COLD CALL: Une question directe pour identifier LE pain point principal` :
-        `🔍 RDV: Explorez en profondeur: ${scenario.painPoints?.slice(0,2).join(" et ") || "besoins spécifiques"}`,
+        `Une question directe pour identifier LE pain point principal` :
+        `Explorez en profondeur les besoins spécifiques`,
       demonstration: conversationType === 'cold-call' ?
-        `💡 COLD CALL: Pas de démo - focalisez sur la value proposition` :
-        `💡 RDV: Démonstration personnalisée selon les besoins révélés`,
+        `Pas de démo - focalisez sur la value proposition` :
+        `Démonstration personnalisée selon les besoins révélés`,
       objections: conversationType === 'cold-call' ?
-        `⚡ COLD CALL: Objectif = obtenir un RDV, pas convaincre totalement` :
-        `⚡ RDV: Levez tous les freins pour avancer vers la décision`,
+        `Objectif = obtenir un RDV, pas convaincre totalement` :
+        `Levez tous les freins pour avancer vers la décision`,
       closing: conversationType === 'cold-call' ?
-        `🎪 COLD CALL: "Pouvons-nous prévoir 30 minutes la semaine prochaine?"` :
-        `🎪 RDV: Définissez les étapes suivantes concrètes avec timeline`
+        `"Pouvons-nous prévoir 30 minutes la semaine prochaine?"` :
+        `Définissez les étapes suivantes concrètes avec timeline`
     };
 
     return phaseAdviceEnhanced[currentPhase as keyof typeof phaseAdviceEnhanced] || 
-           `Phase ${currentPhase} - Adaptez selon l'évolution de la conversation`;
+           `Adaptez selon l'évolution de la conversation`;
+  };
+
+  const getAgentDisplayName = (agent: AgentType): string => {
+    const names = {
+      contact_principal: scenario?.interlocutor?.name || 'Contact Principal',
+      collegue_technique: 'Expert Technique',
+      direction: 'Direction',
+      coach: 'Coach Commercial'
+    };
+    return names[agent];
   };
 
   useEffect(() => {
@@ -301,24 +333,45 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
         </CardHeader>
 
         <CardContent className="flex-1 flex flex-col p-4">
-          {/* Coaching contextuel amélioré */}
+          {/* Interface Multi-Agents Enrichie */}
           <div className="mb-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
             <div className="flex items-start justify-between mb-2">
               <h4 className="text-sm font-medium">
-                {isInFeedbackMode ? "🎯 Analyse Performance" : "🎙️ Votre Contact"}
+                🎙️ Agent Actuel: {getAgentDisplayName(currentAgent)}
               </h4>
-              {!isInFeedbackMode && (
-                <div className="text-xs text-muted-foreground">
-                  Confiance: {trustLevel}%
-                </div>
-              )}
+              <div className="text-xs text-muted-foreground">
+                Confiance: {trustLevel}%
+              </div>
             </div>
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            
+            <p className="text-xs text-muted-foreground leading-relaxed mb-3">
               {getContextualCoaching()}
             </p>
-            <div className="mt-3 flex items-center gap-2 flex-wrap">
+            
+            {/* Sélecteur d'agents */}
+            {isConnected && (
+              <div className="mb-3">
+                <div className="text-xs font-medium mb-2">Agents disponibles:</div>
+                <div className="flex flex-wrap gap-1">
+                  {(['contact_principal', 'collegue_technique', 'direction', 'coach'] as AgentType[]).map(agent => (
+                    <Button
+                      key={agent}
+                      variant={currentAgent === agent ? "default" : "outline"}
+                      size="sm"
+                      className="text-xs h-6 px-2"
+                      onClick={() => agent !== currentAgent && switchToAgent(agent)}
+                      disabled={agent === currentAgent}
+                    >
+                      {getAgentDisplayName(agent)}
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            <div className="flex items-center gap-2 flex-wrap">
               <Badge variant="outline" className="text-xs">
-                {isInFeedbackMode ? "Mode Coach" : `Phase: ${currentPhase}`}
+                Phase: {currentPhase}
               </Badge>
               {scenario && (
                 <Badge variant="outline" className="text-xs">
@@ -330,9 +383,9 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
                   {conversationType === 'cold-call' ? 'Cold Call' : 'RDV'}
                 </Badge>
               )}
-              {selectedVoice && (
-                <Badge variant="outline" className="text-xs bg-green-50 text-green-700">
-                  Voix: {selectedVoice}
+              {currentAgent !== 'contact_principal' && (
+                <Badge variant="outline" className="text-xs bg-orange-50 text-orange-700">
+                  Agent Spécialisé
                 </Badge>
               )}
             </div>
@@ -376,7 +429,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
               <div className="flex items-center gap-2">
                 {isConnected ? (
                   <Badge className="bg-green-100 text-green-800">
-                    {isInFeedbackMode ? "Coach connecté" : "Contact en ligne"}
+                    {getAgentDisplayName(currentAgent)} en ligne
                   </Badge>
                 ) : (
                   <Badge variant="outline">Déconnecté</Badge>
@@ -386,7 +439,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
                 )}
                 {isSpeaking && (
                   <Badge className="bg-blue-100 text-blue-800">
-                    {isInFeedbackMode ? "Coach parle" : "Contact parle"}
+                    {getAgentDisplayName(currentAgent)} parle
                   </Badge>
                 )}
               </div>
