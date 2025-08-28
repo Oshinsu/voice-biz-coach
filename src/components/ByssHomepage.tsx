@@ -137,68 +137,68 @@ export function ByssHomepage() {
         </div>
       </section>
 
-      {/* Stats Section - Fond saumon remplacé par Orange */}
-      <section className="py-20 px-6 bg-accent">
+      {/* Stats Section - Fond Blanc */}
+      <section className="py-20 px-6 bg-background">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
               Performances en temps réel
             </h2>
-            <p className="text-lg text-primary/80 max-w-2xl mx-auto">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Des résultats concrets pour l'apprentissage commercial moderne
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div className="relative overflow-hidden bg-accent-foreground border-0 shadow-lg hover:shadow-xl transition-all duration-500 group rounded-lg">
+            <div className="relative overflow-hidden bg-background border border-primary/20 shadow-lg hover:shadow-xl transition-all duration-500 group rounded-lg">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 rounded-full bg-primary group-hover:scale-110 transition-transform duration-300">
-                    <Target className="h-6 w-6 text-white" />
+                  <div className="p-3 rounded-full bg-accent group-hover:scale-110 transition-transform duration-300">
+                    <Target className="h-6 w-6 text-primary" />
                   </div>
                   <div className="w-2 h-2 bg-accent rounded-full"></div>
                 </div>
                 <div className="text-3xl font-bold mb-2 text-primary">{totalCompanies}</div>
-                <div className="text-sm text-primary/80 font-medium">Scénarios B2B disponibles</div>
+                <div className="text-sm text-muted-foreground font-medium">Scénarios B2B disponibles</div>
               </div>
             </div>
             
-            <div className="relative overflow-hidden bg-accent-foreground border-0 shadow-lg hover:shadow-xl transition-all duration-500 group rounded-lg">
+            <div className="relative overflow-hidden bg-background border border-primary/20 shadow-lg hover:shadow-xl transition-all duration-500 group rounded-lg">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 rounded-full bg-primary group-hover:scale-110 transition-transform duration-300">
-                    <TrendingUp className="h-6 w-6 text-white" />
+                  <div className="p-3 rounded-full bg-accent group-hover:scale-110 transition-transform duration-300">
+                    <TrendingUp className="h-6 w-6 text-primary" />
                   </div>
                   <div className="w-2 h-2 bg-accent rounded-full"></div>
                 </div>
                 <div className="text-3xl font-bold mb-2 text-primary">85%</div>
-                <div className="text-sm text-primary/80 font-medium">Taux de satisfaction étudiants</div>
+                <div className="text-sm text-muted-foreground font-medium">Taux de satisfaction étudiants</div>
               </div>
             </div>
             
-            <div className="relative overflow-hidden bg-accent-foreground border-0 shadow-lg hover:shadow-xl transition-all duration-500 group rounded-lg">
+            <div className="relative overflow-hidden bg-background border border-primary/20 shadow-lg hover:shadow-xl transition-all duration-500 group rounded-lg">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 rounded-full bg-primary group-hover:scale-110 transition-transform duration-300">
-                    <BarChart3 className="h-6 w-6 text-white" />
+                  <div className="p-3 rounded-full bg-accent group-hover:scale-110 transition-transform duration-300">
+                    <BarChart3 className="h-6 w-6 text-primary" />
                   </div>
                   <div className="w-2 h-2 bg-accent rounded-full"></div>
                 </div>
                 <div className="text-3xl font-bold mb-2 text-primary">92%</div>
-                <div className="text-sm text-primary/80 font-medium">Amélioration des compétences</div>
+                <div className="text-sm text-muted-foreground font-medium">Amélioration des compétences</div>
               </div>
             </div>
             
-            <div className="relative overflow-hidden bg-accent-foreground border-0 shadow-lg hover:shadow-xl transition-all duration-500 group rounded-lg">
+            <div className="relative overflow-hidden bg-background border border-primary/20 shadow-lg hover:shadow-xl transition-all duration-500 group rounded-lg">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <div className="p-3 rounded-full bg-primary group-hover:scale-110 transition-transform duration-300">
-                    <Clock className="h-6 w-6 text-white" />
+                  <div className="p-3 rounded-full bg-accent group-hover:scale-110 transition-transform duration-300">
+                    <Clock className="h-6 w-6 text-primary" />
                   </div>
                   <div className="w-2 h-2 bg-accent rounded-full"></div>
                 </div>
                 <div className="text-3xl font-bold mb-2 text-primary">24/7</div>
-                <div className="text-sm text-primary/80 font-medium">Disponibilité plateforme</div>
+                <div className="text-sm text-muted-foreground font-medium">Disponibilité plateforme</div>
               </div>
             </div>
           </div>
@@ -266,29 +266,29 @@ export function ByssHomepage() {
       {/* Trust Elements */}
       <TrustElements />
 
-      {/* Pricing Section - Fond Orange */}
-      <section className="py-20 px-6 bg-accent">
+      {/* Pricing Section - Fond Bleu Marine */}
+      <section className="py-20 px-6 bg-primary">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-primary text-primary-foreground">
+            <Badge className="mb-4 bg-primary-foreground/10 text-accent border border-accent/30">
               Tarification transparente
             </Badge>
-            <h2 className="text-4xl md:text-5xl font-bold text-primary mb-6">
+            <h2 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
               Une solution complète pour votre établissement
             </h2>
-            <p className="text-xl text-primary/80 mb-8">
+            <p className="text-xl text-primary-foreground/80 mb-8">
               Accès illimité pour tous vos étudiants et formateurs
             </p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Pricing Card */}
-            <Card className="bg-accent-foreground border border-primary/20 shadow-lg">
+            <Card className="bg-primary-foreground border border-primary-foreground/20 shadow-lg">
               <CardContent className="p-8">
                 <div className="text-center mb-8">
-                  <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
-                    <Star className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-medium text-primary">Solution Premium</span>
+                  <div className="inline-flex items-center gap-2 bg-accent/10 px-4 py-2 rounded-full mb-4">
+                    <Star className="h-4 w-4 text-accent" />
+                    <span className="text-sm font-medium text-accent">Solution Premium</span>
                   </div>
                   <div className="text-6xl font-bold text-primary mb-2">
                     749€
@@ -309,13 +309,13 @@ export function ByssHomepage() {
                     "Rapports de performance détaillés"
                   ].map((feature) => (
                     <div key={feature} className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-success flex-shrink-0" />
+                      <CheckCircle className="h-5 w-5 text-accent flex-shrink-0" />
                       <span className="text-primary">{feature}</span>
                     </div>
                   ))}
                 </div>
 
-                <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground text-lg py-4" asChild>
+                <Button className="w-full bg-accent hover:bg-accent/90 text-primary text-lg py-4" asChild>
                   <Link to="/contact">
                     Demander une démo personnalisée
                   </Link>
@@ -326,7 +326,7 @@ export function ByssHomepage() {
             {/* Value Propositions */}
             <div className="space-y-8">
               <div>
-                <h3 className="text-2xl font-bold text-primary mb-6">
+                <h3 className="text-2xl font-bold text-primary-foreground mb-6">
                   Pourquoi choisir Byss VNS ?
                 </h3>
                 <div className="space-y-6">
@@ -349,13 +349,13 @@ export function ByssHomepage() {
                   ].map((item) => {
                     const Icon = item.icon;
                     return (
-                      <div key={item.title} className="flex gap-4 p-4 bg-accent-foreground/80 rounded-xl border border-primary/20">
-                        <div className="p-3 bg-primary/10 rounded-lg flex-shrink-0 border border-primary/20">
-                          <Icon className="h-6 w-6 text-primary" />
+                      <div key={item.title} className="flex gap-4 p-4 bg-primary-foreground/10 rounded-xl border border-primary-foreground/20">
+                        <div className="p-3 bg-accent/20 rounded-lg flex-shrink-0 border border-accent/30">
+                          <Icon className="h-6 w-6 text-accent" />
                         </div>
                         <div>
-                          <h4 className="font-semibold text-primary mb-2">{item.title}</h4>
-                          <p className="text-sm text-primary/80 leading-relaxed">{item.description}</p>
+                          <h4 className="font-semibold text-primary-foreground mb-2">{item.title}</h4>
+                          <p className="text-sm text-primary-foreground/80 leading-relaxed">{item.description}</p>
                         </div>
                       </div>
                     );
@@ -363,12 +363,12 @@ export function ByssHomepage() {
                 </div>
               </div>
 
-              <div className="p-6 bg-accent-foreground/80 rounded-xl border border-primary/20">
+              <div className="p-6 bg-primary-foreground/10 rounded-xl border border-primary-foreground/20">
                 <div className="flex items-center gap-3 mb-3">
-                  <CheckCircle className="h-6 w-6 text-success" />
-                  <span className="font-semibold text-success">Garantie satisfait ou remboursé</span>
+                  <CheckCircle className="h-6 w-6 text-accent" />
+                  <span className="font-semibold text-accent">Garantie satisfait ou remboursé</span>
                 </div>
-                <p className="text-sm text-primary/80">
+                <p className="text-sm text-primary-foreground/80">
                   Essai gratuit de 30 jours. Si vous n'êtes pas satisfait, nous vous remboursons intégralement.
                 </p>
               </div>
