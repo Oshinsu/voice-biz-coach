@@ -141,21 +141,21 @@ const Scenarios = () => {
                       </div>
                     </div>
 
-                    {/* Stats */}
-                    <div className="flex items-center justify-between mb-6 p-3 bg-background/50 rounded-lg">
-                      <div className="text-center">
-                        <div className="text-lg font-bold text-accent">{scenario.success_probability || scenario.probability}%</div>
-                        <div className="text-xs text-muted-foreground">Probabilité</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-lg font-bold text-foreground">{(scenario.main_objectives || scenario.objectives || []).length}</div>
-                        <div className="text-xs text-muted-foreground">Objectifs</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-lg font-bold text-foreground">{(scenario.available_tools || scenario.tools || []).length}</div>
-                        <div className="text-xs text-muted-foreground">Outils</div>
-                      </div>
-                    </div>
+            {/* Stats */}
+            <div className="flex items-center justify-between mb-6 p-3 bg-background/50 rounded-lg">
+              <div className="text-center">
+                <div className="text-lg font-bold text-foreground">{(scenario.main_objectives || scenario.objectives || []).length}</div>
+                <div className="text-xs text-muted-foreground">Objectifs</div>
+              </div>
+              <div className="text-center">
+                <div className="text-lg font-bold text-foreground">{(scenario.available_tools || scenario.tools || []).length}</div>
+                <div className="text-xs text-muted-foreground">Outils</div>
+              </div>
+              <div className="text-center">
+                <div className="text-lg font-bold text-accent">{scenario.difficulty}</div>
+                <div className="text-xs text-muted-foreground">Niveau</div>
+              </div>
+            </div>
 
                     {/* Pain Points Preview */}
                     <div className="mb-6">

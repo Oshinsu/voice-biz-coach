@@ -105,15 +105,15 @@ export function EnhancedStats({ totalCompanies, totalRevenue, avgSuccessRate }: 
           />
           <StatCard
             icon={TrendingUp}
-            value={`${(totalRevenue/1000000).toFixed(1)}M€`}
-            label="Valeur totale des deals"
+            value="85%"
+            label="Taux de satisfaction étudiants"
             delay={200}
             color="bg-accent"
           />
           <StatCard
             icon={BarChart3}
-            value={avgSuccessRate}
-            label="Taux de réussite moyen"
+            value="92%"
+            label="Amélioration des compétences"
             delay={300}
             color="bg-success"
           />

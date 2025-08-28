@@ -1,4 +1,4 @@
-import { ArrowRight, Brain, TrendingUp, Users, Zap, CheckCircle, Star, Mic, BarChart3, Shield, GraduationCap, Building, Target } from "lucide-react";
+import { ArrowRight, Brain, TrendingUp, Users, Zap, CheckCircle, Star, Mic, BarChart3, Shield, GraduationCap, Building, Target, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -137,12 +137,73 @@ export function ByssHomepage() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <EnhancedStats 
-        totalCompanies={totalCompanies}
-        totalRevenue={totalRevenue}
-        avgSuccessRate={avgSuccessRate}
-      />
+      {/* Stats Section - Fond saumon remplacé par Orange */}
+      <section className="py-20 px-6 bg-accent">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">
+              Performances en temps réel
+            </h2>
+            <p className="text-lg text-primary/80 max-w-2xl mx-auto">
+              Des résultats concrets pour l'apprentissage commercial moderne
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="relative overflow-hidden bg-accent-foreground border-0 shadow-lg hover:shadow-xl transition-all duration-500 group rounded-lg">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="p-3 rounded-full bg-primary group-hover:scale-110 transition-transform duration-300">
+                    <Target className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="w-2 h-2 bg-accent rounded-full"></div>
+                </div>
+                <div className="text-3xl font-bold mb-2 text-primary">{totalCompanies}</div>
+                <div className="text-sm text-primary/80 font-medium">Scénarios B2B disponibles</div>
+              </div>
+            </div>
+            
+            <div className="relative overflow-hidden bg-accent-foreground border-0 shadow-lg hover:shadow-xl transition-all duration-500 group rounded-lg">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="p-3 rounded-full bg-primary group-hover:scale-110 transition-transform duration-300">
+                    <TrendingUp className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="w-2 h-2 bg-accent rounded-full"></div>
+                </div>
+                <div className="text-3xl font-bold mb-2 text-primary">85%</div>
+                <div className="text-sm text-primary/80 font-medium">Taux de satisfaction étudiants</div>
+              </div>
+            </div>
+            
+            <div className="relative overflow-hidden bg-accent-foreground border-0 shadow-lg hover:shadow-xl transition-all duration-500 group rounded-lg">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="p-3 rounded-full bg-primary group-hover:scale-110 transition-transform duration-300">
+                    <BarChart3 className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="w-2 h-2 bg-accent rounded-full"></div>
+                </div>
+                <div className="text-3xl font-bold mb-2 text-primary">92%</div>
+                <div className="text-sm text-primary/80 font-medium">Amélioration des compétences</div>
+              </div>
+            </div>
+            
+            <div className="relative overflow-hidden bg-accent-foreground border-0 shadow-lg hover:shadow-xl transition-all duration-500 group rounded-lg">
+              <div className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="p-3 rounded-full bg-primary group-hover:scale-110 transition-transform duration-300">
+                    <Clock className="h-6 w-6 text-white" />
+                  </div>
+                  <div className="w-2 h-2 bg-accent rounded-full"></div>
+                </div>
+                <div className="text-3xl font-bold mb-2 text-primary">24/7</div>
+                <div className="text-sm text-primary/80 font-medium">Disponibilité plateforme</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Technology Section - Fond Blanc */}
       <section className="py-20 px-6 bg-background">
