@@ -107,26 +107,21 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
         <CardContent className="space-y-4">
           <p className="text-muted-foreground">{scenario.description}</p>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-3 bg-primary/5 rounded-lg">
-              <TrendingUp className="h-6 w-6 mx-auto mb-1 text-primary" />
-              <p className="text-xs text-muted-foreground">Probabilité</p>
-              <p className="text-lg font-bold">{scenario.probability}%</p>
-            </div>
-            <div className="text-center p-3 bg-secondary/5 rounded-lg">
-              <Building className="h-6 w-6 mx-auto mb-1 text-secondary" />
-              <p className="text-xs text-muted-foreground">Secteur</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="text-center p-4 bg-secondary/5 rounded-lg">
+              <Building className="h-6 w-6 mx-auto mb-2 text-secondary" />
+              <p className="text-xs text-muted-foreground uppercase tracking-wide">Secteur</p>
               <p className="text-sm font-medium">{scenario.company.sector}</p>
             </div>
-            <div className="text-center p-3 bg-accent/5 rounded-lg">
-              <DollarSign className="h-6 w-6 mx-auto mb-1 text-accent" />
-              <p className="text-xs text-muted-foreground">Budget</p>
-              <p className="text-sm font-medium">{scenario.company.budget}</p>
+            <div className="text-center p-4 bg-accent/5 rounded-lg">
+              <DollarSign className="h-6 w-6 mx-auto mb-2 text-accent" />
+              <p className="text-xs text-muted-foreground uppercase tracking-wide">Budget Innovation</p>
+              <p className="text-sm font-medium">12M€/an</p>
             </div>
-            <div className="text-center p-3 bg-muted/5 rounded-lg">
-              <Users className="h-6 w-6 mx-auto mb-1" />
-              <p className="text-xs text-muted-foreground">Taille</p>
-              <p className="text-sm font-medium">{scenario.company.size}</p>
+            <div className="text-center p-4 bg-muted/5 rounded-lg">
+              <Users className="h-6 w-6 mx-auto mb-2" />
+              <p className="text-xs text-muted-foreground uppercase tracking-wide">Taille</p>
+              <p className="text-sm font-medium">2,800 étudiants</p>
             </div>
           </div>
         </CardContent>

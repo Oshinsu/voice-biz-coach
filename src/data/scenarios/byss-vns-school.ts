@@ -5,11 +5,11 @@ export const byssVnsSchoolScenario: Scenario = {
   title: "Révolution Pédagogique IA",
   description: "Vendre Byss VNS à EDHEC Business School pour transformer l'enseignement commercial avec notre simulateur vocal IA révolutionnaire",
   difficulty: "Difficile",
-  probability: 65,
+  probability: 75,
   company: {
     name: "EDHEC Business School",
-    sector: "Enseignement Supérieur - École de Commerce",
-    size: "2,800 étudiants (850 Master Grande École, 450 MSc, 1,200 formations exec), 180 professeurs permanents",
+    sector: "Enseignement Supérieur",
+    size: "2,800 étudiants, 180 professeurs",
     revenue: "85M€/an (40% formations initiales, 35% executive education, 15% recherche, 10% international)",
     location: "Lille & Nice, France - Campus principal Lille (120 hectares), campus Nice (15 hectares)",
     
@@ -67,7 +67,7 @@ export const byssVnsSchoolScenario: Scenario = {
     
     currentSolution: "Patchwork pédagogique fragmenté: Cesim Business Simulations (text-based, 85k€/an) + Marketplace Simulations + jeux rôles manuels professeurs. Time investment: 12h/prof préparation simulations/semestre. Student experience: 2h practice/semester vs 15h standard industry. ROI measurement: impossible, aucune métrique objective skills progression. Technology gap: simulations 2015 vs attentes 2024 étudiants digital natives.",
     
-    budget: "Budget innovations pédagogiques: 12M€/an (14% budget total). Allocation: 65% plateformes existantes, 25% learning lab R&D, 10% pilots nouveaux outils. Appétit investissement Byss VNS: jusqu'à 300k€ si ROI prouvé amélioration satisfaction étudiants +5pts (objectif 87%→92%) + placement rate maintaining 96%.",
+    budget: "12M€/an innovations pédagogiques - Investissement Byss VNS jusqu'à 300k€",
     
     timeline: "Urgence stratégique 2024: renouvellement accreditations EQUIS/AACSB 2025 nécessite innovation pédagogique majeure. Deadline pilot programs: janvier 2024 pour évaluation mars-juin, déploiement septembre 2024 si concluant. Competition pressure: HEC lance 'IA Campus' février 2024.",
     
