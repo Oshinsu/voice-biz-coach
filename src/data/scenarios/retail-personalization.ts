@@ -196,5 +196,131 @@ export const retailPersonalizationScenario: Scenario = {
       concerns: ["Complexité outils", "Formation équipe"],
       approach: "Formation marketing + bénéfices campagnes"
     }
+  ],
+
+  // Stratégie commerciale intégrée
+  salesStrategy: {
+    approach: {
+      title: 'AI retail transformation expert',
+      description: 'Révolution customer experience et optimisation conversions omnicanal'
+    },
+    evidence: {
+      title: 'Retailers leaders transformés',
+      description: 'FNAC, Darty, Showroomprivé : +65% conversion, +45% panier moyen'
+    },
+    pilot: {
+      title: 'Pilote personnalisation 90 jours',
+      description: 'Test IA sur segment clients premium avec garantie performance'
+    },
+    sequence: [
+      'Audit customer journey : analyse parcours omnicanal + points friction',
+      'Data assessment : qualité data clients + potentiel personnalisation',
+      'Benchmark concurrentiel : analyse expérience Zara, H&M, Asos',
+      'Demo personnalisée : simulation IA sur profils clients réels',
+      'ROI calculation : impact conversion + panier moyen + rétention',
+      'Pilote 90 jours : déploiement IA segment premium + mesure KPIs',
+      'Performance review : validation ROI + optimisation algorithmes',
+      'Scaling plan : déploiement tous segments + formation équipe'
+    ],
+    leveragePoints: [
+      'Black Friday 2024 : opportunity +300% trafic nécessite personnalisation',
+      'Concurrence Amazon : war customer experience, IA = différentiation',
+      'Génération Z : 73% expect personnalisation, sinon abandon cart',
+      'Margins pressure : fast fashion low-cost, personnalisation = premium pricing',
+      'Omnichannel challenge : 67% clients multi-device, expérience fragmentée'
+    ]
+  },
+
+  // Données marché intégrées
+  marketData: {
+    marketOverview: {
+      marketSize: "12.1B€ e-commerce mode France, 890B$ mondial",
+      growthRate: "+11% CAGR e-commerce, +35% IA retail",
+      budgetRange: "100K-500K€/an grandes chaînes, 2-4% CA",
+      expectedROI: "+65% conversion, +45% panier moyen, +30% rétention",
+      timeline: "Urgence Black Friday 2024 + saison Noël",
+      keyPlayers: ["Dynamic Yield", "Monetate", "Yotpo", "Klaviyo", "Optimizely"],
+      personalizationGap: "78% retailers sans personnalisation IA avancée",
+      customerExpectation: "73% Gen Z expect personnalisation temps réel",
+      conversionImpact: "Personnalisation = +19% ventes moyenne secteur"
+    }
+  },
+
+  // Objectifs spécifiques intégrés
+  specificObjectives: {
+    coldCall: {
+      primary: "Identifier gaps customer experience + quantifier pertes conversion",
+      secondary: "Évaluer budget transformation digitale + maturité data",
+      successMetrics: "RDV démonstration IA + accès analytics e-commerce"
+    },
+    rdv: {
+      primary: "Démontrer ROI RetailAI via simulation conversions réelles",
+      secondary: "Valider pilote Black Friday + buy-in direction marketing",
+      successMetrics: "Pilote approuvé + budget alloué + timeline validée"
+    }
+  },
+
+  // Objections détaillées intégrées
+  detailedObjections: [
+    {
+      category: "Budget ROI",
+      objection: "250k€/an c'est énorme, comment être sûr du ROI ?",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "FNAC a généré +2.1M€ de revenus supplémentaires dès la première année avec un investissement de 200k€",
+        "Votre conversion actuelle 2.3% vs 3.8% moyenne avec IA = 65% de revenus perdus quotidiennement",
+        "On garantit +20% conversion minimum ou remboursement la première année"
+      ],
+      evidence: "Case study FNAC : ROI 1050% an 1 + garantie performance contractuelle",
+      nextStep: "Calcul ROI personnalisé sur votre trafic actuel + garantie performance"
+    },
+    {
+      category: "Complexité technique",
+      objection: "Notre équipe IT est débordée, on n'a pas les ressources",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "RetailAI s'intègre via simple tag JavaScript, comme Google Analytics : 24h setup",
+        "Notre équipe tech gère tout : intégration, maintenance, optimisations",
+        "Darty : 'Implémentation invisible pour l'IT, résultats visibles pour le business'"
+      ],
+      evidence: "Intégration 24h + équipe technique dédiée + testimonial Darty",
+      nextStep: "Démonstration technique simple intégration + planning déploiement"
+    },
+    {
+      category: "Data privacy",
+      objection: "Avec le RGPD, on ne peut pas faire de personnalisation poussée",
+      frequency: "Fréquente" as const,
+      responses: [
+        "RetailAI est RGPD-native : personnalisation sans données personnelles stockées",
+        "On utilise l'IA comportementale temps réel, pas de profiling persistant",
+        "Showroomprivé : personnalisation +45% avec conformité RGPD 100%"
+      ],
+      evidence: "Conformité RGPD native + case study Showroomprivé",
+      nextStep: "Audit RGPD de votre approche personnalisation + recommandations"
+    },
+    {
+      category: "Timing",
+      objection: "Black Friday approche, pas le moment de changer",
+      frequency: "Fréquente" as const,
+      responses: [
+        "C'est exactement le moment ! Black Friday = 35% du CA annuel, chaque % compte",
+        "Setup RetailAI en 2 semaines, opérationnel avant Black Friday",
+        "FNAC a déployé 3 semaines avant Black Friday 2023 : +47% performance vs N-1"
+      ],
+      evidence: "Case study FNAC Black Friday : +47% performance avec déploiement express",
+      nextStep: "Planning déploiement express 15 jours compatible Black Friday"
+    },
+    {
+      category: "Concurrence interne",
+      objection: "On évalue aussi Salesforce Commerce Cloud et Adobe Target",
+      frequency: "Occasionnelle" as const,
+      responses: [
+        "Salesforce = solution enterprise complexe 18 mois déploiement. RetailAI = spécialisé mode, 15 jours",
+        "Adobe Target nécessite équipe data science. RetailAI = IA no-code, résultats immédiats",
+        "Notre IA est entraînée spécifiquement sur 500M sessions e-commerce mode vs solutions généralistes"
+      ],
+      evidence: "Benchmark performance spécialisé mode vs solutions généralistes",
+      nextStep: "Comparatif détaillé + pilot head-to-head sur vos métriques"
+    }
   ]
 };

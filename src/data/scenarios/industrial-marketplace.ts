@@ -211,5 +211,131 @@ export const industrialMarketplaceScenario: Scenario = {
       concerns: ["ROI financier", "Budget serré", "Risques"],
       approach: "Chiffrage précis économies + pilote limité"
     }
+  ],
+
+  // Stratégie commerciale intégrée
+  salesStrategy: {
+    approach: {
+      title: 'Procurement digital transformation expert',
+      description: 'Révolution achats industriels et optimisation supply chain'
+    },
+    evidence: {
+      title: 'Industriels achats optimisés',
+      description: 'Vallourec, ArcelorMittal, Faurecia : -25% coûts, +40% efficacité'
+    },
+    pilot: {
+      title: 'Pilote achats 90 jours',
+      description: 'Test marketplace sur familles critiques avec garantie économies'
+    },
+    sequence: [
+      'Audit processus achats : mapping workflow + pain points négociation',
+      'Spend analysis : analyse 24 mois achats + potentiel optimisation',
+      'Supplier assessment : évaluation portefeuille fournisseurs actuel',
+      'Demo marketplace : simulation sourcing + négociation temps réel',
+      'ROI calculation : économies achats + gains productivité équipe',
+      'Pilote 90 jours : test familles critiques + mesure performances',
+      'Validation gains : proof économies + amélioration KPIs achats',
+      'Scaling plan : déploiement tous achats + formation équipe'
+    ],
+    leveragePoints: [
+      'Inflation matières : +45% acier, marketplace = négociation optimisée',
+      'Supply chain crisis : diversification fournisseurs = sécurisation',
+      'Pressure marge : optimisation achats = survie compétitivité',
+      'Digitalisation retard : concurrence avance, rattrapage urgent',
+      'Équipe achats débordée : automatisation = focus valeur ajoutée'
+    ]
+  },
+
+  // Données marché intégrées
+  marketData: {
+    marketOverview: {
+      marketSize: "890B€ achats industriels Europe, 4200B$ mondial",
+      growthRate: "+8% CAGR achats digitaux, +22% marketplaces B2B",
+      budgetRange: "50K-200K€/an transformation achats, 0.1-0.3% spend",
+      expectedROI: "-25% coûts achats, +40% efficacité équipe",
+      timeline: "Urgence compétitivité : inflation + supply chain",
+      keyPlayers: ["Ariba", "Jaggaer", "Ivalua", "Zycus", "Coupa"],
+      digitalizationGap: "67% PME industrielles achats manuels",
+      supplierRisk: "43% disruption supply chain 2024",
+      costPressure: "+45% matières premières, optimisation critique"
+    }
+  },
+
+  // Objectifs spécifiques intégrés
+  specificObjectives: {
+    coldCall: {
+      primary: "Quantifier inefficacités achats + potentiel économies process",
+      secondary: "Évaluer budget transformation + urgences supply chain",
+      successMetrics: "RDV démonstration + accès données spend analysis"
+    },
+    rdv: {
+      primary: "Démontrer ROI IndustryMarket via simulation négociations",
+      secondary: "Valider pilote familles critiques + buy-in direction achats",
+      successMetrics: "Pilote approuvé + budget alloué + timeline définie"
+    }
+  },
+
+  // Objections détaillées intégrées
+  detailedObjections: [
+    {
+      category: "Relations fournisseurs",
+      objection: "Nos fournisseurs historiques ne voudront pas passer par une marketplace",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Vallourec gardait ses fournisseurs stratégiques en direct, marketplace pour sourcing nouveaux + négociation optimisée",
+        "Vos fournisseurs bénéficient aussi : visibilité marché, process simplifié, paiements plus rapides",
+        "ArcelorMittal : 'Nos fournisseurs nous remercient, relations plus transparentes et efficaces'"
+      ],
+      evidence: "Case study Vallourec approche hybride + testimonial ArcelorMittal",
+      nextStep: "Stratégie déploiement respectueuse relations historiques"
+    },
+    {
+      category: "Budget",
+      objection: "120k€/an c'est cher, surtout si on n'est pas sûrs des économies",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Vos achats de 8M€/an : 5% d'économies = 400k€. Notre solution = ROI 330% la première année",
+        "Faurecia a économisé 680k€ première année avec investissement 150k€",
+        "On garantit minimum 200k€ économies an 1 ou remboursement"
+      ],
+      evidence: "ROI Faurecia 680k€ + garantie contractuelle économies",
+      nextStep: "Calcul ROI personnalisé sur votre spend + garantie performance"
+    },
+    {
+      category: "Complexité changement",
+      objection: "Christine et son équipe vont résister, elles ont leurs habitudes",
+      frequency: "Fréquente" as const,
+      responses: [
+        "Interface simple comme Amazon Business, apprentissage 2h max",
+        "Formation personnalisée + accompagnement change management inclus",
+        "Responsable achats Vallourec : 'Impossible de revenir en arrière, trop d'efficacité gagnée'"
+      ],
+      evidence: "Interface intuitive + programme accompagnement + testimonial utilisatrice",
+      nextStep: "Démonstration interface à Christine + plan accompagnement"
+    },
+    {
+      category: "Timing",
+      objection: "Période tendue avec inflation, pas le moment de changer",
+      frequency: "Fréquente" as const,
+      responses: [
+        "C'est exactement le bon moment ! Inflation +45% matières = chaque % d'économie compte",
+        "Faurecia a déployé en pleine crise COVID : économies immédiates cruciales pour survie",
+        "Setup 6 semaines, économies dès les premières négociations"
+      ],
+      evidence: "Case study Faurecia déploiement crise + économies immédiates",
+      nextStep: "Planning déploiement express compatible contraintes inflation"
+    },
+    {
+      category: "Sécurité données",
+      objection: "Nos données achats sont stratégiques, on ne peut pas les externaliser",
+      frequency: "Occasionnelle" as const,
+      responses: [
+        "Données hébergées en Europe, conformité RGPD + ISO 27001, même niveau que vos banques",
+        "Architecture zero-trust : vos données chiffrées, accès contrôlé, audit trail complet",
+        "ArcelorMittal nous fait confiance pour 12B€ d'achats annuels"
+      ],
+      evidence: "Certifications sécurité + référence ArcelorMittal trust",
+      nextStep: "Audit sécurité avec votre DSI + visite datacenters"
+    }
   ]
 };

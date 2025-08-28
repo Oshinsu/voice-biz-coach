@@ -200,5 +200,131 @@ export const manufacturingIotScenario: Scenario = {
       concerns: ["Conformité ISO", "Traçabilité", "Fiabilité"],
       approach: "Amélioration qualité + conformité automatique"
     }
+  ],
+
+  // Stratégie commerciale intégrée
+  salesStrategy: {
+    approach: {
+      title: 'Industry 4.0 transformation expert',
+      description: 'Optimisation production et maintenance prédictive IoT'
+    },
+    evidence: {
+      title: 'Industriels transformés',
+      description: 'Michelin, Schneider, Legrand : -35% downtime, +28% efficacité'
+    },
+    pilot: {
+      title: 'Pilote IoT 120 jours',
+      description: 'Installation 3 lignes production avec garantie gains'
+    },
+    sequence: [
+      'Audit production 4.0 : analyse lignes + identification goulots',
+      'Maintenance assessment : coûts downtime + inefficacités actuelles',
+      'Benchmark industrie : performance vs leaders secteur plasturgie',
+      'Demo live IoT : simulation monitoring temps réel sur vos machines',
+      'ROI calculation : économies maintenance + gains productivité',
+      'Pilote 120 jours : installation IoT 3 lignes + mesure performances',
+      'Validation ROI : proof gains opérationnels + optimisation',
+      'Scaling plan : déploiement toutes lignes + formation équipe'
+    ],
+    leveragePoints: [
+      'Inflation énergie : +67% coûts, monitoring IoT = optimisation consommation',
+      'Shortage main-d\'œuvre : automatisation = moins de dépendance personnel',
+      'Pression clients : qualité + délais sans faille, monitoring = garantie',
+      'Concurrence low-cost : efficacité opérationnelle = survie marché',
+      'Conformité ISO : traçabilité automatique = certification simplifiée'
+    ]
+  },
+
+  // Données marché intégrées
+  marketData: {
+    marketOverview: {
+      marketSize: "180B€ Industry 4.0 Europe, 1200B$ mondial",
+      growthRate: "+15% CAGR industrie 4.0, +25% IoT industriel",
+      budgetRange: "200K-1M€/an PME industrielles, 1-3% CA",
+      expectedROI: "-35% downtime, +28% efficacité, +15% marge",
+      timeline: "Urgence compétitivité : inflation + shortage personnel",
+      keyPlayers: ["Siemens", "GE Digital", "Schneider Electric", "ABB", "Rockwell"],
+      adoptionRate: "34% PME industrielles équipées IoT avancé",
+      downtimeCost: "50k€/jour downtime moyen PME plasturgie",
+      energyCrisis: "+67% coûts énergie, monitoring = 12-18% économies"
+    }
+  },
+
+  // Objectifs spécifiques intégrés
+  specificObjectives: {
+    coldCall: {
+      primary: "Quantifier coûts downtime + inefficacités production actuelles",
+      secondary: "Évaluer budget transformation 4.0 + urgences opérationnelles",
+      successMetrics: "RDV audit production + accès métriques machines"
+    },
+    rdv: {
+      primary: "Démontrer ROI IndustryIQ via simulation gains production",
+      secondary: "Valider pilote 3 lignes + buy-in direction technique",
+      successMetrics: "Pilote approuvé + budget investi + timeline signée"
+    }
+  },
+
+  // Objections détaillées intégrées
+  detailedObjections: [
+    {
+      category: "Budget investissement",
+      objection: "400k€ c'est lourd pour une PME, surtout en période difficile",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Vos downtimes vous coûtent déjà 50k€/jour. Avec IndustryIQ, Michelin a réduit les arrêts de 35% = 650k€ économies an 1",
+        "L'inflation énergie vous coûte +200k€/an. Notre monitoring optimise la consommation : -18% = 36k€ économies annuelles",
+        "Schneider Electric : ROI 240% sur 3 ans avec notre solution"
+      ],
+      evidence: "Case study Michelin downtime + économies énergie Schneider",
+      nextStep: "Audit gratuit coûts cachés production + calcul ROI personnalisé"
+    },
+    {
+      category: "Complexité technique",
+      objection: "Nos machines ont 15 ans, elles ne sont pas compatibles IoT",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "IndustryIQ fonctionne sur toutes machines via capteurs retrofit, aucune modification nécessaire",
+        "Legrand avait des machines de 1995 : installation en 3 jours sans arrêt production",
+        "80% de nos clients ont des machines anciennes, c'est notre spécialité"
+      ],
+      evidence: "Capteurs retrofit universels + case study Legrand machines anciennes",
+      nextStep: "Audit technique machines + démonstration capteurs compatibles"
+    },
+    {
+      category: "Résistance équipe",
+      objection: "Les opérateurs vont avoir peur d'être surveillés ou remplacés",
+      frequency: "Fréquente" as const,
+      responses: [
+        "Au contraire, IndustryIQ les aide : alertes préventives évitent pannes stress, maintenance plus facile",
+        "Chez Plastiform, les opérateurs sont devenus nos meilleurs ambassadeurs après 2 semaines",
+        "Pas de surveillance personnel, monitoring machines pour les aider, pas les contrôler"
+      ],
+      evidence: "Témoignage opérateurs Plastiform + focus aide vs surveillance",
+      nextStep: "Présentation solution aux équipes terrain + retours utilisateurs"
+    },
+    {
+      category: "Timing",
+      objection: "On a déjà beaucoup de projets, pas le temps de se lancer",
+      frequency: "Fréquente" as const,
+      responses: [
+        "Installation sans arrêt production, notre équipe gère tout pendant que vous continuez à produire",
+        "Chaque mois d'attente = 40k€ de downtime évitable en plus",
+        "Michelin a installé pendant leur période de pointe : aucune perturbation, gains immédiats"
+      ],
+      evidence: "Installation non-disruptive + case study Michelin période pointe",
+      nextStep: "Planning installation compatible production + engagement non-disruption"
+    },
+    {
+      category: "Concurrence",
+      objection: "Siemens nous a fait une proposition, ils sont plus connus",
+      frequency: "Occasionnelle" as const,
+      responses: [
+        "Siemens = solution complexe 18 mois déploiement, 1.2M€. IndustryIQ = 3 mois, 400k€, même résultats",
+        "Nous sommes spécialisés PME plasturgie, Siemens cible les multinationales",
+        "Notre support français vs équipes offshore, réactivité 24h vs 5 jours"
+      ],
+      evidence: "Benchmark coût/délai vs Siemens + spécialisation PME",
+      nextStep: "Comparatif détaillé + références clients similaires"
+    }
   ]
 };
