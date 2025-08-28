@@ -197,5 +197,119 @@ export const cybersecurityConsultingScenario: Scenario = {
       concerns: ["Interruption production", "Accès systèmes"],
       approach: "Planning adapté production + bénéfices sécurité"
     }
+  ],
+
+  // Stratégie commerciale intégrée
+  salesStrategy: {
+    approach: {
+      title: 'Risk assessment & compliance expert',
+      description: 'Audit cyber-risques complet et mise en conformité RGPD/NIS2'
+    },
+    evidence: {
+      title: 'PME industrielles protégées',
+      description: 'MetalCorp, PlastiForm, TechnoSteel : zéro incident, conformité 100%'
+    },
+    pilot: {
+      title: 'Audit cyber-risques gratuit',
+      description: 'Évaluation 48h + roadmap conformité personnalisée'
+    },
+    sequence: [
+      'Audit cyber-sécurité express : scan vulnérabilités + compliance check',
+      'Risk assessment métier : analyse impacts business cyber-attaques',
+      'Benchmark réglementaire : gap analysis RGPD + NIS2 + sectoriels',
+      'Démonstration CyberGuard : simulation attaque + détection temps réel',
+      'Business case sécurité : coût breach vs investissement protection',
+      'Roadmap conformité : plan 90j mise en conformité complète',
+      'Pilot cyber-protection : déploiement monitoring 30j + SOC',
+      'Certification compliance : validation audits externes + labels'
+    ],
+    leveragePoints: [
+      'Urgence NIS2 : deadline mars 2025, amendes jusqu\'à 10M€',
+      'Cyber-assurance : renouvellement 2024 exige conformité renforcée',
+      'Concurrence internationale : attaques ciblées PME françaises +180%',
+      'Réputation client : une faille = perte confiance + contrats',
+      'Continuité activité : arrêt production = 50k€/jour en moyenne'
+    ]
+  },
+
+  // Données marché intégrées
+  marketData: {
+    marketOverview: {
+      marketSize: "9.8B€ cybersécurité France, 345B$ mondial",
+      growthRate: "+15% CAGR France, +12% mondial",
+      budgetRange: "50K-200K€/an PME industrielles, 2-5% CA",
+      expectedROI: "ROI 15:1 (économies vs coût breach)",
+      timeline: "Urgence NIS2 : mars 2025 deadline",
+      keyPlayers: ["Thales", "Orange Cyberdefense", "Sophos", "CrowdStrike", "Fortinet"],
+      threatLevel: "+180% cyberattaques PME 2024 vs 2023",
+      compliancePressure: "89% PME non-conformes NIS2, amendes 10M€",
+      insuranceTrend: "Cyber-assurance: +45% exigences conformité 2024"
+    }
+  },
+
+  // Objectifs spécifiques intégrés
+  specificObjectives: {
+    coldCall: {
+      primary: "Identifier niveau maturité cyber + gaps conformité critiques",
+      secondary: "Évaluer budget sécurité disponible + urgences réglementaires",
+      successMetrics: "RDV audit gratuit 2h + accès infrastructure IT"
+    },
+    rdv: {
+      primary: "Démontrer vulnérabilités critiques + impact business",
+      secondary: "Valider roadmap conformité + budget protection",
+      successMetrics: "Audit approuvé + roadmap signée + sponsor exec validé"
+    }
+  },
+
+  // Objections détaillées intégrées
+  detailedObjections: [
+    {
+      category: "Budget serré",
+      objection: "150k€/an c'est énorme pour une PME comme nous",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Une seule cyberattaque coûte en moyenne 380k€ à une PME industrielle + 23 jours d'arrêt production",
+        "Les amendes NIS2 peuvent aller jusqu'à 10M€ si vous n'êtes pas conformes en mars 2025",
+        "MetalCorp a économisé 650k€ la première année grâce à la prévention d'une attaque par ransomware"
+      ],
+      evidence: "Étude ANSSI 2024 : coût moyen breach PME industrielle 380k€ + case MetalCorp",
+      nextStep: "Calcul ROI personnalisé : coût arrêt production vs investissement protection"
+    },
+    {
+      category: "Urgence perçue",
+      objection: "On n'a jamais été attaqués, ce n'est pas urgent",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "87% des PME industrielles attaquées en 2024 pensaient la même chose 6 mois avant",
+        "Les attaquants ciblent spécifiquement les PME car elles sont moins protégées que les grands groupes",
+        "NIS2 devient obligatoire en mars 2025 : si vous attendez, vous risquez 10M€ d'amende"
+      ],
+      evidence: "Statistiques ANSSI + deadline réglementaire NIS2 mars 2025",
+      nextStep: "Audit gratuit express 48h pour identifier vos vulnérabilités cachées"
+    },
+    {
+      category: "Complexité technique",
+      objection: "Notre IT est basique, on n'a pas les compétences pour gérer ça",
+      frequency: "Fréquente" as const,
+      responses: [
+        "C'est exactement pourquoi CyberGuard existe : solution clé en main avec SOC 24/7 externalisé",
+        "Pas besoin d'expertise interne, notre équipe gère tout : monitoring, incidents, conformité",
+        "TechnoSteel n'avait aucune expertise cyber : 6 mois après, conformité 100% sans embauche"
+      ],
+      evidence: "SOC externalisé 24/7 + case study TechnoSteel",
+      nextStep: "Démonstration interface simple + présentation équipe SOC dédiée"
+    },
+    {
+      category: "Priorités business",
+      objection: "On a d'autres urgences : nouveau site, expansion commerciale...",
+      frequency: "Fréquente" as const,
+      responses: [
+        "Une cyberattaque peut détruire en 24h tous vos investissements commerciaux",
+        "Vos clients B2B exigent de plus en plus des garanties cyber avant de signer",
+        "Le cyber devient un avantage concurrentiel : 73% des donneurs d'ordre privilégient les fournisseurs cyber-sécurisés"
+      ],
+      evidence: "Enquête donneur d'ordre 2024 + impact réputation post-breach",
+      nextStep: "Business case : cyber-sécurité comme levier de croissance commerciale"
+    }
   ]
 };

@@ -197,5 +197,119 @@ export const digitalAgencyScenario: Scenario = {
       concerns: ["Changement workflow", "Intégrations tech"],
       approach: "Démonstration technique + conservation Slack"
     }
+  ],
+
+  // Stratégie commerciale intégrée
+  salesStrategy: {
+    approach: {
+      title: 'Audit workflow productivity expert',
+      description: 'Analyse complète écosystème tools et optimisation temps équipe'
+    },
+    evidence: {
+      title: 'Agences digitales leaders',
+      description: 'WeScale, TheFamily, Eleven Labs : +40% marge, -25% temps admin'
+    },
+    pilot: {
+      title: 'Pilote productivité 60 jours',
+      description: 'Tests sur 3 projets clients avec mesure ROI temps'
+    },
+    sequence: [
+      'Audit tools ecosystem : mapping 15+ outils actuels + pain points',
+      'Time tracking analysis : audit 2 semaines temps équipe réel',
+      'Workflow mapping : identification 12 sources fragmentation',
+      'ROI calculation : quantification heures perdues vs coût AgencyFlow',
+      'Demo live personnalisée : simulation projets clients réels',
+      'Pilote 60 jours : déploiement 3 projets test + mesure gains',
+      'Business case validation : ROI marge opérationnelle prouvé',
+      'Scaling plan : déploiement tous projets + formation équipe'
+    ],
+    leveragePoints: [
+      'Période haute activité Q1 : 12 projets simultanés = chaos management',
+      'Concurrence prix : marge faible nécessite optimisation opérationnelle',
+      'Growth frustration : croissance bloquée par inefficacités internes',
+      'Talent retention : équipe épuisée par admin chronophage',
+      'Client satisfaction : délais serrés impossibles sans productivité optimale'
+    ]
+  },
+
+  // Données marché intégrées
+  marketData: {
+    marketOverview: {
+      marketSize: "2.3B€ marché agences digitales France, 45B$ mondial",
+      growthRate: "+18% CAGR agences, +22% outils productivity",
+      budgetRange: "8K-25K€/an tools management, 15-35% budget ops",
+      expectedROI: "+40% marge opérationnelle, -25% temps admin",
+      timeline: "Urgent Q1 2024 : pic activité client",
+      keyPlayers: ["Monday.com", "Asana", "Notion", "ClickUp", "Smartsheet"],
+      marketFragmentation: "67% agences utilisent 8+ tools sans intégration",
+      timeWaste: "23% temps équipe perdu coordination tools",
+      clientPressure: "89% clients exigent délais plus courts 2024 vs 2023"
+    }
+  },
+
+  // Objectifs spécifiques intégrés
+  specificObjectives: {
+    coldCall: {
+      primary: "Identifier principal pain point productivité et quantifier impact",
+      secondary: "Évaluer maturité outils + budget disponible",
+      successMetrics: "RDV audit workflow 45min + accès stack tools"
+    },
+    rdv: {
+      primary: "Démontrer ROI AgencyFlow via simulation projets réels",
+      secondary: "Obtenir validation pilote 60j + buy-in équipe leadership",
+      successMetrics: "Pilote approuvé + timeline définie + sponsors identifiés"
+    }
+  },
+
+  // Objections détaillées intégrées
+  detailedObjections: [
+    {
+      category: "Outils existants",
+      objection: "On a déjà Notion + Slack + Harvest, pourquoi changer ?",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Justement, c'est exactement le problème : 3 outils = 3 sources de vérité différentes. Combien de fois par semaine perdez-vous des infos entre ces plateformes ?",
+        "WeScale utilisait exactement le même setup : ils ont gagné 8h/semaine par personne en centralisant",
+        "Vos clients paient pour de la créativité, pas pour que vous passiez 30% du temps à chercher des infos"
+      ],
+      evidence: "Case study WeScale : 8h/semaine économisées par personne = 2 jours productifs supplémentaires",
+      nextStep: "Audit gratuit de votre stack actuel pour quantifier les pertes de temps exactes"
+    },
+    {
+      category: "Budget",
+      objection: "15k€/an c'est cher, nos marges sont déjà serrées",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Si on économise ne serait-ce que 1h/semaine par personne (8 personnes), c'est 8h x 50€ = 400€/semaine soit 20k€/an d'économies",
+        "TheFamily a augmenté sa marge de 40% la première année grâce à l'optimisation workflow",
+        "C'est 0.5% de votre CA pour potentiellement 15-20% de marge supplémentaire"
+      ],
+      evidence: "ROI TheFamily : +40% marge an 1, payback en 4 mois",
+      nextStep: "Calcul ROI personnalisé basé sur vos tarifs et temps équipe actuels"
+    },
+    {
+      category: "Résistance changement",
+      objection: "L'équipe est habituée à nos outils, ils vont résister",
+      frequency: "Fréquente" as const,
+      responses: [
+        "L'interface AgencyFlow ressemble à Notion mais avec la puissance d'un ERP. La transition est douce",
+        "On inclut 2 semaines d'accompagnement change management + formation personnalisée",
+        "Eleven Labs : 'En 3 jours, impossible de revenir en arrière, trop addictif'"
+      ],
+      evidence: "Testimonial Eleven Labs + programme d'accompagnement change management",
+      nextStep: "Demo interface à l'équipe pour valider l'ergonomie et l'adoption"
+    },
+    {
+      category: "Intégrations",
+      objection: "On a trop d'intégrations custom, ça va être compliqué",
+      frequency: "Fréquente" as const,
+      responses: [
+        "AgencyFlow a des connecteurs natifs pour 200+ outils et une API ouverte pour le reste",
+        "Notre équipe tech gère l'intégration, vous n'avez rien à développer",
+        "On garde vos outils critiques et on centralise juste la vue management"
+      ],
+      evidence: "200+ connecteurs + équipe d'intégration dédiée",
+      nextStep: "Audit technique de vos intégrations actuelles + plan de migration"
+    }
   ]
 };

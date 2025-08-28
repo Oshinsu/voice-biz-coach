@@ -197,5 +197,119 @@ export const saasHrToolScenario: Scenario = {
       concerns: ["Intégrations", "Simplicité", "Developer experience"],
       approach: "Intégrations Slack + simplicité vs enterprise"
     }
+  ],
+
+  // Stratégie commerciale intégrée
+  salesStrategy: {
+    approach: {
+      title: 'HR efficiency & scaling expert',
+      description: 'Optimisation processus RH et préparation hypercroissance'
+    },
+    evidence: {
+      title: 'Scale-ups tech similaires',
+      description: 'Algolia, Datadog, ContentSquare : -50% temps recrutement, +40% rétention'
+    },
+    pilot: {
+      title: 'Pilote recrutement 60 jours',
+      description: 'Test complet cycle recrutement + onboarding automation'
+    },
+    sequence: [
+      'Audit processus RH : mapping workflows recrutement + onboarding',
+      'Time-to-hire analysis : benchmark vs marché tech français',
+      'ROI calculation : coût recrutement actuel vs TalentFlow automation',
+      'Démonstration personnalisée : simulation recrutement profil tech',
+      'Intégration assessment : compatibilité stack tech existant',
+      'Pilote recrutement : test 2-3 postes avec métriques comparatives',
+      'Performance review : ROI temps + qualité recrutement',
+      'Scaling plan : déploiement complet + formation équipe RH'
+    ],
+    leveragePoints: [
+      'Hypercroissance : objectif 200 personnes 2024 vs 120 actuellement',
+      'Guerre des talents : pénurie développeurs +35% time-to-hire marché',
+      'Coût opportunité : poste non pourvu = 15k€/mois manque à gagner',
+      'Scaling RH : équipe RH saturée, processus manuels non scalables',
+      'Compétitivité : candidate experience déterminante attraction talents'
+    ]
+  },
+
+  // Données marché intégrées
+  marketData: {
+    marketOverview: {
+      marketSize: "2.1B€ HR Tech France, 24B$ mondial",
+      growthRate: "+25% CAGR France, +11% mondial",
+      budgetRange: "50K-150K€/an scale-ups, 800-1500€/employé",
+      expectedROI: "+40% efficacité RH, -50% time-to-hire",
+      timeline: "Urgence Q1 2024 : hypercroissance recrutement",
+      keyPlayers: ["Workday", "BambooHR", "Personio", "HiBob", "Lucca"],
+      talentShortage: "Pénurie développeurs : +35% time-to-hire 2024",
+      scalingPressure: "77% scale-ups tech doublent équipe en 18 mois",
+      candidateExperience: "89% candidats rejettent après mauvaise experience"
+    }
+  },
+
+  // Objectifs spécifiques intégrés
+  specificObjectives: {
+    coldCall: {
+      primary: "Quantifier pain points recrutement + coût time-to-hire actuel",
+      secondary: "Identifier budget RH disponible + objectifs croissance",
+      successMetrics: "RDV démonstration 45min + accès metrics recrutement"
+    },
+    rdv: {
+      primary: "Démontrer ROI TalentFlow via simulation recrutement",
+      secondary: "Valider pilote + intégration stack + buy-in CEO",
+      successMetrics: "Pilote approuvé + budget alloué + timeline définie"
+    }
+  },
+
+  // Objections détaillées intégrées
+  detailedObjections: [
+    {
+      category: "Outils existants",
+      objection: "On utilise déjà LinkedIn Recruiter + Excel, ça marche",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Algolia utilisait exactement le même setup : ils sont passés de 45 à 18 jours de time-to-hire avec TalentFlow",
+        "Excel ne scale pas : à 200 personnes, vous allez perdre des candidats dans les macros",
+        "LinkedIn c'est juste la source, TalentFlow c'est tout le pipeline : tri automatique, scoring, onboarding"
+      ],
+      evidence: "Case study Algolia : time-to-hire -60% + témoignage DRH",
+      nextStep: "Audit de votre processus actuel + simulation gain temps avec TalentFlow"
+    },
+    {
+      category: "Budget",
+      objection: "80k€/an pour 120 personnes, c'est 700€ par employé",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Un poste de dev non pourvu vous coûte 15k€/mois. Si TalentFlow fait gagner 2 semaines sur 1 recrutement, c'est déjà rentabilisé",
+        "ContentSquare calcule 180k€ d'économies an 1 : réduction coûts recrutement + productivité RH",
+        "Vous allez recruter 80 personnes en 2024 : 700€ vs 15k€ de coût de recrutement externe par poste"
+      ],
+      evidence: "ROI ContentSquare 180k€ + benchmark coûts recrutement externes",
+      nextStep: "Calcul ROI personnalisé basé sur vos objectifs recrutement 2024"
+    },
+    {
+      category: "Timing",
+      objection: "Pas le bon moment, on est en pleine croissance",
+      frequency: "Fréquente" as const,
+      responses: [
+        "C'est exactement le bon moment ! Plus vous attendez, plus le rattrapage sera difficile",
+        "Datadog a déployé TalentFlow en pleine hypercroissance : gain immédiat sur les recrutements suivants",
+        "Setup en 2 semaines, ROI dès le 3ème recrutement"
+      ],
+      evidence: "Case study Datadog déploiement en hypercroissance",
+      nextStep: "Planning déploiement express 2 semaines compatible avec votre roadmap"
+    },
+    {
+      category: "Équipe",
+      objection: "Camille va avoir du mal avec un nouvel outil, elle n'est pas très tech",
+      frequency: "Fréquente" as const,
+      responses: [
+        "L'interface TalentFlow est aussi simple que LinkedIn, mais en plus puissant",
+        "On inclut 1 semaine de formation personnalisée + 3 mois de support dédié",
+        "DRH chez Algolia : 'Plus simple que notre ancien Excel, impossible de faire marche arrière'"
+      ],
+      evidence: "Interface intuitive + programme formation + testimonial utilisatrice",
+      nextStep: "Démonstration interface à Camille + accès sandbox pour tests"
+    }
   ]
 };
