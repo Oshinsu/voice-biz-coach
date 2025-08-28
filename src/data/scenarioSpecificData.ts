@@ -1,5 +1,22 @@
 // Données spécifiques par scénario pour personnaliser l'expérience d'apprentissage
 
+interface ScenarioSalesStrategy {
+  approach: {
+    title: string;
+    description: string;
+  };
+  evidence: {
+    title: string;
+    description: string;
+  };
+  pilot: {
+    title: string;
+    description: string;
+  };
+  sequence: string[];
+  leveragePoints: string[];
+}
+
 interface ScenarioMarketData {
   marketOverview: {
     marketSize: string;
@@ -40,6 +57,34 @@ interface ScenarioObjections {
 
 // ============= KPI PERFORMANCE (ÉCOLE DE COMMERCE) =============
 const kpiPerformanceData = {
+  salesStrategy: {
+    approach: {
+      title: 'Approche consultative',
+      description: 'Audit pédagogique et benchmark'
+    },
+    evidence: {
+      title: 'Preuves sociales',
+      description: 'Cas clients ESSEC, KEDGE'
+    },
+    pilot: {
+      title: 'Pilote risk-free',
+      description: 'Test 3 mois département'
+    },
+    sequence: [
+      'Audit pédagogique gratuit + benchmark concurrence',
+      'Démonstration personnalisée avec cas ESCAP',
+      'Proposition pilote 6 mois département test',
+      'Présentation résultats + business case complet',
+      'Négociation contrat + déploiement global'
+    ],
+    leveragePoints: [
+      'Pression concurrentielle (HEC/ESSEC équipées)',
+      'Attentes génération Z étudiants',
+      'Demandes entreprises partenaires',
+      'Objectifs digitaux direction générale',
+      'ROI mesurable et rapide (6-12 mois)'
+    ]
+  },
   marketOverview: {
     marketSize: "2.1B€ marché EdTech France",
     growthRate: "+15.8% CAGR",
@@ -182,6 +227,34 @@ const kpiPerformanceData = {
 
 // ============= FINTECH STARTUP =============
 const fintechStartupData = {
+  salesStrategy: {
+    approach: {
+      title: 'Technical Deep Dive',
+      description: 'Analyse algorithmes et stack'
+    },
+    evidence: {
+      title: 'Performance benchmarks',
+      description: 'Tests sur données réelles'
+    },
+    pilot: {
+      title: 'Proof of concept',
+      description: 'Intégration sandbox 30j'
+    },
+    sequence: [
+      'Audit technique et évaluation stack IA actuel',
+      'Benchmark performance sur données historiques',
+      'Proof of concept intégration sandbox',
+      'Validation conformité et sécurité',
+      'Déploiement production et scaling'
+    ],
+    leveragePoints: [
+      'Pression réglementaire PCI DSS/GDPR',
+      'Concurrence neo-banques innovantes',
+      'Coûts croissants de la fraude',
+      'Objectifs croissance aggressive',
+      'Time-to-market critique'
+    ]
+  },
   marketOverview: {
     marketSize: "15.2B$ marché global fintech",
     growthRate: "+22% CAGR",
@@ -252,6 +325,34 @@ const fintechStartupData = {
 
 // ============= RETAIL PERSONALIZATION =============
 const retailPersonalizationData = {
+  salesStrategy: {
+    approach: {
+      title: 'ROI-driven analysis',
+      description: 'Audit conversion et UX'
+    },
+    evidence: {
+      title: 'Impact mesurable',
+      description: '+28% conversion clients'
+    },
+    pilot: {
+      title: 'A/B test magasin',
+      description: 'Validation ROI 60 jours'
+    },
+    sequence: [
+      'Audit UX et analyse funnel conversion',
+      'Évaluation data quality et potentiel IA',
+      'A/B test personnalisation magasin pilote',
+      'Mesure impact business et satisfaction',
+      'Déploiement omnicanal et scaling'
+    ],
+    leveragePoints: [
+      'Concurrence Amazon et pure players',
+      'Attentes clients hyper-personnalisées',
+      'Objectifs croissance digital',
+      'Pression marge et rentabilité',
+      'Évolution comportements post-COVID'
+    ]
+  },
   marketOverview: {
     marketSize: "943B$ e-commerce mondial",
     growthRate: "+14.7% CAGR",
@@ -321,6 +422,33 @@ const retailPersonalizationData = {
 
 // ============= DIGITAL AGENCY =============
 const digitalAgencyData = {
+  salesStrategy: {
+    approach: {
+      title: 'Audit productivité',
+      description: 'Analyse workflow agence'
+    },
+    evidence: {
+      title: 'ROI client direct',
+      description: 'Amélioration marge 5-8%'
+    },
+    pilot: {
+      title: 'Test 1 équipe',
+      description: 'Preuve efficacité rapide'
+    },
+    sequence: [
+      'Audit workflow et identification pertes temps',
+      'Démonstration sur vrai projet client',
+      'Test 30 jours équipe pilote',
+      'Mesure impact marge et productivité',
+      'Déploiement global et formation'
+    ],
+    leveragePoints: [
+      'Concurrence agences réseau mieux organisées',
+      'Attentes clients qualité/réactivité croissantes',
+      'Objectif marge 30% direction',
+      'ROI visible dès premier mois'
+    ]
+  },
   marketOverview: {
     marketSize: "567B$ services digitaux",
     growthRate: "+11.2% CAGR", 
@@ -375,6 +503,34 @@ const digitalAgencyData = {
 
 // ============= CYBERSECURITY CONSULTING =============
 const cybersecurityConsultingData = {
+  salesStrategy: {
+    approach: {
+      title: 'Risk assessment',
+      description: 'Audit sécurité et gap analysis'
+    },
+    evidence: {
+      title: 'Conformité prouvée',
+      description: '97% taux conformité clients'
+    },
+    pilot: {
+      title: 'Audit gratuit',
+      description: 'Évaluation risques 15 jours'
+    },
+    sequence: [
+      'Audit sécurité gratuit et gap analysis NIS2',
+      'Risk assessment et cartographie menaces',
+      'Roadmap conformité personnalisée',
+      'Tests pénétration et validation',
+      'Mise en conformité et certification'
+    ],
+    leveragePoints: [
+      'Urgence conformité NIS2/DORA 2024',
+      'Multiplication cyberattaques secteur',
+      'Coûts incidents vs coûts prévention',
+      'Exigences clients et partenaires',
+      'Réputation et continuité business'
+    ]
+  },
   marketOverview: {
     marketSize: "345B$ cybersécurité mondiale",
     growthRate: "+12.5% CAGR",
@@ -430,6 +586,34 @@ const cybersecurityConsultingData = {
 
 // ============= SAAS HR TOOL =============
 const saasHrToolData = {
+  salesStrategy: {
+    approach: {
+      title: 'Scale-up expertise',
+      description: 'Audit processus RH croissance'
+    },
+    evidence: {
+      title: 'Adoption rapide',
+      description: '94% taux adoption équipes'
+    },
+    pilot: {
+      title: 'Département test',
+      description: 'Validation UX 30 jours'
+    },
+    sequence: [
+      'Audit processus RH et identification goulots',
+      'Cartographie intégrations SIRH existant',
+      'Pilote département avec formation équipe',
+      'Mesure gains productivité et satisfaction',
+      'Déploiement global et change management'
+    ],
+    leveragePoints: [
+      'Hypercroissance et scaling pains',
+      'Guerre des talents et rétention',
+      'Coûts inefficacité processus manuels',
+      'Attentes employés outils modernes',
+      'Compliance et reporting automatisé'
+    ]
+  },
   marketOverview: {
     marketSize: "320B$ HR tech mondiale",
     growthRate: "+10.4% CAGR",
@@ -485,6 +669,34 @@ const saasHrToolData = {
 
 // ============= MANUFACTURING IOT =============
 const manufacturingIotData = {
+  salesStrategy: {
+    approach: {
+      title: 'Industry 4.0 audit',
+      description: 'Analyse OEE et maintenance'
+    },
+    evidence: {
+      title: 'ROI industriel',
+      description: '+22% OEE moyenne clients'
+    },
+    pilot: {
+      title: 'Ligne pilote',
+      description: 'Test IoT ligne production'
+    },
+    sequence: [
+      'Audit industrie 4.0 et analyse OEE actuel',
+      'Cartographie équipements et compatibilité',
+      'Pilote IoT sur ligne de production test',
+      'Validation gains OEE et prédictive',
+      'Déploiement usine et scaling multi-sites'
+    ],
+    leveragePoints: [
+      'Pression compétitivité internationale',
+      'Coûts downtimes et maintenance',
+      'Objectifs OEE et excellence opérationnelle',
+      'Transition Industry 4.0 obligatoire',
+      'Attraction talents et modernisation'
+    ]
+  },
   marketOverview: {
     marketSize: "750B$ Industry 4.0 mondial",
     growthRate: "+16.9% CAGR",
@@ -540,6 +752,34 @@ const manufacturingIotData = {
 
 // ============= INDUSTRIAL MARKETPLACE =============
 const industrialMarketplaceData = {
+  salesStrategy: {
+    approach: {
+      title: 'Procurement optimization',
+      description: 'Audit processus achats'
+    },
+    evidence: {
+      title: 'Économies prouvées',
+      description: '-23% coûts achats moyens'
+    },
+    pilot: {
+      title: 'Catégorie test',
+      description: 'Pilote achats spécifiques'
+    },
+    sequence: [
+      'Audit processus achats et spend analysis',
+      'Mapping fournisseurs secteur et qualification',
+      'Pilote catégorie achats avec sourcing',
+      'Mesure économies et gains efficacité',
+      'Déploiement toutes catégories et intégration ERP'
+    ],
+    leveragePoints: [
+      'Pression coûts et optimisation budgets',
+      'Complexité sourcing et qualification',
+      'Délais approvisionnement critiques',
+      'Compliance et traçabilité fournisseurs',
+      'Digitalisation fonction achats'
+    ]
+  },
   marketOverview: {
     marketSize: "12.1T$ procurement B2B mondial",
     growthRate: "+8.4% CAGR",

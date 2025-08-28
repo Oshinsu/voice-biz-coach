@@ -92,30 +92,30 @@ export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Sales Strategy Overview */}
+      {/* Sales Strategy Overview - Dynamic per scenario */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5" />
-            Stratégie commerciale globale
+            Stratégie commerciale - {scenarioData?.companyName || scenarioId}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center p-4 bg-primary/5 rounded-lg">
               <Target className="h-8 w-8 mx-auto mb-2 text-primary" />
-              <p className="font-medium">Approche consultative</p>
-              <p className="text-sm text-muted-foreground">Audit et recommandations</p>
+              <p className="font-medium">{scenarioData?.salesStrategy?.approach?.title || 'Approche consultative'}</p>
+              <p className="text-sm text-muted-foreground">{scenarioData?.salesStrategy?.approach?.description || 'Analyse et recommandations'}</p>
             </div>
             <div className="text-center p-4 bg-secondary/5 rounded-lg">
               <TrendingUp className="h-8 w-8 mx-auto mb-2 text-secondary" />
-              <p className="font-medium">Preuves sociales</p>
-              <p className="text-sm text-muted-foreground">Cas clients similaires</p>
+              <p className="font-medium">{scenarioData?.salesStrategy?.evidence?.title || 'Preuves sociales'}</p>
+              <p className="text-sm text-muted-foreground">{scenarioData?.salesStrategy?.evidence?.description || 'Cas clients similaires'}</p>
             </div>
             <div className="text-center p-4 bg-accent/5 rounded-lg">
               <Award className="h-8 w-8 mx-auto mb-2 text-accent" />
-              <p className="font-medium">Pilote risk-free</p>
-              <p className="text-sm text-muted-foreground">Démonstration valeur</p>
+              <p className="font-medium">{scenarioData?.salesStrategy?.pilot?.title || 'Pilote risk-free'}</p>
+              <p className="text-sm text-muted-foreground">{scenarioData?.salesStrategy?.pilot?.description || 'Démonstration valeur'}</p>
             </div>
           </div>
 
@@ -123,52 +123,35 @@ export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({
             <div>
               <h4 className="font-semibold mb-3">Séquence de vente recommandée</h4>
               <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
-                  <span className="text-sm">Audit pédagogique gratuit + benchmark</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
-                  <span className="text-sm">Démonstration personnalisée avec cas ESCAP</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
-                  <span className="text-sm">Proposition pilote 6 mois département test</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold">4</div>
-                  <span className="text-sm">Présentation résultats + business case complet</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold">5</div>
-                  <span className="text-sm">Négociation contrat + déploiement global</span>
-                </div>
+                {(scenarioData?.salesStrategy?.sequence || [
+                  'Analyse préliminaire et audit',
+                  'Démonstration personnalisée',
+                  'Proposition pilote ciblé',
+                  'Présentation des résultats',
+                  'Négociation et déploiement'
+                ]).map((step, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <div className="w-6 h-6 bg-primary text-white rounded-full flex items-center justify-center text-xs font-bold">{index + 1}</div>
+                    <span className="text-sm">{step}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
             <div>
               <h4 className="font-semibold mb-3">Points d'appui décisionnels</h4>
               <div className="space-y-2">
-                <div className="flex items-start gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm">Pression concurrentielle (HEC/ESSEC équipées)</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm">Attentes génération Z étudiants</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm">Demandes entreprises partenaires</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm">Objectifs digitaux direction générale</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm">ROI mesurable et rapide (6-12 mois)</p>
-                </div>
+                {(scenarioData?.salesStrategy?.leveragePoints || [
+                  'Pression concurrentielle du marché',
+                  'Évolution des attentes clients',
+                  'Objectifs digitaux entreprise',
+                  'ROI mesurable et rapide'
+                ]).map((point, index) => (
+                  <div key={index} className="flex items-start gap-2">
+                    <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                    <p className="text-sm">{point}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
