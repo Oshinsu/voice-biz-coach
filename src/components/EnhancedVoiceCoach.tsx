@@ -1,6 +1,7 @@
 import { RealtimeWebRTCCoach, handleWebRTCError, WEBRTC_CONFIG } from "@/lib/openai-webrtc";
 import { VoiceAgentManager, AgentType } from "@/lib/multi-agent-system";
 import { ContextualDiscoveryManager } from "@/lib/contextual-discovery";
+import { generateOptimizedScenarioPrompt } from "@/lib/prompts";
 import { useSalesStore } from "@/store/salesStore";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

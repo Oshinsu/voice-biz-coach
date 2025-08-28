@@ -3,7 +3,7 @@
  * Architecture avancée avec handoff entre agents spécialisés
  */
 
-import { generateEnhancedVoicePrompt } from './enhanced-voice-prompts';
+import { generateOptimizedScenarioPrompt } from './prompts';
 import { RealtimeWebRTCCoach } from './openai-webrtc';
 
 export type AgentType = 'contact_principal' | 'collegue_technique' | 'direction' | 'coach';
@@ -96,13 +96,12 @@ export class VoiceAgentManager {
   async startConversation(voice: string = 'sage'): Promise<void> {
     this.currentAgent = 'contact_principal';
     
-    const prompt = generateEnhancedVoicePrompt({
+    const prompt = generateOptimizedScenarioPrompt({
+      scenarioId: this.context.scenario.id,
       conversationType: this.context.conversationType,
-      scenarioData: this.context.scenario,
       currentPhase: this.context.currentPhase,
       trustLevel: this.context.trustLevel,
-      agentType: this.currentAgent,
-      voice
+      agentType: this.currentAgent
     });
 
     // Initialisation WebRTC avec prompt enrichi et fonctions discovery
@@ -174,13 +173,12 @@ export class VoiceAgentManager {
     this.onAgentSwitch?.(previousAgent, targetAgent, reason);
 
     // Génération du nouveau prompt pour l'agent cible
-    const newPrompt = generateEnhancedVoicePrompt({
+    const newPrompt = generateOptimizedScenarioPrompt({
+      scenarioId: this.context.scenario.id,
       conversationType: this.context.conversationType,
-      scenarioData: this.context.scenario,
       currentPhase: this.context.currentPhase,
       trustLevel: this.context.trustLevel,
-      agentType: targetAgent,
-      voice: 'sage'
+      agentType: targetAgent
     });
 
     // Préparation du contexte de handoff
