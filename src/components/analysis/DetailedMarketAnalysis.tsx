@@ -158,7 +158,19 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
             <CardTitle className="text-lg">Segmentation du marché</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-80">
+            <ChartContainer
+              config={{
+                value: {
+                  label: "Part de marché",
+                  color: "hsl(var(--chart-1))",
+                },
+                revenue: {
+                  label: "Chiffre d'affaires",
+                  color: "hsl(var(--chart-2))",
+                },
+              }}
+              className="h-80"
+            >
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
@@ -177,7 +189,7 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
                   <ChartTooltip content={<ChartTooltipContent />} />
                 </PieChart>
               </ResponsiveContainer>
-            </div>
+            </ChartContainer>
             <div className="grid grid-cols-1 gap-3 mt-4">
               {data.segmentation.map((segment: any, index: number) => (
                 <div key={segment.name} className="flex justify-between items-center p-3 bg-muted/50 rounded-lg">
@@ -203,7 +215,19 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
             <CardTitle className="text-lg">Évolution du marché 2022-2026</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-80">
+            <ChartContainer
+              config={{
+                market: {
+                  label: "Marché total (M€)",
+                  color: "hsl(var(--primary))",
+                },
+                digital: {
+                  label: "Digital (M€)",
+                  color: "hsl(var(--secondary))",
+                },
+              }}
+              className="h-80"
+            >
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={data.growthTrends}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -226,7 +250,7 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
                   />
                 </LineChart>
               </ResponsiveContainer>
-            </div>
+            </ChartContainer>
           </CardContent>
         </Card>
       </div>
@@ -268,7 +292,19 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-80 mb-6">
+          <ChartContainer
+            config={{
+              adoption: {
+                label: "Adoption %",
+                color: "hsl(var(--primary))",
+              },
+              satisfaction: {
+                label: "Satisfaction %",
+                color: "hsl(var(--secondary))",
+              },
+            }}
+            className="h-80 mb-6"
+          >
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.tools}>
                 <CartesianGrid strokeDasharray="3 3" />
@@ -279,7 +315,7 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
                 <Bar dataKey="satisfaction" fill="hsl(var(--secondary))" name="Satisfaction %" />
               </BarChart>
             </ResponsiveContainer>
-          </div>
+          </ChartContainer>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
