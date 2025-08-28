@@ -304,15 +304,16 @@ export class ContextualDiscoveryManager {
     }
 
     // Détermination du niveau de trust pour la réponse
-    const trustLevel = this.getTrustLevel();
-    const template = this.selectResponseTemplate(func, trustLevel);
+    const trustLevelCategory = this.getTrustLevel();
+    const template = this.selectResponseTemplate(func, trustLevelCategory);
     
     // Simulation délai réaliste
     const delay = this.getRandomDelay(func.delayRange);
     await this.simulateDelay(delay);
 
     // Révélation progressive d'informations
-    const newInfo = this.revealInformation(functionName, trustLevel);
+    const trustLevelNumber = this.currentTrustLevel;
+    const newInfo = this.revealInformation(functionName, this.currentTrustLevel);
     
     // Impact sur la confiance
     const trustDelta = func.trustImpact * this.getTrustMultiplier(parameters);

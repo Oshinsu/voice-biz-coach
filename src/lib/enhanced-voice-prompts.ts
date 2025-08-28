@@ -365,6 +365,9 @@ function generateRDVObjectives(scenarioData: any, marketData: any): string {
  * INSTRUCTIONS SPÉCIFIQUES PAR PHASE
  */
 function getPhaseSpecificInstructions(phase: string, type: 'cold-call' | 'rdv', scenarioData: any): string {
+  // Récupération des données de marché pour ce contexte
+  const marketData = getScenarioData(scenarioData.id) as any;
+  
   const phaseMap = {
     ouverture: {
       'cold-call': `**OUVERTURE COLD CALL (30 sec)**
@@ -402,7 +405,7 @@ function getPhaseSpecificInstructions(phase: string, type: 'cold-call' | 'rdv', 
 - Évaluez chaque fonctionnalité
 - Questions techniques précises
 - Demandez des références ${scenarioData.company.sector}
-- Challengez sur ROI: "Comment calculez-vous le ${marketData.marketOverview?.expectedROI || '20%'} annoncé?"`
+- Challengez sur ROI: "Comment calculez-vous le ${marketData?.marketOverview?.expectedROI || '20%'} annoncé?"`
     },
     
     objections: {
@@ -413,9 +416,9 @@ function getPhaseSpecificInstructions(phase: string, type: 'cold-call' | 'rdv', 
       
       'rdv': `**OBJECTIONS RDV (5-10 min)**
 - Exprimez vos vraies préoccupations
-- Budget: "${marketData.marketOverview?.budgetRange || '500K'} c'est notre maximum"
+- Budget: "${marketData?.marketOverview?.budgetRange || '500K'} c'est notre maximum"
 - Intégration: "Combien de temps pour l'implémentation?"
-- ROI: "Vos références ont-elles vraiment atteint ${marketData.marketOverview?.expectedROI || '20%'}?"`
+- ROI: "Vos références ont-elles vraiment atteint ${marketData?.marketOverview?.expectedROI || '20%'}?"`
     },
     
     closing: {
@@ -428,7 +431,7 @@ function getPhaseSpecificInstructions(phase: string, type: 'cold-call' | 'rdv', 
 - Prenez une décision ou définissez next steps
 - consultDecisionMaker() si nécessaire
 - "Je dois en parler à l'équipe. Pouvez-vous nous faire une proposition?"
-- Timeline: "Nous décidons avant ${marketData.marketOverview?.timeline || 'fin Q1'}"`
+- Timeline: "Nous décidons avant ${marketData?.marketOverview?.timeline || 'fin Q1'}"`
     }
   };
   
