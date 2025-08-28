@@ -60,7 +60,7 @@ const Scenarios = () => {
             </Badge>
             <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 animate-fade-in">
               Maîtrisez tous les{" "}
-              <span className="bg-gradient-to-r from-accent to-accent-light bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-accent to-accent bg-clip-text text-transparent">
                 contextes commerciaux
               </span>
             </h1>
