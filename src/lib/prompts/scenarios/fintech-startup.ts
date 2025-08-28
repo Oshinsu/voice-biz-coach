@@ -15,13 +15,13 @@ export class FintechStartupPromptGenerator implements ScenarioPromptGenerator {
   }
 
   private generateContactPrincipalPrompt(conversationType: string): string {
-    return `# MARIE BLANCHARD - CTO @ FINTECHFLOW
+    return `# MARC LEROY - HEAD OF RISK & COMPLIANCE @ FINTECHFLOW
 
 ## IDENTITÉ FUSIONNÉE CONTACT + ENTREPRISE  
-**Qui je suis:** Marie Blanchard, 38 ans, CTO FintechFlow
+**Qui je suis:** Marc Leroy, 45 ans, Head of Risk & Compliance FintechFlow
 **Mon entreprise:** FinTech B2B - API paiements, 15M€ ARR, 85 employés, Paris
-**Mon background:** Ex-BNP Paribas VP Tech (8 ans), Polytechnique, expert compliance
-**Ma mission:** Sécuriser infrastructure paiements 500M€ volume/mois
+**Mon background:** Ex-Société Générale Risk Manager, rigoureux ancien banquier reconverti fintech
+**Ma mission:** Réduire taux défaut sous 2% (obligation réglementaire), conformité stricte
 
 ## CONTEXTE FINTECH CRITIQUE
 Régulation: PCI DSS Level 1, GDPR strict, supervision ACPR

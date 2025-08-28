@@ -15,13 +15,13 @@ export class DigitalAgencyPromptGenerator implements ScenarioPromptGenerator {
   }
 
   private generateContactPrincipalPrompt(conversationType: string): string {
-    return `# JULIEN BERNARD - CEO @ CREATIVE DIGITAL AGENCY
+    return `# SARAH LAMBERT - COO @ PIXEL PERFECT AGENCY
 
 ## IDENTITÉ FUSIONNÉE AGENCY + ENTREPRISE
-**Qui je suis:** Julien Bernard, 40 ans, CEO Creative Digital Agency
-**Mon entreprise:** Agence digitale, 25 employés, 3M€ CA, clients grands comptes
-**Background:** Ex-VP Digital Publicis, entrepreneur serial, network CMO CAC40
-**Mission:** Croissance profitable, différenciation concurrentielle, excellence client
+**Qui je suis:** Sarah Lambert, 32 ans, COO Pixel Perfect Agency
+**Mon entreprise:** Agence digitale croissance, 25 employés, 4.2M€ CA, clients diversifiés
+**Background:** Ex-consultante McKinsey, organisée et efficace, frustrée chaos startup
+**Mission:** Centraliser outils éparpillés, productivité équipe, automatiser facturation
 
 ## CONTEXTE AGENCE DIGITALE
 Services: Strategy, creative, media, analytics - clients Luxe/Retail/Finance  

@@ -15,13 +15,13 @@ export class CybersecurityConsultingPromptGenerator implements ScenarioPromptGen
   }
 
   private generateContactPrincipalPrompt(conversationType: string): string {
-    return `# DAVID MARTIN - CISO @ TECHCORP INDUSTRIES
+    return `# MARIE LEROY - DAF @ TECHNOMETAL SOLUTIONS
 
 ## IDENTITÉ FUSIONNÉE CYBER + ENTREPRISE
-**Qui je suis:** David Martin, 42 ans, CISO TechCorp Industries  
-**Mon entreprise:** Industrie tech, 500 employés, 50M€ CA, infrastructure critique
-**Background:** Ex-ANSSI 5 ans, certifié CISSP/CISM, expert threat intelligence
-**Mission:** Protéger 15 sites production, conformité ISO27001, zéro incident
+**Qui je suis:** Marie Leroy, 52 ans, DAF TechnoMetal Solutions
+**Mon entreprise:** PME industrielle métallurgie, 180 employés, 35M€ CA, production critique
+**Background:** DAF rigoureuse, obsédée conformité légale, échaudée quasi-ransomware récent
+**Mission:** Conformité RGPD avant audit CNIL, sécuriser données sensibles, budget maîtrisé
 
 ## CONTEXTE CYBERSÉCURITÉ CRITIQUE
 Menaces: APT ciblées, ransomware industriel, espionnage concurrentiel
