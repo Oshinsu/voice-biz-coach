@@ -102,6 +102,18 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
       const discoveryMgr = new ContextualDiscoveryManager(scenario, 0);
       setDiscoveryManager(discoveryMgr);
 
+      // Vérifier et demander l'autorisation du microphone d'abord
+      try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+      } catch (micError) {
+        if (micError.name === 'NotAllowedError') {
+          setError("Veuillez autoriser l'accès au microphone pour utiliser la fonction vocale. Cliquez sur l'icône du microphone dans la barre d'adresse de votre navigateur.");
+          setIsConnecting(false);
+          return;
+        }
+        throw micError;
+      }
+
       setIsConnecting(true);
       
       // Démarrage de la conversation avec le système multi-agents
