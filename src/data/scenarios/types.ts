@@ -14,6 +14,14 @@ export interface Company {
   linkedin?: string;
   foundedYear?: number;
   keyPeople?: string[];
+  // Enriched data fields
+  metrics?: any;
+  companyHistory?: any;
+  ecosystemeTechnologique?: any;
+  detailedFinancials?: any;
+  orgChart?: any;
+  technicalStack?: any;
+  marketPosition?: any;
 }
 
 export interface Interlocutor {
@@ -30,6 +38,13 @@ export interface Interlocutor {
   psychologyProfile?: any;
   linkedinProfile?: any;
   decisionProcess?: string;
+  // Enriched data fields
+  workingStyle?: any;
+  personalityProfile?: any;
+  professionalNetwork?: any;
+  careerHistory?: any;
+  dailyRoutine?: any;
+  communicationPreferences?: any;
 }
 
 export interface Product {
@@ -39,6 +54,13 @@ export interface Product {
     starter: string;
     professional: string;
     enterprise: string;
+    enterprise_plus?: string;
+    pricingModel?: string;
+    setupFees?: string;
+    contractTerms?: string;
+    overage?: string;
+    migration?: string;
+    cancelPolicy?: string;
   };
   pricing_starter?: string;
   pricing_professional?: string;
@@ -55,6 +77,14 @@ export interface Product {
   technicalSpecs?: any;
   marketPositioning?: any;
   targetSegments?: string[];
+  // Enriched product data
+  vendor?: any;
+  marketingPositioning?: any;
+  battleCards?: any;
+  competitiveMatrix?: any;
+  customerSegments?: any;
+  useCases?: any;
+  integrations?: any;
 }
 
 export interface SwotAnalysis {
