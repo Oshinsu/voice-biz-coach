@@ -1,4 +1,4 @@
-import { ArrowRight, BarChart3, Target, TrendingUp, Users, Zap, CheckCircle, Star } from "lucide-react";
+import { ArrowRight, BarChart3, Target, TrendingUp, Users, Zap, CheckCircle, Star, GraduationCap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,7 @@ const getScenarioIcon = (scenarioId: string) => {
     "digital-agency": Users,
     "fintech-startup": Target,
     "saas-hr-tool": TrendingUp,
-    "byss-vns-school": Zap,
+    "byss-vns-school": GraduationCap,
     "consulting-firm": BarChart3,
   };
   return iconMap[scenarioId] || BarChart3;
