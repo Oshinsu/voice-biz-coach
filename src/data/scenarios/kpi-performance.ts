@@ -9,25 +9,25 @@ export const kpiPerformanceScenario: Scenario = {
   company: {
     name: "ModaStyle",
     sector: "E-commerce Mode Éthique",
-    size: "50 employés (Marketing: 12, Tech: 8, Logistique: 15, Admin: 15)",
-    revenue: "8M€/an (+45% croissance 2023, objectif 12M€ en 2024)",
+    size: "85 employés (Marketing: 8, Tech: 12, Operations: 35, Commercial: 15, Admin: 15)",
+    revenue: "8M€/an (+25% croissance 2023, objectif 10.5M€ en 2024)",
     location: "Lyon, France - Siège social Presqu'île, entrepôt Rillieux-la-Pape",
     
     // Métriques détaillées entreprise
     metrics: {
-      chiffreAffaires: "8M€ (2023) vs 5.5M€ (2022)",
-      croissance: "+45% YoY (+65% T4 vs T4-1)",
-      ebitda: "1.2M€ (15% marge)",
-      beneficeNet: "640k€ (8% marge nette)",
-      employes: 50,
-      croissanceEquipe: "+25% en 2023 (40 → 50)",
-      acquisitionClient: "47€ CAC moyen tous canaux",
-      ltv: "165€ LTV moyenne (calculée sur 24 mois)",
-      roas: "3.5x ROAS blended tous canaux",
-      conversionRate: "2.1% desktop, 1.6% mobile",
-      panierMoyen: "78€ (objectif 85€)",
-      trafficMensuel: "180k visiteurs uniques/mois",
-      clientsActifs: "12,500 clients actifs 12 derniers mois"
+      chiffreAffaires: "8M€ (2023) vs 6.4M€ (2022)",
+      croissance: "+25% YoY (+35% T4 vs T4-1)",
+      ebitda: "560k€ (7% marge)",
+      beneficeNet: "240k€ (3% marge nette)",
+      employes: 85,
+      croissanceEquipe: "+15% en 2023 (74 → 85)",
+      acquisitionClient: "58€ CAC moyen tous canaux",
+      ltv: "142€ LTV moyenne (calculée sur 18 mois)",
+      roas: "2.8x ROAS blended tous canaux", 
+      conversionRate: "1.4% desktop, 0.9% mobile",
+      panierMoyen: "89€ (objectif 95€)",
+      trafficMensuel: "220k visiteurs uniques/mois",
+      clientsActifs: "18,500 clients actifs 12 derniers mois"
     },
     
     description: "E-commerce pionnier français mode éthique fondé 2018 par Clara Dubois (ex-acheteuse Zara). Révolutionne la mode durable avec 12 marques partenaires certifiées GOTS/OEKO-TEX. Catalogue 850 références : vêtements femme/homme/enfant, maroquinerie, bijoux. Positionnement premium (70-150€ pièce) vs fast-fashion. Présence France/Belgique/Suisse, expansion Allemagne prévue 2024. Mission: démocratiser mode éthique européenne. Stack: Shopify Plus, Klaviyo, Meta Ads, Google Ads, Gorgias support. Ambition: leader européen mode éthique 25M€ CA 2027.",
@@ -45,33 +45,25 @@ export const kpiPerformanceScenario: Scenario = {
     },
     
     ecosystemeTechnologique: {
-      ecommerce: "Shopify Plus (99.7% uptime, 15k€/an)",
-      emailMarketing: "Klaviyo (flows automation, 8k€/an)",
-      publicite: "Meta Business Manager (35k€/mois), Google Ads (25k€/mois), Pinterest (8k€/mois)",
-      analytics: "Google Analytics 4 + GTM + Facebook Pixel + TikTok Pixel",
-      crm: "HubSpot Sales Hub (prospects B2B marques)",
-      support: "Gorgias (chat, tickets, 180€/mois)",
-      logistique: "WMS custom Shopify + Colissimo/Chronopost",
-      comptabilite: "Sage 100 + Pennylane",
-      design: "Figma + Adobe Creative Suite",
-      dev: "GitHub + Vercel + Next.js custom apps"
+      ecommerce: "Shopify Plus (2k€/mois)",
+      emailMarketing: "Klaviyo (480€/mois)",
+      publicite: "Meta Ads (28k€/mois), Google Ads (18k€/mois)",
+      analytics: "Google Analytics 4 + Facebook Pixel",
+      support: "Zendesk (150€/mois)",
+      logistique: "Shopify Flow + Colissimo",
+      comptabilite: "Pennylane + Sage comptabilité"
     },
 
     painPoints: [
-      "Attribution marketing fragmentée: impossible de tracer le customer journey réel. Une cliente voit une pub Facebook, clique, revient via Google 3 jours plus tard, achète après email Klaviyo → quel canal créditer? GA4 dit 'direct', Meta dit 'Facebook', Google dit 'recherche'. Résultat: optimisation budgets publicitaires à l'aveugle",
-      "Taux de churn client 23% sans signaux prédictifs: clients fidèles partent soudainement sans warning. Exemple: Émilie R., cliente VIP 850€ achats 18 mois, disparaît après retour produit mal géré. Impossible d'identifier pattern pour action préventive",
-      "Budget publicitaire 80k€/mois mal alloué: 45% Meta, 30% Google, 15% Pinterest, 10% influence. Allocation historique vs performance réelle. Meta performe T4 mode hiver, Google meilleur T2 mode été, mais budgets fixes toute l'année",
-      "Équipe marketing épuisée par reporting manuel: Sophie + Jules + Amélie passent 16h/semaine à consolider 15 fichiers Excel différents. Données dispo mercredi pour décisions lundi suivant = réactivité impossible face concurrence",
-      "Retours produits 12% vs 8% marché mode éthique: problème taille (35%), couleur différente écran (25%), qualité tissu (20%), défaut fabrication (20%). Aucun predictif pour anticiper avant production",
-      "Saisonnalité erratique malgré 5 ans data: collection printemps 2023 -15% vs prévision, été +25%, automne-hiver normal. Impossible optimiser stocks/marketing sans patterns fiables",
-      "Segmentation client rudimentaire: 3 segments (nouveaux, actifs, VIP) vs 15+ segments potentiels. Campaigns email 'one size fits all' = 18% open rate vs 35% possible avec hyperpersonnalisation",
-      "Mobile experience sous-optimisée: 65% trafic mobile mais 35% revenus seulement. Conversion mobile 1.6% vs 2.1% desktop. Problème UX checkout mobile identifié mais pas priorisé faute de ROI calculé",
-      "Influence marketing non-mesurable: 40k€ investis/trimestre micro-influenceurs mode éthique, impossible de mesurer ROAS réel. Codes promo uniques créent friction, liens bio non-trackés"
+      "Attribution marketing fragmentée: impossible de savoir quel canal génère vraiment les ventes. Budget pub 46k€/mois réparti à l'aveugle entre Meta (60%) et Google (40%) sans visibilité sur le parcours client réel",
+      "Reporting manuel chronophage: 8h/semaine pour consolider les données Meta, Google et Shopify dans Excel. Analyse toujours en retard d'une semaine sur les performances",
+      "Optimisation budgets impossible: allocation fixe mensuelle alors que les performances varient selon les saisons et collections. Pas de réactivité sur les campagnes qui marchent", 
+      "Segmentation client basique: seulement 3 segments (nouveaux, récurrents, VIP) alors qu'on sait qu'on pourrait faire plus fin pour améliorer les taux de conversion email"
     ],
     
     currentSolution: "Architecture analytics fragmentée: Google Analytics 4 (gratuit, setup basique) + Google Ads conversion tracking + Facebook Business Manager analytics + Klaviyo email analytics + Shopify Analytics (natif) + 15 fichiers Excel consolidés manuellement par Sophie Martin chaque lundi. Temps consolidation: 4h/semaine. Fiabilité données: 75% (20% écarts entre sources). Réactivité décision: 7 jours délai. Granularité insight: macro seulement (pas de micro-segments).",
     
-    budget: "15-25k€/an analytics tools vs 1M€ total marketing budget (1.5-2.5% budget). Comparaison: 960k€ média advertising, 180k€ content/création, 120k€ influence, 80k€ tools & tech, 60k€ events/PR. Appétit investissement si ROI prouvé: jusqu'à 40k€ première année.",
+    budget: "8-15k€/an analytics tools vs 650k€ total marketing budget (1.2-2.3% budget). Répartition: 550k€ média advertising, 60k€ content/création, 25k€ tools & tech, 15k€ events. Validation Clara nécessaire au-delà de 12k€.",
     
     timeline: "Urgence maximale Q1 2024: lancement collection printemps-été crucial (40% CA annuel réalisé Q2-Q3). Besoin attribution parfaite avant campagne lancement mars 2024. Décision décembre 2023, déploiement janvier 2024, opérationnel février pour optimisation mars-avril.",
     
@@ -109,24 +101,20 @@ export const kpiPerformanceScenario: Scenario = {
     role: "Directrice Marketing & Analytics",
     
     // Profil psychologique approfondi
-    personality: "Perfectionniste data-driven obsédée par l'excellence opérationnelle. Ex-consultante Converteo habituée aux standards corporates, frustrée par les limitations startup. Workaholic assumée: checks KPIs dimanche 23h, répond emails vacation, dort 5h/nuit en période campagne. Tempérament impatient face inefficacité: coupe réunions sans agenda, exige ROI chiffré sur chaque décision. Passion authentique pour les patterns data cachés. Stress permanent croissance ModaStyle vs ressources limitées. Leadership technique reconnu équipe marketing.",
+    personality: "Directrice marketing pragmatique avec un profil digital. Apprécie les données mais sans être une data scientist. Orientée résultats, veut comprendre ce qui marche pour l'optimiser. Parfois fatiguée par la fragmentation des outils actuels. Communication directe et efficace. Cherche des solutions simples qui font gagner du temps à son équipe.",
     
-    // Profil LinkedIn simulé
+    // Profil LinkedIn réaliste
     linkedinProfile: {
-      headline: "Directrice Marketing & Analytics @ModaStyle | Ex-Converteo | Data-Driven Growth Expert | HEC MBA",
+      headline: "Directrice Marketing @ModaStyle | Digital Marketing & E-commerce | ESC Lyon",
       experience: [
-        "ModaStyle (3 ans) - Directrice Marketing & Analytics: +300% croissance revenue, setup attribution avancée, team leadership 6 personnes",
-        "Spartoo (2 ans) - Senior Marketing Manager: optimisation ROAS +65%, gestion budget 500k€, acquisition multicanal",
-        "Converteo (3 ans) - Consultant Analytics: audit attribution 50+ clients, expertise GA360/Adobe Analytics, transformation digitale retail"
+        "ModaStyle (2 ans) - Directrice Marketing: développement marketing digital, gestion équipe 4 personnes",
+        "Spartoo (3 ans) - Chef de Projet Marketing Digital: campagnes acquisition, optimisation conversion",
+        "Agence Digitale Lyon (2 ans) - Consultante Marketing Digital: accompagnement e-commerces PME"
       ],
-      education: "HEC Paris - MBA Marketing Quantitatif (Major promo), Centrale Lyon - Ingénieur (data science option)",
-      certifications: "Google Analytics Certified, Facebook Blueprint Certified, Google Ads Certified, Mixpanel Certified",
-      publications: [
-        "Attribution Marketing : Dépasser les silos data pour l'e-commerce mode (eCommerce Mag, juin 2023)",
-        "Interview : Comment ModaStyle a multiplié par 4 son ROAS en 18 mois (JDN, mars 2023)"
-      ],
-      network: "850+ connexions (marketing directors, growth managers, consultants analytics)",
-      activite: "Posts hebdomadaires sur attribution marketing, partage études de cas croissance, commente tendances retail tech"
+      education: "ESC Lyon - Master Marketing Digital, IUT TC Lyon - DUT Techniques de Commercialisation", 
+      certifications: "Google Analytics, Google Ads, Facebook Blueprint",
+      network: "420 connexions (marketing digital, e-commerce, mode)",
+      activite: "Partage occasionnel sur les tendances e-commerce et mode éthique"
     },
     
     // Habitudes et préférences détaillées  
@@ -143,23 +131,17 @@ export const kpiPerformanceScenario: Scenario = {
     decisionPower: "Décisionnaire opérationnel jusqu'à 30k€ (validation board 24h). Au-delà: co-décision CEO Clara Dubois (relation trust forte). Influence majeure roadmap produit marketing, budgets publicitaires, choix tools marketing stack. Veto technique sur outils analytics si standards qualité non respectés. Input stratégique pricing, lancement produits, expansion géographique.",
     
     priorities: [
-      "Attribution marketing unifiée: résoudre fragmentation GA4/Meta/Google → vision customer journey 360° pour optimisation budgets 80k€/mois",
-      "Réduction CAC de 47€ vers 35€: optimisation acquisition tous canaux via data granulaire, amélioration conversion, retention early stage",
-      "Prédiction churn client ML: modèle prédictif 15-30j avant départ potentiel pour actions préventives (email, discount, support proactif)",
-      "Automatisation reporting: éliminer 16h/semaine consolidation manuelle équipe → time-to-insight 24h max vs 7j actuels",
-      "Optimisation budgets temps réel: allocation dynamique Meta/Google/Pinterest selon performance journalière vs allocation fixe mensuelle",
-      "Segmentation clients avancée: passer de 3 segments actuels à 15+ micro-segments comportementaux pour hyperpersonnalisation",
-      "Mobile optimization ROI: améliorer conversion mobile 1.6%→2.5% via data UX précise (65% trafic, 35% revenue = opportunité massive)"
+      "Comprendre l'attribution réelle entre Meta et Google pour mieux répartir le budget pub (46k€/mois)",
+      "Automatiser le reporting hebdomadaire qui prend actuellement 8h à l'équipe",
+      "Améliorer la segmentation client pour des campagnes email plus efficaces",
+      "Optimiser les budgets selon les pics saisonniers de la mode éthique"
     ],
     
     concerns: [
-      "Temps implémentation critique: période lancement collection mars 2024 = zéro tolérance interruption data. Maximum 2 semaines transition sinon report 6 mois",
-      "Formation équipe résistance: Jules (26 ans, technique) OK, Amélie (31 ans, moins tech) risque friction. Besoin accompagnement change management",
-      "Intégration Shopify Plus: 8M€ CA en jeu, moindre bug checkout = catastrophe. Exige tests AB sandbox + rollback plan + monitoring temps réel",
-      "Fiabilité prédictions IA: précédent échec outil prediction (40% faux positifs) → équipe sceptique. Besoin validation statistique rigoureuse + benchmarks",
-      "Confidentialité données: RGPD strict mode éthique + compétition féroce = aucune donnée client externalisable. Serveurs européens mandatory",
-      "Dépendance vendor: si plateforme tombe, ModaStyle aveugle 24h = perte 22k€ CA/jour. SLA 99.9% + backup solutions exigés",
-      "Evolution tarifaire: startup → scale-up, volumes x3 prévus 2024-2026. Pricing scalable sans explosion coûts sinon budget insoutenable"
+      "Budget limité: doit rester dans l'enveloppe 8-15k€/an, au-delà il faut validation Clara",
+      "Facilité d'usage: l'équipe n'est pas ultra-technique, faut que ce soit simple à utiliser",
+      "Temps de mise en place: on est en période chargée avec le lancement collection printemps",
+      "Intégration Shopify: il ne faut pas que ça plante notre boutique"
     ],
     
     motivations: [
