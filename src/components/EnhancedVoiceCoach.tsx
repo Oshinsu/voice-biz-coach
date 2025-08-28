@@ -308,7 +308,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
-      <Card className="w-96 h-[600px] shadow-xl border-primary/20 flex flex-col">
+      <Card className="w-96 max-h-[80vh] shadow-xl border-primary/20 flex flex-col">
         <CardHeader className="pb-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -333,7 +333,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
           )}
         </CardHeader>
 
-        <CardContent className="flex-1 flex flex-col p-4">
+        <CardContent className="flex-1 flex flex-col p-4 min-h-0">
           {/* Interface Multi-Agents Enrichie */}
           <div className="mb-4 p-3 bg-primary/5 rounded-lg border border-primary/20">
             <div className="flex items-start justify-between mb-2">
@@ -393,7 +393,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto space-y-2 mb-4">
+          <div className="flex-1 overflow-y-auto space-y-2 mb-4 min-h-0">
             {messages.map((message, index) => (
               <div key={index} className={`mb-2 p-2 rounded max-w-[80%] ${
                 message.sender === 'user' 
@@ -425,7 +425,7 @@ export function EnhancedVoiceCoach({ scenario, open = true, onToggle }: Enhanced
           </div>
 
           {/* Contrôles */}
-          <div className="border-t pt-4">
+          <div className="border-t pt-4 flex-shrink-0">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 {isConnected ? (
