@@ -28,6 +28,7 @@ import {
 import { ProductAnalysis } from './ProductAnalysis';
 import { MarketAnalysis } from './MarketAnalysis';
 import { ObjectionStrategy } from './ObjectionStrategy';
+import { ScenarioObjectives } from './ScenarioObjectives';
 
 interface ScenarioDetailsProps {
   scenario: {
@@ -372,50 +373,16 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
             swotAnalyses={[scenario.swot, scenario.competitorSwot]} 
             sector={scenario.company?.sector}
             companyName={scenario.company?.name}
+            scenarioId={scenario.id}
           />
         </TabsContent>
 
         <TabsContent value="objectives" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="h-5 w-5" />
-                Objectifs commerciaux
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div>
-                <h4 className="font-semibold mb-3">Objectifs principaux</h4>
-                <div className="grid gap-3">
-                  {scenario.objectives.map((objective, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 bg-primary/5 rounded-lg">
-                      <Target className="h-4 w-4 mt-0.5 text-primary flex-shrink-0" />
-                      <span className="text-sm">{objective}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <Wrench className="h-4 w-4" />
-                  Outils disponibles
-                </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {scenario.tools.map((tool, index) => (
-                    <div key={index} className="flex items-center gap-3 p-3 border rounded-lg">
-                      <Wrench className="h-4 w-4 text-secondary" />
-                      <span className="text-sm">{tool}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <ScenarioObjectives scenarioId={scenario.id} />
         </TabsContent>
 
         <TabsContent value="objections" className="space-y-6">
-          <ObjectionStrategy />
+          <ObjectionStrategy scenarioId={scenario.id} />
         </TabsContent>
       </Tabs>
     </div>

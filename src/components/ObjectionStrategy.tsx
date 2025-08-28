@@ -7,94 +7,49 @@ import {
   DollarSign, Users, Clock, Zap, Brain,
   TrendingUp, Award, Lightbulb, ArrowRight
 } from 'lucide-react';
+import { getScenarioData } from '@/data/scenarioSpecificData';
 
-export const ObjectionStrategy: React.FC = () => {
-  const objections = [
-    {
-      category: "Budget",
-      icon: DollarSign,
-      color: "red",
-      objection: "Le coût est trop élevé pour notre budget actuel",
-      responses: [
-        "Calculons ensemble le coût de ne pas agir : perte de compétitivité, baisse d'attractivité...",
-        "Notre pilote gratuit vous permet de mesurer le ROI avant investissement",
-        "Investissement rentabilisé en 6-8 mois via réduction des défauts",
-        "Financement étalé possible + réduction première année"
-      ],
-      evidence: "Fintech similaire: ROI de 340% en 18 mois via réduction taux défaut crédit",
-      nextStep: "Préparation business case avec données financières spécifiques"
-    },
-    {
-      category: "Technique",
-      icon: Zap,
-      color: "orange",
-      objection: "L'intégration avec nos systèmes existants sera complexe",
-      responses: [
-        "Notre API native s'intègre en <48h avec tous les LMS majeurs (Moodle, Canvas...)",
-        "Équipe technique dédiée pour accompagnement gratuit pendant onboarding",
-        "Pas de modification infrastructure requise, déploiement cloud sécurisé",
-        "99.9% uptime garanti avec redondance multi-zones"
-      ],
-      evidence: "Fintech leader: intégration complète réalisée en 48h avec 0 interruption de service",
-      nextStep: "Audit technique gratuit avec votre DSI"
-    },
-    {
-      category: "Pédagogique",
-      icon: Brain,
-      color: "yellow",
-      objection: "Nos professeurs ne sont pas prêts pour ce changement",
-      responses: [
-        "Programme de formation équipes techniques en 3 étapes sur 6 semaines",
-        "Support technique dédié avec best practices intégrées",
-        "Interface intuitive : 89% des utilisateurs autonomes en <2h",
-        "Champions internes identifiés pour accompagner le changement"
-      ],
-      evidence: "Fintech major: 95% satisfaction équipes techniques après 3 mois d'utilisation",
-      nextStep: "Workshop découverte pour équipe technique volontaire"
-    },
-    {
-      category: "Efficacité",
-      icon: Target,
-      color: "blue",
-      objection: "Comment prouver l'efficacité pédagogique réelle ?",
-      responses: [
-        "Analytics détaillés : progression compétences, temps engagement, scores performance",
-        "Méthodologie d'évaluation validée scientifiquement (études peer-reviewed)",
-        "Comparaison avant/après avec groupes témoins possible",
-        "Certification compétences avec badges reconnus par entreprises partenaires"
-      ],
-      evidence: "Étude 12 mois : +67% compétences négociation vs méthodes traditionnelles",
-      nextStep: "Protocole de mesure d'impact personnalisé ESCAP"
-    },
-    {
-      category: "Timing",
-      icon: Clock,
-      color: "purple",
-      objection: "Ce n'est pas le bon moment, trop de projets en cours",
-      responses: [
-        "Le pilote gratuit ne mobilise que 2h/semaine pour 1 professeur",
-        "Déploiement progressif aligné sur votre planning académique",
-        "Support complet : vous vous concentrez sur la pédagogie, nous sur la technique",
-        "Concurrence s'équipe : chaque mois de retard = avantage concurrentiel perdu"
-      ],
-      evidence: "Écoles concurrentes adoptent massivement : 40% en 2024 vs 12% en 2023",
-      nextStep: "Planning de déploiement adapté à vos contraintes"
-    },
-    {
-      category: "Alternative",
-      icon: Users,
-      color: "green",
-      objection: "Nous préférons développer une solution interne",
-      responses: [
-        "Coût développement interne estimé : 2-3M€ sur 3 ans + équipe 8 personnes",
-        "Time-to-market : 18-24 mois vs déploiement immédiat",
-        "Notre R&D : 40 ingénieurs spécialisés IA éducative depuis 5 ans",
-        "Maintenance, évolutions, support : charges récurrentes lourdes"
-      ],
-      evidence: "Université Paris-Dauphine: abandon projet interne après 18 mois et 1.2M€",
-      nextStep: "Comparaison détaillée coûts/bénéfices build vs buy"
-    }
-  ];
+interface ObjectionStrategyProps {
+  scenarioId?: string;
+}
+
+export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({ 
+  scenarioId = 'kpi-performance' 
+}) => {
+  const scenarioData = getScenarioData(scenarioId);
+  const objections = scenarioData.objections.map((obj, index) => ({
+    ...obj,
+    icon: getIconForCategory(obj.category),
+    color: getColorForCategory(obj.category)
+  }));
+
+  function getIconForCategory(category: string) {
+    const iconMap: Record<string, any> = {
+      "Budget / ROI": DollarSign,
+      "Résistance au changement": Brain,
+      "Efficacité pédagogique": Target,
+      "Intégration technique": Zap,
+      "Timing": Clock,
+      "Alternative interne": Users,
+      "Concurrence": Shield,
+      "Preuves sociales": Award
+    };
+    return iconMap[category] || AlertTriangle;
+  }
+
+  function getColorForCategory(category: string) {
+    const colorMap: Record<string, string> = {
+      "Budget / ROI": "red",
+      "Résistance au changement": "orange", 
+      "Efficacité pédagogique": "blue",
+      "Intégration technique": "purple",
+      "Timing": "yellow",
+      "Alternative interne": "green",
+      "Concurrence": "indigo",
+      "Preuves sociales": "pink"
+    };
+    return colorMap[category] || "gray";
+  }
 
   const getColorClass = (color: string) => {
     const colors = {
@@ -225,10 +180,15 @@ export const ObjectionStrategy: React.FC = () => {
                   <div className="flex-1 space-y-4">
                     <div>
                       <div className="flex items-center gap-2 mb-2">
-                        <Badge variant="outline" className={getTextColorClass(obj.color)}>
-                          {obj.category}
-                        </Badge>
-                        <h4 className={`font-semibold ${getTextColorClass(obj.color)}`}>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className={getTextColorClass(obj.color)}>
+                            {obj.category}
+                          </Badge>
+                          <Badge variant="secondary" className="text-xs">
+                            {obj.frequency}
+                          </Badge>
+                        </div>
+                        <h4 className={`font-semibold ${getTextColorClass(obj.color)} mt-2`}>
                           "{obj.objection}"
                         </h4>
                       </div>
@@ -261,6 +221,11 @@ export const ObjectionStrategy: React.FC = () => {
                           Étape suivante
                         </h5>
                         <p className="text-sm font-medium">{obj.nextStep}</p>
+                        {obj.persona_adaptation && (
+                          <div className="mt-2 p-2 bg-muted/50 rounded text-xs">
+                            <span className="font-medium">Adaptation persona:</span> {obj.persona_adaptation}
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
