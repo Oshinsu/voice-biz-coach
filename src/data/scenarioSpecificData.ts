@@ -59,175 +59,175 @@ interface ScenarioObjections {
 const kpiPerformanceData = {
   salesStrategy: {
     approach: {
-      title: 'Approche consultative expert',
-      description: 'Audit pédagogique 360° et benchmark concurrentiel approfondi'
+      title: 'Audit attribution marketing expert',
+      description: 'Analyse complète fragmentation data et optimisation budgets publicitaires'
     },
     evidence: {
-      title: 'Preuves sociales écoles tier 1',
-      description: 'ESSEC, KEDGE, SKEMA : +67% engagement étudiant'
+      title: 'Clients e-commerce similaires',
+      description: 'TheKooples, Sézane, Maisons du Monde : +35% ROAS, -28% CAC'
     },
     pilot: {
-      title: 'Pilote académique risk-free',
-      description: 'Test 6 mois département avec garantie résultats'
+      title: 'Pilote attribution 90 jours',
+      description: 'Test sur 30% budget publicitaire avec garantie performance'
     },
     sequence: [
-      'Audit pédagogique 360° : méthodes actuelles vs meilleures pratiques secteur',
-      'Benchmark concurrentiel : analyse 15 écoles tier 1-2 équipées',
-      'Workshop direction : définition KPIs pédagogiques et business',
-      'Démonstration immersive : simulation cours avec étudiants volontaires',
-      'Business case personnalisé : ROI sur 3 ans avec scénarios conservateur/optimiste',
-      'Pilote département : déploiement 6 mois avec accompagnement quotidien',
-      'Mesure impact : analytics pédagogiques et satisfaction étudiants/professeurs',
-      'Scaling strategy : roadmap déploiement autres départements'
+      'Audit attribution 360° : analyse stack actuel (GA4/Meta/Google/Klaviyo)',
+      'Mapping customer journey : identification touchpoints non trackés',
+      'Benchmark e-commerce mode : performance attribution vs 15 concurrents',
+      'Démonstration live : dashboard attribution temps réel sur vos campagnes',
+      'Business case personnalisé : ROI optimisation sur budget 80k€/mois',
+      'Pilote 90 jours : tracking multi-touch attribution sur segments tests',
+      'Mesure impact : gain ROAS et économies budget publicitaire',
+      'Scaling plan : déploiement attribution complète + formation équipe'
     ],
     leveragePoints: [
-      'Urgence compétitive : 73% écoles tier 1 équipées vs 31% en 2023',
-      'Révolution pédagogique GenZ : 89% étudiants exigent interactivité digitale',
-      'Exigences entreprises partenaires : soft skills + compétences tech',
-      'Mandats direction : digitalisation et excellence pédagogique 2025',
-      'ROI prouvé et rapide : payback 8-14 mois, impact visible dès semestre 1'
+      'Urgence Q1 2024 : lancement collection printemps = 40% CA annuel',
+      'Budget gaspillé : 25-35% du budget publicitaire mal attribué',
+      'Concurrence aggressive : autres marques mode optimisent déjà attribution',
+      'Pression croissance : objectif 12M€ CA vs 8M€ actuel nécessite ROAS optimisé',
+      'ROI immédiat : gains visibles dès 30 jours, payback 4-6 mois'
     ]
   },
   marketOverview: {
-    marketSize: "2.1B€ EdTech France, 78B$ mondial",
-    growthRate: "+15.8% CAGR France, +18.3% mondial",
-    budgetRange: "150K-500K€ écoles, jusqu'à 2M€ universités",
-    expectedROI: "22% an 1, 45% cumulé 3 ans",
-    timeline: "Rentrée septembre 2025 (décision avant avril)",
-    keyPlayers: ["Articulate", "Cornerstone", "360Learning", "Rise Up"],
-    marketPenetration: "31% écoles équipées solutions immersives",
-    studentSatisfaction: "+67% vs cours magistraux",
-    teacherAdoption: "94% après formation",
-    currentProcessingTime: "6-8h préparation cours",
-    errorRate: "12-15% évaluations inadaptées",
-    costPerTransaction: "45€ par étudiant/cours"
+    marketSize: "4.8B€ Marketing Attribution France, 21B$ mondial",
+    growthRate: "+28% CAGR France, +31% mondial",
+    budgetRange: "15K-40K€/an PME, jusqu'à 200K€ enterprise",
+    expectedROI: "35% gain ROAS moyenne, 28% réduction CAC",
+    timeline: "Urgence Q1 2024 pour campagnes printemps",
+    keyPlayers: ["Triple Whale", "Northbeam", "Mixpanel", "Segment", "Google Analytics"],
+    marketPenetration: "23% e-commerce équipés attribution avancée",
+    budgetWaste: "30-35% budget publicitaire mal attribué",
+    roas: "ROAS moyen 3.5x vs 4.8x avec attribution optimisée",
+    currentProcessingTime: "16h/semaine consolidation manuelle",
+    errorRate: "25-30% erreurs attribution",
+    costPerTransaction: "3.2€ coût attribution par commande"
   },
 
   objectives: {
     coldCall: {
-      primary: "Identifier les défis pédagogiques actuels",
-      secondary: "Évaluer l'ouverture à l'innovation",
-      successMetrics: "RDV avec responsable pédagogique obtenu"
+      primary: "Identifier les problèmes d'attribution actuels",
+      secondary: "Évaluer l'urgence optimisation budget publicitaire",
+      successMetrics: "RDV avec directrice marketing + CTO obtenu"
     },
     rdv: {
-      primary: "Démontrer l'impact sur l'engagement étudiant",
-      secondary: "Présenter le ROI pédagogique mesurable",
-      successMetrics: "Autorisation pilote sur 1 département"
+      primary: "Démontrer l'optimisation ROAS possible",
+      secondary: "Présenter le ROI sur budget 80k€/mois",
+      successMetrics: "Validation pilote 90 jours sur segments tests"
     }
   },
 
   objections: [
     {
-      category: "Budget / ROI",
-      objection: "Le budget formation est serré cette année",
+      category: "Budget Analytics",
+      objection: "Le budget analytics est limité cette année",
       frequency: "Très fréquente" as const,
       responses: [
-        "ROI 22% dès la première année : 150K€ investis = 183K€ de valeur générée",
-        "Pilote gratuit 3 mois : validation concrète avant tout engagement",
-        "Économies : -40% temps préparation cours, +60% efficacité pédagogique",
-        "Budget étalé possible : 30% année 1, 70% après validation résultats"
+        "ROI 35% ROAS gain : 25k€ investis = 28k€ économies publicitaires/mois",
+        "Pilote payant gagnant : coût pilote 5k€ vs 15k€ économies garanties",
+        "Budget autofinancé : économies publicitaires > coût plateforme",
+        "Paiement au résultat possible : pas de fee si objectifs ROAS non atteints"
       ],
-      evidence: "EM Lyon : ROI 31% première année + 89% satisfaction étudiants",
-      nextStep: "Simulation ROI personnalisée ESCAP avec vos coûts actuels",
-      persona_adaptation: "Focus ROI chiffré pour DG, bénéfices pédagogiques pour directeur académique"
+      evidence: "Sézane : ROI 280% première année + 35% gain ROAS sur budget 120k€/mois",
+      nextStep: "Simulation ROI sur votre budget 80k€/mois avec scénarios réalistes",
+      persona_adaptation: "Focus optimisation budget pour Sophie, impact sur croissance pour Clara"
     },
     {
-      category: "Résistance au changement",
-      objection: "Les professeurs ne sont pas prêts pour ces outils",
+      category: "Formation équipe",
+      objection: "L'équipe marketing n'a pas le temps de se former",
       frequency: "Fréquente" as const,
       responses: [
-        "Formation complète incluse : 16h réparties sur 2 mois",
-        "Champions internes : 2-3 professeurs early adopters formés en priorité",
-        "Accompagnement individuel : 1h/semaine/professeur pendant 6 semaines",
-        "Interface intuitive : 94% professeurs autonomes après 3 sessions"
+        "Formation intégrée au pilote : 6h réparties sur 3 semaines",
+        "Sophie championne interne : formation approfondie puis cascade",
+        "Interface intuitive : dashboard familier type GA4 enrichi",
+        "Support réactif : chat support 9h-19h + onboarding dédié"
       ],
-      evidence: "KEDGE : 97% adoption professeurs en 4 mois, 0 résistance après formation",
-      nextStep: "Rencontre avec vos professeurs les plus innovants pour témoignage",
-      persona_adaptation: "Rassurer sur accompagnement et progressivité"
-    },
-    {
-      category: "Efficacité pédagogique",
-      objection: "Est-ce que ça améliore vraiment l'apprentissage ?",
-      frequency: "Très fréquente" as const,
-      responses: [
-        "+73% engagement étudiant vs cours magistraux traditionnels",
-        "+45% rétention des compétences à 6 mois (vs +12% méthodes classiques)",
-        "Évaluation continue : tracking progression en temps réel",
-        "Personnalisation : adaptation niveau et rythme de chaque étudiant"
-      ],
-      evidence: "ESSEC : +67% réussite aux évaluations commerciales, +52% satisfaction étudiants",
-      nextStep: "Protocole de mesure d'impact personnalisé ESCAP avec KPIs définis ensemble",
-      persona_adaptation: "Mettre l'accent sur rigueur scientifique et mesures objectives"
+      evidence: "TheKooples : équipe marketing autonome en 15 jours, 0 résistance",
+      nextStep: "Démonstration interface avec Sophie + planning formation personnalisé",
+      persona_adaptation: "Rassurer sur simplicité et accompagnement progressif"
     },
     {
       category: "Intégration technique",
-      objection: "L'intégration avec notre LMS sera trop complexe",
-      frequency: "Fréquente" as const,
+      objection: "L'intégration avec Shopify/Klaviyo sera complexe",
+      frequency: "Très fréquente" as const,
       responses: [
-        "API native s'intégrant en 24-48h avec tous LMS majeurs (Moodle, Canvas, Blackboard...)",
-        "Équipe technique dédiée pour accompagnement gratuit pendant tout l'onboarding",
-        "Aucune modification infrastructure requise, déploiement cloud sécurisé RGPD-compliant",
-        "99.97% uptime garanti avec redondance multi-zones et backup automatique"
+        "Connecteurs natifs Shopify Plus + Klaviyo : installation 2-4h",
+        "Thomas accompagné par notre CTO : support technique dédié",
+        "Zéro impact checkout : tracking côté serveur, 0 latence",
+        "API documentée + sandbox : tests complets avant prod"
       ],
-      evidence: "SKEMA : intégration complète avec Moodle réalisée en 36h avec zéro interruption de service",
-      nextStep: "Audit technique gratuit avec votre DSI et démonstration intégration",
-      persona_adaptation: "Focus aspects techniques pour DSI, simplicité pour utilisateurs finaux"
+      evidence: "Maisons du Monde : intégration Shopify + Klaviyo en 6h, 0 interruption",
+      nextStep: "Audit technique avec Thomas + démonstration intégration sandbox",
+      persona_adaptation: "Focus sécurité et performance pour Thomas, simplicité pour Sophie"
     },
     {
-      category: "Timing",
-      objection: "Ce n'est pas le bon moment, nous avons trop de projets",
+      category: "Timing campagnes",
+      objection: "Nous lançons la collection printemps, pas le moment",
       frequency: "Fréquente" as const,
       responses: [
-        "Le pilote ne mobilise que 3h/semaine pour 1 professeur volontaire",
-        "Déploiement progressif totalement aligné sur votre calendrier académique",
-        "Support complet : vous vous concentrez sur la pédagogie, nous gérons la technique",
-        "Vos concurrents s'équipent massivement : chaque mois de retard = avantage perdu"
+        "Justement le moment idéal : optimiser attribution AVANT pic trafic mars-mai",
+        "Installation en janvier : opérationnel pour campagnes février-mars",
+        "Gain critique : 40% CA annuel Q2-Q3 = attribution optimisée essentielle",
+        "Support renforcé : équipe dédiée pendant lancement collection"
       ],
-      evidence: "40% des écoles de commerce Tier 1 équipées en 2024 vs 15% en 2023 - accélération massive",
-      nextStep: "Planning déploiement sur-mesure respectant vos contraintes et priorités",
-      persona_adaptation: "Rassurer sur progressivité et flexibilité du déploiement"
+      evidence: "Sandro : attribution optimisée 30j avant collection été = +42% ROAS vs année précédente",
+      nextStep: "Planning installation aligné sur calendrier campagnes printemps",
+      persona_adaptation: "Montrer l'urgence business et l'avantage concurrentiel"
     },
     {
-      category: "Alternative interne",
-      objection: "Nous préférons développer une solution en interne",
-      frequency: "Occasionnelle" as const,
+      category: "GA4 existant",
+      objection: "Google Analytics 4 nous donne déjà les données nécessaires",
+      frequency: "Très fréquente" as const,
       responses: [
-        "Coût développement interne : 800K€-1,2M€ sur 2-3 ans + équipe 6-8 personnes dédiées",
-        "Time-to-market : 24-36 mois vs déploiement immédiat avec notre solution",
-        "Notre R&D : 25 ingénieurs spécialisés IA conversationnelle éducative depuis 4 ans",
-        "Maintenance, évolutions, conformité : charges récurrentes lourdes et chronophages"
+        "GA4 = attribution last-click vs notre attribution multi-touch réelle",
+        "GA4 échantillonnage + data modeling vs tracking 100% précis",
+        "Cross-device + iOS 14.5 : GA4 perd 40-50% du tracking vs notre solution",
+        "Business intelligence avancée : optimisation budgets vs reporting basique"
       ],
-      evidence: "Université Paris-Dauphine : abandon projet interne après 2 ans et 950K€ investis",
-      nextStep: "Comparaison détaillée coûts/bénéfices/risques build vs buy sur 5 ans",
-      persona_adaptation: "Focus ROI et time-to-market pour DG, complexité technique pour DSI"
+      evidence: "Étude 2024 : GA4 sous-estime 35% des conversions vs attribution multi-touch",
+      nextStep: "Audit comparatif GA4 vs attribution réelle sur vos campagnes actuelles",
+      persona_adaptation: "Expliquer les limites techniques GA4 et bénéfices business"
     },
     {
       category: "Concurrence",
-      objection: "Nous regardons aussi Articulate 360 qui est leader",
+      objection: "Nous regardons aussi Triple Whale qui est spécialisé e-commerce",
       frequency: "Fréquente" as const,
       responses: [
-        "Articulate excellent pour e-learning classique, mais pas spécialisé simulation commerciale B2B",
-        "Notre IA conversationnelle vs leurs templates statiques : expérience immersive incomparable",
-        "Analytics prédictives sur performance vs reporting basique Articulate",
-        "Prix similaire mais ROI supérieur grâce à spécialisation métier"
+        "Triple Whale excellent pour Shopify basique, nous spécialisés mode/lifestyle",
+        "Notre IA attribution vs leurs règles statiques : précision supérieure",
+        "Intégration Klaviyo avancée : segmentation attribution vs basique Triple Whale",
+        "Prix similaire mais ROI supérieur grâce à algorithmes propriétaires"
       ],
-      evidence: "Benchmark indépendant Féfaur 2024 : notre solution 2,3x plus efficace sur compétences commerciales",
-      nextStep: "Démonstration comparative en live + témoignage client ayant migré d'Articulate",
-      persona_adaptation: "Reconnaître qualités concurrent mais montrer spécialisation unique"
+      evidence: "Migration Reformation de Triple Whale : +18% précision attribution en 90j",
+      nextStep: "Benchmark live Triple Whale vs nous sur vos données + témoignage client",
+      persona_adaptation: "Reconnaître qualités concurrent mais montrer différenciation technique"
     },
     {
-      category: "Preuves sociales",
-      objection: "Quelles sont vos références dans l'enseignement supérieur ?",
+      category: "Changement solution",
+      objection: "Nous venons d'implémenter des changements, pourquoi encore bouger ?",
+      frequency: "Fréquente" as const,
+      responses: [
+        "Pas de remplacement : enrichissement de vos outils actuels",
+        "Installation non-intrusive : overlay sur GA4, pas de migration",
+        "ROI immédiat : optimisation sans tout recommencer",
+        "Complémentarité : garde GA4 + ajoute attribution précise"
+      ],
+      evidence: "Jacquemus : enrichissement stack existant, +31% ROAS sans migration",
+      nextStep: "Audit de coexistence avec votre stack actuel",
+      persona_adaptation: "Rassurer sur continuité pour Thomas, gains pour Sophie"
+    },
+    {
+      category: "Preuves e-commerce mode",
+      objection: "Avez-vous des références dans la mode éthique ?",
       frequency: "Occasionnelle" as const,
       responses: [
-        "Clients actuels : ESSEC, KEDGE, SKEMA, EM Lyon (plus de 15 000 étudiants formés)",
-        "Partenariats : HEC incubateur, Station F EdTech program, Label French Tech",
-        "Reconnaissance : Prix Innovation EduTech 2024, Partenaire Microsoft Education",
-        "Croissance : +340% clients sur 18 mois, 94% taux de renouvellement"
+        "Clients mode actuels : Sézane, TheKooples, Maje, Isabel Marant",
+        "Spécialisation lifestyle : compréhension cycles saisonniers et comportements",
+        "Vertical mode éthique : Reformation, Gabriela Hearst, Veja trackées",
+        "Croissance : +180% clients mode en 12 mois, 96% satisfaction"
       ],
-      evidence: "Étude satisfaction : NPS moyen 68 chez nos clients éducation vs 31 moyenne secteur",
-      nextStep: "Mise en relation avec Directeur Innovation KEDGE pour retour d'expérience",
-      persona_adaptation: "Adapter références selon profil : innovation pour DPed, business pour DG"
+      evidence: "Veja : +28% ROAS sur campagnes sneakers éthiques, attribution cross-device optimisée",
+      nextStep: "Échange avec Sézane CMO pour retour d'expérience mode éthique",
+      persona_adaptation: "Références sectorielles pour crédibilité auprès Sophie et Clara"
     }
   ] as ScenarioObjections[]
 };
