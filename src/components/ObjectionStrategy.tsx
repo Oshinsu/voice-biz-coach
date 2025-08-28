@@ -7,7 +7,7 @@ import {
   DollarSign, Users, Clock, Zap, Brain,
   TrendingUp, Award, Lightbulb, ArrowRight
 } from 'lucide-react';
-import { getScenarioData } from '@/data/scenarioSpecificData';
+import { useScenarios } from '@/hooks/useScenarios';
 
 interface ObjectionStrategyProps {
   scenarioId?: string;
@@ -16,10 +16,11 @@ interface ObjectionStrategyProps {
 export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({ 
   scenarioId = 'kpi-performance' 
 }) => {
-  const scenarioData = getScenarioData(scenarioId);
+  const { getScenarioById } = useScenarios();
+  const scenario = getScenarioById(scenarioId);
   
   // Vérification que nous avons des objections pour ce scénario
-  if (!scenarioData?.objections || !Array.isArray(scenarioData.objections)) {
+  if (!scenario?.detailedObjections || !Array.isArray(scenario.detailedObjections)) {
     return (
       <div className="p-6 text-center">
         <p className="text-muted-foreground">
@@ -32,7 +33,7 @@ export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({
     );
   }
 
-  const objections = scenarioData.objections.map((obj, index) => ({
+  const objections = scenario.detailedObjections?.map((obj, index) => ({
     ...obj,
     icon: getIconForCategory(obj.category),
     color: getColorForCategory(obj.category)
@@ -97,25 +98,25 @@ export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Shield className="h-5 w-5" />
-            Stratégie commerciale - {scenarioData?.companyName || scenarioId}
+            Stratégie commerciale - {scenario?.company?.name || scenarioId}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center p-4 bg-primary/5 rounded-lg">
               <Target className="h-8 w-8 mx-auto mb-2 text-primary" />
-              <p className="font-medium">{scenarioData?.salesStrategy?.approach?.title || 'Approche consultative'}</p>
-              <p className="text-sm text-muted-foreground">{scenarioData?.salesStrategy?.approach?.description || 'Analyse et recommandations'}</p>
+              <p className="font-medium">{scenario?.salesStrategy?.approach?.title || 'Approche consultative'}</p>
+              <p className="text-sm text-muted-foreground">{scenario?.salesStrategy?.approach?.description || 'Analyse et recommandations'}</p>
             </div>
             <div className="text-center p-4 bg-secondary/5 rounded-lg">
               <TrendingUp className="h-8 w-8 mx-auto mb-2 text-secondary" />
-              <p className="font-medium">{scenarioData?.salesStrategy?.evidence?.title || 'Preuves sociales'}</p>
-              <p className="text-sm text-muted-foreground">{scenarioData?.salesStrategy?.evidence?.description || 'Cas clients similaires'}</p>
+              <p className="font-medium">{scenario?.salesStrategy?.evidence?.title || 'Preuves sociales'}</p>
+              <p className="text-sm text-muted-foreground">{scenario?.salesStrategy?.evidence?.description || 'Cas clients similaires'}</p>
             </div>
             <div className="text-center p-4 bg-accent/5 rounded-lg">
               <Award className="h-8 w-8 mx-auto mb-2 text-accent" />
-              <p className="font-medium">{scenarioData?.salesStrategy?.pilot?.title || 'Pilote risk-free'}</p>
-              <p className="text-sm text-muted-foreground">{scenarioData?.salesStrategy?.pilot?.description || 'Démonstration valeur'}</p>
+              <p className="font-medium">{scenario?.salesStrategy?.pilot?.title || 'Pilote risk-free'}</p>
+              <p className="text-sm text-muted-foreground">{scenario?.salesStrategy?.pilot?.description || 'Démonstration valeur'}</p>
             </div>
           </div>
 
@@ -123,7 +124,7 @@ export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({
             <div>
               <h4 className="font-semibold mb-3">Séquence de vente recommandée</h4>
               <div className="space-y-2">
-                {(scenarioData?.salesStrategy?.sequence || [
+                {(scenario?.salesStrategy?.sequence || [
                   'Analyse préliminaire et audit',
                   'Démonstration personnalisée',
                   'Proposition pilote ciblé',
@@ -141,7 +142,7 @@ export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({
             <div>
               <h4 className="font-semibold mb-3">Points d'appui décisionnels</h4>
               <div className="space-y-2">
-                {(scenarioData?.salesStrategy?.leveragePoints || [
+                {(scenario?.salesStrategy?.leveragePoints || [
                   'Pression concurrentielle du marché',
                   'Évolution des attentes clients',
                   'Objectifs digitaux entreprise',

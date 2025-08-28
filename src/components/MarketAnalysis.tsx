@@ -5,7 +5,7 @@ import { AnalysisSection } from './analysis/AnalysisSection';
 import { MarketOverview } from './analysis/MarketOverview';
 import { CompetitiveLandscape } from './analysis/CompetitiveLandscape';
 import { DetailedMarketAnalysis } from './analysis/DetailedMarketAnalysis';
-import { getScenarioData } from '@/data/scenarioSpecificData';
+import { useScenarios } from '@/hooks/useScenarios';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 
@@ -22,10 +22,11 @@ export const MarketAnalysis: React.FC<MarketAnalysisProps> = ({
   companyName = 'Entreprise',
   scenarioId = 'kpi-performance'
 }) => {
-  const scenarioData = getScenarioData(scenarioId);
+  const { getScenarioById } = useScenarios();
+  const scenario = getScenarioById(scenarioId);
   
   // Handle case where scenario doesn't have market data yet
-  if (!scenarioData?.marketOverview) {
+  if (!scenario?.marketData?.marketOverview) {
     return (
       <div className="p-6 text-center">
         <p className="text-muted-foreground">
@@ -38,7 +39,7 @@ export const MarketAnalysis: React.FC<MarketAnalysisProps> = ({
     );
   }
 
-  const marketData = scenarioData; // Direct access since the structure is flat now
+  const marketData = scenario.marketData;
 
   return (
     <div className="space-y-6">

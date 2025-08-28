@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Building2, Users, DollarSign, Calendar, Target, TrendingUp } from 'lucide-react';
-import { getScenarioData } from '@/data/scenarioSpecificData';
+import { useScenarios } from '@/hooks/useScenarios';
 
 interface ScenarioInitialInfoProps {
   scenarioId: string;
@@ -13,13 +13,16 @@ export const ScenarioInitialInfo: React.FC<ScenarioInitialInfoProps> = ({
   scenarioId, 
   scenario 
 }) => {
-  const scenarioData = getScenarioData(scenarioId);
+  const { getScenarioById } = useScenarios();
+  const scenarioData = getScenarioById(scenarioId);
   
-  if (!scenarioData?.marketOverview) {
+  if (!scenarioData?.marketData?.marketOverview) {
     return null;
   }
 
-  const { marketOverview, objectives } = scenarioData;
+  const marketData = scenarioData.marketData;
+  const marketOverview = marketData?.marketOverview;
+  const objectives = scenarioData.specificObjectives;
 
   return (
     <div className="space-y-6">

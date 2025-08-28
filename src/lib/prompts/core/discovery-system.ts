@@ -3,7 +3,7 @@
  * Functions contextuelles pour réalisme conversationnel
  */
 
-import { getScenarioData } from '@/data/scenarioSpecificData';
+import { consolidatedScenarios } from '@/data/scenarios';
 
 /**
  * Génère le système de discovery functions pour un scénario

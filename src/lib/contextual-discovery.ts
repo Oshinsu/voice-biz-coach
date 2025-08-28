@@ -3,7 +3,7 @@
  * Fonctions discovery adaptées aux secteurs et révélation progressive
  */
 
-import { getScenarioData } from '@/data/scenarioSpecificData';
+import { consolidatedScenarios } from '@/data/scenarios';
 
 export interface DiscoveryLayer {
   id: string;
@@ -45,7 +45,7 @@ export class ContextualDiscoveryManager {
 
   constructor(scenario: any, initialTrustLevel: number = 0) {
     this.scenario = scenario;
-    this.scenarioData = getScenarioData(scenario.id);
+    this.scenarioData = consolidatedScenarios.find(s => s.id === scenario.id);
     this.currentTrustLevel = initialTrustLevel;
   }
 

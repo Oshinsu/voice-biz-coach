@@ -2,16 +2,17 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Target, Phone, Calendar, CheckCircle, TrendingUp, Users } from 'lucide-react';
-import { getScenarioData } from '@/data/scenarioSpecificData';
+import { useScenarios } from '@/hooks/useScenarios';
 
 interface ScenarioObjectivesProps {
   scenarioId: string;
 }
 
 export const ScenarioObjectives: React.FC<ScenarioObjectivesProps> = ({ scenarioId }) => {
-  const scenarioData = getScenarioData(scenarioId);
+  const { getScenarioById } = useScenarios();
+  const scenario = getScenarioById(scenarioId);
   
-  if (!scenarioData?.objectives) {
+  if (!scenario?.specificObjectives) {
     return (
       <Card>
         <CardContent className="text-center py-8">
@@ -24,7 +25,7 @@ export const ScenarioObjectives: React.FC<ScenarioObjectivesProps> = ({ scenario
     );
   }
 
-  const { objectives } = scenarioData;
+  const objectives = scenario.specificObjectives;
 
   return (
     <div className="space-y-6">

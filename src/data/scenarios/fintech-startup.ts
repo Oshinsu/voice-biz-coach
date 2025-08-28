@@ -197,5 +197,110 @@ export const fintechStartupScenario: Scenario = {
       concerns: ["Architecture technique", "APIs", "Scalabilité"],
       approach: "Démonstration technique + intégration stack"
     }
+  ],
+
+  // Stratégie commerciale intégrée
+  salesStrategy: {
+    approach: {
+      title: 'Technical Deep Dive Expert',
+      description: 'Analyse exhaustive algorithmes ML et architecture micro-services'
+    },
+    evidence: {
+      title: 'Performance benchmarks en production',
+      description: 'Tests live sur 50M+ transactions avec comparaisons A/B'
+    },
+    pilot: {
+      title: 'Proof of concept risk-free',
+      description: 'Intégration sandbox 45j avec garantie performance'
+    },
+    sequence: [
+      'Audit technique complet : stack ML actuel, data pipeline, modèles en production',
+      'Assessment security & compliance : PCI DSS, GDPR, Open Banking API',
+      'Benchmark performance : tests comparatifs sur 6 mois données historiques',
+      'Architecture review : scalabilité, latence, coûts infrastructure cloud',
+      'POC intégration sandbox : API testing, load testing, fraud simulation',
+      'Validation business case : ROI, réduction faux positifs, impact UX',
+      'Go-live production : déploiement graduel avec monitoring 24/7',
+      'Optimization continue : A/B testing et amélioration algorithmes'
+    ],
+    leveragePoints: [
+      'Urgence réglementaire : PCI DSS Level 1 + Open Banking + DORA 2025',
+      'Guerre concurrentielle : Revolut, N26, Monzo innovation perpétuelle',
+      'Explosion fraude : +156% tentatives 2024, coût moyen 2.1M€/incident',
+      'Hypercroissance : scaling 10x volumes sans dégradation performance',
+      'Investor pressure : metrics de fraud detection dans due diligence levées'
+    ]
+  },
+
+  // Données marché intégrées
+  marketData: {
+    marketOverview: {
+      marketSize: "15.2B$ global fintech, 890M€ France",
+      growthRate: "+22% CAGR global, +31% CAGR France",
+      budgetRange: "2M-5M€ R&D (dont 30-40% sécurité/compliance)",
+      expectedROI: "35% an 1, 180% cumulé 3 ans",
+      timeline: "Q2 2025 (deadline DORA compliance)",
+      keyPlayers: ["Stripe", "Adyen", "Checkout.com", "Klarna", "PayPal"],
+      fraudLosses: "4.7B$ pertes fraude 2024, +23% vs 2023",
+      regulatoryFines: "127M€ amendes ACPR/AMF 2024",
+      customerAcquisition: "89€ CAC moyen, +45% vs banques",
+      transactionLatency: "127ms moyenne vs 67ms néobanques leader",
+      falsePositiveRate: "12-18% vs 3-5% meilleures solutions",
+      complianceDelay: "14 mois average regulatory approval"
+    }
+  },
+
+  // Objectifs spécifiques intégrés
+  specificObjectives: {
+    coldCall: {
+      primary: "Identifier le pain point principal en détection de fraude",
+      secondary: "Évaluer budget R&D disponible",
+      successMetrics: "RDV avec CTO + CRO obtenu"
+    },
+    rdv: {
+      primary: "Quantifier les pertes actuelles liées à la fraude",
+      secondary: "Comprendre stack technique et contraintes",
+      successMetrics: "Proof of concept approuvé avec timeline"
+    }
+  },
+
+  // Objections détaillées intégrées
+  detailedObjections: [
+    {
+      category: "Performance IA",
+      objection: "Vos algorithmes sont-ils meilleurs que nos modèles internes ?",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Nos modèles sont entraînés sur 500M+ transactions cross-sectorielles vs vos données limitées au secteur",
+        "Benchmark indépendant Forrester : 94% précision vs 78% moyenne marché",
+        "Tests A/B chez 15 fintech similaires : -35% faux positifs, +28% détection fraude"
+      ],
+      evidence: "Benchmark Forrester 2024 + résultats live clients",
+      nextStep: "POC comparatif sur vos données historiques 6 mois"
+    },
+    {
+      category: "Sécurité",
+      objection: "Confier nos données de paiement à un prestataire externe, c'est risqué",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Nous sommes certifiés PCI DSS Level 1, même niveau que Stripe/Adyen",
+        "Nos datacenters sont en Europe, conformité GDPR native + audit Big4 trimestriel",
+        "Architecture zero-trust : vos données restent chiffrées en permanence"
+      ],
+      evidence: "Certifications + audit trail + clients Tier 1 banking",
+      nextStep: "Audit sécurité avec votre RSSI + visite datacenter"
+    },
+    {
+      category: "Coût",
+      objection: "2M€ sur 3 ans c'est énorme pour une startup",
+      frequency: "Fréquente" as const,
+      responses: [
+        "Vos pertes fraude actuelles : 1.8M€/an. Notre ROI : break-even 14 mois",
+        "Coût faux positifs : 340k€/an client frustration. Réduction 35% = 120k€ économies",
+        "Modèle SaaS évolutif : vous payez selon votre croissance"
+      ],
+      evidence: "Calcul ROI personnalisé + cas clients croissance similaire",
+      nextStep: "Business case détaillé avec CFO + modèle pricing adaptatif"
+    }
   ]
 };

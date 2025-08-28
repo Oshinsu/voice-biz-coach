@@ -426,5 +426,131 @@ export const kpiPerformanceScenario: Scenario = {
       concerns: ["Courbe apprentissage", "Efficacité quotidienne"],
       approach: "Formation hands-on + bénéfices concrets quotidiens"
     }
+  ],
+
+  // Stratégie commerciale intégrée
+  salesStrategy: {
+    approach: {
+      title: 'Audit attribution marketing expert',
+      description: 'Analyse complète fragmentation data et optimisation budgets publicitaires'
+    },
+    evidence: {
+      title: 'Clients e-commerce similaires',
+      description: 'TheKooples, Sézane, Maisons du Monde : +35% ROAS, -28% CAC'
+    },
+    pilot: {
+      title: 'Pilote attribution 90 jours',
+      description: 'Test sur 30% budget publicitaire avec garantie performance'
+    },
+    sequence: [
+      'Audit attribution 360° : analyse stack actuel (GA4/Meta/Google/Klaviyo)',
+      'Mapping customer journey : identification touchpoints non trackés',
+      'Benchmark e-commerce mode : performance attribution vs 15 concurrents',
+      'Démonstration live : dashboard attribution temps réel sur vos campagnes',
+      'Business case personnalisé : ROI optimisation sur budget 80k€/mois',
+      'Pilote 90 jours : tracking multi-touch attribution sur segments tests',
+      'Mesure impact : gain ROAS et économies budget publicitaire',
+      'Scaling plan : déploiement attribution complète + formation équipe'
+    ],
+    leveragePoints: [
+      'Urgence Q1 2024 : lancement collection printemps = 40% CA annuel',
+      'Budget gaspillé : 25-35% du budget publicitaire mal attribué',
+      'Concurrence aggressive : autres marques mode optimisent déjà attribution',
+      'Pression croissance : objectif 12M€ CA vs 8M€ actuel nécessite ROAS optimisé',
+      'ROI immédiat : gains visibles dès 30 jours, payback 4-6 mois'
+    ]
+  },
+
+  // Données marché intégrées
+  marketData: {
+    marketOverview: {
+      marketSize: "4.8B€ Marketing Attribution France, 21B$ mondial",
+      growthRate: "+28% CAGR France, +31% mondial",
+      budgetRange: "15K-40K€/an PME, jusqu'à 200K€ enterprise",
+      expectedROI: "35% gain ROAS moyenne, 28% réduction CAC",
+      timeline: "Urgence Q1 2024 pour campagnes printemps",
+      keyPlayers: ["Triple Whale", "Northbeam", "Mixpanel", "Segment", "Google Analytics"],
+      marketPenetration: "23% e-commerce équipés attribution avancée",
+      budgetWaste: "30-35% budget publicitaire mal attribué",
+      roas: "ROAS moyen 3.5x vs 4.8x avec attribution optimisée"
+    }
+  },
+
+  // Objectifs spécifiques intégrés
+  specificObjectives: {
+    coldCall: {
+      primary: "Décrocher audit attribution 45min avec Sophie Martin sous 15 jours",
+      secondary: "Cartographier ecosystem marketing ModaStyle + identifier pain points attribution",
+      successMetrics: "RDV confirmé + access pain points + budget range validé"
+    },
+    rdv: {
+      primary: "Convaincre lancer pilote attribution 90 jours sur 30% budget (25k€)",
+      secondary: "Obtenir buy-in CEO Clara + mapping décision process + timeline validation",
+      successMetrics: "Pilote validé + budget alloué + timeline signée + sponsorship exec"
+    }
+  },
+
+  // Objections détaillées intégrées
+  detailedObjections: [
+    {
+      category: "Budget",
+      objection: "25k€ c'est trop cher pour un outil analytics, on a déjà Google Analytics gratuit",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "Votre budget publicitaire est de 80k€/mois. Si DataTrack vous fait économiser ne serait-ce que 10% grâce à une meilleure attribution, cela représente 8k€/mois soit 96k€/an d'économies",
+        "Google Analytics vous coûte en réalité 16h/semaine de temps équipe soit 35k€/an en coût caché",
+        "TheKooples a économisé 180k€ la première année avec notre solution"
+      ],
+      evidence: "ROI client TheKooples : -28% CAC, +35% ROAS = 180k€ économies an 1",
+      nextStep: "Audit gratuit pour quantifier votre potentiel d'économies exact"
+    },
+    {
+      category: "Timing",
+      objection: "On n'a pas le temps de changer d'outil maintenant, on lance la collection printemps",
+      frequency: "Très fréquente" as const,
+      responses: [
+        "C'est exactement pour ça qu'il faut agir maintenant. Cette collection représente 40% de votre CA annuel, vous ne pouvez pas vous permettre une attribution approximative",
+        "Notre setup prend 24h vs 6 semaines pour la concurrence. On peut être opérationnels avant votre campagne de lancement",
+        "Sézane a déployé DataTrack 3 semaines avant leur collection été : +42% performance campagne vs N-1"
+      ],
+      evidence: "Case study Sézane : déploiement 3 semaines avant collection = +42% performance",
+      nextStep: "Planning détaillé déploiement 3 semaines compatible avec votre calendrier"
+    },
+    {
+      category: "Technique",
+      objection: "Notre setup Shopify/GA4 est complexe, on a peur de casser quelque chose",
+      frequency: "Fréquente" as const,
+      responses: [
+        "Notre connecteur Shopify Plus est certifié et utilisé par 200+ e-commerces sans incident",
+        "Le déploiement se fait en parallèle de votre setup actuel, sans interruption",
+        "On propose un rollback automatique si problème détecté"
+      ],
+      evidence: "200+ déploiements Shopify sans incident, certification Shopify Plus Partner",
+      nextStep: "Demo technique avec votre CTO Thomas pour valider l'intégration"
+    },
+    {
+      category: "Équipe",
+      objection: "Mon équipe n'aura pas le temps d'apprendre un nouvel outil",
+      frequency: "Fréquente" as const,
+      responses: [
+        "L'interface est intuitive, nos clients e-commerce sont opérationnels en 2h de formation",
+        "On inclut 8h de formation personnalisée + 3 mois de support priority",
+        "Amélie chez Sézane : 'Plus simple que GA4, enfin des insights actionnables'"
+      ],
+      evidence: "Testimonial Sézane : 'Formation 2h, équipe autonome J+1'",
+      nextStep: "Session découverte interface 30min avec Jules et Amélie"
+    },
+    {
+      category: "Concurrence",
+      objection: "On regarde aussi Triple Whale / Northbeam, ils sont moins chers",
+      frequency: "Occasionnelle" as const,
+      responses: [
+        "Triple Whale : setup 6 semaines, support offshore, pricing US non transparent. Nous : 24h setup, support français, prix fixe",
+        "Northbeam cible les gros US retailers, interface complexe. Nous sommes spécialisés e-commerce français 1-50M€",
+        "Notre IA est entraînée sur 500M sessions e-commerce européennes vs data US généraliste"
+      ],
+      evidence: "Benchmark : nous 94% précision vs 82% Triple Whale selon étude Ecommerce Mag",
+      nextStep: "Tableau comparatif détaillé + pilot head-to-head sur vos données"
+    }
   ]
 };

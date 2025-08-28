@@ -131,4 +131,58 @@ export interface Scenario {
   budget_range?: string;
   success_probability?: number;
   expected_revenue?: string;
+  
+  // Nouvelles propriétés intégrées
+  salesStrategy?: {
+    approach: {
+      title: string;
+      description: string;
+    };
+    evidence: {
+      title: string;
+      description: string;
+    };
+    pilot: {
+      title: string;
+      description: string;
+    };
+    sequence: string[];
+    leveragePoints: string[];
+  };
+  
+  marketData?: {
+    marketOverview: {
+      marketSize: string;
+      growthRate: string;
+      budgetRange?: string;
+      expectedROI?: string;
+      timeline?: string;
+      keyPlayers?: string[];
+      [key: string]: any;
+    };
+    technicalChallenges?: string[];
+  };
+  
+  specificObjectives?: {
+    coldCall: {
+      primary: string;
+      secondary: string;
+      successMetrics: string;
+    };
+    rdv: {
+      primary: string;
+      secondary: string;
+      successMetrics: string;
+    };
+  };
+  
+  detailedObjections?: Array<{
+    category: string;
+    objection: string;
+    frequency: 'Très fréquente' | 'Fréquente' | 'Occasionnelle';
+    responses: string[];
+    evidence: string;
+    nextStep: string;
+    persona_adaptation?: string;
+  }>;
 }
