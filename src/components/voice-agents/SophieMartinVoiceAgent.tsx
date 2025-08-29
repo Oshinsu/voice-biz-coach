@@ -141,12 +141,12 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
       if (error) throw error;
       console.log('✅ Token éphémère obtenu:', tokenData);
       
-      if (!tokenData?.value) {
+      if (!tokenData?.client_secret?.value) {
         console.error('❌ Structure token reçue:', tokenData);
         throw new Error("Token éphémère non reçu");
       }
 
-      const ephemeralToken = tokenData.value;
+      const ephemeralToken = tokenData.client_secret.value;
 
       // Créer gestionnaire événements WebRTC
       const handleMessage = (event: any) => {
