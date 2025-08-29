@@ -22,18 +22,28 @@ serve(async (req) => {
 
     console.log('🔑 Generating ephemeral token for WebRTC...');
 
-    // Request an ephemeral token from OpenAI
-    const response = await fetch("https://api.openai.com/v1/realtime/sessions", {
+    // Structure correcte selon doc OpenAI WebRTC
+    const sessionConfig = {
+      session: {
+        type: "realtime",
+        model: "gpt-realtime",
+        audio: {
+          output: {
+            voice: voice
+          }
+        },
+        instructions: instructions || "You are a helpful assistant."
+      }
+    };
+
+    // Request an ephemeral token from OpenAI (endpoint correct selon doc)
+    const response = await fetch("https://api.openai.com/v1/realtime/client_secrets", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        model: "gpt-4o-realtime-preview-2024-12-17",
-        voice: voice,
-        instructions: instructions || "You are a helpful assistant."
-      }),
+      body: JSON.stringify(sessionConfig),
     });
 
     const data = await response.json();

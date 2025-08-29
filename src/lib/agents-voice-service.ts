@@ -45,11 +45,12 @@ export class AgentsVoiceService {
       
       const tokenData = tokenResponse.data;
       
-      if (!tokenData.client_secret?.value) {
-        throw new Error("Failed to get ephemeral token");
+      // Récupération token selon doc OpenAI WebRTC
+      if (!tokenData.value) {
+        throw new Error("Failed to get ephemeral token - no value in response");
       }
 
-      const ephemeralKey = tokenData.client_secret.value;
+      const ephemeralKey = tokenData.value;
       console.log('✅ Token éphémère généré via Supabase');
 
       // 2. Configuration WebRTC
@@ -83,25 +84,31 @@ export class AgentsVoiceService {
       this.dc = this.pc.createDataChannel("oai-events");
       this.setupDataChannelHandlers();
 
-      // 6. Négociation WebRTC
+      // 6. Négociation WebRTC selon doc OpenAI officielle
       const offer = await this.pc.createOffer();
       await this.pc.setLocalDescription(offer);
 
-      // 7. Connexion à OpenAI Realtime API
-      const baseUrl = "https://api.openai.com/v1/realtime";
-      const modelParam = this.config.model || "gpt-realtime";
+      // 7. Connexion WebRTC selon doc OpenAI (format exact)
+      const baseUrl = "https://api.openai.com/v1/realtime/calls";
+      const model = this.config.model || "gpt-realtime";
       
-      const sdpResponse = await fetch(`${baseUrl}/calls?model=${modelParam}`, {
+      console.log(`🔗 Connexion WebRTC: ${baseUrl}?model=${model}`);
+      
+      const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
         method: "POST",
         body: offer.sdp,
         headers: {
           Authorization: `Bearer ${ephemeralKey}`,
-          "Content-Type": "application/sdp"
+          "Content-Type": "application/sdp",
         },
       });
 
+      console.log(`📡 WebRTC Response Status: ${sdpResponse.status}`);
+      
       if (!sdpResponse.ok) {
-        throw new Error(`WebRTC negotiation failed: ${sdpResponse.status}`);
+        const errorText = await sdpResponse.text();
+        console.error(`❌ WebRTC Response Error: ${errorText}`);
+        throw new Error(`WebRTC negotiation failed: ${sdpResponse.status} - ${errorText}`);
       }
 
       const answer = {
