@@ -159,6 +159,8 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
             
             // Envoyer configuration session après création
             const sessionConfig = {
+              type: "realtime",
+              model: "gpt-4o-realtime-preview-2024-12-17",
               modalities: ["text", "audio"],
               instructions: getSophieSystemPrompt(),
               voice: "alloy",
