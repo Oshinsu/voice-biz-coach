@@ -139,13 +139,14 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
       const { data: tokenData, error } = await supabase.functions.invoke('get-openai-key');
       
       if (error) throw error;
-      console.log('✅ Token éphémère obtenu');
+      console.log('✅ Token éphémère obtenu:', tokenData);
       
-      if (!tokenData?.client_secret?.value) {
+      if (!tokenData?.value) {
+        console.error('❌ Structure token reçue:', tokenData);
         throw new Error("Token éphémère non reçu");
       }
 
-      const ephemeralToken = tokenData.client_secret.value;
+      const ephemeralToken = tokenData.value;
 
       // Créer gestionnaire événements WebRTC
       const handleMessage = (event: any) => {
