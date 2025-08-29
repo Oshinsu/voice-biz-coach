@@ -63,14 +63,14 @@ export const kpiPerformanceScenario: Scenario = {
     
     currentSolution: "Architecture analytics fragmentée: Google Analytics 4 (gratuit, setup basique) + Google Ads conversion tracking + Facebook Business Manager analytics + Klaviyo email analytics + Shopify Analytics (natif) + 15 fichiers Excel consolidés manuellement par Sophie Martin chaque lundi. Temps consolidation: 4h/semaine. Fiabilité données: 75% (20% écarts entre sources). Réactivité décision: 7 jours délai. Granularité insight: macro seulement (pas de micro-segments).",
     
-    budget: "8-15k€/an analytics tools vs 650k€ total marketing budget (1.2-2.3% budget). Répartition: 550k€ média advertising, 60k€ content/création, 25k€ tools & tech, 15k€ events. Validation Clara nécessaire au-delà de 12k€.",
+    budget: "8-15k€/an analytics tools vs 650k€ total marketing budget (1.2-2.3% budget). Répartition: 550k€ média advertising (Meta 330k€/an, Google 220k€/an), 60k€ content/création, 25k€ tools & tech, 15k€ events. Validation Clara nécessaire au-delà de 12k€.",
     
     timeline: "Urgence maximale Q1 2024: lancement collection printemps-été crucial (40% CA annuel réalisé Q2-Q3). Besoin attribution parfaite avant campagne lancement mars 2024. Décision décembre 2023, déploiement janvier 2024, opérationnel février pour optimisation mars-avril.",
     
     foundedYear: 2018,
     keyPeople: [
       "Clara Dubois - CEO & Fondatrice, 34 ans (Ex-acheteuse senior Zara 6 ans, ESSEC). Visionnaire mode éthique européenne, leadership inspirant équipe, obsédée customer experience. Network influent mode/retail",
-      "Sophie Martin - Directrice Marketing & Analytics, 29 ans (Ex-Converteo 3 ans, Ex-Spartoo 2 ans, HEC marketing quanti). Data-driven excellence, frustrée limitations tools actuels, workaholic assumée",
+      "Sophie Martin - Directrice Marketing & Analytics, 33 ans (Ex-Converteo 4 ans, Ex-Spartoo 3 ans, Ex-Agence digitale Lyon 2 ans, ESC Lyon marketing digital). 10 ans expertise analytics, frustrée limitations tools actuels, recherche efficacité",
       "Jules Moreau - Traffic Manager, 26 ans (Ex-freelance Meta Ads, spécialiste acquisition). Expert growth hacking, maîtrise budgets publicitaires, créatif campagnes visuelles mode",
       "Amélie Durant - CRM Manager, 31 ans (Ex-Sephora email marketing, spécialiste retention). Experte lifecycle marketing, personnalisation email, customer journey mapping",
       "Thomas Dubois - CTO, 32 ans (frère Clara, Ex-dev lead Criteo, Polytechnique). Architecture Shopify Plus, optimisation performance, innovation tech retail",
@@ -80,17 +80,17 @@ export const kpiPerformanceScenario: Scenario = {
     // Données financières et opérationnelles détaillées
     detailedFinancials: {
       revenue2023: "8,000,000€",
-      revenue2022: "5,500,000€", 
-      revenue2021: "3,800,000€",
+      revenue2022: "6,400,000€", 
+      revenue2021: "4,800,000€",
       grossMargin: "62% (4.96M€ marge brute)",
       costOfGoodsSold: "38% (3.04M€)",
-      marketingSpend: "1,000,000€ (12.5% CA)",
-      personnelCosts: "1,400,000€ (17.5% CA, 50 employés)",
-      operatingExpenses: "1,560,000€ (tech, logistique, admin)",
-      ebitda: "1,200,000€ (15%)",
-      taxes: "360,000€",
-      netProfit: "640,000€ (8%)",
-      cashFlow: "1,100,000€",
+      marketingSpend: "650,000€ (8.1% CA)",
+      personnelCosts: "1,600,000€ (20% CA, 85 employés)",
+      operatingExpenses: "1,300,000€ (tech, logistique, admin)",
+      ebitda: "560,000€ (7%)",
+      taxes: "160,000€",
+      netProfit: "240,000€ (3%)",
+      cashFlow: "800,000€",
       inventoryValue: "850,000€",
       accountsReceivable: "0€ (B2C direct)",
       workingCapital: "650,000€"
@@ -107,14 +107,15 @@ export const kpiPerformanceScenario: Scenario = {
     linkedinProfile: {
       headline: "Directrice Marketing @ModaStyle | Digital Marketing & E-commerce | ESC Lyon",
       experience: [
-        "ModaStyle (2 ans) - Directrice Marketing: développement marketing digital, gestion équipe 4 personnes",
-        "Spartoo (3 ans) - Chef de Projet Marketing Digital: campagnes acquisition, optimisation conversion",
+        "ModaStyle (3 ans) - Directrice Marketing & Analytics: transformation data-driven, gestion équipe 6 personnes, +300% revenue",
+        "Converteo (4 ans) - Senior Analytics Consultant: audit attribution, clients Fnac-Darty/Monoprix, setup GA360",
+        "Spartoo (3 ans) - Marketing Manager: gestion budget 500k€/an, optimisation ROAS +65%, équipe 4 personnes",
         "Agence Digitale Lyon (2 ans) - Consultante Marketing Digital: accompagnement e-commerces PME"
       ],
-      education: "ESC Lyon - Master Marketing Digital, IUT TC Lyon - DUT Techniques de Commercialisation", 
-      certifications: "Google Analytics, Google Ads, Facebook Blueprint",
-      network: "420 connexions (marketing digital, e-commerce, mode)",
-      activite: "Partage occasionnel sur les tendances e-commerce et mode éthique"
+      education: "ESC Lyon - Master Marketing Digital & Data Analytics", 
+      certifications: "Google Analytics 4, Google Ads, Facebook Blueprint, Klaviyo Expert",
+      network: "680 connexions (marketing digital, e-commerce, mode, analytics)",
+      activite: "Speaker conférences e-commerce, partage insights attribution marketing"
     },
     
     // Habitudes et préférences détaillées  
@@ -152,7 +153,7 @@ export const kpiPerformanceScenario: Scenario = {
       "Challenge technique: repousser limites e-commerce analytics, innover méthodes attribution, devenir référence expertise secteur"
     ],
     
-    experience: "8 années expertise marketing digital analytics: CONVERTEO (3 ans, 2019-2022): Consultant Senior Analytics spécialisé e-commerce/retail. Clients: Fnac-Darty, Monoprix, Showroomprivé. Expertise: audit attribution, setup GA360/Adobe Analytics, transformation data-driven +50 missions. SPARTOO (2 ans, 2017-2019): Marketing Manager acquisition. Gestion budget 500k€/an, optimisation ROAS +65%, déploiement attribution cross-device, équipe 4 personnes. MODASTYLE (3 ans, 2022-present): Directrice Marketing & Analytics. Recrutée par Clara pour structurer analytics scale-up. Résultats: +300% revenue, setup stack marketing complet, équipe 3→6 personnes, autorité reconnue data."
+    experience: "10 années expertise marketing digital analytics: AGENCE DIGITALE LYON (2 ans, 2014-2016): Consultante junior e-commerce PME. SPARTOO (3 ans, 2016-2019): Marketing Manager acquisition. Gestion budget 500k€/an, optimisation ROAS +65%, déploiement attribution cross-device, équipe 4 personnes. CONVERTEO (4 ans, 2019-2023): Senior Analytics Consultant e-commerce/retail. Clients: Fnac-Darty, Monoprix, Showroomprivé. Expertise: audit attribution, setup GA360/Adobe Analytics, transformation data-driven +50 missions. MODASTYLE (3 ans, 2021-present): Directrice Marketing & Analytics. Recrutée par Clara pour structurer analytics scale-up. Résultats: +300% revenue, setup stack marketing complet, équipe 3→6 personnes, autorité reconnue data."
   },
   product: {
     name: "DataTrack Pro",
