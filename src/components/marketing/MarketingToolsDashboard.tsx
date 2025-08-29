@@ -9,8 +9,8 @@ import {
 import { DataTrackProPorterMatrix } from './DataTrackProPorterMatrix';
 import { DataTrackProAnsoffMatrix } from './DataTrackProAnsoffMatrix';
 import { DataTrackProBCGMatrix } from './DataTrackProBCGMatrix';
-import { MarketingStrategy } from './MarketingStrategy';
-import { SwotMatrix } from '../SwotMatrix';
+import { ModaStyleMarketingStrategy } from './ModaStyleMarketingStrategy';
+import { ModaStyleSwotMatrix } from './ModaStyleSwotMatrix';
 
 interface MarketingToolsDashboardProps {
   scenarioId: string;
@@ -154,21 +154,14 @@ export const MarketingToolsDashboard: React.FC<MarketingToolsDashboardProps> = (
         </TabsContent>
 
         <TabsContent value="swot" className="space-y-6">
-          {productSwot ? (
-            <SwotMatrix 
-              title="Analyse SWOT du produit"
-              swot={productSwot}
-              variant="default"
-            />
-          ) : (
-            <div className="text-center py-8">
-              <p className="text-muted-foreground">Données SWOT non disponibles pour ce scénario</p>
-            </div>
-          )}
+          <ModaStyleSwotMatrix 
+            title="Analyse SWOT DataTrack Pro - Cas ModaStyle"
+            variant="default"
+          />
         </TabsContent>
 
         <TabsContent value="marketing" className="space-y-6">
-          <MarketingStrategy scenarioId={scenarioId} />
+          <ModaStyleMarketingStrategy scenarioId={scenarioId} />
         </TabsContent>
       </Tabs>
 
