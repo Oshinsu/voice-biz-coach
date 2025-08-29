@@ -133,16 +133,19 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
       setMessages([]);
       setExchangeCount(0);
 
-      // Récupérer l'API key OpenAI depuis les secrets Supabase en créant un edge function helper
-      console.log('🔑 Récupération de l\'API key OpenAI...');
-      const { data: secretData, error: secretError } = await supabase.functions.invoke('get-openai-key');
+      // Obtenir le token éphémère via la nouvelle edge function
+      console.log('🎤 Génération du token éphémère...');
+      const { data: tokenData, error } = await supabase.functions.invoke('realtime-ephemeral-token');
       
-      if (secretError || !secretData?.apiKey) {
-        throw new Error('API key OpenAI non configurée dans les secrets Supabase');
+      if (error) throw error;
+      console.log('📡 Réponse token éphémère:', JSON.stringify(tokenData, null, 2));
+      
+      if (!tokenData?.client_secret?.value) {
+        console.error('❌ Structure token incorrecte. Attendu: client_secret.value, reçu:', Object.keys(tokenData || {}));
+        throw new Error("Token éphémère non reçu - structure réponse inattendue");
       }
 
-      const OPENAI_API_KEY = secretData.apiKey;
-      console.log('✅ API key OpenAI récupérée');
+      console.log('✅ Token éphémère obtenu pour Sophie Martin');
 
       // Créer un nouvel agent avec le prompt adapté
       const agent = new RealtimeAgent({
@@ -230,10 +233,10 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
         setMessages(newMessages);
       });
 
-      // Connexion directe avec l'API key OpenAI
-      console.log('🔑 Connexion directe au Realtime API avec Agents SDK...');
+      // Connexion avec token éphémère
+      console.log('🔑 Connexion WebRTC avec token éphémère...');
       await session.connect({
-        apiKey: OPENAI_API_KEY
+        apiKey: tokenData.client_secret.value
       });
       
       agentRef.current = agent;
