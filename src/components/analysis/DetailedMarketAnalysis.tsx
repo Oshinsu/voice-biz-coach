@@ -15,7 +15,7 @@ import {
 } from 'recharts';
 import { 
   TrendingUp, Building2, Users, DollarSign, Target, 
-  Globe, Zap, Award, AlertTriangle, CheckCircle
+  Globe, Zap, Award, AlertTriangle, CheckCircle, ShoppingCart, Calendar
 } from 'lucide-react';
 
 interface DetailedMarketAnalysisProps {
@@ -24,6 +24,47 @@ interface DetailedMarketAnalysisProps {
 
 const getMarketData = (scenarioId: string) => {
   const marketDataMap: Record<string, any> = {
+    'kpi-performance': {
+      sector: 'E-commerce Mode Éthique',
+      totalMarketSize: '€4.8Md',
+      growth: '+28%',
+      playerCount: '15,200+',
+      averageSize: '45 employés',
+      segmentation: [
+        { name: 'Mode Éthique', value: 35, revenue: '€1.68Md' },
+        { name: 'E-commerce Mode', value: 40, revenue: '€1.92Md' },
+        { name: 'Retail Mode', value: 25, revenue: '€1.20Md' }
+      ],
+      growthTrends: [
+        { year: '2022', market: 3200, digital: 2800 },
+        { year: '2023', market: 3900, digital: 3500 },
+        { year: '2024', market: 4800, digital: 4400 },
+        { year: '2025', market: 6100, digital: 5700 },
+        { year: '2026', market: 7800, digital: 7400 }
+      ],
+      painPoints: [
+        { issue: 'Attribution multi-touch complexe', impact: 85, cost: '€45k/an' },
+        { issue: 'Gaspillage budget publicitaire', impact: 80, cost: '€38k/an' },
+        { issue: 'Données silos Facebook/Google', impact: 75, cost: '€32k/an' },
+        { issue: 'ROI imprécis campagnes', impact: 70, cost: '€28k/an' },
+        { issue: 'Saisonnalité imprévisible', impact: 65, cost: '€25k/an' }
+      ],
+      tools: [
+        { category: 'Google Analytics', adoption: 95, satisfaction: 60 },
+        { category: 'Facebook Analytics', adoption: 90, satisfaction: 55 },
+        { category: 'Shopify Analytics', adoption: 85, satisfaction: 65 },
+        { category: 'Solutions Attribution', adoption: 25, satisfaction: 40 },
+        { category: 'DataTrack Pro', adoption: 5, satisfaction: 85 }
+      ],
+      financialMetrics: [
+        { metric: 'ROI Marketing', value: '312%', target: '400%', gap: -88 },
+        { metric: 'ROAS Moyen', value: '3.2', target: '4.5', gap: -1.3 },
+        { metric: 'CAC', value: '€47', target: '€35', gap: 12 },
+        { metric: 'Panier Moyen', value: '€52', target: '€60', gap: -8 },
+        { metric: 'Conversion Mobile', value: '1.9%', target: '2.8%', gap: -0.9 },
+        { metric: 'Gaspillage Budget', value: '30%', target: '15%', gap: 15 }
+      ]
+    },
     'byss-vns-school': {
       sector: 'EdTech - Enseignement Supérieur',
       totalMarketSize: '€15.2Md',
@@ -477,17 +518,31 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Target className="h-5 w-5" />
-            Performance financière du secteur
+            {scenarioId === 'kpi-performance' ? 'Performance ModaStyle vs Objectifs' : 'Performance financière du secteur'}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {scenarioId === 'kpi-performance' && (
+            <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+              <div className="flex items-center gap-2 text-amber-800 mb-2">
+                <AlertTriangle className="h-5 w-5" />
+                <span className="font-semibold">Analyse critique ModaStyle</span>
+              </div>
+              <p className="text-sm text-amber-700">
+                30% du budget marketing (630K€/an sur 2.1M€) est gaspillé à cause de l'attribution imprécise. 
+                Le pic de saisonnalité de 40% au printemps n'est pas optimisé.
+              </p>
+            </div>
+          )}
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {data.financialMetrics.map((metric: any, index: number) => (
               <div key={metric.metric} className="p-6 border rounded-xl">
                 <div className="flex justify-between items-start mb-4">
-                  <h4 className="font-semibold">{metric.metric}</h4>
-                  <Badge variant={metric.gap > 0 ? "destructive" : "default"}>
+                  <h4 className="font-semibold text-sm">{metric.metric}</h4>
+                  <Badge variant={metric.gap > 0 ? "destructive" : "default"} className="text-xs">
                     {metric.gap > 0 ? `+${metric.gap}` : metric.gap}
+                    {metric.metric === 'Gaspillage Budget' && scenarioId === 'kpi-performance' ? '%' : ''}
                   </Badge>
                 </div>
                 
@@ -509,7 +564,7 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
                         {metric.gap > 0 ? (
                           <>
                             <AlertTriangle className="h-4 w-4" />
-                            Écart à combler
+                            Écart critique
                           </>
                         ) : (
                           <>
@@ -524,6 +579,67 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
               </div>
             ))}
           </div>
+
+          {/* ModaStyle specific insights */}
+          {scenarioId === 'kpi-performance' && (
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="border-primary/20">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <ShoppingCart className="h-5 w-5" />
+                    Impact Saisonnalité Mode
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span>Pic Printemps</span>
+                      <span className="font-bold text-green-600">+40% CA</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Été/Automne</span>
+                      <span className="font-bold text-orange-600">-25% CA</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Hiver</span>
+                      <span className="font-bold text-blue-600">-15% CA</span>
+                    </div>
+                    <div className="pt-2 text-sm text-muted-foreground">
+                      Opportunité : Optimiser l'attribution pour maximiser le ROI pendant les pics
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-secondary/20">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Calendar className="h-5 w-5" />
+                    Benchmark E-commerce Mode
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span>ROI Secteur Moyen</span>
+                      <span className="font-bold">280%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>ModaStyle Actuel</span>
+                      <span className="font-bold text-primary">312%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Top Performers</span>
+                      <span className="font-bold text-green-600">450%+</span>
+                    </div>
+                    <div className="pt-2 text-sm text-muted-foreground">
+                      ModaStyle surperforme le secteur mais reste sous le potentiel optimal
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
