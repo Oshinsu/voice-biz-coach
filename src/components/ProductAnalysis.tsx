@@ -1,8 +1,8 @@
 import React from 'react';
-import { Package, BarChart3, Target, Users } from 'lucide-react';
+import { Package } from 'lucide-react';
 import { Product } from '@/hooks/useScenarios';
 import { AnalysisSection } from './analysis/AnalysisSection';
-import { DataTrackProOverview } from './analysis/DataTrackProOverview';
+import { GenericProductOverview } from './analysis/GenericProductOverview';
 import { MarketingToolsDashboard } from './marketing/MarketingToolsDashboard';
 
 interface ProductAnalysisProps {
@@ -33,7 +33,7 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({
         title={`${mainProduct.name} - Vue d'ensemble`}
         icon={Package}
       >
-        <DataTrackProOverview product={mainProduct} />
+        <GenericProductOverview product={mainProduct} scenarioId={scenarioId} />
       </AnalysisSection>
 
       {/* Marketing Tools Dashboard */}

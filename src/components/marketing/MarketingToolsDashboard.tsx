@@ -6,11 +6,9 @@ import {
   Target, BarChart3, Zap, Users, TrendingUp,
   Shield, Grid3X3, Layers, ArrowRight
 } from 'lucide-react';
-import { DataTrackProPorterMatrix } from './DataTrackProPorterMatrix';
-import { DataTrackProAnsoffMatrix } from './DataTrackProAnsoffMatrix';
-import { DataTrackProBCGMatrix } from './DataTrackProBCGMatrix';
-import { ModaStyleMarketingStrategy } from './ModaStyleMarketingStrategy';
-import { ModaStyleSwotMatrix } from './ModaStyleSwotMatrix';
+import { GenericMarketingStrategy } from './GenericMarketingStrategy';
+import { GenericBCGMatrix } from './GenericBCGMatrix';
+import { SwotMatrix } from '../SwotMatrix';
 
 interface MarketingToolsDashboardProps {
   scenarioId: string;
@@ -142,26 +140,31 @@ export const MarketingToolsDashboard: React.FC<MarketingToolsDashboardProps> = (
         </TabsList>
 
         <TabsContent value="porter" className="space-y-6">
-          <DataTrackProPorterMatrix scenarioId={scenarioId} />
+          <div className="p-6 text-center">
+            <p className="text-muted-foreground">
+              Analyse Porter en cours de développement pour ce scénario...
+            </p>
+          </div>
         </TabsContent>
 
         <TabsContent value="ansoff" className="space-y-6">
-          <DataTrackProAnsoffMatrix scenarioId={scenarioId} />
+          <div className="p-6 text-center">
+            <p className="text-muted-foreground">
+              Matrice Ansoff en cours de développement pour ce scénario...
+            </p>
+          </div>
         </TabsContent>
 
         <TabsContent value="bcg" className="space-y-6">
-          <DataTrackProBCGMatrix scenarioId={scenarioId} />
+          <GenericBCGMatrix scenarioId={scenarioId} />
         </TabsContent>
 
         <TabsContent value="swot" className="space-y-6">
-          <ModaStyleSwotMatrix 
-            title="Analyse SWOT DataTrack Pro - Cas ModaStyle"
-            variant="default"
-          />
+          <SwotMatrix scenarioId={scenarioId} />
         </TabsContent>
 
         <TabsContent value="marketing" className="space-y-6">
-          <ModaStyleMarketingStrategy scenarioId={scenarioId} />
+          <GenericMarketingStrategy scenarioId={scenarioId} productSwot={productSwot} />
         </TabsContent>
       </Tabs>
 

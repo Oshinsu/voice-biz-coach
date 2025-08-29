@@ -1,13 +1,7 @@
 import React from 'react';
-import { Globe, Target, BarChart3, Lightbulb, TrendingUp, Users, Building } from 'lucide-react';
 import { SwotAnalysis } from '@/hooks/useScenarios';
-import { AnalysisSection } from './analysis/AnalysisSection';
-import { MarketOverview } from './analysis/MarketOverview';
-import { CompetitiveLandscape } from './analysis/CompetitiveLandscape';
 import { DetailedMarketAnalysis } from './analysis/DetailedMarketAnalysis';
 import { useScenarios } from '@/hooks/useScenarios';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 
 interface MarketAnalysisProps {
   swotAnalyses?: SwotAnalysis[];

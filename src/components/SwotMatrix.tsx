@@ -3,14 +3,35 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { TrendingUp, TrendingDown, AlertTriangle, Target } from "lucide-react";
 import { SwotAnalysis } from '@/data/scenarios';
+import { useScenarios } from '@/hooks/useScenarios';
 
 interface SwotMatrixProps {
-  title: string;
-  swot: SwotAnalysis;
+  scenarioId: string;
   variant?: "default" | "competitive";
 }
 
-export function SwotMatrix({ title, swot, variant = "default" }: SwotMatrixProps) {
+export function SwotMatrix({ scenarioId, variant = "default" }: SwotMatrixProps) {
+  const { getScenarioById } = useScenarios();
+  const scenario = getScenarioById(scenarioId);
+
+  if (!scenario) {
+    return <div>Scénario non trouvé</div>;
+  }
+
+  const swot = variant === "competitive" ? scenario.competitorSwot : scenario.swot;
+  const title = variant === "competitive" 
+    ? `Analyse SWOT Concurrentiel - ${scenario.company?.name}` 
+    : `Analyse SWOT - ${scenario.product?.name}`;
+
+  if (!swot) {
+    return (
+      <div className="p-6 text-center">
+        <p className="text-muted-foreground">
+          Analyse SWOT en cours de développement pour ce scénario...
+        </p>
+      </div>
+    );
+  }
   const getImpactColor = (impact: string) => {
     switch (impact.toLowerCase()) {
       case "fort": return "bg-destructive text-destructive-foreground";
