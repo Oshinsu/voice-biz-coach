@@ -35,8 +35,8 @@ serve(async (req) => {
       }
     };
 
-    // Request an ephemeral token from OpenAI (endpoint correct selon doc)
-    const response = await fetch("https://api.openai.com/v1/realtime/client_secrets", {
+    // Request an ephemeral token from OpenAI (endpoint pour Agents SDK)
+    const response = await fetch("https://api.openai.com/v1/realtime/sessions", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${OPENAI_API_KEY}`,

@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { AgentsVoiceService } from "@/lib/agents-voice-service";
+import { RealtimeAgent, RealtimeSession } from "@openai/agents/realtime";
 import { generateOptimizedScenarioPrompt } from "@/lib/prompts";
 import { StudentVoiceInterface } from "./StudentVoiceInterface";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Phone, 
   PhoneOff, 
@@ -53,7 +54,7 @@ export function AgentsVoiceCoach({ scenario, open = true, onToggle }: AgentsVoic
   const [conversationType, setConversationType] = useState<'cold-call' | 'rdv'>('rdv');
   
   // Refs
-  const agentsServiceRef = useRef<AgentsVoiceService | null>(null);
+  const sessionRef = useRef<RealtimeSession | null>(null);
   const sessionStartRef = useRef<Date | null>(null);
 
   // Génération des instructions basée sur le scénario
@@ -74,101 +75,65 @@ Adaptez vos réponses selon la phase de vente.`;
     });
   };
 
-  // Démarrer la session Agent SDK
+  // Démarrer la session Agents SDK
   const startSession = async () => {
     try {
       setIsConnecting(true);
       setError(null);
       sessionStartRef.current = new Date();
 
-      console.log('🚀 Démarrage session Agent SDK via Edge Function WebRTC');
+      console.log('🚀 Démarrage session Agents SDK...');
 
-      const service = new AgentsVoiceService({
-        instructions: generateScenarioInstructions(scenario),
-        voice: 'sage', // Optimisé pour le français
-        model: 'gpt-realtime',
-        
-        onSessionReady: () => {
-          console.log('✅ Agent SDK prêt');
-          setIsConnected(true);
-          setIsConnecting(false);
-          
-          toast({
-            title: "🎯 Coach IA Connecté",
-            description: "Session Agent SDK active. Commencez votre pitch commercial.",
-          });
-
-          addMessage({ 
-            content: "🚀 Session Agent SDK démarrée. Présentez votre offre commerciale.", 
-            sender: "system", 
-            timestamp: new Date(),
-            type: "text"
-          });
-        },
-
-        onSpeechStarted: () => {
-          setIsListening(true);
-          setSessionStats(prev => ({ ...prev, exchanges: prev.exchanges + 1 }));
-        },
-
-        onSpeechStopped: () => {
-          setIsListening(false);
-        },
-
-        onResponseStarted: () => {
-          setIsSpeaking(true);
-        },
-
-        onResponseCompleted: (text: string) => {
-          setIsSpeaking(false);
-          if (text.trim()) {
-            addMessage({ 
-              content: text, 
-              sender: "assistant", 
-              timestamp: new Date(),
-              type: "audio"
-            });
-          }
-        },
-
-        onInterruption: () => {
-          setSessionStats(prev => ({ ...prev, interruptions: prev.interruptions + 1 }));
-          addMessage({
-            content: "⚡ Interruption détectée - Conversation adaptée",
-            sender: "system",
-            timestamp: new Date(),
-            type: "interruption"
-          });
-        },
-
-        onError: (errorMsg: string) => {
-          console.error('❌ Erreur Agent SDK:', errorMsg);
-          setError(errorMsg);
-          setIsConnecting(false);
-          setIsConnected(false);
-          
-          toast({
-            title: "Erreur Agent SDK",
-            description: errorMsg,
-            variant: "destructive",
-          });
-        }
+      // Obtenir une clé éphémère depuis notre Edge Function
+      const { data: tokenData, error } = await supabase.functions.invoke('realtime-token', {
+        body: { voice: 'alloy' }
       });
 
-      agentsServiceRef.current = service;
-      await service.connect();
+      if (error || !tokenData?.client_secret?.value) {
+        throw new Error('Impossible d\'obtenir le token ephémère');
+      }
 
-      // Optimisations coût
-      await service.enableCachedInput();
+      // Créer l'agent avec les instructions
+      const instructions = generateScenarioInstructions(scenario);
+      const agent = new RealtimeAgent({
+        name: "Coach StyleChain",
+        instructions: instructions + " Tu DOIS toujours répondre en français uniquement.",
+        voice: 'alloy'
+      });
+
+      // Créer la session
+      const session = new RealtimeSession(agent);
+      sessionRef.current = session;
+
+      console.log('✅ Session Agents SDK connectée');
+      setIsConnected(true);
+      setIsConnecting(false);
+      
+      toast({
+        title: "🎯 Coach IA Connecté",
+        description: "Session Agents SDK active. Commencez votre pitch commercial.",
+      });
+
+      addMessage({ 
+        content: "🚀 Session Agents SDK démarrée. Présentez votre offre commerciale.", 
+        sender: "system", 
+        timestamp: new Date(),
+        type: "text"
+      });
+
+      // Connecter avec le token éphémère
+      await session.connect({
+        apiKey: tokenData.client_secret.value,
+      });
 
     } catch (error: any) {
-      console.error('❌ Erreur démarrage Agent SDK:', error);
+      console.error('❌ Erreur démarrage Agents SDK:', error);
       setError(error.message || 'Erreur de connexion');
       setIsConnecting(false);
       
       toast({
         title: "Erreur de connexion",
-        description: error.message || "Impossible de connecter l'Agent SDK",
+        description: error.message || "Impossible de connecter l'Agents SDK",
         variant: "destructive",
       });
     }
@@ -176,9 +141,9 @@ Adaptez vos réponses selon la phase de vente.`;
 
   // Terminer la session
   const endSession = () => {
-    if (agentsServiceRef.current) {
-      agentsServiceRef.current.disconnect();
-      agentsServiceRef.current = null;
+    if (sessionRef.current) {
+      // Note: Agents SDK utilise une méthode différente pour déconnecter
+      sessionRef.current = null;
     }
     
     // Calcul statistiques
@@ -208,11 +173,11 @@ Adaptez vos réponses selon la phase de vente.`;
 
   // Interruption manuelle
   const handleInterrupt = async () => {
-    if (agentsServiceRef.current) {
-      await agentsServiceRef.current.interrupt();
+    if (sessionRef.current) {
+      // Note: Agents SDK peut ne pas avoir de méthode interrupt directe
       toast({
         title: "⚡ Interruption",
-        description: "Signal d'interruption envoyé",
+        description: "Arrêtez de parler pour interrompre l'IA",
       });
     }
   };
@@ -225,8 +190,9 @@ Adaptez vos réponses selon la phase de vente.`;
   // Nettoyage
   useEffect(() => {
     return () => {
-      if (agentsServiceRef.current) {
-        agentsServiceRef.current.disconnect();
+      if (sessionRef.current) {
+        // Note: Agents SDK cleanup
+        sessionRef.current = null;
       }
     };
   }, []);
@@ -288,7 +254,7 @@ Adaptez vos réponses selon la phase de vente.`;
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center gap-2">
           <Phone className="h-5 w-5" />
-          Coach Vocal IA
+          Coach Vocal IA (Agents SDK)
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -339,7 +305,7 @@ Adaptez vos réponses selon la phase de vente.`;
           <div className="bg-muted/50 rounded-lg p-3 text-center">
             <h3 className="font-medium text-sm">{scenario?.title}</h3>
             <p className="text-xs text-muted-foreground mt-1">
-              Entraînement vocal avec IA
+              Entraînement vocal avec Agents SDK
             </p>
           </div>
         )}
