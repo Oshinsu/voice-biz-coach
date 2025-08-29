@@ -11,6 +11,7 @@ import { saasHrToolScenario } from './saas-hr-tool';
 import { manufacturingIotScenario } from './manufacturing-iot';
 import { industrialMarketplaceScenario } from './industrial-marketplace';
 import { byssVnsSchoolScenario } from './byss-vns-school';
+import { websiteSalesScenario } from './website-sales';
 
 // Export consolidated scenarios array
 export const consolidatedScenarios = [
@@ -22,7 +23,8 @@ export const consolidatedScenarios = [
   saasHrToolScenario,
   manufacturingIotScenario,
   industrialMarketplaceScenario,
-  byssVnsSchoolScenario
+  byssVnsSchoolScenario,
+  websiteSalesScenario
 ];
 
 // Utility function to get a scenario by ID

@@ -25,6 +25,7 @@ import { RetailPersonalizationPromptGenerator } from './scenarios/retail-persona
 import { IndustrialMarketplacePromptGenerator } from './scenarios/industrial-marketplace';
 import { ManufacturingIotPromptGenerator } from './scenarios/manufacturing-iot';
 import { ByssVnsSchoolPromptGenerator } from './scenarios/byss-vns-school';
+import { WebsiteSalesPromptGenerator } from './scenarios/website-sales';
 
 /**
  * FACTORY PATTERN - Mapping scénario → générateur
@@ -38,7 +39,8 @@ const scenarioGenerators: Record<string, ScenarioPromptGenerator> = {
   'retail-personalization': new RetailPersonalizationPromptGenerator(),
   'industrial-marketplace': new IndustrialMarketplacePromptGenerator(),
   'manufacturing-iot': new ManufacturingIotPromptGenerator(),
-  'byss-vns-school': new ByssVnsSchoolPromptGenerator()
+  'byss-vns-school': new ByssVnsSchoolPromptGenerator(),
+  'website-sales': new WebsiteSalesPromptGenerator()
 };
 
 /**
