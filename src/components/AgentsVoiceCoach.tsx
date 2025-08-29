@@ -103,13 +103,7 @@ Démarrez par une réaction naturelle de surprise à ce call commercial inattend
       setError(null);
       sessionStartRef.current = new Date();
 
-      console.log('🚀 Démarrage session Agent SDK Direct - WebRTC (PAS Edge Function!)');
-
-      // Vérifier la clé API
-      const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-      if (!OPENAI_API_KEY || OPENAI_API_KEY === '' || OPENAI_API_KEY === 'sk-...') {
-        throw new Error('Clé OpenAI manquante. Ajoutez VITE_OPENAI_API_KEY dans le fichier .env');
-      }
+      console.log('🚀 Démarrage session Agent SDK via Edge Function WebRTC');
 
       const service = new AgentsVoiceService({
         instructions: generateOptimizedInstructions(),

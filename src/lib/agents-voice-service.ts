@@ -145,49 +145,76 @@ export class AgentsVoiceService {
   }
 
   private handleRealtimeEvent(event: any): void {
-    console.log('📨 Événement reçu:', event.type);
+    console.log('📨 Événement WebRTC reçu:', event.type, event);
 
     switch (event.type) {
+      // === ÉVÉNEMENTS UTILISATEUR ===
       case 'input_audio_buffer.speech_started':
+        console.log('🎤 Utilisateur commence à parler');
+        this.isRecording = true;
         this.config.onSpeechStarted?.();
         break;
       
       case 'input_audio_buffer.speech_stopped':
+        console.log('🔇 Utilisateur arrête de parler');
+        this.isRecording = false;
         this.config.onSpeechStopped?.();
         break;
       
-      case 'response.audio.delta':
+      case 'conversation.item.input_audio_transcription.completed':
+        console.log('👤 Transcription utilisateur:', event.transcript);
+        break;
+
+      // === ÉVÉNEMENTS IA RESPONSE ===
+      case 'response.created':
+        console.log('🚀 IA commence sa réponse');
         this.config.onResponseStarted?.();
         break;
       
+      case 'response.audio.delta':
+        // IA génère de l'audio (ne pas appeler onResponseStarted à chaque delta)
+        break;
+      
       case 'response.audio.done':
-        this.config.onResponseCompleted?.('Response completed');
+        console.log('🔊 Audio IA terminé');
+        this.config.onResponseCompleted?.('Audio response completed');
         break;
       
       case 'response.audio_transcript.delta':
         if (event.delta) {
-          console.log('📝 Transcription:', event.delta);
+          console.log('📝 IA parle (delta):', event.delta);
         }
         break;
       
       case 'response.audio_transcript.done':
         if (event.transcript) {
-          console.log('📄 Transcription complète:', event.transcript);
+          console.log('📄 IA transcription complète:', event.transcript);
           this.config.onResponseCompleted?.(event.transcript);
         }
         break;
-      
-      case 'conversation.item.input_audio_transcription.completed':
-        console.log('👤 Utilisateur:', event.transcript);
+
+      case 'response.done':
+        console.log('✅ Réponse IA complètement terminée');
+        break;
+
+      // === ÉVÉNEMENTS SESSION ===
+      case 'session.created':
+        console.log('🎯 Session WebRTC créée');
         break;
       
+      case 'session.updated':
+        console.log('🔄 Session WebRTC mise à jour');
+        break;
+
+      // === GESTION ERREURS ===
       case 'error':
-        console.error('❌ Erreur événement:', event);
-        this.config.onError?.(event.error?.message || 'Event error');
+        console.error('❌ Erreur WebRTC:', event.error);
+        this.config.onError?.(event.error?.message || 'WebRTC error');
         break;
       
+      // === ÉVÉNEMENTS NON GÉRÉS ===
       default:
-        console.log('📦 Événement non géré:', event.type);
+        console.log('📦 Événement WebRTC non géré:', event.type, event);
     }
   }
 
