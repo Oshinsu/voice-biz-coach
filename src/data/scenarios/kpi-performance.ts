@@ -31,16 +31,41 @@ export const kpiPerformanceScenario: Scenario = {
       crm: "HubSpot Starter"
     },
     painPoints: [
-      "Attribution Google/Facebook imprécise (overlap estimé 40-60%)",
-      "Impact campagnes TV/Influence difficile à mesurer",
-      "Optimisation budgets Google/Facebook en silo",
-      "Reporting manuel chronophage (2j/semaine)",
-      "Pas de vision unifiée customer journey"
+      {
+        issue: "Attribution Google/Facebook imprécise (overlap estimé 40-60%)",
+        description: "Impossible de distinguer les conversions Facebook des conversions Google Ads. 45% des commandes attribuées aux deux canaux simultanément. Budget 80k€/mois mal réparti entre plateformes.",
+        cost: "€22k/an",
+        impact: "Budget publicitaire mal optimisé, cannibalisation non détectée"
+      },
+      {
+        issue: "Impact campagnes TV/Influence difficile à mesurer",
+        description: "Campagnes TV (15k€/mois) et collaborations influenceurs (8k€/mois) sans tracking précis. Impossibilité de mesurer l'impact sur la notoriété et les ventes indirectes.",
+        cost: "€18k/an",
+        impact: "ROI média offline inconnu, budget alloué à l'aveugle"
+      },
+      {
+        issue: "Optimisation budgets Google/Facebook en silo",
+        description: "Gestion séparée des campagnes Google Ads (50k€/mois) et Facebook Ads (30k€/mois). Pas de vision cross-canal pour optimiser l'allocation budgétaire globale.",
+        cost: "€15k/an",
+        impact: "Perte d'efficacité budgétaire, arbitrages non data-driven"
+      },
+      {
+        issue: "Reporting manuel chronophage (2j/semaine)",
+        description: "Sophie et Jules passent 16h/semaine à consolider manuellement les données GA4, Facebook, Google Ads dans Excel. Risque d'erreurs humaines.",
+        cost: "€12k/an",
+        impact: "Temps équipe perdu, décisions retardées, erreurs reporting"
+      },
+      {
+        issue: "Pas de vision unifiée customer journey",
+        description: "Impossible de suivre le parcours complet client depuis la découverte jusqu'à la fidélisation. Données fragmentées entre outils sans réconciliation.",
+        cost: "€25k/an",
+        impact: "Optimisation impossible du funnel, opportunités de rétention manquées"
+      }
     ],
     
     currentSolution: "Google Analytics 4 + exports Excel + dashboard Tableau basique",
     
-    budget: "Budget outils marketing: 35K€/an - Budget nouveaux projets: 50K€/an",
+    budget: "Budget outils marketing: 25K€/an - Budget nouveaux projets: 20K€/an",
     
     timeline: "Test avant fin Q1, déploiement Q2 si concluant",
     
@@ -152,12 +177,12 @@ export const kpiPerformanceScenario: Scenario = {
     competitiveAdvantages: [
       "Spécialisé e-commerce fashion (vs. généraliste)",
       "Interface française et support local",
-      "Implémentation rapide (4-6 sem vs 3-4 mois)",
+      "Implémentation rapide (4-6 semaines vs 3-4 mois)",
       "Pricing transparent sans surprise",
       "Cas clients similaires (Grain de Malice, Spartoo)"
     ],
-    roi: "312%",
-    implementationTime: "24h à 4 semaines selon complexité"
+    roi: "220%",
+    implementationTime: "4-6 semaines setup complet avec formation équipe"
   },
   // Objectifs pédagogiques selon type d'appel
   objectives: [
@@ -186,34 +211,34 @@ export const kpiPerformanceScenario: Scenario = {
   expectedRevenue: "7,188€ première année",
   swot: {
     strengths: [
-      "IA propriétaire entraînée sur 500M+ sessions e-commerce (impact: 9/10, probabilité: 9/10)",
-      "Setup en 24h vs 2-6 semaines concurrence (impact: 8/10, probabilité: 10/10)",
-      "Spécialisation e-commerce mode/lifestyle avec use cases sectoriels (impact: 7/10, probabilité: 8/10)",
-      "Support client français avec CSM dédiés (impact: 6/10, probabilité: 9/10)",
-      "Prix 60% inférieur à Northbeam/Triple Whale (impact: 8/10, probabilité: 10/10)",
-      "Connecteurs natifs avec 200+ outils marketing sans développement (impact: 7/10, probabilité: 9/10)",
-      "Prédiction churn 89% précision (impact: 8/10, probabilité: 8/10)"
+      "Spécialisation e-commerce mode/lifestyle avec use cases sectoriels",
+      "Attribution multi-touch propriétaire vs last-click basique GA4",
+      "Setup 4-6 semaines vs 3-4 mois concurrence enterprise",
+      "Support client français avec CSM dédiés mode & lifestyle",
+      "Prix 40% inférieur à Northbeam/Triple Whale (599€ vs 1000€+)",
+      "Connecteurs natifs Shopify Plus/Meta/Google sans développement",
+      "Prédiction churn basée sur données comportementales e-commerce"
     ],
     weaknesses: [
-      "Startup 3 ans vs Google/Facebook établis (impact: 6/10, probabilité: 8/10)",
-      "Prix premium vs Google Analytics gratuit (impact: 7/10, probabilité: 9/10)",
-      "Dépendance APIs tierces (Facebook, Google) (impact: 5/10, probabilité: 7/10)",
-      "Courbe apprentissage nouvelles métriques (impact: 4/10, probabilité: 6/10)",
-      "Historique client limitée à 24 mois (impact: 3/10, probabilité: 8/10)"
+      "Startup 3 ans vs géants tech Google/Facebook établis",
+      "Prix premium 599€/mois vs Google Analytics gratuit",
+      "Dépendance APIs tierces Facebook/Google pour data ingestion",
+      "Courbe apprentissage nouvelles métriques pour équipe Sophie",
+      "Historique données limitée 24 mois migration vs années GA4"
     ],
     opportunities: [
-      "iOS 14.5+ complique attribution Facebook/Google (impact: 9/10, probabilité: 10/10)",
-      "Croissance e-commerce +45% nécessite meilleurs outils (impact: 8/10, probabilité: 9/10)",
-      "Inflation publicitaire +30% oblige optimisation (impact: 8/10, probabilité: 9/10)",
-      "Mode éthique en croissance 60%/an (impact: 7/10, probabilité: 8/10)",
-      "RGPD renforce besoin first-party data (impact: 6/10, probabilité: 8/10)"
+      "iOS 14.5+ complique attribution Facebook/Google (impact majeur ModaStyle)",
+      "Croissance e-commerce mode éthique +22% nécessite meilleurs outils",
+      "Inflation coûts publicitaires +18% oblige optimisation budgets",
+      "Budget ModaStyle 2.1M€ marketing justifie investissement analytics",
+      "RGPD renforce besoin first-party data vs cookies tiers"
     ],
     threats: [
-      "Google améliore GA4 attribution (impact: 7/10, probabilité: 6/10)",
-      "Northbeam baisse prix agressivement (impact: 6/10, probabilité: 5/10)",
-      "Récession réduit budgets marketing (impact: 8/10, probabilité: 4/10)",
-      "Apple/Meta changent APIs (impact: 7/10, probabilité: 6/10)",
-      "Client développe solution interne (impact: 5/10, probabilité: 3/10)"
+      "Google améliore GA4 attribution (Enhanced Conversions déployé)",
+      "Northbeam baisse prix pour concurrencer (guerre des prix)",
+      "Récession potentielle réduit budgets innovation marketing",
+      "Apple/Meta modifient APIs (risque disruption tracking)",
+      "ModaStyle développe solution interne avec équipe Thomas"
     ]
   },
   competitorSwot: {

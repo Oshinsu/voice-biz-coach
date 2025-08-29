@@ -65,7 +65,9 @@ export function StudentVoiceInterface({
         sector: scenario.company?.sector || 'Agence Digitale',
         employee: scenario.company?.size || '12 employés',
         revenue: scenario.company?.revenue || '1.2M€/an',
-        challenge: scenario.company?.painPoints?.[0] || 'Centralisation outils éparpillés',
+        challenge: typeof scenario.company?.painPoints?.[0] === 'string' 
+          ? scenario.company.painPoints[0] 
+          : scenario.company?.painPoints?.[0]?.issue || 'Centralisation outils éparpillés',
         priority: scenario.interlocutor?.priorities?.[0] || 'Automatisation facturation',
         personality: scenario.interlocutor?.personality || 'Organisée et efficace',
         avatar: '👩‍💼',
@@ -99,7 +101,9 @@ export function StudentVoiceInterface({
       sector: scenario?.company?.sector || 'Secteur d\'activité',
       employee: scenario?.company?.size || 'Taille équipe',
       revenue: scenario?.company?.revenue || 'CA estimé',
-      challenge: scenario?.company?.painPoints?.[0] || 'Défi principal',
+      challenge: typeof scenario?.company?.painPoints?.[0] === 'string' 
+        ? scenario.company.painPoints[0] 
+        : scenario?.company?.painPoints?.[0]?.issue || 'Défi principal',
       priority: scenario?.interlocutor?.priorities?.[0] || 'Priorité business',
       personality: scenario?.interlocutor?.personality || 'Profil de personnalité',
       avatar: '🤝',

@@ -91,50 +91,11 @@ export const MarketingToolsDashboard: React.FC<MarketingToolsDashboardProps> = (
         </p>
       </div>
 
-      {/* Tools Overview */}
-      <Card className="bg-gradient-to-r from-indigo-50 to-purple-50">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Layers className="h-5 w-5" />
-            Vue d'ensemble des outils
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {tools.map((tool) => (
-              <div
-                key={tool.id}
-                className="p-4 bg-white border rounded-lg hover:shadow-md transition-all duration-300 hover-scale cursor-pointer"
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <tool.icon className="h-6 w-6 text-primary" />
-                  <div className="flex flex-col gap-1">
-                    <Badge className={getCategoryColor(tool.category)} variant="secondary">
-                      {tool.category}
-                    </Badge>
-                    <Badge className={getComplexityColor(tool.complexity)} variant="outline">
-                      {tool.complexity}
-                    </Badge>
-                  </div>
-                </div>
-                <h4 className="font-semibold mb-1">{tool.name}</h4>
-                <p className="text-sm text-muted-foreground">{tool.description}</p>
-                <div className="mt-3 flex items-center text-primary text-sm font-medium">
-                  Analyser
-                  <ArrowRight className="h-3 w-3 ml-1" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
 
       {/* Tools Tabs */}
       <Tabs defaultValue="porter" className="w-full">
-        <TabsList className="grid w-full grid-cols-5">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="porter" className="text-xs">Porter</TabsTrigger>
-          <TabsTrigger value="ansoff" className="text-xs">Ansoff</TabsTrigger>
-          <TabsTrigger value="bcg" className="text-xs">BCG</TabsTrigger>
           <TabsTrigger value="swot" className="text-xs">SWOT</TabsTrigger>
           <TabsTrigger value="marketing" className="text-xs">Marketing</TabsTrigger>
         </TabsList>
@@ -145,18 +106,6 @@ export const MarketingToolsDashboard: React.FC<MarketingToolsDashboardProps> = (
               Analyse Porter en cours de développement pour ce scénario...
             </p>
           </div>
-        </TabsContent>
-
-        <TabsContent value="ansoff" className="space-y-6">
-          <div className="p-6 text-center">
-            <p className="text-muted-foreground">
-              Matrice Ansoff en cours de développement pour ce scénario...
-            </p>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="bcg" className="space-y-6">
-          <GenericBCGMatrix scenarioId={scenarioId} />
         </TabsContent>
 
         <TabsContent value="swot" className="space-y-6">
@@ -179,41 +128,41 @@ export const MarketingToolsDashboard: React.FC<MarketingToolsDashboardProps> = (
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="space-y-2">
-              <h4 className="font-semibold text-emerald-800">Diagnostic</h4>
+              <h4 className="font-semibold text-emerald-800">Diagnostic concurrentiel</h4>
               <ul className="space-y-1 text-sm">
                 <li className="flex items-center gap-2">
                   <Target className="h-3 w-3 text-emerald-600" />
-                  SWOT pour forces/faiblesses internes
+                  SWOT pour forces/faiblesses vs concurrence
                 </li>
                 <li className="flex items-center gap-2">
                   <Shield className="h-3 w-3 text-emerald-600" />
-                  Porter pour environnement concurrentiel
+                  Porter pour intensité concurrentielle
                 </li>
               </ul>
             </div>
             <div className="space-y-2">
-              <h4 className="font-semibold text-teal-800">Stratégie</h4>
+              <h4 className="font-semibold text-teal-800">Déploiement</h4>
               <ul className="space-y-1 text-sm">
                 <li className="flex items-center gap-2">
-                  <Grid3X3 className="h-3 w-3 text-teal-600" />
-                  Ansoff pour croissance
+                  <Zap className="h-3 w-3 text-teal-600" />
+                  Setup DataTrack Pro en 4-6 semaines
                 </li>
                 <li className="flex items-center gap-2">
-                  <BarChart3 className="h-3 w-3 text-teal-600" />
-                  BCG pour allocation ressources
+                  <Users className="h-3 w-3 text-teal-600" />
+                  Formation équipe Sophie incluse
                 </li>
               </ul>
             </div>
             <div className="space-y-2">
-              <h4 className="font-semibold text-cyan-800">Exécution</h4>
+              <h4 className="font-semibold text-cyan-800">ROI & Performance</h4>
               <ul className="space-y-1 text-sm">
                 <li className="flex items-center gap-2">
-                  <Zap className="h-3 w-3 text-cyan-600" />
-                  Mix marketing pour opérationnel
+                  <TrendingUp className="h-3 w-3 text-cyan-600" />
+                  220% ROI première année ModaStyle
                 </li>
                 <li className="flex items-center gap-2">
-                  <Users className="h-3 w-3 text-cyan-600" />
-                  KPIs pour pilotage performance
+                  <BarChart3 className="h-3 w-3 text-cyan-600" />
+                  Attribution multi-touch précise vs GA4
                 </li>
               </ul>
             </div>

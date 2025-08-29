@@ -32,23 +32,6 @@ export function SwotMatrix({ scenarioId, variant = "default" }: SwotMatrixProps)
       </div>
     );
   }
-  const getImpactColor = (impact: string) => {
-    switch (impact.toLowerCase()) {
-      case "fort": return "bg-destructive text-destructive-foreground";
-      case "moyen": return "bg-warning text-warning-foreground";
-      case "faible": return "bg-success text-success-foreground";
-      default: return "bg-muted text-muted-foreground";
-    }
-  };
-
-  const getProbabilityColor = (probability: string) => {
-    switch (probability.toLowerCase()) {
-      case "élevée": return "bg-success text-success-foreground";
-      case "moyenne": return "bg-warning text-warning-foreground";
-      case "faible": return "bg-muted text-muted-foreground";
-      default: return "bg-muted text-muted-foreground";
-    }
-  };
 
   return (
     <div className="space-y-6">

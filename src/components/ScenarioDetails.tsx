@@ -44,7 +44,12 @@ interface ScenarioDetailsProps {
       revenue: string;
       location: string;
       description: string;
-      painPoints: string[];
+      painPoints: string[] | Array<{
+        issue: string;
+        description: string;
+        cost: string;
+        impact: string;
+      }>;
       currentSolution: string;
       budget: string;
       timeline: string;
@@ -254,9 +259,24 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
                 </h4>
                 <div className="grid gap-3">
                   {scenario.company.painPoints.map((pain, index) => (
-                    <div key={index} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
-                      <AlertCircle className="h-4 w-4 mt-0.5 text-orange-500 flex-shrink-0" />
-                      <span className="text-sm">{pain}</span>
+                    <div key={index} className="p-4 bg-muted/50 rounded-lg border-l-4 border-orange-500">
+                      <div className="flex items-start gap-3">
+                        <AlertCircle className="h-5 w-5 mt-0.5 text-orange-500 flex-shrink-0" />
+                        <div className="flex-1">
+                          {typeof pain === 'string' ? (
+                            <span className="text-sm">{pain}</span>
+                          ) : (
+                            <div className="space-y-2">
+                              <h5 className="font-medium text-sm">{pain.issue}</h5>
+                              <p className="text-xs text-muted-foreground">{pain.description}</p>
+                              <div className="flex gap-4 text-xs">
+                                <span className="text-red-600 font-medium">Impact: {pain.impact}</span>
+                                <span className="text-orange-600 font-medium">Coût: {pain.cost}</span>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>

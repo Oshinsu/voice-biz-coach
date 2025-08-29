@@ -26,35 +26,60 @@ const getMarketData = (scenarioId: string) => {
   const marketDataMap: Record<string, any> = {
     'kpi-performance': {
       sector: 'E-commerce Mode Éthique',
-      totalMarketSize: '€4.8Md',
-      growth: '+28%',
-      playerCount: '15,200+',
+      totalMarketSize: '€2.8Md',
+      growth: '+12%',
+      playerCount: '8,500+',
       averageSize: '45 employés',
       segmentation: [
-        { name: 'Mode Éthique', value: 35, revenue: '€1.68Md' },
-        { name: 'E-commerce Mode', value: 40, revenue: '€1.92Md' },
-        { name: 'Retail Mode', value: 25, revenue: '€1.20Md' }
+        { name: 'Mode Éthique', value: 22, revenue: '€616M' },
+        { name: 'E-commerce Mode', value: 58, revenue: '€1.62Md' },
+        { name: 'Retail Mode', value: 20, revenue: '€560M' }
       ],
       growthTrends: [
-        { year: '2022', market: 3200, digital: 2800 },
-        { year: '2023', market: 3900, digital: 3500 },
-        { year: '2024', market: 4800, digital: 4400 },
-        { year: '2025', market: 6100, digital: 5700 },
-        { year: '2026', market: 7800, digital: 7400 }
+        { year: '2022', market: 2100, digital: 1800 },
+        { year: '2023', market: 2400, digital: 2100 },
+        { year: '2024', market: 2800, digital: 2500 },
+        { year: '2025', market: 3200, digital: 2900 },
+        { year: '2026', market: 3600, digital: 3400 }
       ],
       painPoints: [
-        { issue: 'Attribution multi-touch complexe', impact: 85, cost: '€45k/an' },
-        { issue: 'Gaspillage budget publicitaire', impact: 80, cost: '€38k/an' },
-        { issue: 'Données silos Facebook/Google', impact: 75, cost: '€32k/an' },
-        { issue: 'ROI imprécis campagnes', impact: 70, cost: '€28k/an' },
-        { issue: 'Saisonnalité imprévisible', impact: 65, cost: '€25k/an' }
+        { 
+          issue: 'Attribution multi-touch complexe', 
+          impact: 85, 
+          cost: '€22k/an',
+          description: 'Overlap 45% entre Facebook/Google Ads impossible à résoudre. Budget 80k€/mois mal réparti. Décisions d\'optimisation biaisées par attribution last-click.'
+        },
+        { 
+          issue: 'Gaspillage budget publicitaire', 
+          impact: 80, 
+          cost: '€18k/an',
+          description: 'Cannibalisation non détectée entre canaux. 12-15% budget gaspillé en doublon attribution. ROAS surévalué de 25% vs réalité.'
+        },
+        { 
+          issue: 'Données silos Facebook/Google', 
+          impact: 75, 
+          cost: '€15k/an',
+          description: 'Reporting manuel 16h/semaine Sophie. Tableaux Excel fragmentés. Impossibilité vision 360° customer journey cross-canal.'
+        },
+        { 
+          issue: 'ROI imprécis campagnes', 
+          impact: 70, 
+          cost: '€12k/an',
+          description: 'Campagnes TV 15k€/mois et influenceurs 8k€/mois sans tracking. ROI offline inconnu. Arbitrages budgétaires à l\'aveugle.'
+        },
+        { 
+          issue: 'Saisonnalité imprévisible', 
+          impact: 65, 
+          cost: '€25k/an',
+          description: 'Prévisions mode basées sur historique GA4 incomplet. Ruptures stock collections populaires. Surstock invendus 18% vs 12% objectif.'
+        }
       ],
       tools: [
-        { category: 'Google Analytics', adoption: 95, satisfaction: 60 },
-        { category: 'Facebook Analytics', adoption: 90, satisfaction: 55 },
-        { category: 'Shopify Analytics', adoption: 85, satisfaction: 65 },
-        { category: 'Solutions Attribution', adoption: 25, satisfaction: 40 },
-        { category: 'DataTrack Pro', adoption: 5, satisfaction: 85 }
+        { category: 'Google Analytics', adoption: 92, satisfaction: 68 },
+        { category: 'Facebook Analytics', adoption: 88, satisfaction: 62 },
+        { category: 'Shopify Analytics', adoption: 85, satisfaction: 71 },
+        { category: 'Solutions Attribution', adoption: 18, satisfaction: 52 },
+        { category: 'DataTrack Pro', adoption: 3, satisfaction: 89 }
       ],
       financialMetrics: [
         { metric: 'ROI Marketing', value: '312%', target: '400%', gap: -88 },

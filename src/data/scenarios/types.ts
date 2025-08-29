@@ -5,7 +5,12 @@ export interface Company {
   revenue: string;
   location: string;
   description: string;
-  painPoints: string[];
+  painPoints: string[] | Array<{
+    issue: string;
+    description: string;
+    cost: string;
+    impact: string;
+  }>;
   currentSolution: string;
   budget: string;
   timeline: string;

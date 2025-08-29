@@ -21,17 +21,22 @@ export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ prod
     paybackPeriod: '5,8 mois',
     monthlyValue: '€4,800',
     features: [
-      'Attribution multi-touch 360°',
-      'Prédiction churn clients premium',
-      'Dashboard temps réel conversion',
-      'Segmentation comportementale IA',
-      'Analytics cross-canal unifié'
+      'Attribution multi-touch 360° (first-click, last-click, data-driven, custom)',
+      'Prédiction churn IA avec scoring risque et triggers automatiques',
+      'Dashboard temps réel conversion avec alertes personnalisables',
+      'Segmentation comportementale IA basée 200+ signaux utilisateur',
+      'Analytics cross-canal unifié Facebook/Google/TikTok/Email/TV',
+      'Modélisation Marketing Mix pour optimisation budget cross-média',
+      'Cohort analysis et LTV prédictive par segment client',
+      'A/B testing attribution pour validation performance modèles'
     ],
     technicalSpecs: [
-      { key: 'Intégrations natives', value: 'Shopify Plus, Facebook Ads, Google Ads, TikTok' },
-      { key: 'API & Webhooks', value: 'REST API v2.0, Webhooks temps réel' },
-      { key: 'Sécurité', value: 'RGPD, SOC2 Type II, chiffrement AES-256' },
-      { key: 'Performance', value: 'SLA 99.9%, latence <200ms, backup 4x/jour' }
+      { key: 'Intégrations natives', value: 'Shopify Plus, Facebook Ads, Google Ads, TikTok Ads, Klaviyo, Pinterest' },
+      { key: 'API & Webhooks', value: 'REST API v2.0, GraphQL, Webhooks temps réel, SDK JavaScript' },
+      { key: 'Sécurité & Conformité', value: 'RGPD, SOC2 Type II, ISO 27001, chiffrement AES-256, audit annuel' },
+      { key: 'Performance & SLA', value: 'SLA 99.9%, latence <150ms, backup 6x/jour, CDN multi-région' },
+      { key: 'Architecture', value: 'Cloud AWS multi-AZ, auto-scaling, monitoring 24/7, logs détaillés' },
+      { key: 'Analytics Engine', value: 'IA propriétaire, ML attribution, modèles prédictifs, calcul temps réel' }
     ],
     competitiveAdvantages: [
       'Spécialisé e-commerce mode vs généralistes',
@@ -43,12 +48,12 @@ export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ prod
 
   const specs = getDataTrackSpecs();
 
-  // ROI Breakdown calculation for ModaStyle (réaliste)
+  // ROI Breakdown calculation for ModaStyle (plus réaliste)
   const getRoiBreakdown = () => {
-    const monthlyRevenue = 665000; // 8M€ annual / 12
-    const currentAttributionLoss = monthlyRevenue * 0.12; // 12% perte attribution (plus réaliste)
-    const churnReduction = monthlyRevenue * 0.08; // 8% réduction churn
-    const conversionImprovement = monthlyRevenue * 0.05; // 5% amélioration conversion
+    const monthlyRevenue = 1500000; // 18M€ annual / 12 (CA réel ModaStyle)
+    const currentAttributionLoss = monthlyRevenue * 0.08; // 8% perte attribution (réaliste)
+    const churnReduction = monthlyRevenue * 0.05; // 5% réduction churn
+    const conversionImprovement = monthlyRevenue * 0.03; // 3% amélioration conversion
     
     const monthlyGain = currentAttributionLoss + churnReduction + conversionImprovement;
     const annualGain = monthlyGain * 12;
@@ -95,7 +100,7 @@ export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ prod
       <div className="p-6 bg-gradient-to-r from-green-50 to-blue-50 border border-green-200 rounded-lg">
         <h4 className="font-semibold text-green-800 mb-4 flex items-center gap-2">
           <TrendingUp className="h-5 w-5" />
-          Projection ROI ModaStyle (8M€ CA annuel)
+          Projection ROI ModaStyle (18M€ CA annuel)
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <div>
@@ -214,7 +219,7 @@ export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ prod
         </h4>
         <div className="text-sm text-blue-700 space-y-1">
           <p>• <strong>Setup:</strong> 899€ (implémentation + formation équipe 2 jours)</p>
-          <p>• <strong>Timeline:</strong> Shopify Plus connecté en 48h, formation équipe J+7</p>
+          <p>• <strong>Timeline:</strong> Shopify Plus connecté en 48h, setup complet 4-6 semaines, formation équipe J+14</p>
           <p>• <strong>Migration:</strong> Historique 24 mois importé automatiquement</p>
           <p>• <strong>Support:</strong> Account manager français dédié mode & lifestyle</p>
         </div>
