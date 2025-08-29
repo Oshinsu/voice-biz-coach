@@ -88,8 +88,8 @@ export class AgentsVoiceService {
       await this.pc.setLocalDescription(offer);
 
       // 7. Connexion WebRTC selon doc OpenAI (format exact)
-      const baseUrl = "https://api.openai.com/v1/realtime/calls";
-      const model = this.config.model || "gpt-realtime";
+      const baseUrl = "https://api.openai.com/v1/realtime";
+      const model = this.config.model || "gpt-4o-realtime-preview-2024-12-17";
       
       console.log(`🔗 Connexion WebRTC: ${baseUrl}?model=${model}`);
       
@@ -134,29 +134,24 @@ export class AgentsVoiceService {
     this.dc.addEventListener("open", () => {
       console.log('📡 Data channel ouvert');
       
-      // Send session.update with instructions via DataChannel AFTER connection
-      if (this.config.instructions) {
-        console.log('📤 Sending session.update with instructions via DataChannel');
-        const sessionUpdate = {
-          type: 'session.update',
-          session: {
-            type: 'realtime', // CRITIAL: Paramètre manquant pour Agent SDK
-            instructions: this.config.instructions,
-            modalities: ['text', 'audio'],
-            voice: this.config.voice || 'alloy',
-            input_audio_format: 'pcm16',
-            output_audio_format: 'pcm16',
-            turn_detection: {
-              type: 'server_vad',
-              threshold: 0.5,
-              prefix_padding_ms: 300,
-              silence_duration_ms: 1000
-            },
-            temperature: 0.8
-          }
-        };
-        this.dc.send(JSON.stringify(sessionUpdate));
-      }
+        // Send session.update with instructions via DataChannel AFTER connection
+        if (this.config.instructions) {
+          console.log('📤 Sending session.update with instructions via DataChannel');
+          const sessionUpdate = {
+            type: 'session.update',
+            session: {
+              instructions: this.config.instructions + " Tu DOIS toujours répondre en français uniquement.",
+              voice: this.config.voice || 'alloy',
+              turn_detection: {
+                type: 'server_vad',
+                threshold: 0.5,
+                prefix_padding_ms: 300,
+                silence_duration_ms: 1000
+              }
+            }
+          };
+          this.dc.send(JSON.stringify(sessionUpdate));
+        }
     });
 
     this.dc.addEventListener("message", (e) => {
