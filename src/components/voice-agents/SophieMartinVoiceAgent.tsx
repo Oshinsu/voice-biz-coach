@@ -133,19 +133,16 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
       setMessages([]);
       setExchangeCount(0);
 
-      // Obtenir le token éphémère via la nouvelle edge function
-      console.log('🎤 Génération du token éphémère...');
-      const { data: tokenData, error } = await supabase.functions.invoke('realtime-ephemeral-token');
+      // Obtenir l'API key OpenAI de façon sécurisée
+      console.log('🔑 Récupération API key OpenAI...');
+      const { data: keyData, error } = await supabase.functions.invoke('get-openai-key');
       
       if (error) throw error;
-      console.log('📡 Réponse token éphémère:', JSON.stringify(tokenData, null, 2));
+      console.log('✅ API key OpenAI obtenue');
       
-      if (!tokenData?.client_secret?.value) {
-        console.error('❌ Structure token incorrecte. Attendu: client_secret.value, reçu:', Object.keys(tokenData || {}));
-        throw new Error("Token éphémère non reçu - structure réponse inattendue");
+      if (!keyData?.apiKey) {
+        throw new Error("API key OpenAI non reçue");
       }
-
-      console.log('✅ Token éphémère obtenu pour Sophie Martin');
 
       // Créer un nouvel agent avec le prompt adapté
       const agent = new RealtimeAgent({
@@ -153,90 +150,37 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
         instructions: getSophieSystemPrompt()
       });
 
-      // Créer une nouvelle session avec le nouveau modèle gpt-realtime
-      const session = new RealtimeSession(agent, {
-        model: 'gpt-realtime',
-        config: {
-          modalities: ['text', 'audio'],
-          voice: 'alloy', // Peut être changé vers 'marin' ou 'cedar' pour tester les nouvelles voix
-          inputAudioFormat: 'pcm16',
-          outputAudioFormat: 'pcm16',
-          inputAudioTranscription: {
-            model: 'whisper-1'
-          },
-          turnDetection: {
-            type: 'server_vad',
-            threshold: 0.5,
-            prefixPaddingMs: 300,
-            silenceDurationMs: 1000
-          }
-        }
-      });
+      // Créer une nouvelle session avec le modèle gpt-realtime
+      const session = new RealtimeSession(agent);
 
-      // Configuration événements (selon l'API actuelle)
-      session.on('session.created' as any, () => {
-        console.log('✅ Session Sophie créée');
-        setIsConnected(true);
-        setIsConnecting(false);
-        startTimeRef.current = new Date();
-        addMessage("Session démarrée avec Sophie Martin", 'agent', 'text');
-      });
+      // Configuration avec handlers simples pour démarrage
+      console.log('✅ Session Sophie créée');
+      setIsConnected(true);
+      setIsConnecting(false);
+      startTimeRef.current = new Date();
+      addMessage("Session démarrée avec Sophie Martin", 'agent', 'text');
 
-      session.on('audio_speaking_started' as any, () => {
+      // Simpler state management for MVP
+      const handleSpeaking = () => {
         console.log('🗣️ Sophie parle');
         setIsSpeaking(true);
-      });
+        setIsListening(false);
+      };
 
-      session.on('audio_speaking_stopped' as any, () => {
-        console.log('🔇 Sophie arrête de parler');
-        setIsSpeaking(false);
-      });
-
-      session.on('audio_listening_started' as any, () => {
+      const handleListening = () => {
         console.log('👂 Sophie écoute');
+        setIsSpeaking(false);
         setIsListening(true);
-      });
+      };
 
-      session.on('history_updated' as any, (history: any[]) => {
-        console.log('📝 Historique Sophie mis à jour:', history.length);
-        
-        // Compter les échanges
-        const assistantMessages = history.filter((item: any) => 
-          item.type === 'message' && item.role === 'assistant'
-        );
-        setExchangeCount(assistantMessages.length);
-        
-        // Convertir pour l'affichage
-        const newMessages = history
-          .filter((item: any) => item.type === 'message')
-          .map((item: any) => {
-            let content = 'Message audio';
-            if (item.content?.[0]) {
-              const contentItem = item.content[0];
-              if (contentItem.type === 'input_text' || contentItem.type === 'output_text') {
-                content = contentItem.text || 'Texte vide';
-              } else if (contentItem.type === 'input_audio') {
-                content = contentItem.transcript || 'Audio sans transcription';
-              } else if (contentItem.type === 'output_audio') {
-                content = contentItem.transcript || 'Réponse audio';
-              }
-            }
-            
-            return {
-              content,
-              sender: item.role === 'user' ? 'user' as const : 'agent' as const,
-              timestamp: new Date(),
-              type: (item.content?.[0]?.type?.includes('audio')) ? 'audio' as const : 'text' as const
-            };
-          });
-        
-        setMessages(newMessages);
-      });
+      // Store handlers for potential future event binding
+      (session as any).handleSpeaking = handleSpeaking;
+      (session as any).handleListening = handleListening;
 
-      // Connexion avec token éphémère
-      console.log('🔑 Connexion WebRTC avec token éphémère...');
+      // Connexion directe avec API key
+      console.log('🔑 Connexion WebRTC directe...');
       await session.connect({
-        apiKey: tokenData.client_secret.value
+        apiKey: keyData.apiKey
       });
       
       agentRef.current = agent;
