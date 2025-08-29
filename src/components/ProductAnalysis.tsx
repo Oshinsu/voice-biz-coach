@@ -2,7 +2,7 @@ import React from 'react';
 import { Package, BarChart3, Target, Users } from 'lucide-react';
 import { Product } from '@/hooks/useScenarios';
 import { AnalysisSection } from './analysis/AnalysisSection';
-import { ProductOverview } from './analysis/ProductOverview';
+import { DataTrackProOverview } from './analysis/DataTrackProOverview';
 import { MarketingToolsDashboard } from './marketing/MarketingToolsDashboard';
 
 interface ProductAnalysisProps {
@@ -33,7 +33,7 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({
         title={`${mainProduct.name} - Vue d'ensemble`}
         icon={Package}
       >
-        <ProductOverview product={mainProduct} />
+        <DataTrackProOverview product={mainProduct} />
       </AnalysisSection>
 
       {/* Marketing Tools Dashboard */}

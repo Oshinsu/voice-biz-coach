@@ -13,7 +13,7 @@ export const kpiPerformanceScenario: Scenario = {
     revenue: "18M€ CA annuel",
     location: "Lyon, France - Siège social Presqu'île, entrepôt Rillieux-la-Pape",
     
-    keyMetrics: {
+    metrics: {
       monthlyVisitors: "420K visiteurs uniques/mois",
       conversionRate: "2.1%",
       averageOrderValue: "52€",
@@ -21,9 +21,9 @@ export const kpiPerformanceScenario: Scenario = {
       marketingBudget: "2.1M€/an (11.7% du CA)"
     },
     
-    history: "Créée en 2015, ModaStyle s'est développée rapidement sur le segment mode accessible. Croissance de 15% par an depuis 2020.",
+    description: "Créée en 2015, ModaStyle s'est développée rapidement sur le segment mode accessible. Croissance de 15% par an depuis 2020.",
     
-    techStack: {
+    technicalStack: {
       ecommerce: "Shopify Plus",
       analytics: "Google Analytics 4, Facebook Pixel",
       advertising: "Google Ads (60% budget), Facebook Ads (30%), TikTok Ads (10%)",
@@ -54,12 +54,7 @@ export const kpiPerformanceScenario: Scenario = {
       "Marc Lecomte - COO, 38 ans (Ex-directeur ops Showroomprivé, supply chain expert). Gestion croissance opérationnelle, logistique, recrutement équipe"
     ],
     
-    // Informations stakeholders
-    keyPersonnel: [
-      "Sophie Martin (Primary Decision Maker)",
-      "Clara Dubois (CEO)",
-      "Thomas Dubois (CTO)"
-    ],
+    // Informations stakeholders incluses dans keyPeople above
     detailedFinancials: {
       quarters: [
         { period: "Q1 2023", revenue: 4.2, marketingSpend: 0.48, roas: 8.8 },
@@ -91,7 +86,7 @@ export const kpiPerformanceScenario: Scenario = {
     
     communicationStyle: "Directe, pose des questions techniques précises, demande des preuves chiffrées",
     
-    decisionMakingPower: "Décision autonome jusqu'à 25k€, validation Direction au-delà",
+    decisionPower: "Décision autonome jusqu'à 25k€, validation Direction au-delà",
     
     priorities: ["Améliorer l'attribution des campagnes Facebook/Google", "Réduire la cannibalisation entre canaux", "Mesurer l'impact des campagnes TV"],
     
@@ -99,7 +94,8 @@ export const kpiPerformanceScenario: Scenario = {
     
     motivations: ["Prouver l'efficacité de ses campagnes", "Optimiser le budget serré", "Montrer sa valeur ajoutée"],
     
-    professionalExperience: {
+    experience: "9 ans en marketing digital et analytics",
+    careerHistory: {
       totalYears: 9,
       currentRole: "Directrice Marketing & Analytics chez ModaStyle (3 ans)",
       keyAchievements: [
@@ -138,9 +134,12 @@ export const kpiPerformanceScenario: Scenario = {
     marketingPositioning: "Attribution marketing précise pour optimiser vos campagnes cross-canal",
     
     pricing: {
-      setup: "8 500€",
-      monthly: "1 200€/mois",
-      implementation: "4-6 semaines"
+      starter: "199€",
+      professional: "599€", 
+      enterprise: "Sur mesure",
+      setupFees: "899€ implémentation + formation 2 jours",
+      contractTerms: "12 mois minimum",
+      migration: "Historique 24 mois inclus"
     },
     keyFeatures: [
       "Attribution multi-touch (first-click, last-click, data-driven)",
@@ -156,7 +155,9 @@ export const kpiPerformanceScenario: Scenario = {
       "Implémentation rapide (4-6 sem vs 3-4 mois)",
       "Pricing transparent sans surprise",
       "Cas clients similaires (Grain de Malice, Spartoo)"
-    ]
+    ],
+    roi: "312%",
+    implementationTime: "24h à 4 semaines selon complexité"
   },
   // Objectifs pédagogiques selon type d'appel
   objectives: [

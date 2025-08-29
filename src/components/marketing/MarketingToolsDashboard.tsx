@@ -6,9 +6,9 @@ import {
   Target, BarChart3, Zap, Users, TrendingUp,
   Shield, Grid3X3, Layers, ArrowRight
 } from 'lucide-react';
-import { PorterMatrix } from './PorterMatrix';
-import { AnsoffMatrix } from './AnsoffMatrix';
-import { BCGMatrix } from './BCGMatrix';
+import { DataTrackProPorterMatrix } from './DataTrackProPorterMatrix';
+import { DataTrackProAnsoffMatrix } from './DataTrackProAnsoffMatrix';
+import { DataTrackProBCGMatrix } from './DataTrackProBCGMatrix';
 import { MarketingStrategy } from './MarketingStrategy';
 import { SwotMatrix } from '../SwotMatrix';
 
@@ -142,15 +142,15 @@ export const MarketingToolsDashboard: React.FC<MarketingToolsDashboardProps> = (
         </TabsList>
 
         <TabsContent value="porter" className="space-y-6">
-          <PorterMatrix scenarioId={scenarioId} />
+          <DataTrackProPorterMatrix scenarioId={scenarioId} />
         </TabsContent>
 
         <TabsContent value="ansoff" className="space-y-6">
-          <AnsoffMatrix scenarioId={scenarioId} />
+          <DataTrackProAnsoffMatrix scenarioId={scenarioId} />
         </TabsContent>
 
         <TabsContent value="bcg" className="space-y-6">
-          <BCGMatrix scenarioId={scenarioId} />
+          <DataTrackProBCGMatrix scenarioId={scenarioId} />
         </TabsContent>
 
         <TabsContent value="swot" className="space-y-6">
