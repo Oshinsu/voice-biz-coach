@@ -1,4 +1,4 @@
-import { ModernVoiceCoach } from './ModernVoiceCoach';
+import { AgentsVoiceCoach } from './AgentsVoiceCoach';
 
 interface UnifiedVoiceCoachProps {
   scenario?: any;
@@ -7,6 +7,6 @@ interface UnifiedVoiceCoachProps {
 }
 
 export function UnifiedVoiceCoach({ scenario, open = true, onToggle }: UnifiedVoiceCoachProps) {
-  // Architecture moderne avec WebSocket direct OpenAI Realtime
-  return <ModernVoiceCoach scenario={scenario} open={open} onToggle={onToggle} />;
+  // Architecture Agent SDK officielle GA - 28 août 2025
+  return <AgentsVoiceCoach scenario={scenario} open={open} onToggle={onToggle} />;
 }
