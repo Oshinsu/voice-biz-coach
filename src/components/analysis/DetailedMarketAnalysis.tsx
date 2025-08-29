@@ -248,6 +248,72 @@ const getMarketData = (scenarioId: string) => {
         { metric: 'Satisfaction client', value: '88%', target: '95%', gap: -7 }
       ]
     },
+    'retail-personalization': {
+      sector: 'Retail Mode & Accessoires',
+      totalMarketSize: '€12.1Md',
+      growth: '+11%',
+      playerCount: '15,000+',
+      averageSize: '150 employés',
+      segmentation: [
+        { name: 'E-commerce Mode', value: 38, revenue: '€4.6Md' },
+        { name: 'Retail Physique+Digital', value: 45, revenue: '€5.4Md' },
+        { name: 'Pure Players', value: 17, revenue: '€2.1Md' }
+      ],
+      growthTrends: [
+        { year: '2022', market: 9200, digital: 3100 },
+        { year: '2023', market: 10500, digital: 3800 },
+        { year: '2024', market: 12100, digital: 4600 },
+        { year: '2025', market: 13800, digital: 5700 },
+        { year: '2026', market: 15900, digital: 7200 }
+      ],
+      painPoints: [
+        { 
+          issue: 'Conversion e-commerce faible vs marché', 
+          impact: 92, 
+          cost: '€180k/an',
+          description: 'Taux conversion 1.2% vs 2.8% marché. Perte 65% revenus potentiels quotidiens. Personnalisation rudimentaire (âge/géo) vs IA comportementale pure-players.'
+        },
+        { 
+          issue: 'Expérience omnicanal déconnectée', 
+          impact: 85, 
+          cost: '€120k/an',
+          description: 'Rupture parcours client magasin/online. 67% clients multi-device, expérience fragmentée. Données clients non unifiées CRM/e-commerce.'
+        },
+        { 
+          issue: 'Stocks invendus au-dessus objectif', 
+          impact: 78, 
+          cost: '€350k/an',
+          description: 'Invendus 18% vs 12% objectif. Manque prédictive analytics. Fast-fashion 6 semaines = gestion stock complexe.'
+        },
+        { 
+          issue: 'Concurrence IA pure-players', 
+          impact: 88, 
+          cost: '€200k/an',
+          description: 'Zalando, Asos, Amazon : recommandations IA avancées. StyleChain : recommandations basiques Shopify. Perte parts marché Gen Z (73% expect personnalisation).'
+        },
+        { 
+          issue: 'ROI digital transformation incertain', 
+          impact: 70, 
+          cost: '€85k/an',
+          description: 'Budget 80-150k€ sans KPIs clairs. Difficulté mesure ROI omnicanal. Adoption équipes magasins (42 ans moyenne) résistante au changement.'
+        }
+      ],
+      tools: [
+        { category: 'E-commerce Platform (Shopify Plus)', adoption: 100, satisfaction: 75 },
+        { category: 'Email Marketing (Klaviyo)', adoption: 85, satisfaction: 68 },
+        { category: 'CRM (Salesforce)', adoption: 90, satisfaction: 72 },
+        { category: 'Analytics Web', adoption: 70, satisfaction: 60 },
+        { category: 'Personnalisation IA', adoption: 15, satisfaction: 45 }
+      ],
+      financialMetrics: [
+        { metric: 'Conversion E-commerce', value: '1.2%', target: '2.8%', gap: -1.6 },
+        { metric: 'Panier Moyen', value: '€67', target: '€95', gap: -28 },
+        { metric: 'Taux Invendus', value: '18%', target: '12%', gap: 6 },
+        { metric: 'ROI Marketing Digital', value: '2.3x', target: '4.5x', gap: -2.2 },
+        { metric: 'Customer Lifetime Value', value: '€245', target: '€380', gap: -135 },
+        { metric: 'Taux Rétention', value: '32%', target: '45%', gap: -13 }
+      ]
+    },
     'manufacturing-iot': {
       sector: 'IoT Industriel',
       totalMarketSize: '€45.6Md',
@@ -682,6 +748,66 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
                     </div>
                     <div className="pt-2 text-sm text-muted-foreground">
                       ModaStyle surperforme le secteur mais reste sous le potentiel optimal
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {scenarioId === 'retail-personalization' && (
+            <div className="grid md:grid-cols-2 gap-6 mt-6">
+              <Card className="border-primary/20">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <ShoppingCart className="h-5 w-5" />
+                    Urgence Black Friday 2024
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span>CA Black Friday</span>
+                      <span className="font-bold text-green-600">35% CA annuel</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Conversion avec IA</span>
+                      <span className="font-bold text-blue-600">+65% potentiel</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Délai implémentation</span>
+                      <span className="font-bold text-orange-600">15 jours max</span>
+                    </div>
+                    <div className="pt-2 text-sm text-muted-foreground">
+                      Opportunité critique : Chaque jour de retard = €8k de CA perdu
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-secondary/20">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Target className="h-5 w-5" />
+                    Benchmark Concurrence
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span>Zalando (Conversion)</span>
+                      <span className="font-bold text-green-600">4.2%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>StyleChain Actuel</span>
+                      <span className="font-bold text-red-600">1.2%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Gap de Performance</span>
+                      <span className="font-bold text-orange-600">-71%</span>
+                    </div>
+                    <div className="pt-2 text-sm text-muted-foreground">
+                      Retard critique face aux pure-players avec IA avancée
                     </div>
                   </div>
                 </CardContent>

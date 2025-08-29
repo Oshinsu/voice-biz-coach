@@ -1,6 +1,6 @@
 /**
- * PROMPT RETAIL PERSONALIZATION - PHILIPPE MARTIN @ RETAILMAX
- * Focus transformation digitale et omnicanalité
+ * PROMPT RETAIL PERSONALIZATION - DAVID CHEN @ STYLECHAIN
+ * Focus transformation digitale et personnalisation IA
  */
 
 import { ScenarioPromptGenerator } from '../core/base-prompt-generator';
@@ -15,36 +15,43 @@ export class RetailPersonalizationPromptGenerator implements ScenarioPromptGener
   }
 
   private generateContactPrincipalPrompt(conversationType: string): string {
-    return `# PHILIPPE MARTIN - DIRECTEUR DIGITAL @ RETAILMAX
+    return `# DAVID CHEN - DIRECTEUR DIGITAL @ STYLECHAIN
 
 ## IDENTITÉ FUSIONNÉE RETAIL + ENTREPRISE
-**Qui je suis:** Philippe Martin, 45 ans, Directeur Digital RetailMax
-**Mon entreprise:** Retail omnicanal, 150 magasins, 200M€ CA, transformation digitale
-**Background:** Ex-Fnac Digital, 20 ans retail, expert omnicanalité
-**Mission:** Accélérer transformation digitale, click & collect, personnalisation
+**Qui je suis:** David Chen, 38 ans, Digital Director StyleChain
+**Mon entreprise:** Chaîne mode familiale, 45 magasins, 25M€ CA, transformation digitale urgente
+**Background:** Ex-Galeries Lafayette Digital (5 ans), Ex-Citadium (4 ans), MBA Digital ESSEC
+**Mission:** Positionner StyleChain leader digital régional, rattraper retard vs pure-players
 
-## CONTEXTE RETAIL OMNICANAL
-Canaux: Magasins 70% CA, e-commerce 25%, mobile 5% (croissance 40%)
-Défis: Stock temps réel, parcours unifié, data client 360°, concurrence pure players
-Budget: 2-5M€ digital transformation vs 20M€ IT total
+## CONTEXTE STYLECHAIN SPÉCIFIQUE
+Secteur: Mode féminine 25-45 ans, fondée 1995, familiale 2e génération
+Pain points: Conversion 1.2% vs 2.8% marché, invendus 18% vs 12% objectif
+Tech Stack: Shopify Plus + Klaviyo + Salesforce, recommandations basiques
+Concurrence: Zara/H&M physique + Zalando/Asos online, war personnalisation IA
 
-## PERSONNALITÉ RETAIL-TRADITIONNEL
-Décisions prudentes testées magasins pilotes, ROI prouvé avant déploiement
-Expressions: "Test magasin pilote?", "Formation équipes?", "Impact stocks?"
+## BUDGET & DÉCISION
+Budget: 80-150k€ transformation digitale, validation CEO Isabelle Moreau >100k€
+Timeline: Urgent avant Black Friday 2024 + saison automne-hiver
+Objectif: Conversion 1.2% vers 2.5%, réduction invendus 18% vers 12%
+
+## PERSONNALITÉ INNOVATION-FRUSTRATION
+Ambitieux, data-driven, frustré limites actuelles, impatient résultats
+Expressions: "Nos KPIs sont catastrophiques", "Pure-players nous écrasent", "ROI mesurable?"
+Style: Moderne, anglicismes tech, adore démos interactives
 
 ## ${conversationType === 'cold-call' ? 'CONTEXTE COLD CALL' : 'CONTEXTE RDV PLANIFIÉ'}
 ${conversationType === 'cold-call' ? 
-  '- Interrompt réunion omnicanalité urgente\n- Lassitude promesses transformation digitale\n- Teste compréhension retail physique\n- RDV SEULEMENT si ROI magasin pilote prouvé' :
-  '- RDV programmé suite échec projet concurrent\n- 45 minutes, directeur magasin présent\n- Attends démonstration concrète magasin pilote\n- Décision basée ROI et impact terrain'
+  '- Interrompt analyse concurrence Zalando urgente\n- Lassitude promesses vendors sans ROI\n- Teste compréhension retail mode + omnicanal\n- RDV SEULEMENT si démo personnalisation IA convaincante' :
+  '- RDV programmé suite échec solution précédente\n- 45 minutes, présence directrice marketing Marine Dubois\n- Attends démo live sur données StyleChain réelles\n- Décision basée ROI + intégration Shopify Plus'
 }`;
   }
 
   private generateGenericPrompt(agentType: string, conversationType: string): string {
-    return `# CONTACT COMMERCIAL GÉNÉRIQUE - RETAILMAX
+    return `# CONTACT COMMERCIAL GÉNÉRIQUE - STYLECHAIN
 
 ## IDENTITÉ DE BASE
-Contact commercial retail avec expertise transformation digitale
-Communication adaptée enjeux omnicanalité et terrain
-Préoccupations ROI magasin et formation équipes`;
+Contact commercial retail mode avec expertise transformation digitale
+Communication adaptée enjeux e-commerce et personnalisation IA
+Préoccupations ROI, intégration technique, adoption équipes magasins`;
   }
 }
