@@ -19,14 +19,8 @@ export function UnifiedVoiceCoach({ scenario, open = true, onToggle }: UnifiedVo
 
     switch (scenario.id) {
       case 'kpi-performance':
-        // Sophie Martin avec prompt natif intégré
-        return (
-          <SophieMartinVoiceAgent 
-            conversationType="cold-call" // TODO: détecter selon le contexte
-            open={open} 
-            onToggle={onToggle} 
-          />
-        );
+        // Utiliser AgentsVoiceCoach qui fonctionne avec Sophie's prompt intégré
+        return <GenericVoiceAgent scenario={scenario} open={open} onToggle={onToggle} />;
       
       // TODO: Ajouter les autres personas
       // case 'fintech-startup':

@@ -86,7 +86,7 @@ Adaptez vos réponses selon la phase de vente.`;
       // Obtenir un token éphémère depuis notre Edge Function
       const { data: tokenData, error } = await supabase.functions.invoke('realtime-token');
 
-      if (error || !tokenData?.value) {
+      if (error || !tokenData?.client_secret?.value) {
         console.error('❌ Erreur token éphémère:', error);
         throw new Error('Impossible d\'obtenir le token éphémère OpenAI');
       }
@@ -205,7 +205,7 @@ Adaptez vos réponses selon la phase de vente.`;
 
       // Connexion avec token éphémère (recommandé par OpenAI)
       await session.connect({
-        apiKey: tokenData.value
+        apiKey: tokenData.client_secret.value
       });
 
       console.log('✅ Session Agents SDK connectée avec tous les événements');
