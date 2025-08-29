@@ -117,98 +117,102 @@ export const ScenarioObjectives: React.FC<ScenarioObjectivesProps> = ({ scenario
       </Card>
 
       {/* Métriques de performance */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5" />
-            Métriques de performance adaptées au scénario
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">75%</div>
-              <div className="text-sm text-blue-700">Taux de décrochage Cold Call</div>
-              <div className="text-xs text-muted-foreground">Objectif: &gt;80%</div>
+      {scenario?.performanceMetrics?.kpis && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5" />
+              Métriques de performance - {scenario?.company?.name}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {scenario.performanceMetrics.kpis.slice(0, 4).map((kpi, index) => {
+                const colors = ['blue', 'green', 'purple', 'orange'];
+                const color = colors[index % colors.length];
+                return (
+                  <div key={index} className={`text-center p-4 bg-${color}-50 rounded-lg`}>
+                    <div className={`text-2xl font-bold text-${color}-600`}>{kpi.current}</div>
+                    <div className={`text-sm text-${color}-700`}>{kpi.name}</div>
+                    <div className="text-xs text-muted-foreground">Objectif: {kpi.target}</div>
+                  </div>
+                );
+              })}
             </div>
             
-            <div className="text-center p-4 bg-green-50 rounded-lg">
-              <div className="text-2xl font-bold text-green-600">45%</div>
-              <div className="text-sm text-green-700">Conversion RDV → Pilote</div>
-              <div className="text-xs text-muted-foreground">Objectif: &gt;50%</div>
-            </div>
-            
-            <div className="text-center p-4 bg-purple-50 rounded-lg">
-              <div className="text-2xl font-bold text-purple-600">7 min</div>
-              <div className="text-sm text-purple-700">Durée moyenne Cold Call</div>
-              <div className="text-xs text-muted-foreground">Objectif: 5-8 min</div>
-            </div>
-            
-            <div className="text-center p-4 bg-orange-50 rounded-lg">
-              <div className="text-2xl font-bold text-orange-600">21 jours</div>
-              <div className="text-sm text-orange-700">Cycle de vente moyen</div>
-              <div className="text-xs text-muted-foreground">Objectif: &lt;28 jours</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+            {scenario.performanceMetrics.industrySpecific && (
+              <div className="mt-6 p-4 bg-muted/50 rounded-lg">
+                <h4 className="font-semibold mb-3">Contexte industrie {scenario.company?.sector}</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                  {Object.entries(scenario.performanceMetrics.industrySpecific).map(([key, value], idx) => (
+                    <div key={idx}>
+                      <span className="font-medium">{key.replace(/([A-Z])/g, ' $1').toLowerCase()}:</span>
+                      <span className="ml-1">{value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Conseils tactiques spécifiques au scénario */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5" />
-            Conseils tactiques pour {scenarioId}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-4 bg-orange-50 rounded-lg">
-              <h4 className="font-semibold text-orange-800 mb-3">Cold Call - Conseils</h4>
-              <ul className="text-sm space-y-2 text-orange-700">
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></span>
-                  Pitch de 30 secondes maximum pour capter l'attention
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></span>
-                  Identifier rapidement le pain point principal
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></span>
-                  Ne pas vendre la solution mais vendre le RDV
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></span>
-                  Utiliser des références crédibles du secteur
-                </li>
-              </ul>
+      {scenario?.tacticalAdvice && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5" />
+              Conseils tactiques - {scenario?.company?.name}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {scenario.tacticalAdvice.coldCall && (
+                <div className="p-4 bg-orange-50 rounded-lg">
+                  <h4 className="font-semibold text-orange-800 mb-3">Cold Call - Conseils</h4>
+                  <ul className="text-sm space-y-2 text-orange-700">
+                    {scenario.tacticalAdvice.coldCall.map((advice, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-orange-500 rounded-full mt-2 flex-shrink-0"></span>
+                        {advice}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
+              {scenario.tacticalAdvice.rdv && (
+                <div className="p-4 bg-green-50 rounded-lg">
+                  <h4 className="font-semibold text-green-800 mb-3">RDV - Conseils</h4>
+                  <ul className="text-sm space-y-2 text-green-700">
+                    {scenario.tacticalAdvice.rdv.map((advice, index) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
+                        {advice}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
             
-            <div className="p-4 bg-green-50 rounded-lg">
-              <h4 className="font-semibold text-green-800 mb-3">RDV - Conseils</h4>
-              <ul className="text-sm space-y-2 text-green-700">
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
-                  Discovery approfondie avec questions ouvertes
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
-                  Démonstration personnalisée selon besoins
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
-                  Quantifier ROI avec chiffres précis
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0"></span>
-                  Cartographier tous les stakeholders
-                </li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+            {scenario.tacticalAdvice.industrySpecific && (
+              <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                <h4 className="font-semibold text-blue-800 mb-3">Conseils sectoriels - {scenario.company?.sector}</h4>
+                <ul className="text-sm space-y-2 text-blue-700">
+                  {scenario.tacticalAdvice.industrySpecific.map((advice, index) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 flex-shrink-0"></span>
+                      {advice}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

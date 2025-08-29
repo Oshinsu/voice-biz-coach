@@ -176,6 +176,29 @@ export interface Scenario {
     };
   };
   
+  performanceMetrics?: {
+    kpis: Array<{
+      name: string;
+      current: string;
+      target: string;
+      category: string;
+    }>;
+    industrySpecific: { [key: string]: any };
+  };
+  
+  tacticalAdvice?: {
+    coldCall: string[];
+    rdv: string[];
+    industrySpecific: string[];
+  };
+  
+  closingTechniques?: {
+    buyingSignals: string[];
+    scripts: string[];
+    postSaleStrategy: string[];
+    industryAdapted: boolean;
+  };
+  
   detailedObjections?: Array<{
     category: string;
     objection: string;

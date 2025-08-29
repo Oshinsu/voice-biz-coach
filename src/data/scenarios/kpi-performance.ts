@@ -352,6 +352,78 @@ export const kpiPerformanceScenario: Scenario = {
       successMetrics: "Pilote validé + budget alloué + timeline signée + sponsorship exec"
     }
   },
+  
+  // Métriques de performance spécifiques e-commerce
+  performanceMetrics: {
+    kpis: [
+      { name: "Taux attribution précise", current: "45%", target: "85%", category: "Attribution" },
+      { name: "ROAS Google Ads", current: "3.2", target: "4.5", category: "Performance" },
+      { name: "ROAS Facebook Ads", current: "2.8", target: "4.0", category: "Performance" },
+      { name: "Temps reporting", current: "16h/semaine", target: "4h/semaine", category: "Productivité" },
+      { name: "CAC moyen", current: "47€", target: "35€", category: "Acquisition" },
+      { name: "LTV/CAC ratio", current: "3.3", target: "4.5", category: "Rentabilité" },
+      { name: "Budget waste", current: "25-35%", target: "<10%", category: "Optimisation" },
+      { name: "Conversion multi-touch", current: "Non mesurée", target: "Trackée", category: "Attribution" }
+    ],
+    industrySpecific: {
+      seasonality: "40% CA collection printemps (mars-mai)",
+      averageOrderValue: "52€ vs 48€ marché mode",
+      customerRetention: "24% vs 19% benchmark e-commerce",
+      mobileConversion: "2.1% vs 1.8% secteur",
+      influencerImpact: "Non mesurable actuellement"
+    }
+  },
+  
+  // Conseils tactiques spécifiques
+  tacticalAdvice: {
+    coldCall: [
+      "Commencer par douleur reporting manuel (16h/semaine Sophie)",
+      "Quantifier budget gaspillé (25-35% sur 80k€/mois)",
+      "Créer urgence collection printemps (40% CA annuel)",
+      "Mentionner concurrents Grain de Malice success story",
+      "Proposer audit gratuit attribution actuelle"
+    ],
+    rdv: [
+      "Faire démo live sur vraies données ModaStyle",
+      "Comparer GA4 vs DataTrack Pro side-by-side", 
+      "Calculer ROI personnalisé sur budget 2.1M€/an",
+      "Présenter roadmap 24h sans interruption business",
+      "Négocier pilote sur 30% budget test collection"
+    ],
+    industrySpecific: [
+      "Adapter au secteur mode éthique (valeurs, storytelling)",
+      "Mentionner saisonnalité forte (urgence timing)",
+      "Valoriser attribution TV/Influence (enjeu mode)",
+      "Parler customer journey long (consideration mode)",
+      "Évoquer concurrence Zalando/ASOS (pression marché)"
+    ]
+  },
+  
+  // Techniques de closing adaptées
+  closingTechniques: {
+    buyingSignals: [
+      "Sophie demande détails techniques intégration Shopify",
+      "Questions sur formation équipe Jules/Amélie",
+      "Évocation timing collection printemps",
+      "Demande références clients e-commerce similaires",
+      "Questions prix Professional vs Enterprise",
+      "Interrogation escalade validation Clara (CEO)"
+    ],
+    scripts: [
+      "Sophie, vu l'urgence collection printemps qui représente 40% de votre CA annuel, et les 80k€/mois de budget actuellement mal optimisés, quand souhaitez-vous démarrer le pilote ?",
+      "Vous avez vu l'impact sur les données de Grain de Malice (+35% ROAS). Avec votre budget 2.1M€/an, le ROI de 312% première année semble-t-il réaliste pour ModaStyle ?",
+      "Pour sécuriser votre collection printemps, je propose un pilote 3 mois sur 30% du budget avec garantie performance. Qu'est-ce qui vous empêcherait de valider aujourd'hui ?"
+    ],
+    postSaleStrategy: [
+      "Onboarding 24h avec Sophie + équipe Jules/Amélie",
+      "Formation certifiante 2 jours DataTrack Pro",
+      "Suivi hebdomadaire performance première collection",
+      "Optimisation continue modèles attribution",
+      "Expansion attribution TV/Influence post-pilote",
+      "Upsell Enterprise après validation ROI"
+    ],
+    industryAdapted: true
+  },
 
   // Objections détaillées intégrées
   detailedObjections: [

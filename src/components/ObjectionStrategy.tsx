@@ -245,83 +245,83 @@ export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Target className="h-5 w-5" />
-            Techniques de closing adaptées
+            Techniques de closing adaptées - {scenario?.company?.name}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <h4 className="font-semibold mb-3">Closing assumptif (recommandé)</h4>
-              <div className="p-4 border rounded-lg">
-                <p className="text-sm italic mb-2">
-                  "Vu l'urgence de modernisation et les résultats exceptionnels du pilote, 
-                  je propose qu'on lance le déploiement dès la rentrée. Préférez-vous commencer 
-                  par le département Commerce ou Marketing ?"
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  ✓ Présuppose l'accord ✓ Offre un choix ✓ Crée urgence positive
-                </p>
-              </div>
+          {scenario?.closingTechniques?.scripts && (
+            <div className="grid grid-cols-1 gap-6">
+              {scenario.closingTechniques.scripts.map((script, index) => (
+                <div key={index} className="p-4 border rounded-lg bg-gradient-to-r from-blue-50 to-purple-50">
+                  <h4 className="font-semibold mb-3">Script de closing #{index + 1}</h4>
+                  <p className="text-sm italic mb-2 text-gray-700">
+                    "{script}"
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    ✓ Adapté au contexte {scenario.company?.sector} ✓ Inclut urgence business ✓ Propose action concrète
+                  </p>
+                </div>
+              ))}
             </div>
-
-            <div>
-              <h4 className="font-semibold mb-3">Closing alternative</h4>
-              <div className="p-4 border rounded-lg">
-                <p className="text-sm italic mb-2">
-                  "Deux options s'offrent à vous : soit on démarre avec le package Professional 
-                  pour 200 étudiants, soit on vise directement l'Enterprise pour toute l'école. 
-                  Qu'est-ce qui correspond mieux à votre vision ?"
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  ✓ Évite le "non" ✓ Guide vers la solution ✓ Valorise l'ambition
-                </p>
-              </div>
-            </div>
-          </div>
+          )}
 
           <Separator />
 
           <div>
             <h4 className="font-semibold mb-3">Signaux d'achat à identifier</h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-3 border rounded-lg">
-                <h5 className="font-medium text-sm mb-2">Signaux verbaux</h5>
-                <ul className="text-xs space-y-1">
-                  <li>• "Comment se passerait l'intégration ?"</li>
-                  <li>• "Quels seraient les délais ?"</li>
-                  <li>• "Et pour la formation des professeurs ?"</li>
-                  <li>• "Le budget pourrait être validé si..."</li>
-                </ul>
+            {scenario?.closingTechniques?.buyingSignals ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {scenario.closingTechniques.buyingSignals.map((signal, index) => (
+                  <div key={index} className="p-3 border rounded-lg">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm">{signal}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-              
-              <div className="p-3 border rounded-lg">
-                <h5 className="font-medium text-sm mb-2">Signaux comportementaux</h5>
-                <ul className="text-xs space-y-1">
-                  <li>• Prend des notes détaillées</li>
-                  <li>• Pose questions techniques précises</li>
-                  <li>• Évoque planning/organisation interne</li>
-                  <li>• Demande références clients</li>
-                </ul>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-3 border rounded-lg">
+                  <h5 className="font-medium text-sm mb-2">Signaux verbaux</h5>
+                  <ul className="text-xs space-y-1">
+                    <li>• "Comment se passerait l'intégration ?"</li>
+                    <li>• "Quels seraient les délais ?"</li>
+                    <li>• "Et pour la formation des équipes ?"</li>
+                    <li>• "Le budget pourrait être validé si..."</li>
+                  </ul>
+                </div>
+                
+                <div className="p-3 border rounded-lg">
+                  <h5 className="font-medium text-sm mb-2">Signaux comportementaux</h5>
+                  <ul className="text-xs space-y-1">
+                    <li>• Prend des notes détaillées</li>
+                    <li>• Pose questions techniques précises</li>
+                    <li>• Évoque planning/organisation interne</li>
+                    <li>• Demande références clients</li>
+                  </ul>
+                </div>
+                
+                <div className="p-3 border rounded-lg">
+                  <h5 className="font-medium text-sm mb-2">Signaux d'engagement</h5>
+                  <ul className="text-xs space-y-1">
+                    <li>• Propose de rencontrer l'équipe</li>
+                    <li>• Suggère démonstration élargie</li>
+                    <li>• Évoque validation direction générale</li>
+                    <li>• Demande proposition formelle</li>
+                  </ul>
+                </div>
               </div>
-              
-              <div className="p-3 border rounded-lg">
-                <h5 className="font-medium text-sm mb-2">Signaux d'engagement</h5>
-                <ul className="text-xs space-y-1">
-                  <li>• Propose de rencontrer l'équipe</li>
-                  <li>• Suggère démonstration élargie</li>
-                  <li>• Évoque validation direction générale</li>
-                  <li>• Demande proposition formelle</li>
-                </ul>
-              </div>
-            </div>
+            )}
           </div>
 
           <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
             <h4 className="font-semibold text-green-800 mb-2">Moment optimal de closing</h4>
             <p className="text-sm text-green-700">
-              Après démonstration du pilote et présentation des résultats tangibles. 
-              L'enthousiasme est à son maximum, les bénéfices sont prouvés, 
-              les objections ont été traitées. C'est le moment de transformer l'essai.
+              {scenario?.closingTechniques?.industryAdapted 
+                ? `Contexte ${scenario.company?.sector}: après démonstration ROI tangible et validation technique. L'impact business est prouvé, les risques adressés.`
+                : "Après démonstration du pilote et présentation des résultats tangibles. L'enthousiasme est à son maximum, les bénéfices sont prouvés, les objections ont été traitées."
+              }
             </p>
           </div>
         </CardContent>
@@ -332,7 +332,7 @@ export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CheckCircle className="h-5 w-5" />
-            Stratégie post-vente et expansion
+            Stratégie post-vente - {scenario?.company?.name}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -340,52 +340,74 @@ export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({
             <div>
               <h4 className="font-semibold mb-3">Onboarding réussi (3 premiers mois)</h4>
               <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">Kick-off avec équipe projet</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">Formation intensive professeurs champions</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">Intégration technique LMS</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">Premiers résultats mesurés et communiqués</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle className="h-4 w-4 text-green-500" />
-                  <span className="text-sm">Ajustements basés sur feedback</span>
-                </div>
+                {scenario?.closingTechniques?.postSaleStrategy ? (
+                  scenario.closingTechniques.postSaleStrategy.slice(0, 5).map((step, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">{step}</span>
+                    </div>
+                  ))
+                ) : (
+                  <>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">Kick-off avec équipe projet</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">Formation équipe utilisateurs</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">Intégration technique complète</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">Premiers résultats mesurés</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500" />
+                      <span className="text-sm">Optimisation continue</span>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
             <div>
               <h4 className="font-semibold mb-3">Opportunités d'expansion</h4>
               <div className="space-y-2">
-                <div className="flex items-start gap-2">
-                  <Target className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm">Extension autres départements (Marketing, RH...)</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Target className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm">Modules complémentaires (négociation B2B, pitch...)</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Target className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm">Formation continue professeurs avancée</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Target className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm">API personnalisations spécifiques ESCAP</p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <Target className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm">Partenariat stratégique co-développement</p>
-                </div>
+                {scenario?.closingTechniques?.postSaleStrategy ? (
+                  scenario.closingTechniques.postSaleStrategy.slice(5).map((opportunity, index) => (
+                    <div key={index} className="flex items-start gap-2">
+                      <Target className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm">{opportunity}</p>
+                    </div>
+                  ))
+                ) : (
+                  <>
+                    <div className="flex items-start gap-2">
+                      <Target className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm">Extension autres départements</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <Target className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm">Modules complémentaires</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <Target className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm">Formation continue équipe</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <Target className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm">Intégrations avancées</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <Target className="h-4 w-4 text-blue-500 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm">Partenariat stratégique</p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </div>
