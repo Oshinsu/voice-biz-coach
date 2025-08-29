@@ -16,7 +16,8 @@ import {
   Volume2,
   Loader2,
   Zap,
-  Settings
+  Settings,
+  Calendar
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -49,6 +50,7 @@ export function AgentsVoiceCoach({ scenario, open = true, onToggle }: AgentsVoic
     exchanges: 0,
     interruptions: 0
   });
+  const [conversationType, setConversationType] = useState<'cold-call' | 'rdv'>('rdv');
   
   // Refs
   const agentsServiceRef = useRef<AgentsVoiceService | null>(null);
@@ -65,7 +67,7 @@ Adaptez vos réponses selon la phase de vente.`;
 
     return generateOptimizedScenarioPrompt({
       scenarioId: scenario.id,
-      conversationType: 'rdv',
+      conversationType: conversationType,
       currentPhase: 'ouverture', 
       trustLevel: 50,
       agentType: 'contact_principal'
@@ -256,6 +258,8 @@ Adaptez vos réponses selon la phase de vente.`;
         isListening={isListening}
         sessionDuration={sessionStats.duration}
         exchanges={sessionStats.exchanges}
+        isMinimized={isMinimized}
+        onToggleMinimize={() => setIsMinimized(!isMinimized)}
       />
     );
   }
@@ -288,6 +292,37 @@ Adaptez vos réponses selon la phase de vente.`;
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Sélection du type de conversation */}
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Type de conversation</label>
+          <div className="flex gap-2">
+            <Button
+              variant={conversationType === 'cold-call' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setConversationType('cold-call')}
+              className="flex-1"
+            >
+              <Phone className="w-4 h-4 mr-1" />
+              Cold Call
+            </Button>
+            <Button
+              variant={conversationType === 'rdv' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setConversationType('rdv')}
+              className="flex-1"
+            >
+              <Calendar className="w-4 h-4 mr-1" />
+              RDV
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {conversationType === 'cold-call' 
+              ? 'Appel à froid pour décrocher un RDV (5-15 min)'
+              : 'Rendez-vous commercial planifié avec toutes les phases (20-45 min)'
+            }
+          </p>
+        </div>
+        
         <div className="text-center">
           <Button
             onClick={startSession}
@@ -295,14 +330,14 @@ Adaptez vos réponses selon la phase de vente.`;
             className="w-full"
             size="lg"
           >
-            <Phone className="h-5 w-5 mr-2" />
+            <Phone className="h-5 h-5 mr-2" />
             {isConnecting ? "Connexion..." : "Démarrer l'Entraînement"}
           </Button>
         </div>
         
         {scenario && (
           <div className="bg-muted/50 rounded-lg p-3 text-center">
-            <h3 className="font-medium text-sm">{scenario.name}</h3>
+            <h3 className="font-medium text-sm">{scenario?.title}</h3>
             <p className="text-xs text-muted-foreground mt-1">
               Entraînement vocal avec IA
             </p>

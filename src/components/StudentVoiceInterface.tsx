@@ -32,6 +32,8 @@ interface StudentVoiceInterfaceProps {
   isListening: boolean;
   sessionDuration: number;
   exchanges: number;
+  isMinimized?: boolean;
+  onToggleMinimize?: () => void;
 }
 
 export function StudentVoiceInterface({
@@ -43,7 +45,9 @@ export function StudentVoiceInterface({
   isSpeaking,
   isListening,
   sessionDuration,
-  exchanges
+  exchanges,
+  isMinimized = false,
+  onToggleMinimize
 }: StudentVoiceInterfaceProps) {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -52,6 +56,24 @@ export function StudentVoiceInterface({
   };
 
   const getScenarioData = () => {
+    // Données spécifiques par scénario avec fallback générique
+    if (scenario?.id === 'digital-agency') {
+      return {
+        name: scenario.interlocutor?.name || 'Sarah Lambert',
+        role: scenario.interlocutor?.role || 'COO - Chief Operating Officer',
+        company: scenario.company?.name || 'Pixel Perfect Agency',
+        sector: scenario.company?.sector || 'Agence Digitale',
+        employee: scenario.company?.size || '12 employés',
+        revenue: scenario.company?.revenue || '1.2M€/an',
+        challenge: scenario.company?.painPoints?.[0] || 'Centralisation outils éparpillés',
+        priority: scenario.interlocutor?.priorities?.[0] || 'Automatisation facturation',
+        personality: scenario.interlocutor?.personality || 'Organisée et efficace',
+        avatar: '👩‍💼',
+        bgColor: 'from-blue-50 to-indigo-50',
+        accentColor: 'blue'
+      };
+    }
+    
     if (scenario?.id === 'kpi-performance') {
       return {
         name: 'Sophie Martin',
@@ -68,16 +90,18 @@ export function StudentVoiceInterface({
         accentColor: 'purple'
       };
     }
+    
+    // Fallback générique utilisant les données du scénario si disponibles
     return {
-      name: 'Assistant Commercial',
-      role: 'Décideur',
-      company: 'Entreprise Cliente',
-      sector: 'Secteur d\'activité',
-      employee: 'Taille équipe',
-      revenue: 'CA estimé',
-      challenge: 'Défi principal',
-      priority: 'Priorité business',
-      personality: 'Profil de personnalité',
+      name: scenario?.interlocutor?.name || 'Assistant Commercial',
+      role: scenario?.interlocutor?.role || 'Décideur',
+      company: scenario?.company?.name || 'Entreprise Cliente',
+      sector: scenario?.company?.sector || 'Secteur d\'activité',
+      employee: scenario?.company?.size || 'Taille équipe',
+      revenue: scenario?.company?.revenue || 'CA estimé',
+      challenge: scenario?.company?.painPoints?.[0] || 'Défi principal',
+      priority: scenario?.interlocutor?.priorities?.[0] || 'Priorité business',
+      personality: scenario?.interlocutor?.personality || 'Profil de personnalité',
       avatar: '🤝',
       bgColor: 'from-blue-50 to-cyan-50',
       accentColor: 'blue'
@@ -115,6 +139,79 @@ export function StudentVoiceInterface({
     }
   };
 
+  // Mode réduit pendant conversation
+  if (isMinimized && isConnected) {
+    return (
+      <div className="fixed bottom-4 right-4 z-50">
+        <Card className="w-80 shadow-2xl border-2">
+          <CardHeader className="pb-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className={cn(
+                  "w-8 h-8 rounded-full flex items-center justify-center text-sm",
+                  isSpeaking 
+                    ? `bg-${data.accentColor}-100 animate-pulse`
+                    : `bg-${data.accentColor}-50`
+                )}>
+                  {data.avatar}
+                </div>
+                <div>
+                  <p className="font-medium text-sm">{data.name}</p>
+                  <p className="text-xs text-muted-foreground">{getCallPhase()}</p>
+                </div>
+              </div>
+              <div className="flex gap-1">
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  onClick={onToggleMinimize}
+                  className="h-6 w-6 p-0"
+                >
+                  ⬆️
+                </Button>
+                <Button 
+                  size="sm" 
+                  variant="ghost" 
+                  onClick={onDisconnect}
+                  className="h-6 w-6 p-0 text-destructive"
+                >
+                  ✕
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="space-y-2">
+              <div className="flex justify-between text-xs">
+                <span>{formatTime(sessionDuration)}</span>
+                <span>{exchanges} échanges</span>
+              </div>
+              <Progress value={getProgress()} className="h-1" />
+              <div className="text-center">
+                {isListening ? (
+                  <Badge variant="default" className="bg-green-600 text-xs">
+                    <Mic className="w-3 h-3 mr-1" />
+                    À vous
+                  </Badge>
+                ) : isSpeaking ? (
+                  <Badge variant="default" className="bg-blue-600 animate-pulse text-xs">
+                    <MessageSquare className="w-3 h-3 mr-1" />
+                    {data.name} répond
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="text-xs">
+                    <MicOff className="w-3 h-3 mr-1" />
+                    En écoute
+                  </Badge>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 z-50">
       {/* Fond avec gradient */}
@@ -126,6 +223,20 @@ export function StudentVoiceInterface({
       
       <div className="relative min-h-screen flex items-center justify-center p-4">
         <div className="w-full max-w-4xl grid gap-6 md:grid-cols-2">
+          
+          {/* Bouton pour minimiser */}
+          {isConnected && onToggleMinimize && (
+            <div className="absolute top-4 right-4">
+              <Button 
+                variant="secondary" 
+                size="sm"
+                onClick={onToggleMinimize}
+                className="bg-background/80 backdrop-blur-sm"
+              >
+                ⬇️ Réduire
+              </Button>
+            </div>
+          )}
           
           {/* Panel Principal - Interlocuteur */}
           <Card className="shadow-2xl border-2">
