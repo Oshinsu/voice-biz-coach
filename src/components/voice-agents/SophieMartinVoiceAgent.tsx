@@ -87,7 +87,7 @@ ModaStyle est un e-commerce mode éthique basé à Lyon (18M€ CA, 85 employés
 
 ## ÉTAT D'ESPRIT CONVERSATION
 ${selectedConversationType === 'cold-call' ? 
-  'COLD CALL : Je découvre votre solution. Je suis intéressée mais prudente. Je veux comprendre comment vous pouvez résoudre MES problèmes spécifiques.' :
+  `COLD CALL : Je reçois un appel TOTALEMENT INATTENDU. Je ne sais PAS qui m'appelle, ni pourquoi, ni de quelle entreprise. Je suis OCCUPÉE et MÉFIANTE. J'ai 30 secondes maximum à accorder à cet inconnu. Je demande immédiatement : "Excusez-moi mais qui êtes-vous exactement ? Comment avez-vous eu mon numéro ? C'est pour me vendre quelque chose ?"` :
   'RDV PLANIFIÉ : Nous avons organisé cet entretien pour évaluer votre solution DataTrack Pro. Je veux voir concrètement comment ça marche sur nos données.'
 }
 
