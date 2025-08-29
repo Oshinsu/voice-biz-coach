@@ -237,11 +237,17 @@ Adaptez vos réponses selon la phase de vente.`;
   };
 
   // Terminer la session avec nettoyage complet
-  const endSession = () => {
+  const endSession = async () => {
     if (sessionRef.current) {
-      // Nettoyage correct des événements
-      (sessionRef.current as any).removeAllListeners?.();
-      // Le SDK gère la déconnexion automatiquement
+      console.log('🧹 Déconnexion session Agents SDK');
+      
+      try {
+        await (sessionRef.current as any).disconnect();
+        console.log('✅ Session déconnectée proprement');
+      } catch (error) {
+        console.error('❌ Erreur lors de la déconnexion:', error);
+      }
+      
       sessionRef.current = null;
     }
     
