@@ -18,21 +18,20 @@ serve(async (req) => {
       throw new Error('OPENAI_API_KEY is not set');
     }
 
-    const { voice = 'alloy', instructions = 'Vous êtes un coach de vente IA expert. Aidez l\'utilisateur à améliorer ses techniques de vente.' } = await req.json();
+    console.log('🎯 Génération token éphémère OpenAI Agents SDK...');
 
-    console.log('🎯 Génération token éphémère OpenAI Realtime API...');
-
-    // Request an ephemeral token from OpenAI
-    const response = await fetch("https://api.openai.com/v1/realtime/sessions", {
+    // Request an ephemeral client token from OpenAI (correct endpoint for Agents SDK)
+    const response = await fetch("https://api.openai.com/v1/realtime/client_secrets", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o-realtime-preview-2024-12-17",
-        voice: voice,
-        instructions: instructions + " Tu DOIS toujours répondre en français uniquement."
+        session: {
+          type: "realtime",
+          model: "gpt-realtime"
+        }
       }),
     });
 
