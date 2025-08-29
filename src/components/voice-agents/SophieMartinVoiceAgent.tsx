@@ -137,9 +137,11 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
       
       if (error) throw error;
       console.log('📡 Réponse Supabase token:', tokenData);
+      console.log('📡 Structure complète tokenData:', JSON.stringify(tokenData, null, 2));
       
-      // Adapter à la nouvelle structure de réponse OpenAI Realtime API
+      // Corriger structure selon l'edge function realtime-token
       if (!tokenData?.client_secret?.value) {
+        console.error('❌ Structure token incorrecte. Attendu: client_secret.value, reçu:', Object.keys(tokenData || {}));
         throw new Error("Token éphémère non reçu - structure réponse inattendue");
       }
 
@@ -219,6 +221,7 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
       });
 
       // Connexion avec token éphémère
+      console.log('🔑 Tentative connexion avec token:', typeof tokenData.client_secret?.value);
       await session.connect({
         apiKey: tokenData.client_secret.value
       });
