@@ -53,6 +53,14 @@ export const GenericMarketingStrategy: React.FC<GenericMarketingStrategyProps> =
           expectedROI: "+35% ROAS, -28% CAC",
           keyPlayers: ["Google Analytics", "Northbeam", "Triple Whale"]
         };
+      case 'retail-personalization':
+        return {
+          marketSize: "12.1B€ e-commerce mode France, 890B$ mondial",
+          growthRate: "+11% CAGR e-commerce, +35% IA retail",
+          budgetRange: "80K-150K€/an transformation digitale",
+          expectedROI: "+65% conversion, +45% panier moyen, -25% invendus",
+          keyPlayers: ["Dynamic Yield", "Monetate", "Yotpo", "Klaviyo", "Optimizely"]
+        };
       default:
         return {
           marketSize: "Marché en forte croissance",
@@ -85,6 +93,12 @@ export const GenericMarketingStrategy: React.FC<GenericMarketingStrategyProps> =
           { name: 'Retail Omnicanal', size: '35%', growth: '+22%' },
           { name: 'DTC Brands', size: '25%', growth: '+38%' }
         ];
+      case 'retail-personalization':
+        return [
+          { name: 'Retail Mode Féminine', size: '42%', growth: '+28%' },
+          { name: 'Chaînes Omnicanal', size: '38%', growth: '+35%' },
+          { name: 'E-commerce Pure', size: '20%', growth: '+18%' }
+        ];
       default:
         return [
           { name: 'PME Innovantes', size: '45%', growth: '+20%' },
@@ -114,6 +128,12 @@ export const GenericMarketingStrategy: React.FC<GenericMarketingStrategyProps> =
           primary: 'Attribution précise cross-canal',
           secondary: 'Setup 24h vs semaines',
           differentiation: 'Spécialisation e-commerce vs généralistes'
+        };
+      case 'retail-personalization':
+        return {
+          primary: 'IA visuelle spécialisée mode',
+          secondary: 'Omnicanal natif vs pure e-commerce',
+          differentiation: 'Expertise retail française vs géants US'
         };
       default:
         return {
@@ -148,12 +168,12 @@ export const GenericMarketingStrategy: React.FC<GenericMarketingStrategyProps> =
           'Content attribution & iOS 14.5+ challenges',
           'Communauté growth marketers e-commerce'
         ];
-      default:
+      case 'retail-personalization':
         return [
-          'Événements sectoriels spécialisés',
-          'Partenariats technologiques stratégiques',
-          'Marketing de contenu expert',
-          'Réseau professionnel ciblé'
+          'Salons retail (E-commerce Paris, FEVAD, Retail & Digital)',
+          'Partenariats Shopify Plus, Salesforce Commerce Cloud',
+          'Content marketing omnicanal et personnalisation IA',
+          'Réseau retail managers et directeurs digitaux mode'
         ];
     }
   };
