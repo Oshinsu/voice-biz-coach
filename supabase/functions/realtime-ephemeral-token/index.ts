@@ -28,12 +28,8 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        session: {
-          type: "realtime",
-          model: "gpt-realtime",
-          voice: "alloy",
-          instructions: "You are Sophie Martin, a professional and experienced business consultant at ModaStyle."
-        }
+        model: "gpt-4o-realtime-preview-2024-12-17",
+        voice: "alloy"
       }),
     });
 
