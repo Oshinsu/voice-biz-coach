@@ -150,38 +150,64 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
         instructions: getSophieSystemPrompt()
       });
 
-      // Créer une nouvelle session avec le modèle gpt-realtime
-      const session = new RealtimeSession(agent);
+      // Créer une nouvelle session avec configuration avancée
+      const session = new RealtimeSession(agent, {
+        model: 'gpt-realtime',
+        config: {
+          inputAudioFormat: 'pcm16',
+          outputAudioFormat: 'pcm16',
+          inputAudioTranscription: {
+            model: 'gpt-4o-mini-transcribe',
+          },
+          turnDetection: {
+            type: 'semantic_vad',
+            eagerness: 'medium',
+            createResponse: true,
+            interruptResponse: true,
+          }
+        }
+      });
 
-      // Configuration avec handlers simples pour démarrage
-      console.log('✅ Session Sophie créée');
-      setIsConnected(true);
-      setIsConnecting(false);
-      startTimeRef.current = new Date();
-      addMessage("Session démarrée avec Sophie Martin", 'agent', 'text');
-
-      // Simpler state management for MVP
-      const handleSpeaking = () => {
-        console.log('🗣️ Sophie parle');
+      // Configuration événements audio et interruptions
+      session.on('audio', (event: any) => {
+        console.log('🔊 Événement audio:', event);
+        // Gérer les événements audio selon leur structure réelle
         setIsSpeaking(true);
-        setIsListening(false);
-      };
+      });
 
-      const handleListening = () => {
-        console.log('👂 Sophie écoute');
+      session.on('audio_interrupted', () => {
+        console.log('🛑 Audio interrompu');
         setIsSpeaking(false);
-        setIsListening(true);
-      };
+        addMessage("Conversation interrompue", 'user', 'interruption');
+        setExchangeCount(prev => prev + 1);
+      });
 
-      // Store handlers for potential future event binding
-      (session as any).handleSpeaking = handleSpeaking;
-      (session as any).handleListening = handleListening;
+      session.on('history_updated', (history: any[]) => {
+        console.log('📝 Historique mis à jour:', history.length, 'éléments');
+        setExchangeCount(history.filter(item => item.type === 'message' && (item as any).role === 'user').length);
+      });
 
+      session.on('error', (error: any) => {
+        console.error('❌ Erreur session:', error);
+        toast({
+          title: "Erreur session",
+          description: error?.message || "Erreur inconnue",
+          variant: "destructive"
+        });
+      });
+
+      console.log('✅ Session Sophie créée avec configuration avancée');
+      
       // Connexion directe avec API key
       console.log('🔑 Connexion WebRTC directe...');
       await session.connect({
         apiKey: keyData.apiKey
       });
+
+      setIsConnected(true);
+      setIsConnecting(false);
+      startTimeRef.current = new Date();
+      addMessage("Session Sophie Martin démarrée avec WebRTC avancé", 'agent', 'text');
       
       agentRef.current = agent;
       sessionRef.current = session;
