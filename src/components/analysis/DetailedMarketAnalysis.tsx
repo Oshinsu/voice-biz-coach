@@ -65,6 +65,47 @@ const getMarketData = (scenarioId: string) => {
         { metric: 'Gaspillage Budget', value: '30%', target: '15%', gap: 15 }
       ]
     },
+    'fintech-startup': {
+      sector: 'Fintech - Crédit PME',
+      totalMarketSize: '€15.2Md',
+      growth: '+22%',
+      playerCount: '2,500+',
+      averageSize: '25 employés',
+      segmentation: [
+        { name: 'Crédit PME', value: 42, revenue: '€6.4Md' },
+        { name: 'Néobanques B2B', value: 35, revenue: '€5.3Md' },
+        { name: 'Solutions Scoring', value: 23, revenue: '€3.5Md' }
+      ],
+      growthTrends: [
+        { year: '2022', market: 9500, digital: 8200 },
+        { year: '2023', market: 11800, digital: 10600 },
+        { year: '2024', market: 15200, digital: 14200 },
+        { year: '2025', market: 19100, digital: 18400 },
+        { year: '2026', market: 24500, digital: 23800 }
+      ],
+      painPoints: [
+        { issue: 'Évaluation crédit manuelle chronophage', impact: 85, cost: '€120k/an' },
+        { issue: 'Taux défaut supérieur objectifs réglementaires', impact: 80, cost: '€180k/an' },
+        { issue: 'Capacité analyse limitée vs demande', impact: 75, cost: '€95k/an' },
+        { issue: 'Concurrence néobanques automatisées', impact: 70, cost: '€85k/an' },
+        { issue: 'Validation réglementaire complexe', impact: 65, cost: '€65k/an' }
+      ],
+      tools: [
+        { category: 'Credit Scoring Manuel', adoption: 85, satisfaction: 60 },
+        { category: 'Solutions IA Basiques', adoption: 35, satisfaction: 55 },
+        { category: 'APIs Banque de France', adoption: 95, satisfaction: 70 },
+        { category: 'Platforms Analytics', adoption: 45, satisfaction: 65 },
+        { category: 'CreditAI Engine', adoption: 8, satisfaction: 90 }
+      ],
+      financialMetrics: [
+        { metric: 'Taux de Défaut', value: '3.2%', target: '2%', gap: 1.2 },
+        { metric: 'Temps Analyse', value: '4h', target: '30min', gap: -90 },
+        { metric: 'Capacité Hebdo', value: '50', target: '100', gap: -50 },
+        { metric: 'Ticket Moyen', value: '45k€', target: '50k€', gap: -5 },
+        { metric: 'Coût par Analyse', value: '€180', target: '€45', gap: 135 },
+        { metric: 'ROI Investment', value: '12%', target: '35%', gap: -23 }
+      ]
+    },
     'byss-vns-school': {
       sector: 'EdTech - Enseignement Supérieur',
       totalMarketSize: '€15.2Md',
@@ -141,46 +182,6 @@ const getMarketData = (scenarioId: string) => {
         { metric: 'Taux utilisation', value: '68%', target: '80%', gap: -12 },
         { metric: 'Délai paiement', value: '45j', target: '30j', gap: 15 },
         { metric: 'Coût acquisition', value: '€2,800', target: '€2,000', gap: 800 }
-      ]
-    },
-    'fintech-startup': {
-      sector: 'Fintech',
-      totalMarketSize: '€89Md',
-      growth: '+15.2%',
-      playerCount: '8,500+',
-      averageSize: '45 employés',
-      segmentation: [
-        { name: 'Paiements', value: 32, revenue: '€28.5Md' },
-        { name: 'Néobanques', value: 28, revenue: '€24.9Md' },
-        { name: 'Investissement', value: 22, revenue: '€19.6Md' },
-        { name: 'Assurance', value: 18, revenue: '€16Md' }
-      ],
-      growthTrends: [
-        { year: '2022', market: 65000, digital: 58000 },
-        { year: '2023', market: 75000, digital: 69000 },
-        { year: '2024', market: 89000, digital: 83000 },
-        { year: '2025', market: 105000, digital: 99000 },
-        { year: '2026', market: 125000, digital: 120000 }
-      ],
-      painPoints: [
-        { issue: 'Conformité réglementaire', impact: 92, cost: '€85k/an' },
-        { issue: 'Sécurité données', impact: 89, cost: '€120k/an' },
-        { issue: 'Intégration bancaire', impact: 78, cost: '€65k/an' },
-        { issue: 'UX/Onboarding', impact: 75, cost: '€45k/an' },
-        { issue: 'Scalabilité tech', impact: 70, cost: '€95k/an' }
-      ],
-      tools: [
-        { category: 'Sécurité', adoption: 95, satisfaction: 78 },
-        { category: 'Analytics', adoption: 85, satisfaction: 72 },
-        { category: 'API Banking', adoption: 88, satisfaction: 65 },
-        { category: 'CRM', adoption: 78, satisfaction: 80 },
-        { category: 'Compliance', adoption: 92, satisfaction: 68 }
-      ],
-      financialMetrics: [
-        { metric: 'CAC', value: '€125', target: '€85', gap: 40 },
-        { metric: 'LTV/CAC', value: '3.2x', target: '5x', gap: -1.8 },
-        { metric: 'Churn mensuel', value: '8%', target: '3%', gap: 5 },
-        { metric: 'ARR growth', value: '45%', target: '80%', gap: -35 }
       ]
     },
     'cybersecurity-consulting': {
@@ -518,7 +519,9 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Target className="h-5 w-5" />
-            {scenarioId === 'kpi-performance' ? 'Performance ModaStyle vs Objectifs' : 'Performance financière du secteur'}
+            {scenarioId === 'kpi-performance' ? 'Performance ModaStyle vs Objectifs' : 
+             scenarioId === 'fintech-startup' ? 'Performance FlexCredit vs Objectifs Réglementaires' : 
+             'Performance financière du secteur'}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -531,6 +534,19 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
               <p className="text-sm text-amber-700">
                 30% du budget marketing (630K€/an sur 2.1M€) est gaspillé à cause de l'attribution imprécise. 
                 Le pic de saisonnalité de 40% au printemps n'est pas optimisé.
+              </p>
+            </div>
+          )}
+
+          {scenarioId === 'fintech-startup' && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+              <div className="flex items-center gap-2 text-red-800 mb-2">
+                <AlertTriangle className="h-5 w-5" />
+                <span className="font-semibold">Urgence Réglementaire FlexCredit</span>
+              </div>
+              <p className="text-sm text-red-700">
+                Taux de défaut 3.2% dépasse l'objectif réglementaire 2% de la Banque de France. 
+                Risque de sanctions si non-conformité maintenue. Analyse manuelle 4h/dossier bride la croissance.
               </p>
             </div>
           )}
@@ -634,6 +650,67 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
                     </div>
                     <div className="pt-2 text-sm text-muted-foreground">
                       ModaStyle surperforme le secteur mais reste sous le potentiel optimal
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
+          {/* FlexCredit specific insights */}
+          {scenarioId === 'fintech-startup' && (
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="border-red-200">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5 text-red-600" />
+                    Conformité Réglementaire
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span>Taux Défaut Actuel</span>
+                      <span className="font-bold text-red-600">3.2%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Objectif Banque de France</span>
+                      <span className="font-bold text-green-600">2%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Risque Sanctions</span>
+                      <span className="font-bold text-red-600">ÉLEVÉ</span>
+                    </div>
+                    <div className="pt-2 text-sm text-muted-foreground">
+                      Urgence: Réduire le défaut sous 2% avant contrôle Q2 2024
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-blue-200">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Target className="h-5 w-5 text-blue-600" />
+                    Capacité vs Concurrence
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span>FlexCredit Actuel</span>
+                      <span className="font-bold text-red-600">50 dossiers/sem</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Objectif Croissance</span>
+                      <span className="font-bold text-blue-600">100 dossiers/sem</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Néobanques IA</span>
+                      <span className="font-bold text-green-600">200+ dossiers/sem</span>
+                    </div>
+                    <div className="pt-2 text-sm text-muted-foreground">
+                      Analyse IA nécessaire pour rester compétitif face à Qonto/Pennylane
                     </div>
                   </div>
                 </CardContent>
