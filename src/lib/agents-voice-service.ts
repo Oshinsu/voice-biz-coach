@@ -140,6 +140,7 @@ export class AgentsVoiceService {
         const sessionUpdate = {
           type: 'session.update',
           session: {
+            type: 'realtime', // CRITIAL: Paramètre manquant pour Agent SDK
             instructions: this.config.instructions,
             modalities: ['text', 'audio'],
             voice: this.config.voice || 'alloy',
