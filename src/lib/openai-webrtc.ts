@@ -1,6 +1,6 @@
 // Configuration WebRTC pour l'API Realtime d'OpenAI (Version 2025)
 export const WEBRTC_CONFIG = {
-  model: "gpt-4o-realtime-preview-2025-06-03", // Modèle le plus récent
+  model: "gpt-realtime-2025-08-28", // Modèle le plus récent
   voice: "sage", // Voix professionnelle par défaut
   baseUrl: "https://api.openai.com/v1/realtime",
   sessionUrl: "https://api.openai.com/v1/realtime/sessions",

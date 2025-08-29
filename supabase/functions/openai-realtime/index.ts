@@ -21,7 +21,7 @@ serve(async (req) => {
       throw new Error('OPENAI_API_KEY is not set');
     }
 
-    const { instructions, voice = 'sage', model = 'gpt-4o-realtime-preview-2025-06-03' } = await req.json();
+    const { instructions, voice = 'sage', model = 'gpt-realtime-2025-08-28' } = await req.json();
 
     // Validation de la voix
     const selectedVoice = SUPPORTED_VOICES.includes(voice) ? voice : 'sage';

@@ -1,6 +1,6 @@
 // Configuration pour l'API Realtime d'OpenAI (nouvelle version 2025)
 export const REALTIME_CONFIG = {
-  model: "gpt-4o-realtime-preview-2025-06-03",
+  model: "gpt-realtime-2025-08-28",
   voice: "sage", // Voix professionnelle et claire
   baseUrl: "https://api.openai.com/v1/realtime",
   wsUrl: "wss://api.openai.com/v1/realtime",
