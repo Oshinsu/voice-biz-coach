@@ -4,10 +4,11 @@ import { Card } from "@/components/ui/card";
 import { Mic, Phone, PhoneOff, MessageSquare, BookOpen, Target, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import heroImage from "@/assets/coach-hero.jpg";
 
-// Configuration API OpenAI - remplacez par votre clé API
-const OPENAI_API_KEY = "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";
+// Configuration sécurisée via Supabase Edge Function
+// L'API key est maintenant stockée de manière sécurisée dans les secrets Supabase
 
 export const VoiceCoach = () => {
   const { toast } = useToast();
@@ -22,28 +23,20 @@ export const VoiceCoach = () => {
   const startConversation = useCallback(async () => {
     setIsConnecting(true);
     try {
-      // Étape 1: Créer une session éphémère avec OpenAI
+      // Étape 1: Créer une session éphémère via Supabase Edge Function
       console.log("Création de la session éphémère...");
-      const sessionResponse = await fetch("https://api.openai.com/v1/realtime/sessions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${OPENAI_API_KEY}`,
-          "Content-Type": "application/json",
-          "OpenAI-Beta": "realtime=v1"
-        },
-        body: JSON.stringify({
-          model: "gpt-4o-realtime-preview-2024-12-17",
-          voice: "sage"
-        })
+      const { data: sessionData, error: sessionError } = await supabase.functions.invoke('openai-realtime', {
+        body: {
+          instructions: "Tu es un coach commercial expert et bienveillant...",
+          voice: "sage",
+          model: "gpt-4o-realtime-preview-2024-12-17"
+        }
       });
 
-      if (!sessionResponse.ok) {
-        const errorText = await sessionResponse.text();
-        console.error("Erreur session:", sessionResponse.status, errorText);
-        throw new Error(`Erreur lors de la création de la session: ${sessionResponse.status} - ${errorText}`);
+      if (sessionError || !sessionData) {
+        console.error("Erreur session:", sessionError);
+        throw new Error(`Erreur lors de la création de la session: ${sessionError?.message || 'Session non créée'}`);
       }
-
-      const sessionData = await sessionResponse.json();
       console.log("Session créée:", sessionData);
 
       // Étape 2: Demander l'accès au microphone

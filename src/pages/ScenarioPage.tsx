@@ -5,7 +5,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useScenarios } from "@/hooks/useScenarios";
 import { useSalesStore } from "@/store/salesStore";
 import { useEffect } from "react";
-import { EnhancedVoiceCoach } from "@/components/EnhancedVoiceCoach";
+import { UnifiedVoiceCoach } from "@/components/UnifiedVoiceCoach";
 import { ScenarioDetails } from "@/components/ScenarioDetails";
 
 export default function ScenarioPage() {
@@ -66,7 +66,7 @@ export default function ScenarioPage() {
       </div>
 
       {/* Voice Coach Widget */}
-      <EnhancedVoiceCoach scenario={scenario} />
+      <UnifiedVoiceCoach scenario={scenario} />
     </div>
   );
 }
