@@ -115,13 +115,13 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
             </div>
             <div className="text-center p-4 bg-accent/5 rounded-lg">
               <DollarSign className="h-6 w-6 mx-auto mb-2 text-accent" />
-              <p className="text-xs text-muted-foreground uppercase tracking-wide">Budget Innovation</p>
-              <p className="text-sm font-medium">12M€/an</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wide">Budget</p>
+              <p className="text-sm font-medium">{scenario.company.budget}</p>
             </div>
             <div className="text-center p-4 bg-muted/5 rounded-lg">
               <Users className="h-6 w-6 mx-auto mb-2" />
               <p className="text-xs text-muted-foreground uppercase tracking-wide">Taille</p>
-              <p className="text-sm font-medium">2,800 étudiants</p>
+              <p className="text-sm font-medium">{scenario.company.size}</p>
             </div>
           </div>
         </CardContent>

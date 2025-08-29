@@ -311,5 +311,63 @@ export const digitalAgencyScenario: Scenario = {
       evidence: "200+ connecteurs + équipe d'intégration dédiée",
       nextStep: "Audit technique de vos intégrations actuelles + plan de migration"
     }
-  ]
+  ],
+
+  // Métriques de performance spécifiques aux agences digitales
+  performanceMetrics: {
+    kpis: [
+      { name: "Marge projet", current: "25%", target: "30%", category: "Rentabilité" },
+      { name: "Taux utilisation", current: "75%", target: "85%", category: "Productivité" },
+      { name: "Délai facturation", current: "45 jours", target: "7 jours", category: "Cash-flow" },
+      { name: "Retard projet", current: "23%", target: "5%", category: "Livraison" }
+    ],
+    industrySpecific: {
+      projectMargins: "25% marge moyenne (objectif 30%)",
+      billingRate: "1200€/jour consultant senior",
+      utilization: "75% taux utilisation équipe",
+      clientRetention: "85% rétention clients (industrie: 70%)"
+    }
+  },
+
+  // Conseils tactiques pour approche commerciale agence
+  tacticalAdvice: {
+    coldCall: [
+      "Éviter périodes de pitch (début/fin mois)",
+      "Axer différenciation vs agences réseau",
+      "7 minutes max, COO très sollicité"
+    ],
+    rdv: [
+      "Démo live 30min entre deux pitchs clients",
+      "Focus ROI concret sur marge et différenciation",
+      "Business case personnalisé sous 48h"
+    ],
+    industrySpecific: [
+      "Spécialisation agences créatives",
+      "Argumentaire marge et temps facturable",
+      "Démonstration impact client concret"
+    ]
+  },
+
+  // Techniques de closing personnalisées agence digitale
+  closingTechniques: {
+    buyingSignals: [
+      "Questions sur cas clients agences similaires",
+      "Demande timeline implémentation",
+      "Questions pricing différents plans",
+      "Évocation discussions équipe/CEO",
+      "Demande démo approfondie modules"
+    ],
+    scripts: [
+      "Sarah, vous évoquiez la pression sur vos marges. Nos clients agences gagnent 5-8 points de marge dès la première année. Quand souhaitez-vous démarrer ?",
+      "Pixel Perfect a le potentiel pour dominer le marché luxe parisien. Notre plateforme vous donne l'avantage. Validons ensemble le pilote 3 mois ?",
+      "Vos concurrents utilisent déjà des solutions similaires. Attendre vous fait prendre du retard. Lançons le projet ce trimestre ?"
+    ],
+    postSaleStrategy: [
+      "Onboarding dédié agence : mapping processus + formation équipe",
+      "Success manager spécialisé agences créatives",
+      "KPI dashboard : marge projet + temps billable + satisfaction",
+      "Quarterly business review + optimisations"
+    ],
+    industryAdapted: true
+  }
 };

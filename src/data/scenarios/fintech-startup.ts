@@ -302,5 +302,63 @@ export const fintechStartupScenario: Scenario = {
       evidence: "Calcul ROI personnalisé + cas clients croissance similaire",
       nextStep: "Business case détaillé avec CFO + modèle pricing adaptatif"
     }
-  ]
+  ],
+
+  // Métriques de performance spécifiques fintech
+  performanceMetrics: {
+    kpis: [
+      { name: "Taux de défaut", current: "3.2%", target: "2%", category: "Risque" },
+      { name: "Temps d'analyse", current: "4h", target: "30min", category: "Efficacité" },
+      { name: "Capacité hebdo", current: "50 dossiers", target: "100 dossiers", category: "Volume" },
+      { name: "Ticket moyen", current: "45k€", target: "50k€", category: "Business" }
+    ],
+    industrySpecific: {
+      defaultRate: "3.2% vs objectif 2% (obligation réglementaire)",
+      processingTime: "4h/dossier vs 30min concurrence",
+      weeklyCapacity: "50 dossiers/semaine max (objectif 100)",
+      averageTicket: "45k€ crédit moyen PME"
+    }
+  },
+
+  // Conseils tactiques approche commerciale fintech
+  tacticalAdvice: {
+    coldCall: [
+      "Éviter fin de trimestre (reporting réglementaire)",
+      "Axer conformité réglementaire urgente",
+      "Profil analytique précis, preuves statistiques"
+    ],
+    rdv: [
+      "Présentation technique 45min avec backtests",
+      "Focus taux défaut + vitesse analyse + capacité",
+      "Backtest sur données historiques FlexCredit"
+    ],
+    industrySpecific: [
+      "Spécialisation fintech/risk management",
+      "Argumentaire conformité réglementaire", 
+      "Validation statistique obligatoire"
+    ]
+  },
+
+  // Techniques de closing spécifiques fintech/risk
+  closingTechniques: {
+    buyingSignals: [
+      "Questions détaillées sur modèles statistiques",
+      "Demande backtest sur données historiques", 
+      "Questions conformité réglementaire Banque de France",
+      "Intérêt pour pilote sur portefeuille non-critique",
+      "Discussion timeline validation réglementaire"
+    ],
+    scripts: [
+      "Marc, vos objectifs réglementaires 2% sont critiques. Notre pilote 3 mois vous donne les preuves nécessaires. Démarrons dès maintenant ?",
+      "FlexCredit a le potentiel pour devenir leader crédit PME IA. Notre technologie vous y mène. Validons le projet pilote ?",
+      "Chaque semaine de retard vous coûte en capacité et conformité. Lançons le backtest cette semaine ?"
+    ],
+    postSaleStrategy: [
+      "Intégration technique progressive avec équipe risk",
+      "Formation spécialisée analystes crédit + certification", 
+      "Support réglementaire continu Banque de France",
+      "Monitoring performance + optimisation modèles"
+    ],
+    industryAdapted: true
+  }
 };
