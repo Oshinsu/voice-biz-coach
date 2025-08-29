@@ -82,17 +82,27 @@ Adaptez vos réponses selon la phase de vente.`;
       setError(null);
       sessionStartRef.current = new Date();
 
-      console.log('🚀 Démarrage session Agents SDK pure...');
+      console.log('🚀 Démarrage session Agents SDK avec token éphémère...');
 
-      // Récupérer la clé API OpenAI depuis Supabase
-      const { data: keyData, error } = await supabase.functions.invoke('get-openai-key', {});
+      // Générer les instructions du scénario
+      const instructions = generateScenarioInstructions(scenario);
 
-      if (error || !keyData?.OPENAI_API_KEY) {
-        throw new Error('Impossible d\'obtenir la clé API OpenAI');
+      // Obtenir un token éphémère depuis notre Edge Function
+      const { data: tokenData, error } = await supabase.functions.invoke('realtime-token', {
+        body: { 
+          voice: 'alloy',
+          instructions: instructions
+        }
+      });
+
+      if (error || !tokenData?.client_secret?.value) {
+        console.error('❌ Erreur token éphémère:', error);
+        throw new Error('Impossible d\'obtenir le token éphémère OpenAI');
       }
 
+      console.log('✅ Token éphémère obtenu');
+
       // Créer l'agent avec les instructions
-      const instructions = generateScenarioInstructions(scenario);
       const agent = new RealtimeAgent({
         name: "Coach StyleChain",
         instructions: instructions + " Tu DOIS toujours répondre en français uniquement.",
@@ -103,9 +113,9 @@ Adaptez vos réponses selon la phase de vente.`;
       const session = new RealtimeSession(agent);
       sessionRef.current = session;
 
-      // Connexion directe avec clé API (l'Agents SDK gère tout automatiquement)
+      // Connexion avec token éphémère (recommandé par OpenAI)
       await session.connect({
-        apiKey: keyData.OPENAI_API_KEY
+        apiKey: tokenData.client_secret.value
       });
 
       console.log('✅ Session Agents SDK connectée');
