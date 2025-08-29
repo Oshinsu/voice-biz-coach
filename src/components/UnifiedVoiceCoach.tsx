@@ -1,4 +1,4 @@
-import { SophieMartinVoiceAgent, GenericVoiceAgent } from './voice-agents';
+import { SophieMartinVoiceAgent } from './voice-agents';
 
 interface UnifiedVoiceCoachProps {
   scenario?: any;
@@ -14,23 +14,27 @@ export function UnifiedVoiceCoach({ scenario, open = true, onToggle }: UnifiedVo
   // Mapping scénarios → agents vocaux dédiés
   const getVoiceAgent = () => {
     if (!scenario) {
-      return <GenericVoiceAgent scenario={scenario} open={open} onToggle={onToggle} />;
+      return <div className="text-muted-foreground p-4">Aucun scénario sélectionné</div>;
     }
 
     switch (scenario.id) {
       case 'kpi-performance':
-        // Utiliser AgentsVoiceCoach qui fonctionne avec Sophie's prompt intégré
-        return <GenericVoiceAgent scenario={scenario} open={open} onToggle={onToggle} />;
+        return <SophieMartinVoiceAgent conversationType="cold-call" open={open} onToggle={onToggle} />;
       
-      // TODO: Ajouter les autres personas
+      // TODO: Agents spécialisés à créer
       // case 'fintech-startup':
-      //   return <PierreVoiceAgent ... />;
+      //   return <PierreVoiceAgent conversationType="cold-call" open={open} onToggle={onToggle} />;
       // case 'retail-personalization':
-      //   return <ClaireVoiceAgent ... />;
+      //   return <ClaireVoiceAgent conversationType="cold-call" open={open} onToggle={onToggle} />;
       
       default:
-        // Fallback vers l'ancien système
-        return <GenericVoiceAgent scenario={scenario} open={open} onToggle={onToggle} />;
+        // Fallback temporaire - agent en développement
+        return (
+          <div className="text-muted-foreground p-4 text-center">
+            <p>Agent vocal en développement pour ce scénario</p>
+            <p className="text-sm mt-2">Scénario: {scenario.title}</p>
+          </div>
+        );
     }
   };
 
