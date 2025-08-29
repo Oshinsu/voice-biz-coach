@@ -57,22 +57,18 @@ export function AgentsVoiceCoach({ scenario, open = true, onToggle }: AgentsVoic
   const sessionRef = useRef<RealtimeSession | null>(null);
   const sessionStartRef = useRef<Date | null>(null);
 
-  // Génération des instructions basée sur le scénario
+  // Génération des instructions basée sur le scénario - DIRECT POUR SOPHIE MARTIN
   const generateScenarioInstructions = (scenario: any): string => {
-    if (!scenario) {
+    if (!scenario || scenario.id !== 'kpi-performance') {
       return `# AGENT COMMERCIAL GÉNÉRIQUE
 Vous êtes un expert commercial pour simulation d'entraînement.
 Personnalité professionnelle, empathique, orientée solutions.
 Adaptez vos réponses selon la phase de vente.`;
     }
 
-    return generateOptimizedScenarioPrompt({
-      scenarioId: scenario.id,
-      conversationType: conversationType,
-      currentPhase: 'ouverture', 
-      trustLevel: 50,
-      agentType: 'sophie_martin'
-    });
+    // Utilisation directe du prompt Sophie Martin pour éviter les couches complexes
+    const kpiPrompts = new (require('@/lib/prompts/scenarios/kpi-performance-optimized').OptimizedKpiPerformancePrompts)();
+    return kpiPrompts.generateVocalOptimizedSophiePrompt(conversationType);
   };
 
   // Démarrer la session Agents SDK avec événements complets
@@ -142,7 +138,7 @@ Adaptez vos réponses selon la phase de vente.`;
         console.log('⏸️ IA arrête de parler');
         setIsSpeaking(false);
         setIsListening(true);
-        setSessionStats(prev => ({ ...prev, exchanges: prev.exchanges + 1 }));
+        // Les échanges sont maintenant comptés dans history_updated
       });
 
       // ✅ ÉVÉNEMENT INTERRUPTION
@@ -160,9 +156,15 @@ Adaptez vos réponses selon la phase de vente.`;
         });
       });
 
-      // ✅ ÉVÉNEMENT HISTORIQUE
+      // ✅ ÉVÉNEMENT HISTORIQUE - AVEC COMPTEUR D'ÉCHANGES
       session.on('history_updated' as any, (history: any[]) => {
         console.log('📝 Historique mis à jour:', history.length, 'éléments');
+        
+        // Compter les échanges (messages de l'assistant = réponses)
+        const assistantMessages = history.filter((item: any) => 
+          item.type === 'message' && item.role === 'assistant'
+        );
+        setSessionStats(prev => ({ ...prev, exchanges: assistantMessages.length }));
         
         // Convertir l'historique en messages pour l'UI
         const newMessages = history
@@ -236,7 +238,7 @@ Adaptez vos réponses selon la phase de vente.`;
     }
   };
 
-  // Terminer la session avec nettoyage complet
+  // Terminer la session avec nettoyage complet ET fermeture interface
   const endSession = async () => {
     if (sessionRef.current) {
       console.log('🧹 Déconnexion session Agents SDK');
@@ -274,6 +276,9 @@ Adaptez vos réponses selon la phase de vente.`;
       timestamp: new Date(),
       type: "text"
     });
+
+    // FERMER L'INTERFACE COMPLETEMENT
+    onToggle?.();
   };
 
   // Interruption manuelle

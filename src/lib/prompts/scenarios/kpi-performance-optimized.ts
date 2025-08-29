@@ -6,15 +6,11 @@
 export class OptimizedKpiPerformancePrompts {
   
   /**
-   * GÉNÉRATEUR PRINCIPAL - Sélectionne le bon prompt selon agentType
+   * GÉNÉRATEUR PRINCIPAL - Sophie Martin uniquement pour ce scénario
    */
   generatePrompt(agentType: string, conversationType: 'cold-call' | 'rdv'): string {
-    if (agentType === 'sophie_martin') {
-      return this.generateVocalOptimizedSophiePrompt(conversationType);
-    }
-    
-    // Fallback pour autres types d'agents
-    return this.generateVocalCoachPrompt('ouverture', conversationType);
+    // Pour le scénario KPI Performance, on retourne TOUJOURS Sophie Martin
+    return this.generateVocalOptimizedSophiePrompt(conversationType);
   }
   
   /**
