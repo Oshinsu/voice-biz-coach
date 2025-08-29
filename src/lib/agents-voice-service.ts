@@ -40,32 +40,29 @@ export class AgentsVoiceService {
         throw new Error('VITE_OPENAI_API_KEY requis pour Agent SDK');
       }
 
-      const response = await fetch("https://api.openai.com/v1/realtime/client_secrets", {
+      const response = await fetch("https://api.openai.com/v1/realtime/sessions", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${OPENAI_API_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          session: {
-            type: "realtime",
-            model: this.config.model || "gpt-realtime",
-            voice: this.config.voice || "sage",
-            instructions: this.config.instructions,
-            modalities: ["text", "audio"],
-            input_audio_format: "pcm16",
-            output_audio_format: "pcm16",
-            input_audio_transcription: {
-              model: "whisper-1"
-            },
-            turn_detection: {
-              type: "server_vad",
-              threshold: 0.5,
-              prefix_padding_ms: 300,
-              silence_duration_ms: 1000
-            },
-            temperature: 0.8
-          }
+          model: this.config.model || "gpt-realtime",
+          voice: this.config.voice || "sage",
+          instructions: this.config.instructions,
+          modalities: ["text", "audio"],
+          input_audio_format: "pcm16",
+          output_audio_format: "pcm16",
+          input_audio_transcription: {
+            model: "whisper-1"
+          },
+          turn_detection: {
+            type: "server_vad",
+            threshold: 0.5,
+            prefix_padding_ms: 300,
+            silence_duration_ms: 1000
+          },
+          temperature: 0.8
         }),
       });
 
@@ -117,7 +114,7 @@ export class AgentsVoiceService {
       const baseUrl = "https://api.openai.com/v1/realtime";
       const modelParam = this.config.model || "gpt-realtime";
       
-      const sdpResponse = await fetch(`${baseUrl}?model=${modelParam}`, {
+      const sdpResponse = await fetch(`${baseUrl}/calls?model=${modelParam}`, {
         method: "POST",
         body: offer.sdp,
         headers: {
