@@ -164,7 +164,9 @@ const Scenarios = () => {
                         {(scenario.pain_points || scenario.company?.painPoints || []).slice(0, 2).map((point, idx) => (
                           <div key={idx} className="text-xs text-muted-foreground flex items-start gap-2">
                             <div className="w-1 h-1 bg-accent rounded-full mt-2 flex-shrink-0"></div>
-                            <span className="line-clamp-1">{point}</span>
+                            <span className="line-clamp-1">
+                              {typeof point === 'string' ? point : point.issue}
+                            </span>
                           </div>
                         ))}
                         {(scenario.pain_points || scenario.company?.painPoints || []).length > 2 && (
