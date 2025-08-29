@@ -109,14 +109,14 @@ export const ModaStyleMarketingStrategy: React.FC<ModaStyleMarketingStrategyProp
     },
     kpis: {
       acquisition: [
-        { name: "CAC ModaStyle", current: "1,650€", target: "1,400€", trend: "down", benchmark: "2,100€ secteur" },
-        { name: "LTV Mode Premium", current: "18,500€", target: "22,000€", trend: "up", benchmark: "14,200€ secteur" },
+        { name: "CAC ModaStyle", current: "2,200€", target: "1,800€", trend: "down", benchmark: "2,100€ secteur" },
+        { name: "LTV Mode Premium", current: "15,800€", target: "18,500€", trend: "up", benchmark: "14,200€ secteur" },
         { name: "Conversion MQL>SQL", current: "24%", target: "32%", trend: "up", benchmark: "18% secteur" },
         { name: "Cycle de vente Mode", current: "38 jours", target: "28 jours", trend: "down", benchmark: "45 jours secteur" }
       ],
       retention: [
-        { name: "NRR E-commerce Mode", current: "118%", target: "135%", trend: "up", benchmark: "108% secteur" },
-        { name: "Churn Annuel", current: "9%", target: "6%", trend: "down", benchmark: "15% secteur" },
+        { name: "NRR E-commerce Mode", current: "112%", target: "125%", trend: "up", benchmark: "108% secteur" },
+        { name: "Churn Annuel", current: "12%", target: "8%", trend: "down", benchmark: "15% secteur" },
         { name: "NPS Clients Mode", current: "72", target: "80", trend: "up", benchmark: "58 secteur" },
         { name: "Usage Analytics", current: "4.2x/semaine", target: "6x/semaine", trend: "up", benchmark: "2.8x secteur" }
       ]
@@ -125,7 +125,7 @@ export const ModaStyleMarketingStrategy: React.FC<ModaStyleMarketingStrategyProp
       vs_google_analytics: {
         differentiation: "Attribution multi-touch mode vs last-click généraliste",
         advantage: "Tracking customer journey mode complexe (influence, saisonnalité)",
-        pricing: "€599 vs Gratuit - ROI 312% justifié récupération attribution"
+        pricing: "€599 vs Gratuit - ROI 220% justifié récupération attribution"
       },
       vs_triple_whale: {
         differentiation: "Spécialisation mode vs généraliste e-commerce",

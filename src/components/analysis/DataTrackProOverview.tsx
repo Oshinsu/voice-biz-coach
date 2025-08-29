@@ -17,9 +17,9 @@ export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ prod
   const getDataTrackSpecs = () => ({
     type: 'Marketing Analytics Platform',
     targetSegment: 'E-commerce Mode & Lifestyle',
-    estimatedROI: '312%',
-    paybackPeriod: '4,2 mois',
-    monthlyValue: '€7,200',
+    estimatedROI: '220%',
+    paybackPeriod: '5,8 mois',
+    monthlyValue: '€4,800',
     features: [
       'Attribution multi-touch 360°',
       'Prédiction churn clients premium',
@@ -43,12 +43,12 @@ export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ prod
 
   const specs = getDataTrackSpecs();
 
-  // ROI Breakdown calculation for ModaStyle
+  // ROI Breakdown calculation for ModaStyle (réaliste)
   const getRoiBreakdown = () => {
     const monthlyRevenue = 665000; // 8M€ annual / 12
-    const currentAttributionLoss = monthlyRevenue * 0.18; // 18% perte attribution
-    const churnReduction = monthlyRevenue * 0.12; // 12% réduction churn
-    const conversionImprovement = monthlyRevenue * 0.08; // 8% amélioration conversion
+    const currentAttributionLoss = monthlyRevenue * 0.12; // 12% perte attribution (plus réaliste)
+    const churnReduction = monthlyRevenue * 0.08; // 8% réduction churn
+    const conversionImprovement = monthlyRevenue * 0.05; // 5% amélioration conversion
     
     const monthlyGain = currentAttributionLoss + churnReduction + conversionImprovement;
     const annualGain = monthlyGain * 12;

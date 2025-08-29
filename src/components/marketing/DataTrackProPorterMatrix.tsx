@@ -396,7 +396,7 @@ export const DataTrackProPorterMatrix: React.FC<DataTrackProPorterMatrixProps> =
                 <li>• Window d'opportunité forte</li>
                 <li>• Différenciation claire vs GA4</li>
                 <li>• Support français valorisé</li>
-                <li>• ROI 312% justifie premium</li>
+                <li>• ROI 220% justifie premium</li>
               </ul>
             </div>
           </div>
