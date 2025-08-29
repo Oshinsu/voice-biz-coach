@@ -130,35 +130,45 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
   const startSession = async () => {
     try {
       setIsConnecting(true);
-      console.log('🎤 Démarrage session Sophie Martin...');
+      setMessages([]);
+      setExchangeCount(0);
 
-      // Obtenir le token éphémère
-      const { data: tokenData, error } = await supabase.functions.invoke('realtime-token');
+      // Récupérer l'API key OpenAI depuis les secrets Supabase en créant un edge function helper
+      console.log('🔑 Récupération de l\'API key OpenAI...');
+      const { data: secretData, error: secretError } = await supabase.functions.invoke('get-openai-key');
       
-      if (error) throw error;
-      console.log('📡 Réponse Supabase token:', tokenData);
-      console.log('📡 Structure complète tokenData:', JSON.stringify(tokenData, null, 2));
-      
-      // Corriger structure selon l'edge function realtime-token
-      if (!tokenData?.client_secret?.value) {
-        console.error('❌ Structure token incorrecte. Attendu: client_secret.value, reçu:', Object.keys(tokenData || {}));
-        throw new Error("Token éphémère non reçu - structure réponse inattendue");
+      if (secretError || !secretData?.apiKey) {
+        throw new Error('API key OpenAI non configurée dans les secrets Supabase');
       }
 
-      console.log('✅ Token éphémère obtenu pour Sophie');
+      const OPENAI_API_KEY = secretData.apiKey;
+      console.log('✅ API key OpenAI récupérée');
 
-      // Créer l'agent Sophie avec prompt intégré et données contextuelles
-      const prompt = getSophieSystemPrompt();
-      console.log('🎭 System prompt Sophie Martin:', prompt.substring(0, 200) + '...');
-      
+      // Créer un nouvel agent avec le prompt adapté
       const agent = new RealtimeAgent({
-        name: "Sophie Martin - ModaStyle",
-        instructions: prompt, // Prompt natif intégré avec données complètes
-        voice: 'alloy'
+        name: 'Sophie Martin',
+        instructions: getSophieSystemPrompt()
       });
 
-      // Créer la session avec l'agent
-      const session = new RealtimeSession(agent);
+      // Créer une nouvelle session avec le nouveau modèle gpt-realtime
+      const session = new RealtimeSession(agent, {
+        model: 'gpt-realtime',
+        config: {
+          modalities: ['text', 'audio'],
+          voice: 'alloy', // Peut être changé vers 'marin' ou 'cedar' pour tester les nouvelles voix
+          inputAudioFormat: 'pcm16',
+          outputAudioFormat: 'pcm16',
+          inputAudioTranscription: {
+            model: 'whisper-1'
+          },
+          turnDetection: {
+            type: 'server_vad',
+            threshold: 0.5,
+            prefixPaddingMs: 300,
+            silenceDurationMs: 1000
+          }
+        }
+      });
 
       // Configuration événements (selon l'API actuelle)
       session.on('session.created' as any, () => {
@@ -220,10 +230,10 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
         setMessages(newMessages);
       });
 
-      // Connexion avec token éphémère
-      console.log('🔑 Tentative connexion avec token:', typeof tokenData.client_secret?.value);
+      // Connexion directe avec l'API key OpenAI
+      console.log('🔑 Connexion directe au Realtime API avec Agents SDK...');
       await session.connect({
-        apiKey: tokenData.client_secret.value
+        apiKey: OPENAI_API_KEY
       });
       
       agentRef.current = agent;
