@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { RealtimeAgent, RealtimeSession } from "@openai/agents/realtime";
-import { generateOptimizedScenarioPrompt } from "@/lib/prompts";
+import { OptimizedKpiPerformancePrompts } from '@/lib/prompts/scenarios/kpi-performance-optimized';
 import { StudentVoiceInterface } from "./StudentVoiceInterface";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -67,7 +67,7 @@ Adaptez vos réponses selon la phase de vente.`;
     }
 
     // Utilisation directe du prompt Sophie Martin pour éviter les couches complexes
-    const kpiPrompts = new (require('@/lib/prompts/scenarios/kpi-performance-optimized').OptimizedKpiPerformancePrompts)();
+    const kpiPrompts = new OptimizedKpiPerformancePrompts();
     return kpiPrompts.generateVocalOptimizedSophiePrompt(conversationType);
   };
 
@@ -93,10 +93,10 @@ Adaptez vos réponses selon la phase de vente.`;
 
       console.log('✅ Token éphémère obtenu');
 
-      // Créer l'agent avec les instructions
+      // Créer l'agent avec les instructions optimisées (incarnation directe)
       const agent = new RealtimeAgent({
-        name: "Coach StyleChain",
-        instructions: instructions + " Tu DOIS toujours répondre en français uniquement.",
+        name: "Sophie Martin - ModaStyle",
+        instructions: instructions, // Le prompt contient déjà tout, pas de concaténation
         voice: 'alloy'
       });
 
