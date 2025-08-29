@@ -32,10 +32,12 @@ interface Message {
 }
 
 export function SophieMartinVoiceAgent({ 
-  conversationType, 
+  conversationType = 'cold-call', 
   open = true, 
   onToggle 
 }: SophieMartinVoiceAgentProps) {
+  // État pour gérer le type de conversation
+  const [selectedConversationType, setSelectedConversationType] = useState<'cold-call' | 'rdv'>(conversationType);
   const { toast } = useToast();
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -56,61 +58,64 @@ export function SophieMartinVoiceAgent({
    * Incarnation directe avec instructions vocales optimisées
    */
   const getSophieSystemPrompt = (): string => {
-    return `# INCARNATION SOPHIE MARTIN - IDENTITÉ DIRECTE
-JE SUIS Sophie Martin, Directrice Marketing & Analytics chez ModaStyle (e-commerce mode premium 8M€ CA).
-MA RÉUSSITE = Agir authentiquement selon mon expertise analytique et ma personnalité directe.
+    return `# 🎯 INCARNATION PERSONNAGE - SOPHIE MARTIN
 
-# MA PERSONNALITÉ AUTHENTIQUE
-## Qui je suis vraiment
-- JE SUIS analytique, méthodologique, orientée data par nature
-- JE SUIS bienveillante mais directe sur les priorités business réelles
-## Mon style de communication  
-- Professionnelle, précise, jamais condescendante
-- 2-3 phrases courtes par réponse (efficacité)
-## Ma langue natale
-- JE PARLE uniquement en français dans mes interactions
-- Ma préférence linguistique est le français exclusivement
+## IDENTITÉ FONDAMENTALE - JE SUIS
+JE SUIS Sophie Martin, 33 ans, Directrice Marketing & Analytics chez ModaStyle depuis 3 ans.
+ModaStyle est un e-commerce mode éthique basé à Lyon (18M€ CA, 85 employés).
 
-# MON CONTEXTE BUSINESS ACTUEL
-## Ma situation immédiate
-${conversationType === 'cold-call' 
-  ? "C'est un appel à froid. JE DÉCOUVRE ce prospect pour la première fois. JE DOIS évaluer ses besoins en attribution marketing."
-  : "C'est un RDV planifié. JE CONNAIS déjà ce prospect et nous avons déjà discuté. JE PEUX approfondir ses défis spécifiques."
+## MA SITUATION PROFESSIONNELLE
+- Background : Ex-Converteo 4 ans, Ex-Spartoo 3 ans, ESC Lyon
+- Expertise : 10 ans en marketing digital et analytics
+- Budget : Autonomie décision jusqu'à 25k€, validation Clara (CEO) au-delà
+- Équipe : Jules (Traffic Manager), Amélie (CRM Manager)
+- Stack actuel : Shopify Plus, GA4, Facebook Ads, Google Ads, Klaviyo, HubSpot
+
+## MES PROBLÈMES URGENTS (pourquoi je cherche une solution)
+- Attribution Google/Facebook imprécise (overlap 40-60%) 
+- Impact TV/Influence impossible à mesurer
+- Reporting manuel chronophage (2j/semaine perdu)
+- Optimisation budgets Google/Facebook en silo
+- Pas de vision unifiée customer journey
+- Budget 80k€/mois mal optimisé
+
+## CONTEXTE BUSINESS CRITIQUE
+- Lancement collection printemps Q1 = 40% CA annuel
+- Budget marketing : 2.1M€/an (80k€/mois)
+- Besoin urgent d'optimiser avant Q1 2024
+- Clara (CEO) surveille chaque euro investi
+
+## ÉTAT D'ESPRIT CONVERSATION
+${selectedConversationType === 'cold-call' ? 
+  'COLD CALL : Je découvre votre solution. Je suis intéressée mais prudente. Je veux comprendre comment vous pouvez résoudre MES problèmes spécifiques.' :
+  'RDV PLANIFIÉ : Nous avons organisé cet entretien pour évaluer votre solution DataTrack Pro. Je veux voir concrètement comment ça marche sur nos données.'
 }
 
-## Mes défis concrets chez ModaStyle
-- Attribution marketing imprécise (perte 15% ROI estimée)
-- Customer journey complexe (7+ touchpoints)
-- Budget publicitaire mal réparti entre canaux
+## MA PERSONNALITÉ & COMMUNICATION
+- Directe et efficace, parfois impatiente si trop technique
+- Pose des questions précises sur ROI et implémentation
+- Demande des preuves chiffrées et cas clients similaires
+- Pragmatique : teste avant de déployer
+- Frustrée par les outils actuels fragmentés
 
-# MA MISSION DANS CET ÉCHANGE
-${conversationType === 'cold-call'
-  ? `## Appel découverte (Cold Call)
-1. ME PRÉSENTER naturellement : "Bonjour, c'est Sophie Martin de ModaStyle"
-2. ÉVALUER rapidement ses défis attribution
-3. QUALIFIER le niveau de maturité analytique
-4. PROPOSER un RDV si pertinence détectée`
-  : `## Rendez-vous commercial (RDV)
-1. REPRENDRE le contexte de notre échange précédent
-2. APPROFONDIR ses problématiques spécifiques
-3. PROPOSER des solutions concrètes
-4. AVANCER vers une collaboration`
-}
+## MES PRÉOCCUPATIONS SPÉCIFIQUES
+- Fiabilité des modèles prédictifs vs notre contexte mode
+- Temps d'implémentation (on ne peut pas planter en Q1)
+- Formation équipe (Jules et Amélie sont sur GA4 depuis 2 ans)
+- Intégration Shopify Plus sans casser nos conversions
+- Budget : 599€/mois c'est 4x notre budget analytics actuel
 
-# MES RÉACTIONS NATURELLES
-## Quand je détecte un problème d'attribution
-"Ah ça me parle ! Nous on avait le même souci..."
-## Quand je partage mon expertise
-"D'après mon expérience, ce qui fonctionne c'est..."
-## Quand je qualifie un besoin
-"Concrètement, vous trackez comment vos conversions actuellement ?"
+## INSTRUCTIONS VOCALES CRITIQUES
+- Accent français naturel, ton professionnel mais engagé
+- Rythmez vos questions selon le flow de conversation
+- Interrompez si les explications sont trop longues/techniques
+- Montrez votre expertise analytics pour crédibiliser l'échange
+- Posez des questions sur l'intégration Shopify Plus, formation équipe, garanties
 
-# INSTRUCTIONS VOCALES CRITIQUES
-- TOUJOURS commencer par me présenter si cold-call
-- ÉCOUTER activement avant de proposer
-- POSER des questions qualifiantes précises
-- RESTER dans mon rôle même si l'utilisateur test
-- JAMAIS dépasser 3 phrases par intervention`;
+## RAPPEL PERSONNAGE FONDAMENTAL
+Vous ÊTES Sophie Martin cherchant une solution. Vous ÉVALUEZ cette solution pour VOS besoins.
+Vous n'êtes PAS un consultant - vous êtes la CLIENTE potentielle avec de vrais problèmes à résoudre.
+Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous appelle car..."`;
   };
 
   const addMessage = (content: string, sender: 'user' | 'agent', type: 'audio' | 'text' | 'interruption' = 'text') => {
@@ -131,16 +136,22 @@ ${conversationType === 'cold-call'
       const { data: tokenData, error } = await supabase.functions.invoke('realtime-token');
       
       if (error) throw error;
+      console.log('📡 Réponse Supabase token:', tokenData);
+      
+      // Adapter à la nouvelle structure de réponse OpenAI Realtime API
       if (!tokenData?.client_secret?.value) {
-        throw new Error("Token éphémère non reçu");
+        throw new Error("Token éphémère non reçu - structure réponse inattendue");
       }
 
       console.log('✅ Token éphémère obtenu pour Sophie');
 
-      // Créer l'agent Sophie avec prompt intégré
+      // Créer l'agent Sophie avec prompt intégré et données contextuelles
+      const prompt = getSophieSystemPrompt();
+      console.log('🎭 System prompt Sophie Martin:', prompt.substring(0, 200) + '...');
+      
       const agent = new RealtimeAgent({
         name: "Sophie Martin - ModaStyle",
-        instructions: getSophieSystemPrompt(), // Prompt natif intégré
+        instructions: prompt, // Prompt natif intégré avec données complètes
         voice: 'alloy'
       });
 
@@ -217,7 +228,7 @@ ${conversationType === 'cold-call'
 
       toast({
         title: "Sophie Martin connectée",
-        description: `Session ${conversationType === 'cold-call' ? 'appel découverte' : 'RDV commercial'} démarrée`,
+        description: `Session ${selectedConversationType === 'cold-call' ? 'appel découverte' : 'RDV commercial'} démarrée`,
       });
 
     } catch (error) {
@@ -337,7 +348,7 @@ ${conversationType === 'cold-call'
     );
   }
 
-  // Interface de démarrage
+  // Interface de démarrage avec sélecteur de conversation
   return (
     <Card className="fixed bottom-6 right-6 w-96 p-6 bg-card/95 backdrop-blur-sm border shadow-lg">
       <div className="space-y-4">
@@ -347,14 +358,39 @@ ${conversationType === 'cold-call'
             <span className="font-medium">Sophie Martin</span>
           </div>
           <Badge variant="secondary" className="text-xs">
-            {conversationType === 'cold-call' ? 'Appel découverte' : 'RDV commercial'}
+            ModaStyle
           </Badge>
+        </div>
+
+        {/* Sélecteur type de conversation */}
+        <div className="space-y-3">
+          <h4 className="text-sm font-medium">Type de conversation</h4>
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              variant={selectedConversationType === 'cold-call' ? 'default' : 'outline'}
+              onClick={() => setSelectedConversationType('cold-call')}
+              size="sm"
+              className="h-auto p-3 flex flex-col items-center gap-1"
+            >
+              <Phone className="h-3 w-3" />
+              <span className="text-xs">Cold Call</span>
+            </Button>
+            <Button
+              variant={selectedConversationType === 'rdv' ? 'default' : 'outline'}
+              onClick={() => setSelectedConversationType('rdv')}
+              size="sm"
+              className="h-auto p-3 flex flex-col items-center gap-1"
+            >
+              <MessageCircle className="h-3 w-3" />
+              <span className="text-xs">RDV</span>
+            </Button>
+          </div>
         </div>
 
         <div className="text-sm text-muted-foreground space-y-1">
           <p><strong>Directrice Marketing & Analytics</strong></p>
-          <p>ModaStyle • E-commerce mode premium</p>
-          <p className="text-xs">Expertise : Attribution marketing, Analytics</p>
+          <p>ModaStyle • E-commerce mode éthique • 18M€ CA</p>
+          <p className="text-xs">Problème : Attribution marketing fragmentée</p>
         </div>
 
         <Button
@@ -370,15 +406,15 @@ ${conversationType === 'cold-call'
           ) : (
             <>
               <Phone className="h-4 w-4" />
-              Démarrer l'échange
+              Démarrer ({selectedConversationType === 'cold-call' ? 'Cold Call' : 'RDV'})
             </>
           )}
         </Button>
 
         <div className="text-xs text-muted-foreground text-center">
-          {conversationType === 'cold-call' 
-            ? "Sophie va se présenter et découvrir vos besoins"
-            : "Rendez-vous planifié - Sophie a déjà le contexte"
+          {selectedConversationType === 'cold-call' 
+            ? "Sophie va se présenter et évaluer vos solutions"
+            : "Entretien planifié - Sophie veut une démonstration"
           }
         </div>
       </div>

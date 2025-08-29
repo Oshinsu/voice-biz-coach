@@ -20,18 +20,17 @@ serve(async (req) => {
 
     console.log('🎯 Génération token éphémère OpenAI Agents SDK...');
 
-    // Request an ephemeral client token from OpenAI (correct endpoint for Agents SDK)
-    const response = await fetch("https://api.openai.com/v1/realtime/client_secrets", {
+    // Request an ephemeral token from OpenAI's Realtime API (correct endpoint for Agents SDK)
+    const response = await fetch("https://api.openai.com/v1/realtime/sessions", {
       method: "POST",
       headers: {
         "Authorization": `Bearer ${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        session: {
-          type: "realtime",
-          model: "gpt-realtime"
-        }
+        model: "gpt-4o-realtime-preview-2024-12-17",
+        voice: "alloy",
+        instructions: "Vous êtes un système de test de connexion. Répondez simplement 'Connexion établie' quand l'utilisateur se connecte."
       }),
     });
 
