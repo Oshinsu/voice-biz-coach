@@ -1,6 +1,6 @@
 /**
- * FACTORY PATTERN POUR PROMPTS MODULAIRES
- * Architecture optimisée: un fichier par scénario
+ * FACTORY PATTERN POUR PROMPTS VOCAUX OPTIMISÉS
+ * Architecture optimisée selon OpenAI Realtime Prompting Guide
  */
 
 import { 
@@ -8,6 +8,9 @@ import {
   OptimizedPromptConfig,
   ScenarioPromptGenerator 
 } from './core/base-prompt-generator';
+import { VocalPromptGenerator, SessionOptimizer } from './core/vocal-prompt-generator';
+import { RealTimeInteractionManager } from './core/real-time-interaction-manager';
+import { DynamicContextualizer } from './core/dynamic-contextualization';
 import { generateContextualLayers } from './core/contextual-layers';
 import { generateDiscoverySystem } from './core/discovery-system';
 import { NaturalFlowGenerator } from './core/natural-flow-system';
@@ -39,8 +42,8 @@ const scenarioGenerators: Record<string, ScenarioPromptGenerator> = {
 };
 
 /**
- * POINT D'ENTRÉE PRINCIPAL - API UNIFIÉE
- * Génère un prompt complet optimisé par scénario
+ * POINT D'ENTRÉE PRINCIPAL - API UNIFIÉE VOCAL
+ * Génère un prompt vocal optimisé selon OpenAI Realtime Guide
  */
 export function generateOptimizedScenarioPrompt({
   scenarioId,
@@ -56,20 +59,74 @@ export function generateOptimizedScenarioPrompt({
     throw new Error(`Générateur de prompt non trouvé pour le scénario: ${scenarioId}`);
   }
   
-  // 2. Générer le prompt core spécialisé (400-500 tokens)
+  // 2. Générer le prompt vocal optimisé (structure OpenAI)
   const corePrompt = generator.generatePrompt(agentType, conversationType);
   
-  // 3. Ajouter les couches contextuelles (200-300 tokens)
-  const contextualLayers = generateContextualLayers(scenarioId, currentPhase, trustLevel);
+  // 3. Ajouter les instructions temps réel
+  const realTimeInstructions = generateRealTimeInstructions(conversationType, currentPhase, trustLevel);
   
-  // 4. Intégrer le système discovery (200-300 tokens)
-  const discoverySystem = generateDiscoverySystem(scenarioId, trustLevel);
+  // 4. Ajouter la contextualisation dynamique
+  const dynamicContext = generateDynamicContext(scenarioId, agentType, trustLevel);
   
-  // 5. Ajouter le système de flow naturel pour Byss VNS
+  // 5. Ajouter le système de flow naturel pour scenarios avancés
   const naturalFlowSystem = generateNaturalFlowEnhancement(scenarioId, agentType, conversationType, trustLevel);
   
-  // 6. Assembler le prompt final optimisé
-  return buildOptimizedPrompt(corePrompt, contextualLayers, discoverySystem, naturalFlowSystem);
+  // 6. Assembler le prompt final optimisé vocal
+  return `${corePrompt}
+
+${realTimeInstructions}
+
+${dynamicContext}
+
+${naturalFlowSystem}`;
+}
+
+/**
+ * GÉNÉRATION INSTRUCTIONS TEMPS RÉEL
+ */
+function generateRealTimeInstructions(conversationType: 'cold-call' | 'rdv', phase: string, trustLevel: number): string {
+  const interactionInstructions = RealTimeInteractionManager.generateInterruptionInstructions();
+  const silenceInstructions = RealTimeInteractionManager.generateSilenceInstructions();
+  const audioInstructions = RealTimeInteractionManager.generateAudioTroubleInstructions();
+  const confirmationInstructions = RealTimeInteractionManager.generateVocalConfirmationInstructions();
+  
+  return `## INSTRUCTIONS TEMPS RÉEL OPTIMISÉES
+
+${interactionInstructions}
+
+${silenceInstructions}
+
+${audioInstructions}
+
+${confirmationInstructions}
+
+## PARAMÈTRES VAD RECOMMANDÉS
+${JSON.stringify(SessionOptimizer.getOptimalSessionConfig(conversationType), null, 2)}`;
+}
+
+/**
+ * GÉNÉRATION CONTEXTE DYNAMIQUE
+ */
+function generateDynamicContext(scenarioId: string, agentType: string, trustLevel: number): string {
+  // Pour l'instant, utilisation du système existant + améliorations
+  const contextualLayers = generateContextualLayers(scenarioId, 'decouverte', trustLevel);
+  const discoverySystem = generateDiscoverySystem(scenarioId, trustLevel);
+  
+  return `## CONTEXTE DYNAMIQUE ENRICHI
+
+${contextualLayers}
+
+${discoverySystem}
+
+## ADAPTATION TRUST LEVEL ${trustLevel}/100
+${getTrustBasedAdaptation(trustLevel)}`;
+}
+
+function getTrustBasedAdaptation(trustLevel: number): string {
+  if (trustLevel < 25) return '**Mode:** Preuves constantes requises, réponses courtes, questions de vérification systématiques';
+  if (trustLevel < 50) return '**Mode:** Évaluation active, partage progressif, test expertise interlocuteur';
+  if (trustLevel < 75) return '**Mode:** Engagement constructif, questions techniques précises, détails opérationnels';
+  return '**Mode:** Collaboration ouverte, planning action, implication équipe, données sensibles OK';
 }
 
 /**

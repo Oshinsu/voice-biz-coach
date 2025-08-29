@@ -1,9 +1,27 @@
-// Configuration pour l'API Realtime d'OpenAI (nouvelle version 2025)
+// Configuration optimisée pour l'API Realtime d'OpenAI selon guide prompting
 export const REALTIME_CONFIG = {
   model: "gpt-realtime-2025-08-28",
-  voice: "sage", // Voix professionnelle et claire
+  voice: "sage", // Voix professionnelle et claire pour contexte business
   baseUrl: "https://api.openai.com/v1/realtime",
   wsUrl: "wss://api.openai.com/v1/realtime",
+  
+  // Configuration session optimisée selon OpenAI Realtime Guide
+  sessionConfig: {
+    modalities: ["text", "audio"],
+    input_audio_format: "pcm16",
+    output_audio_format: "pcm16",
+    input_audio_transcription: {
+      model: "whisper-1"
+    },
+    turn_detection: {
+      type: "server_vad", // TOUJOURS utiliser server_vad
+      threshold: 0.5, // Ajusté selon contexte conversation
+      prefix_padding_ms: 300,
+      silence_duration_ms: 1000 // Ajusté selon type conversation
+    },
+    temperature: 0.7, // Équilibre créativité/consistance pour vocal
+    max_response_output_tokens: "inf"
+  }
 };
 
 // Types pour les événements Realtime
