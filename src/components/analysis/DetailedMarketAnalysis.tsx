@@ -84,11 +84,36 @@ const getMarketData = (scenarioId: string) => {
         { year: '2026', market: 24500, digital: 23800 }
       ],
       painPoints: [
-        { issue: 'Évaluation crédit manuelle chronophage', impact: 85, cost: '€120k/an' },
-        { issue: 'Taux défaut supérieur objectifs réglementaires', impact: 80, cost: '€180k/an' },
-        { issue: 'Capacité analyse limitée vs demande', impact: 75, cost: '€95k/an' },
-        { issue: 'Concurrence néobanques automatisées', impact: 70, cost: '€85k/an' },
-        { issue: 'Validation réglementaire complexe', impact: 65, cost: '€65k/an' }
+        { 
+          issue: 'Évaluation crédit manuelle chronophage', 
+          impact: 85, 
+          cost: '€120k/an',
+          description: 'Processus d\'analyse 100% manuel prenant 3-5 jours par dossier. Risk managers surchargés : 50 dossiers/mois vs 200+ possibles avec IA.'
+        },
+        { 
+          issue: 'Taux défaut supérieur objectifs réglementaires', 
+          impact: 80, 
+          cost: '€180k/an',
+          description: 'Taux actuel 4.2% vs seuil ACPR 3.5%. Risque sanctions Banque de France et hausse provisions obligatoires de 15%.'
+        },
+        { 
+          issue: 'Capacité analyse limitée vs demande', 
+          impact: 75, 
+          cost: '€95k/an',
+          description: 'Plafond 200 dossiers/mois limite croissance. 40% demandes rejetées par manque capacité, non par risque réel.'
+        },
+        { 
+          issue: 'Concurrence néobanques automatisées', 
+          impact: 70, 
+          cost: '€85k/an',
+          description: 'Délai 5 jours vs 24h concurrents. 25% perte prospects impatients. Qonto/Shine captent 35% parts marché PME.'
+        },
+        { 
+          issue: 'Validation réglementaire complexe', 
+          impact: 65, 
+          cost: '€65k/an',
+          description: 'Modèles scoring doivent être validés ACPR. Reporting trimestriel obligatoire + audit annuel compliance coûteux.'
+        }
       ],
       tools: [
         { category: 'Credit Scoring Manuel', adoption: 85, satisfaction: 60 },
@@ -426,9 +451,16 @@ export const DetailedMarketAnalysis: React.FC<DetailedMarketAnalysisProps> = ({
           <div className="space-y-6">
             {data.painPoints.map((pain: any, index: number) => (
               <div key={pain.issue} className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <h4 className="font-semibold">{pain.issue}</h4>
-                  <div className="text-right">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <h4 className="font-semibold">{pain.issue}</h4>
+                    {pain.description && (
+                      <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                        {pain.description}
+                      </p>
+                    )}
+                  </div>
+                  <div className="text-right ml-4">
                     <Badge variant="destructive" className="text-xs">
                       Impact: {pain.impact}%
                     </Badge>
