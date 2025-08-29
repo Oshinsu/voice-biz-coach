@@ -3,9 +3,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { RealtimeAgent, RealtimeSession } from "@openai/agents/realtime";
 import { StudentVoiceInterface } from "../StudentVoiceInterface";
 import { supabase } from "@/integrations/supabase/client";
+import { RealtimeWebRTC } from "@/utils/RealtimeWebRTC";
 import { 
   Phone, 
   PhoneOff, 
@@ -48,10 +48,10 @@ export function SophieMartinVoiceAgent({
   const [sessionDuration, setSessionDuration] = useState(0);
   const [exchangeCount, setExchangeCount] = useState(0);
   
-  const agentRef = useRef<RealtimeAgent | null>(null);
-  const sessionRef = useRef<RealtimeSession | null>(null);
+  const webRTCRef = useRef<RealtimeWebRTC | null>(null);
   const startTimeRef = useRef<Date | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const sessionCreatedRef = useRef<boolean>(false);
 
   /**
    * PROMPT SOPHIE MARTIN INTÉGRÉ
@@ -132,89 +132,117 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
       setIsConnecting(true);
       setMessages([]);
       setExchangeCount(0);
+      sessionCreatedRef.current = false;
 
-      // Obtenir l'API key OpenAI de façon sécurisée
-      console.log('🔑 Récupération API key OpenAI...');
-      const { data: keyData, error } = await supabase.functions.invoke('get-openai-key');
+      // Obtenir le token éphémère OpenAI
+      console.log('🔑 Récupération token éphémère OpenAI...');
+      const { data: tokenData, error } = await supabase.functions.invoke('get-openai-key');
       
       if (error) throw error;
-      console.log('✅ API key OpenAI obtenue');
+      console.log('✅ Token éphémère obtenu');
       
-      if (!keyData?.apiKey) {
-        throw new Error("API key OpenAI non reçue");
+      if (!tokenData?.client_secret?.value) {
+        throw new Error("Token éphémère non reçu");
       }
 
-      // Créer un nouvel agent avec le prompt adapté
-      const agent = new RealtimeAgent({
-        name: 'Sophie Martin',
-        instructions: getSophieSystemPrompt()
-      });
+      const ephemeralToken = tokenData.client_secret.value;
 
-      // Créer une nouvelle session avec configuration avancée
-      const session = new RealtimeSession(agent, {
-        model: 'gpt-realtime',
-        config: {
-          inputAudioFormat: 'pcm16',
-          outputAudioFormat: 'pcm16',
-          inputAudioTranscription: {
-            model: 'gpt-4o-mini-transcribe',
-          },
-          turnDetection: {
-            type: 'semantic_vad',
-            eagerness: 'medium',
-            createResponse: true,
-            interruptResponse: true,
-          }
+      // Créer gestionnaire événements WebRTC
+      const handleMessage = (event: any) => {
+        console.log('📨 Événement reçu:', event.type);
+        
+        switch (event.type) {
+          case 'session.created':
+            console.log('✅ Session créée, envoi configuration...');
+            sessionCreatedRef.current = true;
+            
+            // Envoyer configuration session après création
+            const sessionConfig = {
+              modalities: ["text", "audio"],
+              instructions: getSophieSystemPrompt(),
+              voice: "alloy",
+              input_audio_format: "pcm16",
+              output_audio_format: "pcm16",
+              input_audio_transcription: {
+                model: "whisper-1"
+              },
+              turn_detection: {
+                type: "server_vad",
+                threshold: 0.5,
+                prefix_padding_ms: 300,
+                silence_duration_ms: 1000
+              },
+              temperature: 0.8,
+              max_response_output_tokens: "inf"
+            };
+            
+            webRTCRef.current?.updateSession(sessionConfig);
+            break;
+            
+          case 'session.updated':
+            console.log('✅ Session configurée');
+            setIsConnected(true);
+            setIsConnecting(false);
+            startTimeRef.current = new Date();
+            addMessage("Sophie Martin connectée via WebRTC", 'agent', 'text');
+            break;
+            
+          case 'response.audio.delta':
+            // Audio géré automatiquement par WebRTC
+            setIsSpeaking(true);
+            setIsListening(false);
+            break;
+            
+          case 'response.audio.done':
+            setIsSpeaking(false);
+            setIsListening(true);
+            break;
+            
+          case 'response.audio_transcript.delta':
+            if (event.delta) {
+              addMessage(event.delta, 'agent', 'text');
+            }
+            break;
+            
+          case 'input_audio_buffer.speech_started':
+            console.log('🗣️ Utilisateur commence à parler');
+            setIsListening(false);
+            setIsSpeaking(false);
+            break;
+            
+          case 'input_audio_buffer.speech_stopped':
+            console.log('🛑 Utilisateur arrête de parler');
+            setExchangeCount(prev => prev + 1);
+            break;
+            
+          case 'error':
+            console.error('❌ Erreur session:', event.error);
+            toast({
+              title: "Erreur session",
+              description: event.error?.message || "Erreur inconnue",
+              variant: "destructive"
+            });
+            break;
         }
-      });
+      };
 
-      // Configuration événements audio et interruptions
-      session.on('audio', (event: any) => {
-        console.log('🔊 Événement audio:', event);
-        // Gérer les événements audio selon leur structure réelle
-        setIsSpeaking(true);
-      });
-
-      session.on('audio_interrupted', () => {
-        console.log('🛑 Audio interrompu');
-        setIsSpeaking(false);
-        addMessage("Conversation interrompue", 'user', 'interruption');
-        setExchangeCount(prev => prev + 1);
-      });
-
-      session.on('history_updated', (history: any[]) => {
-        console.log('📝 Historique mis à jour:', history.length, 'éléments');
-        setExchangeCount(history.filter(item => item.type === 'message' && (item as any).role === 'user').length);
-      });
-
-      session.on('error', (error: any) => {
-        console.error('❌ Erreur session:', error);
+      const handleError = (error: Error) => {
+        console.error('❌ Erreur WebRTC:', error);
+        setIsConnecting(false);
         toast({
-          title: "Erreur session",
-          description: error?.message || "Erreur inconnue",
+          title: "Erreur WebRTC",
+          description: error.message,
           variant: "destructive"
         });
-      });
+      };
 
-      console.log('✅ Session Sophie créée avec configuration avancée');
-      
-      // Connexion directe avec API key
-      console.log('🔑 Connexion WebRTC directe...');
-      await session.connect({
-        apiKey: keyData.apiKey
-      });
-
-      setIsConnected(true);
-      setIsConnecting(false);
-      startTimeRef.current = new Date();
-      addMessage("Session Sophie Martin démarrée avec WebRTC avancé", 'agent', 'text');
-      
-      agentRef.current = agent;
-      sessionRef.current = session;
+      // Créer et connecter WebRTC
+      webRTCRef.current = new RealtimeWebRTC(handleMessage, handleError);
+      await webRTCRef.current.connect(ephemeralToken);
 
       toast({
-        title: "Sophie Martin connectée",
-        description: `Session ${selectedConversationType === 'cold-call' ? 'appel découverte' : 'RDV commercial'} démarrée`,
+        title: "Connexion établie",
+        description: "Configuration de Sophie Martin en cours...",
       });
 
     } catch (error) {
@@ -239,15 +267,15 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
         console.log('⏱️ Timer session arrêté');
       }
       
-      if (sessionRef.current) {
+      if (webRTCRef.current) {
         console.log('🔌 Fermeture connexion WebRTC...');
-        await sessionRef.current.close();
-        sessionRef.current = null;
+        await webRTCRef.current.disconnect();
+        webRTCRef.current = null;
         console.log('✅ Session WebRTC fermée');
       }
       
       // Nettoyage complet état
-      agentRef.current = null;
+      sessionCreatedRef.current = false;
       setIsConnected(false);
       setIsConnecting(false);
       setIsSpeaking(false);
@@ -272,8 +300,8 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
       console.error('❌ Erreur fermeture session Sophie:', error);
       
       // Force le nettoyage même en cas d'erreur
-      sessionRef.current = null;
-      agentRef.current = null;
+      webRTCRef.current = null;
+      sessionCreatedRef.current = false;
       if (timerRef.current) {
         clearInterval(timerRef.current);
         timerRef.current = null;
@@ -292,9 +320,9 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
   };
 
   const handleInterrupt = async () => {
-    if (sessionRef.current && isSpeaking) {
+    if (webRTCRef.current && isSpeaking) {
       try {
-        await sessionRef.current.interrupt();
+        webRTCRef.current.interrupt();
         addMessage("Interruption envoyée", 'user', 'interruption');
       } catch (error) {
         console.error('❌ Erreur interruption:', error);
@@ -303,9 +331,9 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
   };
 
   const sendTextMessage = async (text: string) => {
-    if (sessionRef.current && text.trim()) {
+    if (webRTCRef.current && text.trim()) {
       try {
-        await sessionRef.current.sendMessage(text);
+        webRTCRef.current.sendMessage(text);
         addMessage(text, 'user', 'text');
       } catch (error) {
         console.error('❌ Erreur envoi message:', error);
