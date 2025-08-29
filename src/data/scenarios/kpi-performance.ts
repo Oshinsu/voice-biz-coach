@@ -9,63 +9,40 @@ export const kpiPerformanceScenario: Scenario = {
   company: {
     name: "ModaStyle",
     sector: "E-commerce Mode Éthique",
-    size: "85 employés (Marketing: 8, Tech: 12, Operations: 35, Commercial: 15, Admin: 15)",
-    revenue: "8M€/an (+25% croissance 2023, objectif 10.5M€ en 2024)",
+    size: "85 employés",
+    revenue: "18M€ CA annuel",
     location: "Lyon, France - Siège social Presqu'île, entrepôt Rillieux-la-Pape",
     
-    // Métriques détaillées entreprise
-    metrics: {
-      chiffreAffaires: "8M€ (2023) vs 6.4M€ (2022)",
-      croissance: "+25% YoY (+35% T4 vs T4-1)",
-      ebitda: "560k€ (7% marge)",
-      beneficeNet: "240k€ (3% marge nette)",
-      employes: 85,
-      croissanceEquipe: "+15% en 2023 (74 → 85)",
-      acquisitionClient: "58€ CAC moyen tous canaux",
-      ltv: "142€ LTV moyenne (calculée sur 18 mois)",
-      roas: "2.8x ROAS blended tous canaux", 
-      conversionRate: "1.4% desktop, 0.9% mobile",
-      panierMoyen: "89€ (objectif 95€)",
-      trafficMensuel: "220k visiteurs uniques/mois",
-      clientsActifs: "18,500 clients actifs 12 derniers mois"
+    keyMetrics: {
+      monthlyVisitors: "420K visiteurs uniques/mois",
+      conversionRate: "2.1%",
+      averageOrderValue: "52€",
+      customerLifetimeValue: "156€",
+      marketingBudget: "2.1M€/an (11.7% du CA)"
     },
     
-    description: "E-commerce pionnier français mode éthique fondé 2018 par Clara Dubois (ex-acheteuse Zara). Révolutionne la mode durable avec 12 marques partenaires certifiées GOTS/OEKO-TEX. Catalogue 850 références : vêtements femme/homme/enfant, maroquinerie, bijoux. Positionnement premium (70-150€ pièce) vs fast-fashion. Présence France/Belgique/Suisse, expansion Allemagne prévue 2024. Mission: démocratiser mode éthique européenne. Stack: Shopify Plus, Klaviyo, Meta Ads, Google Ads, Gorgias support. Ambition: leader européen mode éthique 25M€ CA 2027.",
+    history: "Créée en 2015, ModaStyle s'est développée rapidement sur le segment mode accessible. Croissance de 15% par an depuis 2020.",
     
-    // Historique et contexte approfondi
-    companyHistory: {
-      fondation: "2018 - Clara Dubois quitte Zara pour créer alternative éthique",
-      etapes: [
-        "2018-2019: Bootstrap 300k€ capital initial, 5 marques, 100 références",
-        "2020: COVID boost e-commerce, +120% croissance, levée famille 800k€",
-        "2021: Expansion Belgique/Suisse, migration Shopify Plus, 25 employés",
-        "2022: Gamme homme/enfant, certificationsGOTS, 1er bénéfice 280k€",
-        "2023: Série A 3M€ Partech/Ring Capital, entrepôt robotisé, 45% croissance"
-      ]
+    techStack: {
+      ecommerce: "Shopify Plus",
+      analytics: "Google Analytics 4, Facebook Pixel",
+      advertising: "Google Ads (60% budget), Facebook Ads (30%), TikTok Ads (10%)",
+      email: "Klaviyo",
+      crm: "HubSpot Starter"
     },
-    
-    ecosystemeTechnologique: {
-      ecommerce: "Shopify Plus (2k€/mois)",
-      emailMarketing: "Klaviyo (480€/mois)",
-      publicite: "Meta Ads (28k€/mois), Google Ads (18k€/mois)",
-      analytics: "Google Analytics 4 + Facebook Pixel",
-      support: "Zendesk (150€/mois)",
-      logistique: "Shopify Flow + Colissimo",
-      comptabilite: "Pennylane + Sage comptabilité"
-    },
-
     painPoints: [
-      "Attribution marketing fragmentée: impossible de savoir quel canal génère vraiment les ventes. Budget pub 46k€/mois réparti à l'aveugle entre Meta (60%) et Google (40%) sans visibilité sur le parcours client réel",
-      "Reporting manuel chronophage: 8h/semaine pour consolider les données Meta, Google et Shopify dans Excel. Analyse toujours en retard d'une semaine sur les performances",
-      "Optimisation budgets impossible: allocation fixe mensuelle alors que les performances varient selon les saisons et collections. Pas de réactivité sur les campagnes qui marchent", 
-      "Segmentation client basique: seulement 3 segments (nouveaux, récurrents, VIP) alors qu'on sait qu'on pourrait faire plus fin pour améliorer les taux de conversion email"
+      "Attribution Google/Facebook imprécise (overlap estimé 40-60%)",
+      "Impact campagnes TV/Influence difficile à mesurer",
+      "Optimisation budgets Google/Facebook en silo",
+      "Reporting manuel chronophage (2j/semaine)",
+      "Pas de vision unifiée customer journey"
     ],
     
-    currentSolution: "Architecture analytics fragmentée: Google Analytics 4 (gratuit, setup basique) + Google Ads conversion tracking + Facebook Business Manager analytics + Klaviyo email analytics + Shopify Analytics (natif) + 15 fichiers Excel consolidés manuellement par Sophie Martin chaque lundi. Temps consolidation: 4h/semaine. Fiabilité données: 75% (20% écarts entre sources). Réactivité décision: 7 jours délai. Granularité insight: macro seulement (pas de micro-segments).",
+    currentSolution: "Google Analytics 4 + exports Excel + dashboard Tableau basique",
     
-    budget: "8-15k€/an analytics tools vs 650k€ total marketing budget (1.2-2.3% budget). Répartition: 550k€ média advertising (Meta 330k€/an, Google 220k€/an), 60k€ content/création, 25k€ tools & tech, 15k€ events. Validation Clara nécessaire au-delà de 12k€.",
+    budget: "Budget outils marketing: 35K€/an - Budget nouveaux projets: 50K€/an",
     
-    timeline: "Urgence maximale Q1 2024: lancement collection printemps-été crucial (40% CA annuel réalisé Q2-Q3). Besoin attribution parfaite avant campagne lancement mars 2024. Décision décembre 2023, déploiement janvier 2024, opérationnel février pour optimisation mars-avril.",
+    timeline: "Test avant fin Q1, déploiement Q2 si concluant",
     
     foundedYear: 2018,
     keyPeople: [
@@ -77,23 +54,19 @@ export const kpiPerformanceScenario: Scenario = {
       "Marc Lecomte - COO, 38 ans (Ex-directeur ops Showroomprivé, supply chain expert). Gestion croissance opérationnelle, logistique, recrutement équipe"
     ],
     
-    // Données financières et opérationnelles détaillées
+    // Informations stakeholders
+    keyPersonnel: [
+      "Sophie Martin (Primary Decision Maker)",
+      "Clara Dubois (CEO)",
+      "Thomas Dubois (CTO)"
+    ],
     detailedFinancials: {
-      revenue2023: "8,000,000€",
-      revenue2022: "6,400,000€", 
-      revenue2021: "4,800,000€",
-      grossMargin: "62% (4.96M€ marge brute)",
-      costOfGoodsSold: "38% (3.04M€)",
-      marketingSpend: "650,000€ (8.1% CA)",
-      personnelCosts: "1,600,000€ (20% CA, 85 employés)",
-      operatingExpenses: "1,300,000€ (tech, logistique, admin)",
-      ebitda: "560,000€ (7%)",
-      taxes: "160,000€",
-      netProfit: "240,000€ (3%)",
-      cashFlow: "800,000€",
-      inventoryValue: "850,000€",
-      accountsReceivable: "0€ (B2C direct)",
-      workingCapital: "650,000€"
+      quarters: [
+        { period: "Q1 2023", revenue: 4.2, marketingSpend: 0.48, roas: 8.8 },
+        { period: "Q2 2023", revenue: 4.1, marketingSpend: 0.51, roas: 8.0 },
+        { period: "Q3 2023", revenue: 4.6, marketingSpend: 0.58, roas: 7.9 },
+        { period: "Q4 2023", revenue: 5.1, marketingSpend: 0.62, roas: 8.2 }
+      ]
     }
   },
   interlocutor: {
@@ -103,57 +76,39 @@ export const kpiPerformanceScenario: Scenario = {
     // Profil psychologique approfondi
     personality: "Directrice marketing pragmatique avec un profil digital. Apprécie les données mais sans être une data scientist. Orientée résultats, veut comprendre ce qui marche pour l'optimiser. Parfois fatiguée par la fragmentation des outils actuels. Communication directe et efficace. Cherche des solutions simples qui font gagner du temps à son équipe.",
     
-    // Profil LinkedIn réaliste
     linkedinProfile: {
-      headline: "Directrice Marketing @ModaStyle | Digital Marketing & E-commerce | ESC Lyon",
-      experience: [
-        "ModaStyle (3 ans) - Directrice Marketing & Analytics: transformation data-driven, gestion équipe 6 personnes, +300% revenue",
-        "Converteo (4 ans) - Senior Analytics Consultant: audit attribution, clients Fnac-Darty/Monoprix, setup GA360",
-        "Spartoo (3 ans) - Marketing Manager: gestion budget 500k€/an, optimisation ROAS +65%, équipe 4 personnes",
-        "Agence Digitale Lyon (2 ans) - Consultante Marketing Digital: accompagnement e-commerces PME"
-      ],
-      education: "ESC Lyon - Master Marketing Digital & Data Analytics", 
-      certifications: "Google Analytics 4, Google Ads, Facebook Blueprint, Klaviyo Expert",
-      network: "680 connexions (marketing digital, e-commerce, mode, analytics)",
-      activite: "Speaker conférences e-commerce, partage insights attribution marketing"
+      experience: "9 ans en marketing digital et analytics",
+      education: "Master Marketing Digital - ESSEC Business School (2016), Certification Google Analytics 4 (2023), Formation Marketing Mix Modeling - Google (2022)",
+      currentCompany: "ModaStyle (depuis 2021)",
+      previousCompanies: ["Sephora (2018-2021 - Senior Marketing Analyst)", "BonPrix (2016-2018 - Marketing Data Analyst)", "Stage L'Oréal (2015 - Marketing Analytics Intern)"],
+      skills: ["Marketing Analytics", "Attribution Modeling", "Customer Journey Analysis", "ROI Optimization", "GA4", "Facebook Ads Manager", "Google Ads", "Tableau", "Excel avancé"],
+      recommendations: 8,
+      connections: "350+"
     },
     
     // Habitudes et préférences détaillées  
-    workingStyle: {
-      horairesTravail: "8h30-19h30 + weekend matin + urgences soir",
-      outilsQuotidiens: "iPad Pro + Apple Pencil (notes manuscrites), MacBook Pro 16' (analyses), iPhone (monitoring constant)",
-      rituelsProductivite: "Meditation 10min matin, check dashboards avec café 8h45, synthèse KPIs équipe tous lundis 9h",
-      espaceTravail: "Bureau debout modulable, 3 écrans (dashboard permanent), notes post-it colorées système personnel",
-      communicationPreferences: "Slack pour urgences, email synthèse, visio max 45min, déteste small talk"
-    },
+    workingStyle: "Méthodique mais pragmatique, teste en petit avant de déployer",
     
-    communicationStyle: "Communication ultra-directe factuelle, aucune tolérance pour approximations ou langue de bois. Rythme soutenu: 3 questions précises/minute, interrompt si dérive sujet. Adore graphiques courbes/histogrammes, déteste PowerPoint corporate fleuve. Prend notes manuscrites structurées iPad (mindmapping couleurs). Expressions favorites: 'Quels sont les chiffres?', 'ROI mesurable comment?', 'Timeline réaliste?'. Body language: contact visuel direct, stylo en main, vérifie notifications discrètement si pas captivée.",
+    communicationStyle: "Directe, pose des questions techniques précises, demande des preuves chiffrées",
     
-    decisionPower: "Décisionnaire opérationnel jusqu'à 30k€ (validation board 24h). Au-delà: co-décision CEO Clara Dubois (relation trust forte). Influence majeure roadmap produit marketing, budgets publicitaires, choix tools marketing stack. Veto technique sur outils analytics si standards qualité non respectés. Input stratégique pricing, lancement produits, expansion géographique.",
+    decisionMakingPower: "Décision autonome jusqu'à 25k€, validation Direction au-delà",
     
-    priorities: [
-      "Comprendre l'attribution réelle entre Meta et Google pour mieux répartir le budget pub (46k€/mois)",
-      "Automatiser le reporting hebdomadaire qui prend actuellement 8h à l'équipe",
-      "Améliorer la segmentation client pour des campagnes email plus efficaces",
-      "Optimiser les budgets selon les pics saisonniers de la mode éthique"
-    ],
+    priorities: ["Améliorer l'attribution des campagnes Facebook/Google", "Réduire la cannibalisation entre canaux", "Mesurer l'impact des campagnes TV"],
     
-    concerns: [
-      "Budget limité: doit rester dans l'enveloppe 8-15k€/an, au-delà il faut validation Clara",
-      "Facilité d'usage: l'équipe n'est pas ultra-technique, faut que ce soit simple à utiliser",
-      "Temps de mise en place: on est en période chargée avec le lancement collection printemps",
-      "Intégration Shopify: il ne faut pas que ça plante notre boutique"
-    ],
+    concerns: ["Fiabilité des modèles prédictifs", "Temps d'implémentation", "Adoption par l'équipe"],
     
-    motivations: [
-      "Reconnaissance professionnelle: ambition VP Growth 2024 (équipe 15 personnes, stock-options), benchmark industrie mode éthique, speaker conférences marketing",
-      "Performance financière: bonus 20% salaire indexé amélioration ROAS +10% + réduction CAC -15% + croissance revenue +40%",
-      "Passion data pure: fascinée corrélations cachées, patterns comportementaux, prédictions ML. Kiff personnel résoudre puzzles analytics complexes",
-      "Impact mission: aider Clara révolutionner industrie mode, prouver que éthique + performance = possible, legacy professionnelle positive",
-      "Challenge technique: repousser limites e-commerce analytics, innover méthodes attribution, devenir référence expertise secteur"
-    ],
+    motivations: ["Prouver l'efficacité de ses campagnes", "Optimiser le budget serré", "Montrer sa valeur ajoutée"],
     
-    experience: "10 années expertise marketing digital analytics: AGENCE DIGITALE LYON (2 ans, 2014-2016): Consultante junior e-commerce PME. SPARTOO (3 ans, 2016-2019): Marketing Manager acquisition. Gestion budget 500k€/an, optimisation ROAS +65%, déploiement attribution cross-device, équipe 4 personnes. CONVERTEO (4 ans, 2019-2023): Senior Analytics Consultant e-commerce/retail. Clients: Fnac-Darty, Monoprix, Showroomprivé. Expertise: audit attribution, setup GA360/Adobe Analytics, transformation data-driven +50 missions. MODASTYLE (3 ans, 2021-present): Directrice Marketing & Analytics. Recrutée par Clara pour structurer analytics scale-up. Résultats: +300% revenue, setup stack marketing complet, équipe 3→6 personnes, autorité reconnue data."
+    professionalExperience: {
+      totalYears: 9,
+      currentRole: "Directrice Marketing & Analytics chez ModaStyle (3 ans)",
+      keyAchievements: [
+        "Mise en place GA4 et Facebook CAPI (2023)",
+        "Amélioration de 18% du ROAS moyen sur Google Ads",
+        "Création dashboard executive pour la Direction"
+      ],
+      expertise: ["Google Analytics 4", "Facebook Business Manager", "Attribution last-click vs multi-touch", "Tableaux de bord Tableau"]
+    }
   },
   product: {
     name: "DataTrack Pro",
@@ -178,106 +133,30 @@ export const kpiPerformanceScenario: Scenario = {
       awards: ["Best Analytics Startup 2023 (La French Tech)", "Innovation Award E-commerce Paris 2023"]
     },
     
-    description: "Suite d'attribution marketing et analytics prédictive nouvelle génération, spécialement développée pour e-commerces européens 1M-50M€ CA. IA propriétaire entraînée sur 500M+ sessions e-commerce réelles. Architecture serverless ultra-scalable. Connecteurs natifs 200+ outils marketing sans développement. Setup no-code 24h vs 2-6 semaines concurrence. Conformité RGPD native. Support français expert e-commerce.",
+    description: "Solution d'attribution marketing et d'analytics prédictifs pour e-commerce",
     
-    // Positionnement marketing détaillé
-    marketingPositioning: {
-      tagline: "L'attribution marketing enfin fiable pour l'e-commerce européen",
-      targetMarket: "E-commerces 1M-50M€ CA, 10k-1M sessions/mois, multi-canal acquisition",
-      valueProposition: "Révélez le vrai ROI de chaque canal marketing avec l'IA la plus précise d'Europe",
-      differentiators: [
-        "IA propriétaire 94% précision vs 78% GA4",
-        "Setup 24h vs 2-6 semaines concurrence", 
-        "Prix transparent par session vs licensing complexe",
-        "Support français expert vs offshore",
-        "RGPD native vs adaptations US"
-      ],
-      competitiveSet: ["Google Analytics 4", "Triple Whale", "Northbeam", "Mixpanel", "Amplitude"],
-      winningMessages: [
-        "Enfin savoir quel canal génère vraiment vos ventes",
-        "L'attribution marketing sans les maux de tête techniques",
-        "L'alternative européenne aux solutions US complexes"
-      ]
-    },
+    marketingPositioning: "Attribution marketing précise pour optimiser vos campagnes cross-canal",
     
     pricing: {
-      starter: "299€/mois HT (jusqu'à 100k sessions/mois, 5 canaux, attribution basique, support email)",
-      professional: "599€/mois HT (jusqu'à 500k sessions/mois, canaux illimités, IA prédictive, support prioritaire)", 
-      enterprise: "1200€/mois HT (sessions illimitées, white-label, API dédiée, CSM personnel, SLA 99.9%)",
-      enterprise_plus: "Sur-mesure (multi-marques, données custom, intégrations spécifiques, consulting stratégique)",
-      
-      // Structure tarifaire détaillée
-      pricingModel: "Usage-based transparent: prix par session trackée/mois vs revenue share opaque concurrence",
-      setupFees: "0€ (inclus dans abonnement)",
-      contractTerms: "12 mois minimum, paiement mensuel ou annuel (-15%)",
-      overage: "0.002€/session supplémentaire au-delà du plan",
-      migration: "Gratuite depuis GA4/Mixpanel (service blanc gant inclus)",
-      cancelPolicy: "30j préavis, data export garanti 90j"
+      setup: "8 500€",
+      monthly: "1 200€/mois",
+      implementation: "4-6 semaines"
     },
     keyFeatures: [
-      // Attribution Marketing Avancée
-      "Attribution multi-touch propriétaire: modèles Shapley, Data-Driven, First-Click, Last-Click, Time-Decay avec weights personnalisables selon business model",
-      "Customer Journey Mapping 360°: visualisation parcours complet prospect → client avec touchpoints cross-device, cross-canal temps réel",
-      "Attribution incrementale: mesure lift réel chaque canal via tests géo-holdout automatisés, correlation analysis, media mix modeling",
-      "View-through attribution: tracking impressions non-cliquées avec fenêtre attribution paramétrable 1-30j, impact mesurable brand awareness",
-      
-      // Intelligence Artificielle Prédictive  
-      "Prédiction churn client ML: algorithme propriétaire 89% précision, alertes 15-30j avant départ probable avec scores confiance individuels",
-      "LTV prédictive dynamique: calcul lifetime value par segment client temps réel avec facteurs comportementaux, saisonniers, produits",
-      "Prédiction demande produits: forecasting ventes par SKU, optimisation stocks, détection tendances émergentes via NLP réseaux sociaux",
-      "Anomaly detection automatique: alertes intelligentes baisse performance, pics trafic, fraude potentielle avec contextualisation business",
-      
-      // Optimisation Budgets & Campagnes
-      "Optimisation budgets algorithmique: allocation automatique Meta/Google/Pinterest selon performance temps réel + contraintes business",
-      "Bid optimization cross-canal: suggestions enchères optimales par keyword/audience/placement avec simulation ROI",
-      "Creative performance analytics: scoring automatique visuels/copies avec recommandations A/B tests, trend analysis créatives",
-      "Audience intelligence: enrichissement segments 1st party data + lookalikes algorithmes propriétaires vs plateformes",
-      
-      // Segmentation & Personnalisation
-      "Segmentation comportementale ML: micro-segments automatiques RFM enrichi + navigation + engagement + préférences produits",
-      "Customer 360 unifié: vue unique client toutes interactions online/offline, transactions, support, emails, réseaux sociaux",
-      "Personnalisation temps réel: recommandations produits, contenus, offres adaptées profil visiteur avec learning continu",
-      "Cohort analysis avancée: retention curves, revenue curves par acquisition source avec prédictions évolution",
-      
-      // Analytics & Reporting  
-      "Dashboard temps réel 50+ KPIs: métriques business customisables avec drill-down granulaire, comparaisons périodes, benchmarks secteur",
-      "Attribution reporting automatisé: rapports performance canal avec ROI, ROAS, CAC, LTV par segment/période/géographie",
-      "Executive dashboard: synthèse C-level performance marketing, alertes business-critical, KPIs objectifs stratégiques",
-      "Custom metrics builder: création métriques propriétaires formules personnalisées adaptées business model unique",
-      
-      // Intégrations & Technical
-      "Connecteurs no-code 200+: intégration native Shopify, Klaviyo, Meta, Google, TikTok, Pinterest, Snapchat, Amazon, Criteo...",
-      "API REST/GraphQL: accès data programmable pour intégrations custom, data warehouse, business intelligence externe",
-      "Data export illimité: extractions data brute CSV/JSON, intégration BigQuery/Snowflake, ownership complète données",
-      "Real-time sync: synchronisation données <30 secondes toutes sources, webhooks events business-critical"
+      "Attribution multi-touch (first-click, last-click, data-driven)",
+      "Connecteurs Google Ads, Facebook Ads, GA4 natifs",
+      "Modélisation Marketing Mix simple",
+      "Dashboards préconstruits pour e-commerce",
+      "Alertes automatiques sur anomalies de performance",
+      "Export CSV/Excel des rapports"
     ],
     competitiveAdvantages: [
-      // Excellence Technique & Innovation
-      "IA propriétaire révolutionnaire: dataset unique 500M+ sessions e-commerce européennes, algorithmes attribution 94% précision vs 78% GA4, 89% Google Ads",
-      "Setup no-code 24h: déploiement complet sans développement vs 2-6 semaines Northbeam/Triple Whale/Mixpanel, 0 interruption business",
-      "Architecture cloud-native: scalabilité automatique, latence <100ms, uptime 99.99% SLA contractuel vs solutions legacy instables",
-      "Innovation continue R&D: 40% budget R&D, 15 data scientists, releases bi-hebdomadaires vs concurrents stagnants",
-      
-      // Expertise Marché Européen
-      "Spécialisation e-commerce européen: compliance RGPD native, serveurs EU, expertise réglementations locales vs solutions US adaptées",
-      "Secteur mode/lifestyle: algorithmes entraînés spécifiquement saisonnalités mode, comportements shopping fashion, conversions mobile",
-      "Support français excellence: équipe CSM experts e-commerce, response time <2h, formation incluse vs call centers offshore médiocres",
-      "Références clients France: 200+ e-commerces français 1M-50M€, case studies sectoriels, network entraide clients",
-      
-      // Transparence & ROI
-      "Pricing transparent équitable: modèle par session simple vs revenue share opaque/licensing complexe concurrents qui explosent avec croissance",
-      "ROI prouvé mesurable: +312% ROI moyen première année clients similaires, metrics auditées cabinet externe vs promesses invérifiables",
-      "Garantie satisfaction: 30j satisfait/remboursé + SLA performance contractuel vs concurrents sans garanties",
-      "Migration gratuite white-glove: service migration données depuis GA4/Mixpanel inclus vs facturation services professionnels",
-      
-      // Avantages Compétitifs Spécifiques vs Leaders
-      "vs Google Analytics 4: Attribution 30% plus précise, interface moderne, prédictif natif, 0 limitations sampling, support humain",
-      "vs Triple Whale: 60% moins cher, attribution plus sophistiquée, IA prédictive avancée, intégrations natives 3x plus nombreuses",
-      "vs Northbeam: 70% moins cher, setup 10x plus rapide, support français, conformité RGPD native, algorithmes plus performants",
-      "vs Mixpanel: Spécialisation e-commerce vs généraliste, attribution marketing native, pricing équitable, support métier expert"
-    ],
-    roi: "Clients moyens : +47% ROAS, -23% CAC, +12% LTV en 6 mois. Retour investissement 312% première année.",
-    implementationTime: "24h setup + 1 semaine calibrage IA + formation équipe"
+      "Spécialisé e-commerce fashion (vs. généraliste)",
+      "Interface française et support local",
+      "Implémentation rapide (4-6 sem vs 3-4 mois)",
+      "Pricing transparent sans surprise",
+      "Cas clients similaires (Grain de Malice, Spartoo)"
+    ]
   },
   // Objectifs pédagogiques selon type d'appel
   objectives: [
