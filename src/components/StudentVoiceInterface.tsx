@@ -176,7 +176,12 @@ export function StudentVoiceInterface({
                 <Button 
                   size="sm" 
                   variant="ghost" 
-                  onClick={onDisconnect}
+                  onClick={async () => {
+                    console.log('🔴 Fermeture depuis interface minimisée');
+                    await onDisconnect();
+                    console.log('✅ Déconnexion terminée, fermeture interface');
+                    onToggleMinimize?.();
+                  }}
                   className="h-6 w-6 p-0 text-destructive"
                 >
                   ✕
@@ -378,7 +383,11 @@ export function StudentVoiceInterface({
                   </Button>
                 ) : (
                   <Button 
-                    onClick={onDisconnect}
+                    onClick={async () => {
+                      console.log('🔴 Fin d\'appel depuis interface principale');
+                      await onDisconnect();
+                      console.log('✅ Session fermée correctement');
+                    }}
                     variant="destructive"
                     className="w-full"
                     size="lg"

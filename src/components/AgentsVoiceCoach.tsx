@@ -238,47 +238,62 @@ Adaptez vos réponses selon la phase de vente.`;
     }
   };
 
-  // Terminer la session avec nettoyage complet ET fermeture interface
+  // Terminer la session avec nettoyage complet SANS fermeture automatique
   const endSession = async () => {
-    if (sessionRef.current) {
-      console.log('🧹 Déconnexion session Agents SDK');
-      
-      try {
+    console.log('🧹 Début déconnexion session Agents SDK');
+    
+    try {
+      if (sessionRef.current) {
+        console.log('🔌 Déconnexion de la session...');
         await (sessionRef.current as any).disconnect();
         console.log('✅ Session déconnectée proprement');
-      } catch (error) {
-        console.error('❌ Erreur lors de la déconnexion:', error);
+        sessionRef.current = null;
       }
       
+      // Calcul statistiques
+      const duration = sessionStartRef.current 
+        ? Math.round((Date.now() - sessionStartRef.current.getTime()) / 1000)
+        : 0;
+      
+      console.log(`📊 Statistiques: ${duration}s, ${sessionStats.exchanges} échanges`);
+      
+      // Nettoyage état
+      setSessionStats(prev => ({ ...prev, duration }));
+      setIsConnected(false);
+      setIsSpeaking(false);
+      setIsListening(false);
+      setError(null);
+      sessionStartRef.current = null;
+
+      toast({
+        title: "📊 Session terminée",
+        description: `Durée: ${duration}s | Échanges: ${sessionStats.exchanges}`,
+      });
+
+      addMessage({ 
+        content: `📈 Session terminée - Durée: ${duration}s | Échanges: ${sessionStats.exchanges} | Interruptions: ${sessionStats.interruptions}`, 
+        sender: "system", 
+        timestamp: new Date(),
+        type: "text"
+      });
+
+      console.log('✅ Déconnexion complète terminée');
+      
+    } catch (error) {
+      console.error('❌ Erreur lors de la déconnexion:', error);
+      // Force le nettoyage même en cas d'erreur
       sessionRef.current = null;
+      setIsConnected(false);
+      setIsSpeaking(false);
+      setIsListening(false);
+      setError(null);
+      
+      toast({
+        title: "⚠️ Session fermée avec erreur",
+        description: "La session a été fermée de force",
+        variant: "destructive",
+      });
     }
-    
-    // Calcul statistiques
-    const duration = sessionStartRef.current 
-      ? Math.round((Date.now() - sessionStartRef.current.getTime()) / 1000)
-      : 0;
-    
-    setSessionStats(prev => ({ ...prev, duration }));
-    setIsConnected(false);
-    setIsSpeaking(false);
-    setIsListening(false);
-    setError(null);
-    sessionStartRef.current = null;
-
-    toast({
-      title: "📊 Session terminée",
-      description: `Durée: ${duration}s | Échanges: ${sessionStats.exchanges}`,
-    });
-
-    addMessage({ 
-      content: `📈 Session terminée - Durée: ${duration}s | Échanges: ${sessionStats.exchanges} | Interruptions: ${sessionStats.interruptions}`, 
-      sender: "system", 
-      timestamp: new Date(),
-      type: "text"
-    });
-
-    // FERMER L'INTERFACE COMPLETEMENT
-    onToggle?.();
   };
 
   // Interruption manuelle

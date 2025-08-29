@@ -243,14 +243,24 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
   };
 
   const endSession = async () => {
+    console.log('🔌 Début fermeture session Sophie...');
+    
     try {
-      console.log('🔌 Fermeture session Sophie...');
-      
-      if (sessionRef.current) {
-        await sessionRef.current.close();
-        sessionRef.current = null;
+      // Arrêter le timer en premier
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+        console.log('⏱️ Timer session arrêté');
       }
       
+      if (sessionRef.current) {
+        console.log('🔌 Fermeture connexion WebRTC...');
+        await sessionRef.current.close();
+        sessionRef.current = null;
+        console.log('✅ Session WebRTC fermée');
+      }
+      
+      // Nettoyage complet état
       agentRef.current = null;
       setIsConnected(false);
       setIsConnecting(false);
@@ -258,8 +268,10 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
       setIsListening(false);
 
       // Calcul durée session
+      let duration = 0;
       if (startTimeRef.current) {
-        const duration = Math.floor((Date.now() - startTimeRef.current.getTime()) / 1000);
+        duration = Math.floor((Date.now() - startTimeRef.current.getTime()) / 1000);
+        startTimeRef.current = null;
         addMessage(`Session terminée - Durée: ${duration}s - Échanges: ${exchangeCount}`, 'agent', 'text');
       }
 
@@ -268,8 +280,28 @@ Commencez TOUJOURS par : "Bonjour, c'est Sophie Martin de ModaStyle. Je vous app
         description: `Sophie Martin déconnectée - ${exchangeCount} échanges`,
       });
 
+      console.log(`✅ Session Sophie fermée complètement - ${duration}s, ${exchangeCount} échanges`);
+
     } catch (error) {
-      console.error('❌ Erreur fermeture session:', error);
+      console.error('❌ Erreur fermeture session Sophie:', error);
+      
+      // Force le nettoyage même en cas d'erreur
+      sessionRef.current = null;
+      agentRef.current = null;
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      setIsConnected(false);
+      setIsConnecting(false);
+      setIsSpeaking(false);
+      setIsListening(false);
+      
+      toast({
+        title: "⚠️ Session fermée avec erreur",
+        description: "Sophie Martin déconnectée de force",
+        variant: "destructive",
+      });
     }
   };
 
