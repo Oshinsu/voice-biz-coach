@@ -49,7 +49,7 @@ export class RealtimeVoiceCoach {
   private ws: WebSocket | null = null;
   private audioContext: AudioContext | null = null;
   private mediaRecorder: MediaRecorder | null = null;
-  private audioQueue: AudioBuffer[] = [];
+  private optimizedAudioQueue: any = null;
   private isConnected = false;
   private isRecording = false;
 
@@ -117,22 +117,36 @@ export class RealtimeVoiceCoach {
     }
   }
 
-  // Initialiser la session avec les paramètres
-  private initializeSession(instructions?: string): void {
-    if (!this.ws) return;
+  // PHASE 2: Configuration Session Optimisée - Session.update APRÈS session.created
+  private sessionInstructions: string | null = null;
+  private sessionReady = false;
 
-    const sessionConfig: SessionConfig = {
-      model: REALTIME_CONFIG.model,
-      voice: REALTIME_CONFIG.voice,
+  private initializeSession(instructions?: string): void {
+    this.sessionInstructions = instructions || SALES_COACH_PROMPT;
+    // Attendre session.created avant d'envoyer session.update
+  }
+
+  private sendSessionUpdate(): void {
+    if (!this.ws || !this.sessionInstructions) return;
+
+    console.log("📡 Envoi session.update après session.created");
+    
+    const sessionConfig = {
       modalities: ["text", "audio"],
-      instructions: instructions || SALES_COACH_PROMPT,
-      temperature: 0.8,
+      instructions: this.sessionInstructions,
+      input_audio_format: "pcm16",
+      output_audio_format: "pcm16", 
+      input_audio_transcription: {
+        model: "whisper-1"
+      },
       turn_detection: {
         type: "server_vad",
         threshold: 0.5,
         prefix_padding_ms: 300,
-        silence_duration_ms: 500,
+        silence_duration_ms: 1000  // Augmenté pour éviter coupures
       },
+      temperature: 0.7,
+      max_response_output_tokens: "inf"
     };
 
     this.sendEvent({
@@ -154,11 +168,14 @@ export class RealtimeVoiceCoach {
 
     switch (event.type) {
       case "session.created":
-        console.log("Session créée avec succès");
+        console.log("✅ Session créée avec succès");
+        this.sessionReady = true;
+        // CRITIQUE: Envoyer session.update APRÈS session.created
+        this.sendSessionUpdate();
         break;
 
       case "session.updated":
-        console.log("Session mise à jour");
+        console.log("✅ Session mise à jour avec configuration optimisée");
         break;
 
       case "input_audio_buffer.speech_started":
@@ -196,34 +213,31 @@ export class RealtimeVoiceCoach {
     }
   }
 
-  // Gérer les chunks audio reçus
+  // PHASE 1: Architecture Audio Critique - Gestion correcte des chunks audio
+  // Gérer les chunks audio reçus avec queue séquentielle
   private async handleAudioDelta(audioData: string): Promise<void> {
     if (!this.audioContext) return;
 
     try {
-      // Décoder le base64 en ArrayBuffer
+      // Décoder le base64 en Uint8Array (PCM16)
       const binaryString = atob(audioData);
       const bytes = new Uint8Array(binaryString.length);
       for (let i = 0; i < binaryString.length; i++) {
         bytes[i] = binaryString.charCodeAt(i);
       }
 
-      // Décoder l'audio PCM16
-      const audioBuffer = await this.audioContext.decodeAudioData(bytes.buffer);
-      this.playAudio(audioBuffer);
+      // Initialiser la queue audio si nécessaire
+      if (!this.optimizedAudioQueue) {
+        const { AudioQueue } = await import('./audio/AudioQueue');
+        this.optimizedAudioQueue = new AudioQueue(this.audioContext);
+      }
+
+      // Ajouter à la queue pour lecture séquentielle
+      await this.optimizedAudioQueue.addToQueue(bytes);
+      
     } catch (error) {
-      console.error("Erreur décodage audio:", error);
+      console.error("❌ Erreur décodage audio PCM16:", error);
     }
-  }
-
-  // Jouer l'audio reçu
-  private playAudio(audioBuffer: AudioBuffer): void {
-    if (!this.audioContext) return;
-
-    const source = this.audioContext.createBufferSource();
-    source.buffer = audioBuffer;
-    source.connect(this.audioContext.destination);
-    source.start();
   }
 
   // Démarrer l'enregistrement audio
@@ -260,20 +274,24 @@ export class RealtimeVoiceCoach {
     }
   }
 
-  // Traiter les chunks audio pour envoi
+  // PHASE 1: Traitement audio optimisé avec encodage PCM16 correct
   private async processAudioChunk(chunk: Blob): Promise<void> {
-    if (!this.ws || !this.isConnected) return;
+    if (!this.ws || !this.isConnected || !this.sessionReady) return;
 
     try {
       const arrayBuffer = await chunk.arrayBuffer();
-      const base64Audio = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+      
+      // Utiliser l'encodeur audio optimisé
+      const { encodeAudioForAPI } = await import('./audio/AudioRecorder');
+      const float32Data = new Float32Array(arrayBuffer);
+      const base64Audio = encodeAudioForAPI(float32Data);
 
       this.sendEvent({
         type: "input_audio_buffer.append",
         audio: base64Audio,
       });
     } catch (error) {
-      console.error("Erreur traitement audio:", error);
+      console.error("❌ Erreur traitement audio chunk:", error);
     }
   }
 
@@ -349,32 +367,56 @@ export class RealtimeVoiceCoach {
   onError?: (error: any) => void;
 }
 
-// Configuration du prompt système pour le coach commercial
-export const SALES_COACH_PROMPT = `Tu es un coach commercial expert et bienveillant spécialisé dans la formation commerciale interactive. Ton rôle est d'aider les utilisateurs à améliorer leurs compétences commerciales.
+// PHASE 3: PROMPT VOCAL OPTIMISÉ selon OpenAI Realtime Guide
+export const SALES_COACH_PROMPT = `# Role & Objective
+Coach commercial expert spécialisé formation vente B2B tech interactive.
+SUCCÈS = Aider utilisateur améliorer compétences commerciales via feedback temps réel.
 
-CONTEXTE ET PERSONNALITÉ :
-- Tu es un coach commercial expérimenté avec plus de 15 ans d'expérience
-- Tu parles français de manière naturelle et professionnelle
-- Tu es patient, encourageant et constructif dans tes retours
-- Tu utilises des exemples concrets et des situations réelles
-- Tu t'adaptes au niveau de l'utilisateur et au scénario de vente
+# Personality & Tone
+## Personality
+- Expert bienveillant avec 15+ ans expérience
+- Patient, encourageant, constructif dans retours
+## Tone
+- Professionnel, naturel, jamais condescendant
+## Length
+2-3 phrases courtes par intervention.
+## Language
+- Conversation uniquement en français
+- Pas de changement langue même si demandé
+## Variety
+- Variez vos encouragements: "Excellent", "Très bien", "Parfait", "Bien joué"
+- Alternez structure conseils pour éviter répétition
 
-DOMAINES D'EXPERTISE :
-1. Techniques de vente et négociation
-2. Prospection et génération de leads
-3. Présentation commerciale et storytelling
-4. Gestion des objections
-5. Closing et finalisation des ventes
-6. Relation client et fidélisation
+# Instructions/Rules
+## Domaines Expertise
+- Techniques vente et négociation B2B
+- Prospection qualifiée secteur tech
+- Présentation commerciale data-driven
+- Gestion objections techniques/budget/timing
+- Closing et steps suivants concrets
 
-APPROCHE PÉDAGOGIQUE :
-- Pose des questions pour comprendre le contexte
-- Propose des conseils actionnables et spécifiques
-- Encourage la pratique et l'amélioration continue
-- Donne des exemples concrets adaptés au secteur
-- Reste toujours bienveillant et motivant
+## Coaching Approach
+- Posez questions courtes pour comprendre contexte
+- Conseils actionnables immédiatement applicables
+- Exemples concrets secteur/situation utilisateur
+- Feedback positif + 1 point amélioration max
 
-Commence par te présenter brièvement et demander à l'utilisateur sur quel aspect commercial il souhaite travailler.`;
+# Sample Phrases
+Variez ces exemples, ne répétez pas:
+## Encouragements
+- "Excellente approche, continuez comme ça"
+- "Très bien, vous adaptez votre discours"
+- "Parfait, vous écoutez vraiment le prospect"
+
+## Conseils courts
+- "Creusez davantage l'impact business"
+- "Posez une question ouverte maintenant"  
+- "Reformulez pour confirmer la compréhension"
+
+## Questions coaching
+- "Quel était votre objectif cette phase?"
+- "Comment le prospect a-t-il réagi?"
+- "Que feriez-vous différemment?"`;
 
 // Fonction utilitaire pour gérer les erreurs
 export function handleRealtimeError(error: any): string {
