@@ -75,7 +75,7 @@ Adaptez vos réponses selon la phase de vente.`;
     });
   };
 
-  // Démarrer la session Agents SDK
+  // Démarrer la session Agents SDK avec événements complets
   const startSession = async () => {
     try {
       setIsConnecting(true);
@@ -109,26 +109,120 @@ Adaptez vos réponses selon la phase de vente.`;
         voice: 'alloy'
       });
 
-      // Créer la session
-      const session = new RealtimeSession(agent);
+      // Créer la session avec configuration optimale
+      const session = new RealtimeSession(agent, {
+        model: 'gpt-realtime',
+        config: {
+          inputAudioFormat: 'pcm16',
+          outputAudioFormat: 'pcm16',
+          inputAudioTranscription: {
+            model: 'whisper-1'
+          },
+          turnDetection: {
+            type: 'server_vad',
+            threshold: 0.5,
+            prefixPaddingMs: 300,
+            silenceDurationMs: 1000
+          },
+          voice: 'alloy'
+        }
+      });
+      
       sessionRef.current = session;
+
+      // ✅ ÉVÉNEMENTS AUDIO ESSENTIELS (audio automatiquement géré par WebRTC)
+      session.on('audio', (audioEvent: any) => {
+        console.log('🔊 Audio reçu:', audioEvent);
+        // Audio automatiquement géré par WebRTC dans le SDK
+      });
+
+      // ✅ ÉVÉNEMENTS D'ÉTAT DE PAROLE
+      session.on('speaking_started' as any, () => {
+        console.log('🗣️ IA commence à parler');
+        setIsSpeaking(true);
+        setIsListening(false);
+      });
+
+      session.on('speaking_stopped' as any, () => {
+        console.log('⏸️ IA arrête de parler');
+        setIsSpeaking(false);
+        setIsListening(true);
+        setSessionStats(prev => ({ ...prev, exchanges: prev.exchanges + 1 }));
+      });
+
+      // ✅ ÉVÉNEMENT INTERRUPTION
+      session.on('audio_interrupted' as any, () => {
+        console.log('⚡ Interruption détectée');
+        setIsSpeaking(false);
+        setIsListening(true);
+        setSessionStats(prev => ({ ...prev, interruptions: prev.interruptions + 1 }));
+        
+        addMessage({
+          content: "⚡ Interruption détectée",
+          sender: "system",
+          timestamp: new Date(),
+          type: "interruption"
+        });
+      });
+
+      // ✅ ÉVÉNEMENT HISTORIQUE
+      session.on('history_updated' as any, (history: any[]) => {
+        console.log('📝 Historique mis à jour:', history.length, 'éléments');
+        
+        // Convertir l'historique en messages pour l'UI
+        const newMessages = history
+          .filter((item: any) => item.type === 'message')
+          .map((item: any) => {
+            // Gestion sécurisée du contenu selon les types
+            let content = 'Message audio';
+            if (item.content?.[0]) {
+              const contentItem = item.content[0];
+              if (contentItem.type === 'input_text' || contentItem.type === 'output_text') {
+                content = contentItem.text || 'Texte vide';
+              } else if (contentItem.type === 'input_audio') {
+                content = contentItem.transcript || 'Audio sans transcription';
+              } else if (contentItem.type === 'output_audio') {
+                content = contentItem.transcript || 'Réponse audio';
+              }
+            }
+            
+            return {
+              content,
+              sender: item.role === 'user' ? 'user' as const : 'assistant' as const,
+              timestamp: new Date(),
+              type: (item.content?.[0]?.type?.includes('audio')) ? 'audio' as const : 'text' as const
+            };
+          });
+        
+        setMessages(newMessages);
+      });
+
+      // ✅ ÉVÉNEMENTS DE CONNEXION
+      session.on('session.created' as any, () => {
+        console.log('🎯 Session créée avec succès');
+      });
+
+      session.on('session.updated' as any, () => {
+        console.log('🔄 Session mise à jour');
+      });
 
       // Connexion avec token éphémère (recommandé par OpenAI)
       await session.connect({
         apiKey: tokenData.client_secret.value
       });
 
-      console.log('✅ Session Agents SDK connectée');
+      console.log('✅ Session Agents SDK connectée avec tous les événements');
       setIsConnected(true);
       setIsConnecting(false);
+      setIsListening(true);
       
       toast({
         title: "🎯 Coach IA Connecté",
-        description: "Session Agents SDK active. Commencez votre pitch commercial.",
+        description: "Parlez maintenant, l'IA vous écoute et répondra.",
       });
 
       addMessage({ 
-        content: "🚀 Session Agents SDK démarrée. Présentez votre offre commerciale.", 
+        content: "🚀 Coach vocal prêt. Commencez votre présentation commerciale.", 
         sender: "system", 
         timestamp: new Date(),
         type: "text"
@@ -147,10 +241,12 @@ Adaptez vos réponses selon la phase de vente.`;
     }
   };
 
-  // Terminer la session
+  // Terminer la session avec nettoyage complet
   const endSession = () => {
     if (sessionRef.current) {
-      // Note: Agents SDK utilise une méthode différente pour déconnecter
+      // Nettoyage correct des événements
+      (sessionRef.current as any).removeAllListeners?.();
+      // Le SDK gère la déconnexion automatiquement
       sessionRef.current = null;
     }
     
@@ -181,11 +277,28 @@ Adaptez vos réponses selon la phase de vente.`;
 
   // Interruption manuelle
   const handleInterrupt = async () => {
-    if (sessionRef.current) {
-      // Note: Agents SDK peut ne pas avoir de méthode interrupt directe
+    if (sessionRef.current && (sessionRef.current as any).interrupt) {
+      console.log('⚡ Interruption manuelle déclenchée');
+      await (sessionRef.current as any).interrupt();
+      
       toast({
         title: "⚡ Interruption",
-        description: "Arrêtez de parler pour interrompre l'IA",
+        description: "Réponse de l'IA interrompue",
+      });
+    }
+  };
+
+  // Envoyer un message texte
+  const sendTextMessage = async (text: string) => {
+    if (sessionRef.current && (sessionRef.current as any).sendMessage) {
+      console.log('📝 Envoi message texte:', text);
+      await (sessionRef.current as any).sendMessage(text);
+      
+      addMessage({
+        content: text,
+        sender: "user",
+        timestamp: new Date(),
+        type: "text"
       });
     }
   };
@@ -195,11 +308,12 @@ Adaptez vos réponses selon la phase de vente.`;
     setMessages(prev => [...prev, message]);
   };
 
-  // Nettoyage
+  // Nettoyage complet des événements
   useEffect(() => {
     return () => {
       if (sessionRef.current) {
-        // Note: Agents SDK cleanup
+        // Nettoyage correct de tous les listeners
+        (sessionRef.current as any).removeAllListeners?.();
         sessionRef.current = null;
       }
     };
