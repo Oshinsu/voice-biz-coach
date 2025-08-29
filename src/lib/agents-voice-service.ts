@@ -34,7 +34,6 @@ export class AgentsVoiceService {
       // Generate ephemeral token via Supabase Edge Function
       const tokenResponse = await supabase.functions.invoke('realtime-token', {
         body: {
-          instructions: this.config.instructions || "You are a helpful assistant.",
           voice: this.config.voice || "alloy"
         }
       });
@@ -134,6 +133,29 @@ export class AgentsVoiceService {
 
     this.dc.addEventListener("open", () => {
       console.log('📡 Data channel ouvert');
+      
+      // Send session.update with instructions via DataChannel AFTER connection
+      if (this.config.instructions) {
+        console.log('📤 Sending session.update with instructions via DataChannel');
+        const sessionUpdate = {
+          type: 'session.update',
+          session: {
+            instructions: this.config.instructions,
+            modalities: ['text', 'audio'],
+            voice: this.config.voice || 'alloy',
+            input_audio_format: 'pcm16',
+            output_audio_format: 'pcm16',
+            turn_detection: {
+              type: 'server_vad',
+              threshold: 0.5,
+              prefix_padding_ms: 300,
+              silence_duration_ms: 1000
+            },
+            temperature: 0.8
+          }
+        };
+        this.dc.send(JSON.stringify(sessionUpdate));
+      }
     });
 
     this.dc.addEventListener("message", (e) => {

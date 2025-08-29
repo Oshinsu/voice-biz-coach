@@ -18,11 +18,11 @@ serve(async (req) => {
       throw new Error('OPENAI_API_KEY is not set');
     }
 
-    const { instructions, voice = "alloy" } = await req.json();
+    const { voice = "alloy" } = await req.json();
 
     console.log('🔑 Generating ephemeral token for WebRTC...');
 
-    // Structure correcte selon doc OpenAI WebRTC
+    // Structure correcte selon doc OpenAI WebRTC - PAS d'instructions dans sessionConfig
     const sessionConfig = {
       session: {
         type: "realtime",
@@ -31,8 +31,7 @@ serve(async (req) => {
           output: {
             voice: voice
           }
-        },
-        instructions: instructions || "You are a helpful assistant."
+        }
       }
     };
 
