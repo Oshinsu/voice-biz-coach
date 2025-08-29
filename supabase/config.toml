@@ -1,4 +1,1 @@
 project_id = "rcfczlwyywaiovxfgdzs"
-
-[functions.openai-realtime]
-verify_jwt = false

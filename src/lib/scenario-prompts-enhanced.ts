@@ -58,10 +58,10 @@ export async function generateEnhancedContactPrompt({
   // Informations discovery disponibles
   const discoveryInstructions = generateDiscoveryInstructions(availableInformation, scenarioData);
 
-  return `# PROMPT CONTEXTUEL SALES TRAINING - API REALTIME 2025
+  return `# PROMPT CONTEXTUEL SALES TRAINING - API REALTIME GA 2025
 
 ## CONFIGURATION TECHNIQUE
-- Modèle: gpt-4o-realtime-preview-2025-06-03
+- Modèle: gpt-realtime (GA 28 août 2025)
 - Voix: ${voice}
 - Mode: Discovery cognitif avec fonction calling avancé
 - Format audio: PCM16 24kHz

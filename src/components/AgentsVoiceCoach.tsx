@@ -102,7 +102,7 @@ Démarrez par une réaction naturelle de surprise à ce call commercial inattend
       setError(null);
       sessionStartRef.current = new Date();
 
-      console.log('🚀 Démarrage session Agent SDK Direct');
+      console.log('🚀 Démarrage session Agent SDK Direct - WebRTC (PAS Edge Function!)');
 
       // Vérifier la clé API
       const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
