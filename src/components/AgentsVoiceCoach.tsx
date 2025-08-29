@@ -71,7 +71,7 @@ Adaptez vos réponses selon la phase de vente.`;
       conversationType: conversationType,
       currentPhase: 'ouverture', 
       trustLevel: 50,
-      agentType: 'contact_principal'
+      agentType: 'sophie_martin'
     });
   };
 
@@ -313,8 +313,8 @@ Adaptez vos réponses selon la phase de vente.`;
   useEffect(() => {
     return () => {
       if (sessionRef.current) {
-        // Nettoyage correct de tous les listeners
-        (sessionRef.current as any).removeAllListeners?.();
+        console.log('🧹 Cleanup composant - Session sera fermée par endSession()');
+        // Le disconnect() est géré dans endSession() pour éviter les conflits
         sessionRef.current = null;
       }
     };

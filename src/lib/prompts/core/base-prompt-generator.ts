@@ -8,7 +8,7 @@ export interface OptimizedPromptConfig {
   conversationType: 'cold-call' | 'rdv';
   currentPhase: string;
   trustLevel: number;
-  agentType: 'contact_principal' | 'collegue_technique' | 'direction' | 'coach';
+  agentType: 'contact_principal' | 'collegue_technique' | 'direction' | 'coach' | 'sophie_martin';
 }
 
 export interface ScenarioPromptGenerator {
