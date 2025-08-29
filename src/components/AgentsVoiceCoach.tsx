@@ -82,15 +82,13 @@ Adaptez vos réponses selon la phase de vente.`;
       setError(null);
       sessionStartRef.current = new Date();
 
-      console.log('🚀 Démarrage session Agents SDK...');
+      console.log('🚀 Démarrage session Agents SDK pure...');
 
-      // Obtenir une clé éphémère depuis notre Edge Function
-      const { data: tokenData, error } = await supabase.functions.invoke('realtime-token', {
-        body: { voice: 'alloy' }
-      });
+      // Récupérer la clé API OpenAI depuis Supabase
+      const { data: keyData, error } = await supabase.functions.invoke('get-openai-key', {});
 
-      if (error || !tokenData?.client_secret?.value) {
-        throw new Error('Impossible d\'obtenir le token ephémère');
+      if (error || !keyData?.OPENAI_API_KEY) {
+        throw new Error('Impossible d\'obtenir la clé API OpenAI');
       }
 
       // Créer l'agent avec les instructions
@@ -104,6 +102,11 @@ Adaptez vos réponses selon la phase de vente.`;
       // Créer la session
       const session = new RealtimeSession(agent);
       sessionRef.current = session;
+
+      // Connexion directe avec clé API (l'Agents SDK gère tout automatiquement)
+      await session.connect({
+        apiKey: keyData.OPENAI_API_KEY
+      });
 
       console.log('✅ Session Agents SDK connectée');
       setIsConnected(true);
@@ -119,11 +122,6 @@ Adaptez vos réponses selon la phase de vente.`;
         sender: "system", 
         timestamp: new Date(),
         type: "text"
-      });
-
-      // Connecter avec le token éphémère
-      await session.connect({
-        apiKey: tokenData.client_secret.value,
       });
 
     } catch (error: any) {
