@@ -93,7 +93,7 @@ export function UnifiedVoiceCoach({ scenario, open = true, onToggle }: UnifiedVo
         body: {
           instructions,
           voice: selectedVoice,
-          model: 'gpt-4o-realtime-preview-2024-12-17'
+          model: 'gpt-realtime'
         }
       });
 
@@ -197,7 +197,7 @@ export function UnifiedVoiceCoach({ scenario, open = true, onToggle }: UnifiedVo
       // Envoyer l'offre à OpenAI
       console.log("📡 Envoi de l'offre à OpenAI...");
       const response = await fetch(
-        `https://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17`,
+        `https://api.openai.com/v1/realtime/calls?model=gpt-realtime`,
         {
           method: "POST",
           body: offer.sdp,
@@ -378,31 +378,42 @@ export function UnifiedVoiceCoach({ scenario, open = true, onToggle }: UnifiedVo
     }
   }, [toast]);
 
-  // Fonction pour générer les instructions
+  // Fonction pour générer les instructions optimisées
   const generateInstructions = (scenario: any, callType: string) => {
-    const baseInstructions = `Tu es maintenant ${scenario?.interlocutor?.name || 'le contact'} de ${scenario?.company?.name || 'l\'entreprise'}. 
+    const baseInstructions = `# ROLE & OBJECTIVE
+Tu es ${scenario?.interlocutor?.name || 'le contact'} de ${scenario?.company?.name || 'l\'entreprise'}.
+${callType === 'cold-call' ? 'CONTEXTE: Appel commercial non sollicité pendant vos heures de travail.' : 'CONTEXTE: RDV planifié que vous avez accepté.'}
+SUCCÈS = Conversation réaliste qui challenge les techniques commerciales du vendeur.
 
-CONTEXTE DE L'APPEL:
-- Type: ${callType === 'cold-call' ? 'Appel de prospection à froid' : 'Rendez-vous commercial planifié'}
-- Entreprise: ${scenario?.company?.name}
-- Secteur: ${scenario?.company?.industry}
-- Votre rôle: ${scenario?.interlocutor?.role}
-- Votre personnalité: ${scenario?.interlocutor?.personality}
+# PERSONALITY & TONE
+- Persona: ${scenario?.interlocutor?.personality || 'Professionnel expérimenté'}
+- Rôle: ${scenario?.interlocutor?.role || 'Contact commercial'}
+- Entreprise: ${scenario?.company?.name} (${scenario?.company?.industry})
+- Langue: UNIQUEMENT français
+- Longueur: 1-2 phrases maximum par réponse
+- Ton: ${callType === 'cold-call' ? 'Sceptique mais professionnel' : 'Ouvert mais exigeant'}
 
-INSTRUCTIONS DE JEU DE RÔLE:
-1. Incarnez fidèlement ${scenario?.interlocutor?.name}
-2. Respectez sa personnalité et ses motivations
-3. ${callType === 'cold-call' ? 'Soyez naturellement surpris par cet appel non planifié' : 'Vous attendiez cet appel planifié'}
-4. Révélez progressivement les informations selon le niveau de confiance
-5. Réagissez de manière réaliste aux arguments commerciaux
-6. Posez des questions pertinentes à votre secteur
-7. Parlez français naturellement
+# GESTION AUDIO UNCLEAR
+- Audio flou: "Désolé, je n'ai pas bien saisi, vous pouvez répéter ?"
+- Silence >3sec: "Une question particulière ?"
+- Interruption: Laisser finir puis continuer naturellement
 
-OBJECTIFS DE LA SIMULATION:
-- Créer une expérience de vente réaliste
-- Challenger le commercial sur ses techniques
-- Permettre un apprentissage progressif
-- Maintenir l'engagement conversationnel
+# VARIETY
+- Ne répétez JAMAIS les mêmes phrases deux fois
+- Variez vos réponses pour éviter le langage robotique
+- Expressions naturelles selon votre personnalité
+
+# CONVERSATION FLOW
+${callType === 'cold-call' ? 
+  'Qualification rapide → Test expertise → Évaluation pertinence → Décision (RDV ou refus)' :
+  'Recadrage objectifs → Discussion technique → Évaluation solution → Next steps'}
+
+# INSTRUCTIONS TEMPS RÉEL
+- Répondez en français seulement
+- Restez dans votre rôle en permanence
+- Challengez le commercial avec des questions pertinentes
+- Révélez progressivement les informations selon la confiance
+- Maintenez un rythme conversationnel naturel
 
 Commencez la conversation de manière naturelle selon le contexte.`;
 
