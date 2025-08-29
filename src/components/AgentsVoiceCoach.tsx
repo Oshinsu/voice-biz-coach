@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { AgentsVoiceService } from "@/lib/agents-voice-service";
+import { generateOptimizedScenarioPrompt } from "@/lib/prompts";
 import { StudentVoiceInterface } from "./StudentVoiceInterface";
 import { 
   Phone, 
@@ -53,47 +54,22 @@ export function AgentsVoiceCoach({ scenario, open = true, onToggle }: AgentsVoic
   const agentsServiceRef = useRef<AgentsVoiceService | null>(null);
   const sessionStartRef = useRef<Date | null>(null);
 
-  // Instructions optimisées pour Agent SDK
-  const generateOptimizedInstructions = () => {
-    const instructions = `# AGENT VOCAL COMMERCIAL IA - ${scenario?.company || 'ModaStyle'}
+  // Génération des instructions basée sur le scénario
+  const generateScenarioInstructions = (scenario: any): string => {
+    if (!scenario) {
+      return `# AGENT COMMERCIAL GÉNÉRIQUE
+Vous êtes un expert commercial pour simulation d'entraînement.
+Personnalité professionnelle, empathique, orientée solutions.
+Adaptez vos réponses selon la phase de vente.`;
+    }
 
-## IDENTITÉ & CONTEXTE
-Vous êtes **${scenario?.persona?.name || 'Sophie Martin'}**, ${scenario?.persona?.role || 'Directrice Marketing & Analytics'} chez ${scenario?.company || 'ModaStyle'}.
-
-**Personnalité:** ${scenario?.persona?.personality || 'Directrice marketing pragmatique avec un profil digital. Apprécie les données mais sans être une data scientist. Orientée résultats, veut comprendre ce qui marche pour l\'optimiser.'}
-
-**Secteur:** ${scenario?.industry || 'E-commerce mode'}
-**Type d'appel:** Prospection commerciale à froid
-**Langue:** Français naturel et professionnel
-
-## COMPORTEMENT AUDIO NATIF
-- Parlez de manière naturelle avec des intonations authentiques
-- Utilisez des pauses réalistes et respirations naturelles  
-- Adaptez votre débit selon l'émotion (surprise, intérêt, méfiance)
-- Intégrez des interjections naturelles ("hmm", "ah bon", "d'accord")
-
-## RÈGLES DE SIMULATION RÉALISTE
-1. **Début d'appel:** Montrez de la surprise (appel non prévu)
-2. **Progressive disclosure:** Révélez les infos selon la confiance établie
-3. **Objections variées:** Ne répétez jamais les mêmes objections entre sessions
-4. **Questions pertinentes:** Posez des questions métier spécifiques
-5. **Gestion des interruptions:** Réagissez naturellement aux coupures
-
-## GESTION AUDIO & TECHNIQUE
-- Si audio pas clair: "Excusez-moi, pouvez-vous répéter ?"
-- En cas d'interruption: Reprenez le fil naturellement
-- Durée optimale: 3-5 minutes d'échange
-- Conclusion: Proposez un suivi concret ou poliment déclinez
-
-## OBJECTIFS DE FORMATION
-- Challenger le commercial sur ses techniques
-- Créer des objections réalistes et variées  
-- Permettre l'apprentissage par la pratique
-- Maintenir l'engagement tout au long
-
-Démarrez par une réaction naturelle de surprise à ce call commercial inattendu.`;
-
-    return instructions;
+    return generateOptimizedScenarioPrompt({
+      scenarioId: scenario.id,
+      conversationType: 'rdv',
+      currentPhase: 'ouverture', 
+      trustLevel: 50,
+      agentType: 'contact_principal'
+    });
   };
 
   // Démarrer la session Agent SDK
@@ -106,7 +82,7 @@ Démarrez par une réaction naturelle de surprise à ce call commercial inattend
       console.log('🚀 Démarrage session Agent SDK via Edge Function WebRTC');
 
       const service = new AgentsVoiceService({
-        instructions: generateOptimizedInstructions(),
+        instructions: generateScenarioInstructions(scenario),
         voice: 'sage', // Optimisé pour le français
         model: 'gpt-realtime',
         
