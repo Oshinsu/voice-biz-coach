@@ -26,54 +26,31 @@ export class AgentsVoiceService {
 
   async connect(): Promise<void> {
     try {
-      console.log('🚀 Initialisation Agent SDK WebRTC Direct...');
+      console.log('🚀 Initialisation Agent SDK WebRTC via Supabase...');
 
-      // 1. Générer token éphémère via OpenAI directement (plus besoin d'Edge Function)
-      let OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+      // Import supabase client dynamically to avoid build issues
+      const { supabase } = await import('@/integrations/supabase/client');
       
-      // Fallback vers localStorage si pas dans .env
-      if (!OPENAI_API_KEY || OPENAI_API_KEY === '' || OPENAI_API_KEY === 'sk-...') {
-        OPENAI_API_KEY = localStorage.getItem('openai_api_key');
-      }
-      
-      if (!OPENAI_API_KEY || !OPENAI_API_KEY.startsWith('sk-')) {
-        throw new Error('VITE_OPENAI_API_KEY requis pour Agent SDK');
-      }
-
-      const response = await fetch("https://api.openai.com/v1/realtime/sessions", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${OPENAI_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: this.config.model || "gpt-realtime",
-          voice: this.config.voice || "sage",
-          instructions: this.config.instructions,
-          modalities: ["text", "audio"],
-          input_audio_format: "pcm16",
-          output_audio_format: "pcm16",
-          input_audio_transcription: {
-            model: "whisper-1"
-          },
-          turn_detection: {
-            type: "server_vad",
-            threshold: 0.5,
-            prefix_padding_ms: 300,
-            silence_duration_ms: 1000
-          },
-          temperature: 0.8
-        }),
+      // Generate ephemeral token via Supabase Edge Function
+      const tokenResponse = await supabase.functions.invoke('realtime-token', {
+        body: {
+          instructions: this.config.instructions || "You are a helpful assistant.",
+          voice: this.config.voice || "alloy"
+        }
       });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Token generation failed: ${response.status} ${errorText}`);
+      if (tokenResponse.error) {
+        throw new Error(`Token generation failed: ${tokenResponse.error.message}`);
+      }
+      
+      const tokenData = tokenResponse.data;
+      
+      if (!tokenData.client_secret?.value) {
+        throw new Error("Failed to get ephemeral token");
       }
 
-      const data = await response.json();
-      const ephemeralKey = data.client_secret.value;
-      console.log('✅ Token éphémère généré');
+      const ephemeralKey = tokenData.client_secret.value;
+      console.log('✅ Token éphémère généré via Supabase');
 
       // 2. Configuration WebRTC
       this.pc = new RTCPeerConnection();

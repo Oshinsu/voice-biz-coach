@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { AgentsVoiceService } from "@/lib/agents-voice-service";
+import { StudentVoiceInterface } from "./StudentVoiceInterface";
 import { 
   Phone, 
   PhoneOff, 
@@ -272,6 +273,23 @@ Démarrez par une réaction naturelle de surprise à ce call commercial inattend
 
   if (!open) return null;
 
+  // Use student interface for connected state
+  if (isConnected || isConnecting) {
+    return (
+      <StudentVoiceInterface
+        scenario={scenario}
+        onConnect={startSession}
+        onDisconnect={endSession}
+        isConnected={isConnected}
+        isConnecting={isConnecting}
+        isSpeaking={isSpeaking}
+        isListening={isListening}
+        sessionDuration={sessionStats.duration}
+        exchanges={sessionStats.exchanges}
+      />
+    );
+  }
+
   // Vue minimisée
   if (isMinimized) {
     return (
@@ -283,14 +301,8 @@ Démarrez par une réaction naturelle de surprise à ce call commercial inattend
           <CardContent className="p-0 flex flex-col items-center justify-center h-full">
             <div className="relative mb-1">
               <Phone className="h-6 w-6 text-primary" />
-              {isConnected && (
-                <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-              )}
             </div>
-            <span className="text-xs font-medium text-primary">SDK</span>
-            {isSpeaking && (
-              <div className="absolute inset-0 border-2 border-blue-500 rounded-lg animate-pulse" />
-            )}
+            <span className="text-xs font-medium text-primary">Coach</span>
           </CardContent>
         </Card>
       </div>
@@ -298,256 +310,56 @@ Démarrez par une réaction naturelle de surprise à ce call commercial inattend
   }
 
   return (
-    <div className="fixed inset-y-0 right-0 w-96 z-50 bg-background border-l-2 border-primary/20 shadow-2xl">
-      <Card className="h-full rounded-none border-0">
-        <CardHeader className="border-b bg-gradient-to-r from-primary/15 to-primary/5 pb-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="relative">
-                <Phone className="h-5 w-5 text-primary" />
-                {isConnected && (
-                  <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                )}
-              </div>
-              <div>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  Coach IA Direct
-                  <Badge variant="outline" className="text-xs">WebRTC</Badge>
-                </CardTitle>
-              </div>
-            </div>
-            <div className="flex items-center gap-1">
-              {isConnected && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleInterrupt}
-                  title="Interruption"
-                >
-                  <Zap className="h-4 w-4" />
-                </Button>
-              )}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsMinimized(true)}
-              >
-                <Minimize2 className="h-4 w-4" />
-              </Button>
-              {onToggle && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={onToggle}
-                >
-                  ✕
-                </Button>
-              )}
-            </div>
+    <Card className="fixed bottom-4 right-4 w-80 shadow-xl border-2 z-50">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-lg flex items-center gap-2">
+          <Phone className="h-5 w-5" />
+          Coach Vocal IA
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="text-center">
+          <Button
+            onClick={startSession}
+            disabled={isConnecting}
+            className="w-full"
+            size="lg"
+          >
+            <Phone className="h-5 w-5 mr-2" />
+            {isConnecting ? "Connexion..." : "Démarrer l'Entraînement"}
+          </Button>
+        </div>
+        
+        {scenario && (
+          <div className="bg-muted/50 rounded-lg p-3 text-center">
+            <h3 className="font-medium text-sm">{scenario.name}</h3>
+            <p className="text-xs text-muted-foreground mt-1">
+              Entraînement vocal avec IA
+            </p>
           </div>
-          
-          {/* Status avancé */}
-          <div className="flex items-center gap-2 flex-wrap text-sm">
-            <Badge 
-              variant={isConnected ? "default" : isConnecting ? "secondary" : "outline"}
-              className={cn(
-                isConnected && "bg-green-500 text-white",
-                isConnecting && "bg-yellow-500 text-white"
-              )}
+        )}
+        
+        <div className="flex space-x-1">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setIsMinimized(true)}
+            className="h-8 w-8 p-0"
+          >
+            <Minimize2 className="h-4 w-4" />
+          </Button>
+          {onToggle && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onToggle}
+              className="h-8 w-8 p-0"
             >
-              {isConnecting ? (
-                <>
-                  <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-                  Connexion SDK...
-                </>
-              ) : isConnected ? (
-                "Connecté"
-              ) : (
-                "Déconnecté"
-              )}
-            </Badge>
-            
-            {isSpeaking && (
-              <Badge variant="outline" className="text-blue-600 border-blue-300 bg-blue-50">
-                <Volume2 className="h-3 w-3 mr-1" />
-                Coach
-              </Badge>
-            )}
-            
-            {isListening && (
-              <Badge variant="outline" className="text-red-600 border-red-300 bg-red-50">
-                <Mic className="h-3 w-3 mr-1" />
-                Écoute
-              </Badge>
-            )}
-
-            {isConnected && (
-              <Badge variant="outline" className="text-primary">
-                {sessionStats.duration}s
-              </Badge>
-            )}
-          </div>
-        </CardHeader>
-
-        <CardContent className="p-4 h-[calc(100vh-220px)] flex flex-col">
-          {/* Messages optimisés */}
-          <div className="flex-1 overflow-y-auto space-y-3 mb-4 scrollbar-thin scrollbar-thumb-muted">
-            {/* Message d'accueil si pas de messages */}
-            {messages.length === 0 && (
-              <div className="text-center text-muted-foreground text-sm py-8">
-                <Phone className="h-8 w-8 mx-auto mb-2 text-primary" />
-                <p className="font-medium">Coach IA WebRTC Direct</p>
-                <p className="text-xs mt-1">Cliquez sur "Agent SDK" pour commencer</p>
-                <div className="mt-3 text-xs bg-blue-50 p-2 rounded border border-blue-200">
-                  <strong>Nouveau :</strong> Architecture WebRTC native
-                  <br />
-                  <strong>Performance :</strong> Latence ultra-faible
-                  <br />
-                  <strong>Coût :</strong> -20% vs ancien système
-                </div>
-              </div>
-            )}
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={cn(
-                  "p-3 rounded-lg max-w-[90%] transition-all duration-300",
-                  message.sender === "user" && "bg-primary text-primary-foreground ml-auto",
-                  message.sender === "assistant" && "bg-muted mr-auto border-l-4 border-primary/30",
-                  message.sender === "system" && "bg-accent text-accent-foreground text-center mx-auto text-sm",
-                  message.type === "interruption" && "bg-yellow-50 border border-yellow-200"
-                )}
-              >
-                <div className="flex items-start gap-2">
-                  {message.type === "audio" && message.sender === "assistant" && (
-                    <Volume2 className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                  )}
-                  {message.type === "interruption" && (
-                    <Zap className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
-                  )}
-                  <div className="flex-1">
-                    <p className="text-sm leading-relaxed">{message.content}</p>
-                    <div className="flex justify-between items-center mt-1">
-                      <span className="text-xs opacity-70">
-                        {message.timestamp.toLocaleTimeString()}
-                      </span>
-                      {message.type && (
-                        <Badge variant="outline" className="text-xs py-0 px-1">
-                          {message.type}
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Erreur */}
-          {error && (
-            <div className="mb-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
-              <p className="text-sm text-destructive font-medium">🚨 Erreur Agent WebRTC</p>
-              <p className="text-xs text-destructive/80 mt-1">{error}</p>
-              {error.includes('VITE_OPENAI_API_KEY') && (
-                <div className="mt-2">
-                  <p className="text-xs text-muted-foreground">
-                    💡 Ajoutez votre clé OpenAI dans le fichier .env : VITE_OPENAI_API_KEY=sk-...
-                  </p>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    className="mt-2 text-xs"
-                    onClick={() => {
-                      const key = prompt('Entrez votre clé OpenAI (sk-...)');
-                      if (key && key.startsWith('sk-')) {
-                        localStorage.setItem('openai_api_key', key);
-                        toast({
-                          title: "Clé OpenAI sauvée",
-                          description: "Rechargez la page pour l'utiliser",
-                        });
-                      }
-                    }}
-                  >
-                    📝 Ajouter clé API
-                  </Button>
-                </div>
-              )}
-            </div>
+              <PhoneOff className="h-4 w-4" />
+            </Button>
           )}
-
-          {/* Contrôles */}
-          <div className="flex gap-2">
-            {!isConnected ? (
-              <Button
-                onClick={startSession}
-                disabled={isConnecting}
-                className="flex-1 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
-              >
-                {isConnecting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                    SDK...
-                  </>
-                ) : (
-                  <>
-                    <Phone className="h-4 w-4 mr-2" />
-                    Agent SDK
-                  </>
-                )}
-              </Button>
-            ) : (
-              <Button
-                onClick={endSession}
-                variant="destructive"
-                className="flex-1"
-              >
-                <PhoneOff className="h-4 w-4 mr-2" />
-                Terminer
-              </Button>
-            )}
-          </div>
-
-          {/* Stats de session */}
-          {isConnected && (
-            <div className="mt-3 p-2 bg-primary/5 rounded border border-primary/20 text-xs">
-              <div className="grid grid-cols-3 gap-2 text-center">
-                <div>
-                  <div className="font-medium text-primary">{sessionStats.duration}s</div>
-                  <div className="text-muted-foreground">Durée</div>
-                </div>
-                <div>
-                  <div className="font-medium text-primary">{sessionStats.exchanges}</div>
-                  <div className="text-muted-foreground">Échanges</div>
-                </div>
-                <div>
-                  <div className="font-medium text-primary">{sessionStats.interruptions}</div>
-                  <div className="text-muted-foreground">Interruptions</div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Info scénario */}
-          {scenario && (
-            <div className="mt-2 p-2 bg-muted/30 rounded text-xs border">
-              <strong>🎯 Scénario:</strong> {scenario.title || 'Formation Agent SDK'}
-              <br />
-              <strong>👤 Prospect:</strong> {scenario.persona?.name || 'Sophie Martin'}
-            </div>
-          )}
-
-          {/* Info migration */}
-          <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded text-xs">
-            <strong>🚀 Migration WebRTC Direct</strong>
-            <br />
-            ✅ Edge Function supprimée
-            <br />
-            ✅ Agent SDK authentique
-            <br />
-            ✅ Coûts optimisés (-20%)
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
