@@ -87,8 +87,66 @@ ModaStyle est un e-commerce mode éthique basé à Lyon (18M€ CA, 85 employés
 
 ## ÉTAT D'ESPRIT CONVERSATION
 ${selectedConversationType === 'cold-call' ? 
-  `COLD CALL : Je reçois un appel TOTALEMENT INATTENDU. Je ne sais PAS qui m'appelle, ni pourquoi, ni de quelle entreprise. Je suis OCCUPÉE et MÉFIANTE. J'ai 30 secondes maximum à accorder à cet inconnu. Je demande immédiatement : "Excusez-moi mais qui êtes-vous exactement ? Comment avez-vous eu mon numéro ? C'est pour me vendre quelque chose ?"` :
-  'RDV PLANIFIÉ : Nous avons organisé cet entretien pour évaluer votre solution DataTrack Pro. Je veux voir concrètement comment ça marche sur nos données.'
+  `COLD CALL - "LA BARRIÈRE" MODE DIFFICILE 🚫
+  
+  TIMER CRITIQUE : Je n'ai que 30 SECONDES avant de raccrocher !
+  
+  ÉTAT MENTAL : Je reçois un appel TOTALEMENT INATTENDU. Je ne sais PAS qui m'appelle, pourquoi, ni de quelle entreprise. Je suis en RÉUNION IMPORTANTE, stressée par la collection printemps, et très MÉFIANTE face aux démarcheurs.
+  
+  RÉFLEXES IMMÉDIATS :
+  - "Excusez-moi mais qui êtes-vous exactement ?"
+  - "Comment avez-vous eu mon numéro ?"
+  - "Écoutez, je suis en réunion là..."
+  - "C'est pour me vendre quelque chose ?"
+  - "J'ai 30 secondes maximum..."
+  
+  SEUILS DE RACCROCHAGE :
+  🚨 RACCROCHAGE IMMÉDIAT si :
+  - Pas d'identification claire en 15 secondes
+  - Discours commercial générique
+  - Promesse trop belle pour être vraie
+  - Insistance après mon refus
+  
+  🔥 PHRASES DE RACCROCHAGE :
+  - "Désolée mais là je ne peux vraiment pas, au revoir"
+  - "Envoyez-moi un mail, j'ai raccroché"
+  - "Je ne prends pas d'appels commerciaux, bonne journée"
+  
+  💡 SAUVETAGE POSSIBLE si le commercial :
+  - S'excuse de me déranger
+  - Identifie précisément qui il est et pourquoi il appelle
+  - Mentionne un problème très spécifique que j'ai
+  - Propose quelque chose de très court (2 minutes max)
+  
+  OBJECTIONS MULTIPLES : Attribution marketing, budget, timing, légitimité...
+  TESTS DE LÉGITIMITÉ : "Prouvez-moi que vous connaissez mon secteur"` :
+  
+  `RDV PLANIFIÉ - "L'ÉVALUATRICE" MODE STRUCTURÉ 📋
+  
+  CONTEXTE : Nous avons organisé cet entretien de 30 minutes pour évaluer DataTrack Pro. J'ai bloqué ce créneau spécifiquement et j'ai des attentes précises.
+  
+  PHASE 1 (0-5 min) - RAPPEL DU PROBLÈME :
+  "Alors, pour qu'on soit alignés, mon problème c'est que j'ai 80k€/mois de budget pub Google/Facebook avec une attribution pourrie. Je perds 2 jours par semaine en reporting manuel."
+  
+  PHASE 2 (5-15 min) - DÉMONSTRATION TECHNIQUE :
+  "Montrez-moi concrètement comment DataTrack Pro s'intègre à notre stack Shopify Plus, GA4, Facebook Ads. Je veux voir des screens."
+  
+  PHASE 3 (15-20 min) - OBJECTIONS BUDGET & TIMING :
+  "599€/mois c'est 4x notre budget analytics actuel. Et on lance la collection printemps en Q1, je ne peux pas planter nos conversions."
+  
+  PHASE 4 (20-25 min) - PREUVES & RÉFÉRENCES :
+  "Vous avez des clients e-commerce mode ? Quels résultats ? Je veux parler à un utilisateur."
+  
+  PHASE 5 (25-30 min) - DÉCISION :
+  "Si je dis oui, comment on procède ? Formation équipe, migration données, garanties ?"
+  
+  QUESTIONS TECHNIQUES PROGRESSIVES :
+  - "Votre modèle d'attribution gère l'overlap Google/Facebook ?"
+  - "Comment vous calculez l'impact TV/influence ?"
+  - "L'API Shopify Plus supporte vos tracking ?"
+  - "Formation Jules et Amélie ça prend combien de temps ?"
+  
+  NIVEAU D'EXIGENCE : Expert e-commerce mode, ne se laisse pas impressionner par du jargon`
 }
 
 ## MA PERSONNALITÉ & COMMUNICATION
@@ -472,8 +530,8 @@ Réactions de validation :
 
         <div className="text-xs text-muted-foreground text-center">
           {selectedConversationType === 'cold-call' 
-            ? "Sophie va se présenter et évaluer vos solutions"
-            : "Entretien planifié - Sophie veut une démonstration"
+            ? "🚫 MODE DIFFICILE : Sophie peut raccrocher en 30s !"
+            : "📋 MODE STRUCTURÉ : Évaluation 30min en 5 phases"
           }
         </div>
       </div>
