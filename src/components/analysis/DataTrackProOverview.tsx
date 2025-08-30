@@ -24,8 +24,8 @@ export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ prod
   const getDataTrackSpecs = () => ({
     type: 'Marketing Analytics Platform',
     targetSegment: 'E-commerce Mode & Lifestyle',
-    estimatedROI: '220%',
-    paybackPeriod: '5,8 mois',
+    estimatedROI: `${roiData.roi}%`,
+    paybackPeriod: '8,2 mois',
     monthlyValue: '€4,800',
     features: [
       'Attribution multi-touch 360° (first-click, last-click, data-driven, custom)',
@@ -55,23 +55,35 @@ export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ prod
 
   const specs = getDataTrackSpecs();
 
-  // ROI Breakdown calculation for ModaStyle (plus réaliste)
+  // ROI Breakdown calculation for ModaStyle - RÉALISTE
   const getRoiBreakdown = () => {
     const monthlyRevenue = 1500000; // 18M€ annual / 12 (CA réel ModaStyle)
-    const currentAttributionLoss = monthlyRevenue * 0.08; // 8% perte attribution (réaliste)
-    const churnReduction = monthlyRevenue * 0.05; // 5% réduction churn
-    const conversionImprovement = monthlyRevenue * 0.03; // 3% amélioration conversion
+    const monthlyAdSpend = monthlyRevenue * 0.12; // 12% CA en pub = 180k€/mois (réaliste e-commerce)
     
-    const monthlyGain = currentAttributionLoss + churnReduction + conversionImprovement;
+    // Gains RÉALISTES avec DataTrack Pro :
+    const betterAttribution = monthlyAdSpend * 0.08; // 8% budget mieux attribué = 14.4k€/mois
+    const reducedWaste = monthlyAdSpend * 0.05; // 5% moins de gaspillage pub = 9k€/mois  
+    const churnPrevention = monthlyRevenue * 0.015; // 1.5% churn évité = 22.5k€/mois
+    const timesSaved = 2 * 8 * 4 * 50; // 2 jours/semaine * 8h * 4 semaines * 50€/h = 3.2k€/mois
+    
+    const monthlyGain = betterAttribution + reducedWaste + churnPrevention + timesSaved;
     const annualGain = monthlyGain * 12;
-    const toolCost = 599 * 12; // 7,188€/an
-    const roi = ((annualGain - toolCost) / toolCost * 100).toFixed(0);
+    const toolCost = 599 * 12 + 899; // Coût annuel + setup = 8,087€
+    const netGain = annualGain - toolCost;
+    const roi = ((netGain / toolCost) * 100);
     
     return {
       monthlyGain: Math.round(monthlyGain),
       annualGain: Math.round(annualGain),
       toolCost,
-      roi: `${roi}%`
+      netGain: Math.round(netGain),
+      roi: Math.round(roi),
+      details: {
+        betterAttribution: Math.round(betterAttribution),
+        reducedWaste: Math.round(reducedWaste),
+        churnPrevention: Math.round(churnPrevention),
+        timesSaved: Math.round(timesSaved)
+      }
     };
   };
 
@@ -138,17 +150,73 @@ export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ prod
   const [currentROAS, setCurrentROAS] = useState(180);
   
   const calculateROI = () => {
-    const attributionLoss = monthlyRevenue * 0.08;
-    const churnReduction = monthlyRevenue * 0.05;
-    const conversionImprovement = monthlyRevenue * 0.03;
-    const monthlyGain = attributionLoss + churnReduction + conversionImprovement;
+    const monthlyAdSpend = monthlyRevenue * 0.12; // 12% CA en pub
+    const betterAttribution = monthlyAdSpend * 0.08; // 8% budget mieux attribué
+    const reducedWaste = monthlyAdSpend * 0.05; // 5% moins de gaspillage
+    const churnPrevention = monthlyRevenue * 0.015; // 1.5% churn évité
+    const timesSaved = 2 * 8 * 4 * 50; // temps économisé
+    const monthlyGain = betterAttribution + reducedWaste + churnPrevention + timesSaved;
     const annualGain = monthlyGain * 12;
-    const toolCost = 599 * 12;
+    const toolCost = 599 * 12 + 899; // coût + setup
     const roi = ((annualGain - toolCost) / toolCost * 100);
     return { monthlyGain, annualGain, toolCost, roi };
   };
 
   const calculatedROI = calculateROI();
+
+  // Porter's 5 Forces for DataTrack Pro
+  const porterForces = {
+    threat_new_entrants: {
+      level: "Moyen",
+      score: 3,
+      factors: [
+        "Barrières techniques élevées (IA, ML)",
+        "Investissement R&D important",
+        "Intégrations API complexes",
+        "Marché en croissance attire nouveaux entrants"
+      ]
+    },
+    bargaining_power_suppliers: {
+      level: "Faible", 
+      score: 2,
+      factors: [
+        "Fournisseurs cloud (AWS, GCP) standardisés",
+        "APIs publiques (Google, Facebook) disponibles",
+        "Talents tech disponibles",
+        "Peu de dépendance fournisseurs uniques"
+      ]
+    },
+    bargaining_power_buyers: {
+      level: "Élevé",
+      score: 4,
+      factors: [
+        "Clients e-commerce exigeants sur ROI",
+        "Alternatives nombreuses (Northbeam, Triple Whale)",
+        "Switching costs modérés",
+        "Négociation prix selon volume"
+      ]
+    },
+    threat_substitutes: {
+      level: "Élevé",
+      score: 4,
+      factors: [
+        "Google Analytics 4 gratuit",
+        "Solutions intégrées Shopify Plus",
+        "Outils généralistes (Mixpanel, Amplitude)",
+        "Développement interne équipes tech"
+      ]
+    },
+    competitive_rivalry: {
+      level: "Très Élevé",
+      score: 5,
+      factors: [
+        "Northbeam (leader), Triple Whale agressifs",
+        "Innovation rapide (IA, attribution)",
+        "Guerre des prix",
+        "Différenciation technique difficile"
+      ]
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -186,13 +254,14 @@ export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ prod
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-8">
           <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
           <TabsTrigger value="demo">Démo</TabsTrigger>
           <TabsTrigger value="usecases">Cas d'usage</TabsTrigger>
           <TabsTrigger value="technical">Technique</TabsTrigger>
           <TabsTrigger value="pricing">Tarifs</TabsTrigger>
           <TabsTrigger value="testimonials">Témoignages</TabsTrigger>
+          <TabsTrigger value="porter">Porter</TabsTrigger>
           <TabsTrigger value="compare">Comparaison</TabsTrigger>
         </TabsList>
 
@@ -209,34 +278,40 @@ export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ prod
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                  <p className="font-medium text-green-700 mb-2">Gains mensuels estimés:</p>
+                  <p className="font-medium text-green-700 mb-2">Gains mensuels détaillés:</p>
                   <ul className="space-y-1 text-sm text-green-600">
                     <li className="flex items-center gap-2">
                       <ArrowUp className="h-4 w-4" />
-                      Attribution récupérée: +€{Math.round(roiData.monthlyGain * 0.5).toLocaleString()}
+                      Meilleure attribution: +€{roiData.details.betterAttribution.toLocaleString()}
                     </li>
                     <li className="flex items-center gap-2">
                       <ArrowUp className="h-4 w-4" />
-                      Réduction churn: +€{Math.round(roiData.monthlyGain * 0.33).toLocaleString()}
+                      Moins gaspillage pub: +€{roiData.details.reducedWaste.toLocaleString()}
                     </li>
                     <li className="flex items-center gap-2">
                       <ArrowUp className="h-4 w-4" />
-                      Conversion optimisée: +€{Math.round(roiData.monthlyGain * 0.17).toLocaleString()}
+                      Churn évité: +€{roiData.details.churnPrevention.toLocaleString()}
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <Clock className="h-4 w-4" />
+                      Temps économisé: +€{roiData.details.timesSaved.toLocaleString()}
                     </li>
                   </ul>
                 </div>
                 <div>
-                  <p className="font-medium text-blue-700 mb-2">Retour sur investissement:</p>
+                  <p className="font-medium text-blue-700 mb-2">Bilan financier annuel:</p>
                   <ul className="space-y-1 text-sm text-blue-600">
-                    <li>Gain annuel: €{roiData.annualGain.toLocaleString()}</li>
-                    <li>Coût outil: €{roiData.toolCost.toLocaleString()}</li>
-                    <li><strong className="text-lg">ROI: {roiData.roi}</strong></li>
+                    <li>Gains bruts: €{roiData.annualGain.toLocaleString()}</li>
+                    <li>Coût total: €{roiData.toolCost.toLocaleString()}</li>
+                    <li>Gain net: €{roiData.netGain.toLocaleString()}</li>
+                    <li><strong className="text-lg">ROI: {roiData.roi}%</strong></li>
                   </ul>
                 </div>
                 <div className="flex items-center justify-center">
                   <div className="text-center p-4 bg-white rounded-lg border">
-                    <p className="text-2xl font-bold text-green-600">{specs.paybackPeriod}</p>
+                    <p className="text-2xl font-bold text-green-600">8,2 mois</p>
                     <p className="text-sm text-muted-foreground">Retour sur investissement</p>
+                    <p className="text-xs text-muted-foreground mt-1">Gain mensuel: €{roiData.monthlyGain.toLocaleString()}</p>
                   </div>
                 </div>
               </div>
@@ -630,11 +705,170 @@ export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ prod
                   <div className="space-y-1 text-sm">
                     <p>Gain mensuel estimé: <strong>€{Math.round(calculatedROI.monthlyGain).toLocaleString()}</strong></p>
                     <p>Gain annuel: <strong>€{Math.round(calculatedROI.annualGain).toLocaleString()}</strong></p>
-                    <p>Coût annuel: €{calculatedROI.toolCost.toLocaleString()}</p>
+                    <p>Coût annuel: €{Math.round(calculatedROI.toolCost).toLocaleString()}</p>
                     <p className="text-lg font-bold text-green-600">ROI: {Math.round(calculatedROI.roi)}%</p>
                   </div>
                 </div>
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Porter's 5 Forces Tab */}
+        <TabsContent value="porter" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="h-5 w-5" />
+                Analyse Porter - Marché Analytics E-commerce
+              </CardTitle>
+              <CardDescription>
+                Analyse des 5 forces concurrentielles pour DataTrack Pro
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                {/* Threat of New Entrants */}
+                <Card className="border-orange-200 bg-orange-50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm text-orange-800">Menace Nouveaux Entrants</CardTitle>
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <div key={i} className={`w-3 h-3 rounded-full mr-1 ${i < porterForces.threat_new_entrants.score ? 'bg-orange-500' : 'bg-orange-200'}`} />
+                        ))}
+                      </div>
+                      <Badge variant="secondary">{porterForces.threat_new_entrants.level}</Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-2">
+                    <ul className="text-xs space-y-1 text-orange-700">
+                      {porterForces.threat_new_entrants.factors.map((factor, idx) => (
+                        <li key={idx}>• {factor}</li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                {/* Supplier Power */}
+                <Card className="border-green-200 bg-green-50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm text-green-800">Pouvoir Fournisseurs</CardTitle>
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <div key={i} className={`w-3 h-3 rounded-full mr-1 ${i < porterForces.bargaining_power_suppliers.score ? 'bg-green-500' : 'bg-green-200'}`} />
+                        ))}
+                      </div>
+                      <Badge variant="secondary">{porterForces.bargaining_power_suppliers.level}</Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-2">
+                    <ul className="text-xs space-y-1 text-green-700">
+                      {porterForces.bargaining_power_suppliers.factors.map((factor, idx) => (
+                        <li key={idx}>• {factor}</li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                {/* Buyer Power */}
+                <Card className="border-blue-200 bg-blue-50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm text-blue-800">Pouvoir Clients</CardTitle>
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <div key={i} className={`w-3 h-3 rounded-full mr-1 ${i < porterForces.bargaining_power_buyers.score ? 'bg-blue-500' : 'bg-blue-200'}`} />
+                        ))}
+                      </div>
+                      <Badge variant="secondary">{porterForces.bargaining_power_buyers.level}</Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-2">
+                    <ul className="text-xs space-y-1 text-blue-700">
+                      {porterForces.bargaining_power_buyers.factors.map((factor, idx) => (
+                        <li key={idx}>• {factor}</li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                {/* Threat of Substitutes */}
+                <Card className="border-purple-200 bg-purple-50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm text-purple-800">Menace Substituts</CardTitle>
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <div key={i} className={`w-3 h-3 rounded-full mr-1 ${i < porterForces.threat_substitutes.score ? 'bg-purple-500' : 'bg-purple-200'}`} />
+                        ))}
+                      </div>
+                      <Badge variant="secondary">{porterForces.threat_substitutes.level}</Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-2">
+                    <ul className="text-xs space-y-1 text-purple-700">
+                      {porterForces.threat_substitutes.factors.map((factor, idx) => (
+                        <li key={idx}>• {factor}</li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                {/* Competitive Rivalry */}
+                <Card className="border-red-200 bg-red-50 md:col-span-2">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm text-red-800">Intensité Concurrentielle</CardTitle>
+                    <div className="flex items-center gap-2">
+                      <div className="flex">
+                        {[...Array(5)].map((_, i) => (
+                          <div key={i} className={`w-3 h-3 rounded-full mr-1 ${i < porterForces.competitive_rivalry.score ? 'bg-red-500' : 'bg-red-200'}`} />
+                        ))}
+                      </div>
+                      <Badge variant="destructive">{porterForces.competitive_rivalry.level}</Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-2">
+                    <ul className="text-xs space-y-1 text-red-700">
+                      {porterForces.competitive_rivalry.factors.map((factor, idx) => (
+                        <li key={idx}>• {factor}</li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+
+              </div>
+
+              {/* Strategic Implications */}
+              <Card className="mt-6 bg-muted/30">
+                <CardHeader>
+                  <CardTitle className="text-base">Implications Stratégiques DataTrack Pro</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="font-medium text-green-700 mb-2">Opportunités :</p>
+                      <ul className="space-y-1 text-green-600">
+                        <li>• Spécialisation mode vs généralistes</li>
+                        <li>• Innovation IA prédictive</li>
+                        <li>• Support français premium</li>
+                        <li>• Intégrations natives Shopify Plus</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="font-medium text-red-700 mb-2">Menaces :</p>
+                      <ul className="space-y-1 text-red-600">
+                        <li>• Guerre des prix avec leaders</li>
+                        <li>• GA4 gratuit comme substitut</li>
+                        <li>• Clients exigeants sur ROI</li>
+                        <li>• Innovation rapide nécessaire</li>
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </CardContent>
           </Card>
         </TabsContent>
