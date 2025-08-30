@@ -9,7 +9,9 @@ import { EnhancedStats } from "./EnhancedStats";
 import { TrustElements } from "./TrustElements";
 
 export function ByssHomepage() {
-  const { scenarios, loading } = useScenarios();
+  const { scenarios, loading, error } = useScenarios();
+  
+  console.log('ByssHomepage rendering:', { scenarios: scenarios?.length, loading, error });
   
   const totalRevenue = scenarios.reduce((sum, scenario) => {
     const revenue = scenario.expected_revenue ? 

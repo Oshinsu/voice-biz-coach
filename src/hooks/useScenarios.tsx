@@ -26,14 +26,19 @@ export const useScenarios = () => {
         setLoading(true);
         setError(null);
         
+        console.log('Loading scenarios...', consolidatedScenarios?.length);
+        
         // Simulate slight loading delay for better UX
         await new Promise(resolve => setTimeout(resolve, 100));
         
         // Load scenarios from static data
         setScenarios(consolidatedScenarios);
+        console.log('Scenarios loaded successfully:', consolidatedScenarios?.length);
       } catch (err) {
         console.error('Error loading scenarios:', err);
         setError(err instanceof Error ? err.message : 'Failed to load scenarios');
+        // Set empty array on error so UI can still render
+        setScenarios([]);
       } finally {
         setLoading(false);
       }

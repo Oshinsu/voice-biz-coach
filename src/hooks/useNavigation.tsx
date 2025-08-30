@@ -19,13 +19,22 @@ export const useNavigation = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Default navigation items as fallback
+  const defaultNavigationItems: NavigationItem[] = [
+    { id: '1', name: 'Accueil', href: '/', order_index: 1, is_active: true },
+    { id: '2', name: 'Scénarios', href: '/scenarios', order_index: 2, is_active: true },
+    { id: '3', name: 'Services', href: '/services', order_index: 3, is_active: true },
+    { id: '4', name: 'À propos', href: '/about', order_index: 4, is_active: true },
+    { id: '5', name: 'Contact', href: '/contact', order_index: 5, is_active: true },
+  ];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        // Fetch navigation items
+        // Try to fetch navigation items
         const { data: navData, error: navError } = await supabase
           .from('navigation_items')
           .select('*')
@@ -33,16 +42,21 @@ export const useNavigation = () => {
           .order('order_index');
 
         if (navError) {
-          throw navError;
+          console.warn('Navigation table not found, using defaults:', navError);
+          // Use default navigation items if table doesn't exist
+          setNavigationItems(defaultNavigationItems);
+          setSiteConfig({});
+          setLoading(false);
+          return;
         }
 
-        // Fetch site configuration
+        // Try to fetch site configuration
         const { data: configData, error: configError } = await supabase
           .from('site_config')
           .select('key, value');
 
         if (configError) {
-          throw configError;
+          console.warn('Site config table not found:', configError);
         }
 
         // Transform config data - fix JSON parsing
@@ -58,10 +72,13 @@ export const useNavigation = () => {
           }
         });
 
-        setNavigationItems(navData || []);
+        setNavigationItems(navData && navData.length > 0 ? navData : defaultNavigationItems);
         setSiteConfig(config);
       } catch (err) {
         console.error('Error fetching navigation data:', err);
+        // Use defaults on any error
+        setNavigationItems(defaultNavigationItems);
+        setSiteConfig({});
         setError(err instanceof Error ? err.message : 'Failed to fetch navigation data');
       } finally {
         setLoading(false);
