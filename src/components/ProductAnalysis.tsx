@@ -3,6 +3,7 @@ import { Package } from 'lucide-react';
 import { Product } from '@/hooks/useScenarios';
 import { AnalysisSection } from './analysis/AnalysisSection';
 import { GenericProductOverview } from './analysis/GenericProductOverview';
+import { DataTrackProOverview } from './analysis/DataTrackProOverview';
 import { MarketingToolsDashboard } from './marketing/MarketingToolsDashboard';
 
 interface ProductAnalysisProps {
@@ -33,7 +34,11 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({
         title={`${mainProduct.name} - Vue d'ensemble`}
         icon={Package}
       >
-        <GenericProductOverview product={mainProduct} scenarioId={scenarioId} />
+        {scenarioId === 'kpi-performance' ? (
+          <DataTrackProOverview product={mainProduct} />
+        ) : (
+          <GenericProductOverview product={mainProduct} scenarioId={scenarioId} />
+        )}
       </AnalysisSection>
 
       {/* Marketing Tools Dashboard */}
