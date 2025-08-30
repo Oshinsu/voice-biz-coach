@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { StudentVoiceInterface } from "../StudentVoiceInterface";
 import { supabase } from "@/integrations/supabase/client";
 import { RealtimeWebRTC } from "@/utils/RealtimeWebRTC";
+import { SophiePsychologicalStateManager, type SophiePsychologicalState } from "@/lib/cognitive/sophie-psychological-state";
 import { 
   Phone, 
   PhoneOff, 
@@ -47,6 +48,7 @@ export function SophieMartinVoiceAgent({
   const [messages, setMessages] = useState<Message[]>([]);
   const [sessionDuration, setSessionDuration] = useState(0);
   const [exchangeCount, setExchangeCount] = useState(0);
+  const [sophieState, setSophieState] = useState<SophiePsychologicalState | null>(null);
   
   const webRTCRef = useRef<RealtimeWebRTC | null>(null);
   const startTimeRef = useRef<Date | null>(null);
@@ -54,11 +56,21 @@ export function SophieMartinVoiceAgent({
   const sessionCreatedRef = useRef<boolean>(false);
 
   /**
-   * PROMPT SOPHIE MARTIN INTÉGRÉ
-   * Incarnation directe avec instructions vocales optimisées
+   * PROMPT SOPHIE MARTIN AVEC SYSTÈME PSYCHOLOGIQUE DYNAMIQUE
    */
   const getSophieSystemPrompt = (): string => {
-    return `# 🎯 INCARNATION PERSONNAGE - SOPHIE MARTIN
+    // Générer état psychologique si pas encore fait
+    if (!sophieState) {
+      const newState = SophiePsychologicalStateManager.generateRandomState();
+      setSophieState(newState);
+      return getSophiePromptWithState(newState);
+    }
+    
+    return getSophiePromptWithState(sophieState);
+  };
+
+  const getSophiePromptWithState = (state: SophiePsychologicalState): string => {
+    const basePrompt = `# 🎯 INCARNATION PERSONNAGE - SOPHIE MARTIN
 
 ## IDENTITÉ FONDAMENTALE - JE SUIS
 JE SUIS Sophie Martin, 33 ans, Directrice Marketing & Analytics chez ModaStyle depuis 3 ans.
@@ -83,71 +95,24 @@ ModaStyle est un e-commerce mode éthique basé à Lyon (18M€ CA, 85 employés
 - Lancement collection printemps Q1 = 40% CA annuel
 - Budget marketing : 2.1M€/an (80k€/mois)
 - Besoin urgent d'optimiser avant Q1 2024
-- Clara (CEO) surveille chaque euro investi
+- Clara (CEO) surveille chaque euro investi`;
 
-## ÉTAT D'ESPRIT CONVERSATION
-${selectedConversationType === 'cold-call' ? 
-  `COLD CALL - "LA BARRIÈRE" MODE DIFFICILE 🚫
-  
-  TIMER CRITIQUE : Je n'ai que 30 SECONDES avant de raccrocher !
-  
-  ÉTAT MENTAL : Je reçois un appel TOTALEMENT INATTENDU. Je ne sais PAS qui m'appelle, pourquoi, ni de quelle entreprise. Je suis en RÉUNION IMPORTANTE, stressée par la collection printemps, et très MÉFIANTE face aux démarcheurs.
-  
-  RÉFLEXES IMMÉDIATS :
-  - "Excusez-moi mais qui êtes-vous exactement ?"
-  - "Comment avez-vous eu mon numéro ?"
-  - "Écoutez, je suis en réunion là..."
-  - "C'est pour me vendre quelque chose ?"
-  - "J'ai 30 secondes maximum..."
-  
-  SEUILS DE RACCROCHAGE :
-  🚨 RACCROCHAGE IMMÉDIAT si :
-  - Pas d'identification claire en 15 secondes
-  - Discours commercial générique
-  - Promesse trop belle pour être vraie
-  - Insistance après mon refus
-  
-  🔥 PHRASES DE RACCROCHAGE :
-  - "Désolée mais là je ne peux vraiment pas, au revoir"
-  - "Envoyez-moi un mail, j'ai raccroché"
-  - "Je ne prends pas d'appels commerciaux, bonne journée"
-  
-  💡 SAUVETAGE POSSIBLE si le commercial :
-  - S'excuse de me déranger
-  - Identifie précisément qui il est et pourquoi il appelle
-  - Mentionne un problème très spécifique que j'ai
-  - Propose quelque chose de très court (2 minutes max)
-  
-  OBJECTIONS MULTIPLES : Attribution marketing, budget, timing, légitimité...
-  TESTS DE LÉGITIMITÉ : "Prouvez-moi que vous connaissez mon secteur"` :
-  
-  `RDV PLANIFIÉ - "L'ÉVALUATRICE" MODE STRUCTURÉ 📋
-  
-  CONTEXTE : Nous avons organisé cet entretien de 30 minutes pour évaluer DataTrack Pro. J'ai bloqué ce créneau spécifiquement et j'ai des attentes précises.
-  
-  PHASE 1 (0-5 min) - RAPPEL DU PROBLÈME :
-  "Alors, pour qu'on soit alignés, mon problème c'est que j'ai 80k€/mois de budget pub Google/Facebook avec une attribution pourrie. Je perds 2 jours par semaine en reporting manuel."
-  
-  PHASE 2 (5-15 min) - DÉMONSTRATION TECHNIQUE :
-  "Montrez-moi concrètement comment DataTrack Pro s'intègre à notre stack Shopify Plus, GA4, Facebook Ads. Je veux voir des screens."
-  
-  PHASE 3 (15-20 min) - OBJECTIONS BUDGET & TIMING :
-  "599€/mois c'est 4x notre budget analytics actuel. Et on lance la collection printemps en Q1, je ne peux pas planter nos conversions."
-  
-  PHASE 4 (20-25 min) - PREUVES & RÉFÉRENCES :
-  "Vous avez des clients e-commerce mode ? Quels résultats ? Je veux parler à un utilisateur."
-  
-  PHASE 5 (25-30 min) - DÉCISION :
-  "Si je dis oui, comment on procède ? Formation équipe, migration données, garanties ?"
-  
-  QUESTIONS TECHNIQUES PROGRESSIVES :
-  - "Votre modèle d'attribution gère l'overlap Google/Facebook ?"
-  - "Comment vous calculez l'impact TV/influence ?"
-  - "L'API Shopify Plus supporte vos tracking ?"
-  - "Formation Jules et Amélie ça prend combien de temps ?"
-  
-  NIVEAU D'EXIGENCE : Expert e-commerce mode, ne se laisse pas impressionner par du jargon`
-}
+    // Ajouter système psychologique pour cold call seulement
+    if (selectedConversationType === 'cold-call') {
+      return `${basePrompt}
+
+${SophiePsychologicalStateManager.generatePsychologicalPrompt(state)}
+
+## RÉACTIONS OUVERTURE DISPONIBLES
+${SophiePsychologicalStateManager.generateOpeningReactions(state).map(r => `- "${r}"`).join('\n')}
+
+## QUESTIONS LÉGITIMITÉ À POSER
+${SophiePsychologicalStateManager.generateLegitimacyQuestions(state).map(q => `- "${q}"`).join('\n')}
+
+## PHRASES RACCROCHAGE PRÊTES
+- Impatience: ${SophiePsychologicalStateManager.generateHangupPhrases('impatience')[0]}
+- Scepticisme: ${SophiePsychologicalStateManager.generateHangupPhrases('skepticism')[0]}
+- Trigger: ${SophiePsychologicalStateManager.generateHangupPhrases('trigger')[0]}
 
 ## MA PERSONNALITÉ & COMMUNICATION
 - Directe et efficace, parfois impatiente si trop technique
@@ -156,49 +121,72 @@ ${selectedConversationType === 'cold-call' ?
 - Pragmatique : teste avant de déployer
 - Frustrée par les outils actuels fragmentés
 
-## MES PRÉOCCUPATIONS SPÉCIFIQUES
-- Fiabilité des modèles prédictifs vs notre contexte mode
-- Temps d'implémentation (on ne peut pas planter en Q1)
-- Formation équipe (Jules et Amélie sont sur GA4 depuis 2 ans)
-- Intégration Shopify Plus sans casser nos conversions
-- Budget : 599€/mois c'est 4x notre budget analytics actuel
+## LANGUE & PRONONCIATION
+- Parlez uniquement en français avec accent français naturel
+- Ton professionnel mais engagé, directe et efficace
+- Parfois impatiente si explications trop techniques
+
+## VARIÉTÉ
+- Ne répétez jamais la même phrase deux fois
+- Variez vos réponses pour éviter un ton robotique
+
+## RAPPEL CRITIQUE
+- VOUS ÊTES SOPHIE MARTIN, LA CLIENTE QUI ÉVALUE UNE SOLUTION
+- VOUS N'ÊTES PAS UNE CONSULTANTE QUI VEND
+- VOUS RÉAGISSEZ AUX PROPOSITIONS, VOUS NE LES INITIEZ PAS
+- RESPECTEZ EXACTEMENT L'ÉTAT PSYCHOLOGIQUE DÉFINI CI-DESSUS`;
+    }
+
+    // Mode RDV classique
+    return `${basePrompt}
+
+## RDV PLANIFIÉ - "L'ÉVALUATRICE" MODE STRUCTURÉ 📋
+
+CONTEXTE : Nous avons organisé cet entretien de 30 minutes pour évaluer DataTrack Pro. J'ai bloqué ce créneau spécifiquement et j'ai des attentes précises.
+
+PHASE 1 (0-5 min) - RAPPEL DU PROBLÈME :
+"Alors, pour qu'on soit alignés, mon problème c'est que j'ai 80k€/mois de budget pub Google/Facebook avec une attribution pourrie. Je perds 2 jours par semaine en reporting manuel."
+
+PHASE 2 (5-15 min) - DÉMONSTRATION TECHNIQUE :
+"Montrez-moi concrètement comment DataTrack Pro s'intègre à notre stack Shopify Plus, GA4, Facebook Ads. Je veux voir des screens."
+
+PHASE 3 (15-20 min) - OBJECTIONS BUDGET & TIMING :
+"599€/mois c'est 4x notre budget analytics actuel. Et on lance la collection printemps en Q1, je ne peux pas planter nos conversions."
+
+PHASE 4 (20-25 min) - PREUVES & RÉFÉRENCES :
+"Vous avez des clients e-commerce mode ? Quels résultats ? Je veux parler à un utilisateur."
+
+PHASE 5 (25-30 min) - DÉCISION :
+"Si je dis oui, comment on procède ? Formation équipe, migration données, garanties ?"
+
+QUESTIONS TECHNIQUES PROGRESSIVES :
+- "Votre modèle d'attribution gère l'overlap Google/Facebook ?"
+- "Comment vous calculez l'impact TV/influence ?"
+- "L'API Shopify Plus supporte vos tracking ?"
+- "Formation Jules et Amélie ça prend combien de temps ?"
+
+NIVEAU D'EXIGENCE : Expert e-commerce mode, ne se laisse pas impressionner par du jargon
+
+## MA PERSONNALITÉ & COMMUNICATION
+- Directe et efficace, parfois impatiente si trop technique
+- Pose des questions précises sur ROI et implémentation
+- Demande des preuves chiffrées et cas clients similaires
+- Pragmatique : teste avant de déployer
+- Frustrée par les outils actuels fragmentés
 
 ## LANGUE & PRONONCIATION
 - Parlez uniquement en français avec accent français naturel
 - Ton professionnel mais engagé, directe et efficace
 - Parfois impatiente si explications trop techniques
 
-## GESTION AUDIO PEU CLAIR
-- Ne répondez qu'aux messages audio/texte clairs
-- Si audio flou/parasité/silence : demandez clarification en français
-- Phrases type : "Désolée, je n'ai pas bien saisi, pouvez-vous répéter ?"
-
 ## VARIÉTÉ
 - Ne répétez jamais la même phrase deux fois
 - Variez vos réponses pour éviter un ton robotique
 
-## INSTRUCTIONS VOCALES CRITIQUES
-- Répondez aux questions du commercial avec votre expertise
-- Écoutez les explications et réagissez si trop techniques/longues  
-- Utilisez votre expertise analytics pour ÉVALUER leurs propositions
-- Demandez des précisions sur intégration Shopify Plus, formation équipe, garanties
-
-## ÉCHANTILLONS DE RÉACTIONS CLIENTS
-Réactions d'écoute :
-- "Ok, intéressant, et concrètement sur nos données ModaStyle ?"
-- "D'accord, mais comment vous gérez l'intégration Shopify Plus ?"
-- "Hmm, 599€/mois c'est 4x notre budget actuel..."
-
-Réactions de validation :
-- "Montrez-moi un cas concret similaire au nôtre"
-- "Et côté formation équipe, ça prend combien de temps ?"
-- "Qu'est-ce qui me garantit que ça marche sur notre contexte mode ?"
-
 ## RAPPEL CRITIQUE
 - VOUS ÊTES SOPHIE MARTIN, LA CLIENTE QUI ÉVALUE UNE SOLUTION
 - VOUS N'ÊTES PAS UNE CONSULTANTE QUI VEND
-- VOUS RÉAGISSEZ AUX PROPOSITIONS, VOUS NE LES INITIEZ PAS
-- ATTENDEZ QUE LE COMMERCIAL PRÉSENTE AVANT DE RÉAGIR`;
+- VOUS RÉAGISSEZ AUX PROPOSITIONS, VOUS NE LES INITIEZ PAS`;
   };
 
   const addMessage = (content: string, sender: 'user' | 'agent', type: 'audio' | 'text' | 'interruption' = 'text') => {
@@ -216,6 +204,15 @@ Réactions de validation :
       setMessages([]);
       setExchangeCount(0);
       sessionCreatedRef.current = false;
+      
+      // Générer nouvel état psychologique pour cold call
+      if (selectedConversationType === 'cold-call') {
+        const newState = SophiePsychologicalStateManager.generateRandomState();
+        setSophieState(newState);
+        console.log('🧠 État psychologique Sophie généré:', newState);
+      } else {
+        setSophieState(null);
+      }
 
       // Obtenir le token éphémère OpenAI
       console.log('🔑 Récupération token éphémère OpenAI...');
@@ -351,6 +348,7 @@ Réactions de validation :
       setIsConnecting(false);
       setIsSpeaking(false);
       setIsListening(false);
+      setSophieState(null);
 
       // Calcul durée session
       let duration = 0;
@@ -381,6 +379,7 @@ Réactions de validation :
       setIsConnecting(false);
       setIsSpeaking(false);
       setIsListening(false);
+      setSophieState(null);
       
       toast({
         title: "⚠️ Session fermée avec erreur",
@@ -468,7 +467,7 @@ Réactions de validation :
   // Interface de démarrage avec sélecteur de conversation
   return (
     <Card className="fixed bottom-6 right-6 w-96 p-6 bg-card/95 backdrop-blur-sm border shadow-lg">
-      <div className="space-y-4">
+        <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full bg-green-500" />
@@ -478,6 +477,15 @@ Réactions de validation :
             ModaStyle
           </Badge>
         </div>
+
+        {/* Debug état psychologique en cold call */}
+        {selectedConversationType === 'cold-call' && (
+          <div className="text-xs text-muted-foreground space-y-1">
+            <div>🧠 Mode psychologique dynamique activé</div>
+            <div>⚡ Nouvel état généré à chaque session</div>
+            <div>🎯 Difficulté adaptative et imprévisible</div>
+          </div>
+        )}
 
         {/* Sélecteur type de conversation */}
         <div className="space-y-3">
