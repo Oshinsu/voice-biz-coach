@@ -29,19 +29,52 @@ import { WebsiteSalesPromptGenerator } from './scenarios/website-sales';
 
 /**
  * FACTORY PATTERN - Mapping scénario → générateur
+ * Utilisation d'initialisation paresseuse pour éviter les dépendances circulaires
  */
-const scenarioGenerators: Record<string, ScenarioPromptGenerator> = {
-  'kpi-performance': new KpiPerformancePromptGenerator(),
-  'fintech-startup': new FintechStartupPromptGenerator(),
-  'cybersecurity-consulting': new CybersecurityConsultingPromptGenerator(),
-  'saas-hr-tool': new SaasHrToolPromptGenerator(),
-  'digital-agency': new DigitalAgencyPromptGenerator(),
-  'retail-personalization': new RetailPersonalizationPromptGenerator(),
-  'industrial-marketplace': new IndustrialMarketplacePromptGenerator(),
-  'manufacturing-iot': new ManufacturingIotPromptGenerator(),
-  'byss-vns-school': new ByssVnsSchoolPromptGenerator(),
-  'website-sales': new WebsiteSalesPromptGenerator()
-};
+const scenarioGenerators: Record<string, ScenarioPromptGenerator> = {};
+
+/**
+ * Fonction pour obtenir un générateur de scénario avec initialisation paresseuse
+ */
+function getScenarioGenerator(scenarioId: string): ScenarioPromptGenerator | null {
+  if (!scenarioGenerators[scenarioId]) {
+    switch (scenarioId) {
+      case 'kpi-performance':
+        scenarioGenerators[scenarioId] = new KpiPerformancePromptGenerator();
+        break;
+      case 'fintech-startup':
+        scenarioGenerators[scenarioId] = new FintechStartupPromptGenerator();
+        break;
+      case 'cybersecurity-consulting':
+        scenarioGenerators[scenarioId] = new CybersecurityConsultingPromptGenerator();
+        break;
+      case 'saas-hr-tool':
+        scenarioGenerators[scenarioId] = new SaasHrToolPromptGenerator();
+        break;
+      case 'digital-agency':
+        scenarioGenerators[scenarioId] = new DigitalAgencyPromptGenerator();
+        break;
+      case 'retail-personalization':
+        scenarioGenerators[scenarioId] = new RetailPersonalizationPromptGenerator();
+        break;
+      case 'industrial-marketplace':
+        scenarioGenerators[scenarioId] = new IndustrialMarketplacePromptGenerator();
+        break;
+      case 'manufacturing-iot':
+        scenarioGenerators[scenarioId] = new ManufacturingIotPromptGenerator();
+        break;
+      case 'byss-vns-school':
+        scenarioGenerators[scenarioId] = new ByssVnsSchoolPromptGenerator();
+        break;
+      case 'website-sales':
+        scenarioGenerators[scenarioId] = new WebsiteSalesPromptGenerator();
+        break;
+      default:
+        return null;
+    }
+  }
+  return scenarioGenerators[scenarioId];
+}
 
 /**
  * POINT D'ENTRÉE PRINCIPAL - API UNIFIÉE VOCAL
@@ -56,7 +89,7 @@ export function generateOptimizedScenarioPrompt({
 }: OptimizedPromptConfig): string {
   
   // 1. Récupérer le générateur spécialisé pour ce scénario
-  const generator = scenarioGenerators[scenarioId];
+  const generator = getScenarioGenerator(scenarioId);
   if (!generator) {
     throw new Error(`Générateur de prompt non trouvé pour le scénario: ${scenarioId}`);
   }
@@ -135,14 +168,25 @@ function getTrustBasedAdaptation(trustLevel: number): string {
  * UTILITAIRE - Liste des scénarios disponibles
  */
 export function getAvailableScenarios(): string[] {
-  return Object.keys(scenarioGenerators);
+  return [
+    'kpi-performance',
+    'fintech-startup', 
+    'cybersecurity-consulting',
+    'saas-hr-tool',
+    'digital-agency',
+    'retail-personalization',
+    'industrial-marketplace',
+    'manufacturing-iot',
+    'byss-vns-school',
+    'website-sales'
+  ];
 }
 
 /**
  * UTILITAIRE - Validation scénario existant
  */
 export function isValidScenario(scenarioId: string): boolean {
-  return scenarioId in scenarioGenerators;
+  return getAvailableScenarios().includes(scenarioId);
 }
 
 /**
