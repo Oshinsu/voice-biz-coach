@@ -25,15 +25,15 @@ interface DetailedMarketAnalysisProps {
 const getMarketData = (scenarioId: string) => {
   const marketDataMap: Record<string, any> = {
     'kpi-performance': {
-      sector: 'E-commerce Mode Éthique',
+      sector: 'E-commerce Mode Accessible',
       totalMarketSize: '€2.8Md',
       growth: '+12%',
       playerCount: '8,500+',
-      averageSize: '45 employés',
+      averageSize: '85 employés',
       segmentation: [
-        { name: 'Mode Éthique', value: 22, revenue: '€616M' },
-        { name: 'E-commerce Mode', value: 58, revenue: '€1.62Md' },
-        { name: 'Retail Mode', value: 20, revenue: '€560M' }
+        { name: 'Mode Accessible', value: 35, revenue: '€980M' },
+        { name: 'E-commerce Mode', value: 45, revenue: '€1.26Md' },
+        { name: 'Retail Traditional', value: 20, revenue: '€560M' }
       ],
       growthTrends: [
         { year: '2022', market: 2100, digital: 1800 },
@@ -44,50 +44,50 @@ const getMarketData = (scenarioId: string) => {
       ],
       painPoints: [
         { 
-          issue: 'Attribution multi-touch complexe', 
+          issue: 'Attribution cross-canaux post-ATT', 
           impact: 85, 
-          cost: '€22k/an',
-          description: 'Overlap 45% entre Facebook/Google Ads impossible à résoudre. Budget 80k€/mois mal réparti. Décisions d\'optimisation biaisées par attribution last-click.'
+          cost: '€120k/an',
+          description: 'Under-reporting Meta 25% post-iOS 14.5. Overlap Google/Meta 45% non résolu. Attribution last-click biaise optimisation budgets 80k€/mois.'
         },
         { 
           issue: 'Gaspillage budget publicitaire', 
-          impact: 80, 
-          cost: '€18k/an',
-          description: 'Cannibalisation non détectée entre canaux. 12-15% budget gaspillé en doublon attribution. ROAS surévalué de 25% vs réalité.'
+          impact: 82, 
+          cost: '€96k/an',
+          description: 'Double-comptabilisation 10-20% entre canaux. ROAS surévalué vs réalité incrémentale. Mauvaise allocation 80k€ digital mensuel.'
         },
         { 
-          issue: 'Données silos Facebook/Google', 
+          issue: 'Reporting manuel chronophage', 
           impact: 75, 
-          cost: '€15k/an',
-          description: 'Reporting manuel 16h/semaine Sophie. Tableaux Excel fragmentés. Impossibilité vision 360° customer journey cross-canal.'
+          cost: '€35k/an',
+          description: 'Sophie passe 16h/semaine sur reporting Excel. Données fragmentées GA4/Meta/Google. Vision 360° customer journey impossible.'
         },
         { 
-          issue: 'ROI imprécis campagnes', 
+          issue: 'ROI offline TV/Influence inconnu', 
+          impact: 78, 
+          cost: '€276k/an',
+          description: 'TV 15k€/mois + influence 8k€/mois sans MMM. ROI offline non mesuré. 23k€/mois dépensés sans tracking incremental.'
+        },
+        { 
+          issue: 'Prévisions & saisonnalité mode', 
           impact: 70, 
-          cost: '€12k/an',
-          description: 'Campagnes TV 15k€/mois et influenceurs 8k€/mois sans tracking. ROI offline inconnu. Arbitrages budgétaires à l\'aveugle.'
-        },
-        { 
-          issue: 'Saisonnalité imprévisible', 
-          impact: 65, 
-          cost: '€25k/an',
-          description: 'Prévisions mode basées sur historique GA4 incomplet. Ruptures stock collections populaires. Surstock invendus 18% vs 12% objectif.'
+          cost: '€324k/an',
+          description: 'Invendus 18% vs 12% objectif. Ruptures stock collections. Prévisions basées historique GA4 incomplet période COVID.'
         }
       ],
       tools: [
-        { category: 'Google Analytics', adoption: 92, satisfaction: 68 },
-        { category: 'Facebook Analytics', adoption: 88, satisfaction: 62 },
-        { category: 'Shopify Analytics', adoption: 85, satisfaction: 71 },
-        { category: 'Solutions Attribution', adoption: 18, satisfaction: 52 },
-        { category: 'DataTrack Pro', adoption: 3, satisfaction: 89 }
+        { category: 'Google Analytics 4', adoption: 95, satisfaction: 72 },
+        { category: 'Meta Business Manager', adoption: 90, satisfaction: 65 },
+        { category: 'Shopify Plus Analytics', adoption: 88, satisfaction: 78 },
+        { category: 'Solutions Attribution MTA', adoption: 12, satisfaction: 55 },
+        { category: 'DataTrack Pro', adoption: 2, satisfaction: 92 }
       ],
       financialMetrics: [
-        { metric: 'ROI Marketing', value: '312%', target: '400%', gap: -88 },
-        { metric: 'ROAS Moyen', value: '3.2', target: '4.5', gap: -1.3 },
-        { metric: 'CAC', value: '€47', target: '€35', gap: 12 },
-        { metric: 'Panier Moyen', value: '€52', target: '€60', gap: -8 },
-        { metric: 'Conversion Mobile', value: '1.9%', target: '2.8%', gap: -0.9 },
-        { metric: 'Gaspillage Budget', value: '30%', target: '15%', gap: 15 }
+        { metric: 'ROAS Google Ads', value: '3.2x', target: '4.5x', gap: -1.3 },
+        { metric: 'ROAS Meta Ads', value: '2.8x', target: '3.6x', gap: -0.8 },
+        { metric: 'AOV E-commerce', value: '€62', target: '€75', gap: -13 },
+        { metric: 'Conversion Rate', value: '2.3%', target: '2.8%', gap: -0.5 },
+        { metric: 'CAC Blended', value: '€28', target: '€22', gap: 6 },
+        { metric: 'Budget Gaspillé', value: '15%', target: '8%', gap: 7 }
       ]
     },
     'fintech-startup': {

@@ -145,7 +145,7 @@ export const MarketingToolsDashboard: React.FC<MarketingToolsDashboardProps> = (
               <ul className="space-y-1 text-sm">
                 <li className="flex items-center gap-2">
                   <Zap className="h-3 w-3 text-teal-600" />
-                  Setup DataTrack Pro en 4-6 semaines
+                  Setup 24-72h + MMM en 4-6 semaines
                 </li>
                 <li className="flex items-center gap-2">
                   <Users className="h-3 w-3 text-teal-600" />
@@ -158,11 +158,11 @@ export const MarketingToolsDashboard: React.FC<MarketingToolsDashboardProps> = (
               <ul className="space-y-1 text-sm">
                 <li className="flex items-center gap-2">
                   <TrendingUp className="h-3 w-3 text-cyan-600" />
-                  220% ROI première année ModaStyle
+                  180-220% ROI année 1 avec gains ROAS réalistes
                 </li>
                 <li className="flex items-center gap-2">
                   <BarChart3 className="h-3 w-3 text-cyan-600" />
-                  Attribution multi-touch précise vs GA4
+                  MTA + MMM pour attribution post-ATT iOS
                 </li>
               </ul>
             </div>
