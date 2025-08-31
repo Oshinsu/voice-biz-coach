@@ -14,11 +14,14 @@ export const kpiPerformanceScenario: Scenario = {
     location: "Lyon, France - Siège social Presqu'île, entrepôt Rillieux-la-Pape",
     
     metrics: {
-      monthlyVisitors: "420K visiteurs uniques/mois",
-      conversionRate: "2.1%",
-      averageOrderValue: "52€",
-      customerLifetimeValue: "156€",
-      marketingBudget: "2.1M€/an (11.7% du CA)"
+      monthlyVisitors: "1,050K visiteurs uniques/mois",
+      conversionRate: "2.3%",
+      averageOrderValue: "62€",
+      customerLifetimeValue: "186-248€",
+      monthlyOrders: "24,200",
+      marketingBudget: "2.1M€/an (11.7% du CA)",
+      paidMediaSpend: "103K€/mois (80K€ digital + 15K€ TV + 8K€ influence)",
+      digitalBreakdown: "Google Ads 50K€, Meta 30K€, TikTok 8K€/mois"
     },
     
     description: "Créée en 2015, ModaStyle s'est développée rapidement sur le segment mode accessible. Croissance de 15% par an depuis 2020.",
@@ -69,7 +72,7 @@ export const kpiPerformanceScenario: Scenario = {
     
     timeline: "Test avant fin Q1, déploiement Q2 si concluant",
     
-    foundedYear: 2018,
+    foundedYear: 2015,
     keyPeople: [
       "Clara Dubois - CEO & Fondatrice, 34 ans (Ex-acheteuse senior Zara 6 ans, ESSEC). Visionnaire mode éthique européenne, leadership inspirant équipe, obsédée customer experience. Network influent mode/retail",
       "Sophie Martin - Directrice Marketing & Analytics, 33 ans (Ex-Converteo 4 ans, Ex-Spartoo 3 ans, Ex-Agence digitale Lyon 2 ans, ESC Lyon marketing digital). 10 ans expertise analytics, frustrée limitations tools actuels, recherche efficacité",
