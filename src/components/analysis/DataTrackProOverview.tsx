@@ -20,6 +20,40 @@ interface DataTrackProOverviewProps {
 }
 
 export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ product }) => {
+  // ROI Breakdown calculation for ModaStyle - RÉALISTE
+  const getRoiBreakdown = () => {
+    const monthlyRevenue = 1500000; // 18M€ annual / 12 (CA réel ModaStyle)
+    const monthlyAdSpend = monthlyRevenue * 0.12; // 12% CA en pub = 180k€/mois (réaliste e-commerce)
+    
+    // Gains RÉALISTES avec DataTrack Pro :
+    const betterAttribution = monthlyAdSpend * 0.08; // 8% budget mieux attribué = 14.4k€/mois
+    const reducedWaste = monthlyAdSpend * 0.05; // 5% moins de gaspillage pub = 9k€/mois  
+    const churnPrevention = monthlyRevenue * 0.015; // 1.5% churn évité = 22.5k€/mois
+    const timesSaved = 2 * 8 * 4 * 50; // 2 jours/semaine * 8h * 4 semaines * 50€/h = 3.2k€/mois
+    
+    const monthlyGain = betterAttribution + reducedWaste + churnPrevention + timesSaved;
+    const annualGain = monthlyGain * 12;
+    const toolCost = 599 * 12 + 899; // Coût annuel + setup = 8,087€
+    const netGain = annualGain - toolCost;
+    const roi = ((netGain / toolCost) * 100);
+    
+    return {
+      monthlyGain: Math.round(monthlyGain),
+      annualGain: Math.round(annualGain),
+      toolCost,
+      netGain: Math.round(netGain),
+      roi: Math.round(roi),
+      details: {
+        betterAttribution: Math.round(betterAttribution),
+        reducedWaste: Math.round(reducedWaste),
+        churnPrevention: Math.round(churnPrevention),
+        timesSaved: Math.round(timesSaved)
+      }
+    };
+  };
+
+  const roiData = getRoiBreakdown();
+
   // Real DataTrack Pro specifications for ModaStyle
   const getDataTrackSpecs = () => ({
     type: 'Marketing Analytics Platform',
@@ -54,40 +88,6 @@ export const DataTrackProOverview: React.FC<DataTrackProOverviewProps> = ({ prod
   });
 
   const specs = getDataTrackSpecs();
-
-  // ROI Breakdown calculation for ModaStyle - RÉALISTE
-  const getRoiBreakdown = () => {
-    const monthlyRevenue = 1500000; // 18M€ annual / 12 (CA réel ModaStyle)
-    const monthlyAdSpend = monthlyRevenue * 0.12; // 12% CA en pub = 180k€/mois (réaliste e-commerce)
-    
-    // Gains RÉALISTES avec DataTrack Pro :
-    const betterAttribution = monthlyAdSpend * 0.08; // 8% budget mieux attribué = 14.4k€/mois
-    const reducedWaste = monthlyAdSpend * 0.05; // 5% moins de gaspillage pub = 9k€/mois  
-    const churnPrevention = monthlyRevenue * 0.015; // 1.5% churn évité = 22.5k€/mois
-    const timesSaved = 2 * 8 * 4 * 50; // 2 jours/semaine * 8h * 4 semaines * 50€/h = 3.2k€/mois
-    
-    const monthlyGain = betterAttribution + reducedWaste + churnPrevention + timesSaved;
-    const annualGain = monthlyGain * 12;
-    const toolCost = 599 * 12 + 899; // Coût annuel + setup = 8,087€
-    const netGain = annualGain - toolCost;
-    const roi = ((netGain / toolCost) * 100);
-    
-    return {
-      monthlyGain: Math.round(monthlyGain),
-      annualGain: Math.round(annualGain),
-      toolCost,
-      netGain: Math.round(netGain),
-      roi: Math.round(roi),
-      details: {
-        betterAttribution: Math.round(betterAttribution),
-        reducedWaste: Math.round(reducedWaste),
-        churnPrevention: Math.round(churnPrevention),
-        timesSaved: Math.round(timesSaved)
-      }
-    };
-  };
-
-  const roiData = getRoiBreakdown();
 
   const [selectedDemo, setSelectedDemo] = useState('overview');
 
