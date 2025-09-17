@@ -6,7 +6,6 @@ import { useScenarios } from "@/hooks/useScenarios";
 import { useSalesStore } from "@/store/salesStore";
 import { useEffect } from "react";
 import { SophieAgentsSDK } from "@/components/voice-agents";
-import { VNSInterface } from "@/components/voice-agents/VNSInterface";
 import { ScenarioDetails } from "@/components/ScenarioDetails";
 
 export default function ScenarioPage() {
@@ -66,13 +65,12 @@ export default function ScenarioPage() {
         <ScenarioDetails scenario={scenario} />
       </div>
 
-      {/* Voice Navigation System (VNS) - Système complet */}
+      {/* Voice Navigation System (VNS) - Système réel */}
       {scenario.id === 'byss-vns-school' && (
-        <VNSInterface 
-          scenarioId={scenario.id}
-          onSessionEnd={(report) => {
-            console.log('📊 Rapport VNS:', report);
-          }}
+        <SophieAgentsSDK 
+          conversationType="rdv"
+          open={true}
+          onToggle={() => {}}
         />
       )}
     </div>

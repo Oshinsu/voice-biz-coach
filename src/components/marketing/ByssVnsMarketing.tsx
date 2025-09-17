@@ -62,7 +62,7 @@ export const ByssVnsMarketing: React.FC<ByssVnsMarketingProps> = ({ scenarioId }
       targets: ["EDHEC Business School", "2-3 business schools premium"],
       goals: ["Case studies ROI", "Témoignages professeurs", "Métriques étudiants"],
       budget: "50k€ marketing",
-      kpis: ["3 pilots signés", "95% satisfaction", "25% engagement boost"]
+      kpis: ["1-2 pilots signés", "Proof of concept validé", "Case study EDHEC"]
     },
     {
       phase: "Phase 2: Market Penetration", 

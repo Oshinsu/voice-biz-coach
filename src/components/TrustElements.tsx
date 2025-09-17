@@ -12,10 +12,10 @@ const partnerLogos = [
 ];
 
 const achievements = [
-  { icon: Users, value: "500+", label: "Étudiants formés", color: "text-primary" },
-  { icon: Clock, value: "10K+", label: "Heures de simulation", color: "text-accent" },
-  { icon: Award, value: "98%", label: "Satisfaction écoles", color: "text-success" },
-  { icon: Zap, value: "45", label: "Universités partenaires", color: "text-warning" }
+  { icon: Users, value: "3", label: "Scénarios développés", color: "text-primary" },
+  { icon: Clock, value: "24h", label: "Setup garanti", color: "text-accent" },
+  { icon: Award, value: "GPT-4o", label: "Technologie Realtime", color: "text-success" },
+  { icon: Zap, value: "RGPD", label: "Conformité garantie", color: "text-warning" }
 ];
 
 const certifications = [

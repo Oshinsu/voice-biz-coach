@@ -88,39 +88,39 @@ export function EnhancedStats({ totalCompanies, totalRevenue, avgSuccessRate }: 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4 animate-fade-in">
-            Performances en temps réel
+            Technologie Byss VNS
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto animate-slide-up">
-            Des résultats concrets pour l'apprentissage commercial moderne
+            Innovation pédagogique avec IA conversationnelle avancée
           </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <StatCard
             icon={Target}
-            value={totalCompanies}
-            label="Scénarios B2B disponibles"
+            value="3"
+            label="Scénarios développés"
             delay={100}
             color="bg-primary"
           />
           <StatCard
             icon={TrendingUp}
-            value="85%"
-            label="Taux de satisfaction étudiants"
+            value="GPT-4o"
+            label="Technologie OpenAI"
             delay={200}
             color="bg-accent"
           />
           <StatCard
             icon={BarChart3}
-            value="92%"
-            label="Amélioration des compétences"
+            value="24h"
+            label="Setup garanti"
             delay={300}
             color="bg-success"
           />
           <StatCard
             icon={Clock}
-            value="24/7"
-            label="Disponibilité plateforme"
+            value="RGPD"
+            label="Conformité Europe"
             delay={400}
             color="bg-warning"
           />
