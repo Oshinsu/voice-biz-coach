@@ -15,17 +15,8 @@ import { generateContextualLayers } from './core/contextual-layers';
 import { generateDiscoverySystem } from './core/discovery-system';
 import { NaturalFlowGenerator } from './core/natural-flow-system';
 
-// Import des générateurs de prompts par scénario
+// Import du seul générateur de prompts restant
 import { KpiPerformancePromptGenerator } from './scenarios/kpi-performance';
-import { FintechStartupPromptGenerator } from './scenarios/fintech-startup';
-import { CybersecurityConsultingPromptGenerator } from './scenarios/cybersecurity-consulting';
-import { SaasHrToolPromptGenerator } from './scenarios/saas-hr-tool';
-import { DigitalAgencyPromptGenerator } from './scenarios/digital-agency';
-import { RetailPersonalizationPromptGenerator } from './scenarios/retail-personalization';
-import { IndustrialMarketplacePromptGenerator } from './scenarios/industrial-marketplace';
-import { ManufacturingIotPromptGenerator } from './scenarios/manufacturing-iot';
-import { ByssVnsSchoolPromptGenerator } from './scenarios/byss-vns-school';
-import { WebsiteSalesPromptGenerator } from './scenarios/website-sales';
 
 /**
  * FACTORY PATTERN - Mapping scénario → générateur
@@ -41,33 +32,6 @@ function getScenarioGenerator(scenarioId: string): ScenarioPromptGenerator | nul
     switch (scenarioId) {
       case 'kpi-performance':
         scenarioGenerators[scenarioId] = new KpiPerformancePromptGenerator();
-        break;
-      case 'fintech-startup':
-        scenarioGenerators[scenarioId] = new FintechStartupPromptGenerator();
-        break;
-      case 'cybersecurity-consulting':
-        scenarioGenerators[scenarioId] = new CybersecurityConsultingPromptGenerator();
-        break;
-      case 'saas-hr-tool':
-        scenarioGenerators[scenarioId] = new SaasHrToolPromptGenerator();
-        break;
-      case 'digital-agency':
-        scenarioGenerators[scenarioId] = new DigitalAgencyPromptGenerator();
-        break;
-      case 'retail-personalization':
-        scenarioGenerators[scenarioId] = new RetailPersonalizationPromptGenerator();
-        break;
-      case 'industrial-marketplace':
-        scenarioGenerators[scenarioId] = new IndustrialMarketplacePromptGenerator();
-        break;
-      case 'manufacturing-iot':
-        scenarioGenerators[scenarioId] = new ManufacturingIotPromptGenerator();
-        break;
-      case 'byss-vns-school':
-        scenarioGenerators[scenarioId] = new ByssVnsSchoolPromptGenerator();
-        break;
-      case 'website-sales':
-        scenarioGenerators[scenarioId] = new WebsiteSalesPromptGenerator();
         break;
       default:
         return null;
@@ -168,18 +132,7 @@ function getTrustBasedAdaptation(trustLevel: number): string {
  * UTILITAIRE - Liste des scénarios disponibles
  */
 export function getAvailableScenarios(): string[] {
-  return [
-    'kpi-performance',
-    'fintech-startup', 
-    'cybersecurity-consulting',
-    'saas-hr-tool',
-    'digital-agency',
-    'retail-personalization',
-    'industrial-marketplace',
-    'manufacturing-iot',
-    'byss-vns-school',
-    'website-sales'
-  ];
+  return ['kpi-performance'];
 }
 
 /**
@@ -198,7 +151,7 @@ function generateNaturalFlowEnhancement(
   conversationType: 'cold-call' | 'rdv',
   trustLevel: number
 ): string {
-  if (!scenarioId.includes('byss-vns-school') || agentType !== 'contact_principal') {
+  if (scenarioId !== 'kpi-performance' || agentType !== 'contact_principal') {
     return '';
   }
   

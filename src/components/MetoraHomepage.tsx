@@ -7,12 +7,7 @@ import { useScenarios } from "@/hooks/useScenarios";
 
 const getScenarioIcon = (scenarioId: string) => {
   const iconMap: { [key: string]: any } = {
-    "retail-personalization": BarChart3,
-    "digital-agency": Users,
-    "fintech-startup": Target,
-    "saas-hr-tool": TrendingUp,
-    "byss-vns-school": GraduationCap,
-    "consulting-firm": BarChart3,
+    "kpi-performance": BarChart3,
   };
   return iconMap[scenarioId] || BarChart3;
 };
