@@ -215,6 +215,110 @@ export type Database = {
         }
         Relationships: []
       }
+      vns_events: {
+        Row: {
+          created_at: string
+          event_data: Json
+          event_type: string
+          id: string
+          session_id: string
+          timestamp_sec: number
+        }
+        Insert: {
+          created_at?: string
+          event_data?: Json
+          event_type: string
+          id?: string
+          session_id: string
+          timestamp_sec: number
+        }
+        Update: {
+          created_at?: string
+          event_data?: Json
+          event_type?: string
+          id?: string
+          session_id?: string
+          timestamp_sec?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vns_events_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "vns_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vns_sessions: {
+        Row: {
+          actions_3: Json | null
+          created_at: string
+          duration_seconds: number
+          exchange_count: number
+          id: string
+          moments_cles: Json | null
+          recap_1_phrase: string | null
+          report_data: Json | null
+          scenario_id: string
+          score_decouverte: number
+          score_ecoute_active: number
+          score_next_step: number
+          score_objections: number
+          score_ouverture: number
+          score_overall: number
+          session_type: string
+          trust_evidence: Json | null
+          trust_final_level: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          actions_3?: Json | null
+          created_at?: string
+          duration_seconds?: number
+          exchange_count?: number
+          id?: string
+          moments_cles?: Json | null
+          recap_1_phrase?: string | null
+          report_data?: Json | null
+          scenario_id: string
+          score_decouverte?: number
+          score_ecoute_active?: number
+          score_next_step?: number
+          score_objections?: number
+          score_ouverture?: number
+          score_overall?: number
+          session_type: string
+          trust_evidence?: Json | null
+          trust_final_level?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          actions_3?: Json | null
+          created_at?: string
+          duration_seconds?: number
+          exchange_count?: number
+          id?: string
+          moments_cles?: Json | null
+          recap_1_phrase?: string | null
+          report_data?: Json | null
+          scenario_id?: string
+          score_decouverte?: number
+          score_ecoute_active?: number
+          score_next_step?: number
+          score_objections?: number
+          score_ouverture?: number
+          score_overall?: number
+          session_type?: string
+          trust_evidence?: Json | null
+          trust_final_level?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
