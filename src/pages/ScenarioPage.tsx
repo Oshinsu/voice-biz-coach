@@ -6,6 +6,7 @@ import { useScenarios } from "@/hooks/useScenarios";
 import { useSalesStore } from "@/store/salesStore";
 import { useEffect } from "react";
 import { SophieAgentsSDK } from "@/components/voice-agents";
+import { VNSInterface } from "@/components/voice-agents/VNSInterface";
 import { ScenarioDetails } from "@/components/ScenarioDetails";
 
 export default function ScenarioPage() {
@@ -65,9 +66,14 @@ export default function ScenarioPage() {
         <ScenarioDetails scenario={scenario} />
       </div>
 
-      {/* Voice Coach Widget */}
+      {/* Voice Navigation System (VNS) - Système complet */}
       {scenario.id === 'kpi-performance' && (
-        <SophieAgentsSDK conversationType="cold-call" />
+        <VNSInterface 
+          scenarioId={scenario.id}
+          onSessionEnd={(report) => {
+            console.log('📊 Rapport VNS:', report);
+          }}
+        />
       )}
     </div>
   );
