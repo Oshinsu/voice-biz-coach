@@ -18,31 +18,21 @@ serve(async (req) => {
       throw new Error('OPENAI_API_KEY is not set');
     }
 
-    console.log('🔑 Génération token éphémère OpenAI pour agent vocal...');
+    console.log('🔑 Génération token éphémère OpenAI pour Agents SDK...');
 
-    // Configuration session selon la doc WebRTC
-    const sessionConfig = {
-      session: {
-        type: "realtime",
-        model: "gpt-realtime",
-        audio: {
-          output: {
-            voice: "alloy",
-          },
-        },
-      },
-    };
-
-    // Générer un token éphémère via l'API REST OpenAI
+    // Appel correct selon la documentation officielle Agents SDK
     const response = await fetch(
-      "https://api.openai.com/v1/realtime/client_secrets",
+      "https://api.openai.com/v1/realtime/sessions",
       {
         method: "POST",
         headers: {
           Authorization: `Bearer ${OPENAI_API_KEY}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(sessionConfig),
+        body: JSON.stringify({
+          model: "gpt-4o-realtime-preview-2024-12-17",
+          voice: "alloy"
+        }),
       }
     );
 
@@ -52,7 +42,7 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    console.log('✅ Token éphémère généré avec succès');
+    console.log('✅ Token éphémère généré avec succès pour Agents SDK');
 
     return new Response(JSON.stringify(data), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
