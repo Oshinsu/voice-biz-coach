@@ -1,44 +1,48 @@
 import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Package } from 'lucide-react';
+import { Product } from '@/hooks/useScenarios';
+import { AnalysisSection } from './analysis/AnalysisSection';
+import { GenericProductOverview } from './analysis/GenericProductOverview';
+import { DataTrackProOverview } from './analysis/DataTrackProOverview';
+import { MarketingToolsDashboard } from './marketing/MarketingToolsDashboard';
 
 interface ProductAnalysisProps {
+  products?: Product[];
   scenarioId?: string;
+  productSwot?: any;
 }
 
-export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({
-  scenarioId = 'kpi-performance'
+export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({ 
+  products = [], 
+  scenarioId = 'digital-agency',
+  productSwot 
 }) => {
+  const mainProduct = products[0];
+  
+  if (!mainProduct) {
+    return (
+      <div className="space-y-6">
+        <MarketingToolsDashboard scenarioId={scenarioId} productSwot={productSwot} />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Analyse Produit - DataTrack Pro</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div>
-              <h4 className="font-semibold mb-2">Produit</h4>
-              <p className="text-muted-foreground">
-                DataTrack Pro - Solution d'attribution marketing et analytics prédictive
-              </p>
-            </div>
-            
-            <div>
-              <h4 className="font-semibold mb-2">Avantages clés</h4>
-              <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Attribution cross-device unifiée</li>
-                <li>• Analytics prédictive IA</li>
-                <li>• ROI 312% première année</li>
-                <li>• Intégration native Shopify Plus</li>
-              </ul>
-            </div>
-            
-            <div className="text-sm text-muted-foreground">
-              Analyse spécifique au scénario : {scenarioId}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Product Overview */}
+      <AnalysisSection
+        title={`${mainProduct.name} - Vue d'ensemble`}
+        icon={Package}
+      >
+        {scenarioId === 'kpi-performance' ? (
+          <DataTrackProOverview product={mainProduct} />
+        ) : (
+          <GenericProductOverview product={mainProduct} scenarioId={scenarioId} />
+        )}
+      </AnalysisSection>
+
+      {/* Marketing Tools Dashboard */}
+      <MarketingToolsDashboard scenarioId={scenarioId} productSwot={productSwot} />
     </div>
   );
 };
