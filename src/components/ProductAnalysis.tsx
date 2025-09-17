@@ -3,7 +3,6 @@ import { Package } from 'lucide-react';
 import { Product } from '@/hooks/useScenarios';
 import { AnalysisSection } from './analysis/AnalysisSection';
 import { ByssVnsProductOverview } from './analysis/ByssVnsProductOverview';
-import { DataTrackProOverview } from './analysis/DataTrackProOverview';
 import { MarketingToolsDashboard } from './marketing/MarketingToolsDashboard';
 
 interface ProductAnalysisProps {
@@ -34,11 +33,7 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({
         title={`${mainProduct.name} - Vue d'ensemble`}
         icon={Package}
       >
-        {scenarioId === 'byss-vns-school' ? (
-          <DataTrackProOverview product={mainProduct} />
-        ) : (
-          <ByssVnsProductOverview scenarioId={scenarioId} />
-        )}
+        <ByssVnsProductOverview scenarioId={scenarioId} />
       </AnalysisSection>
 
       {/* Marketing Tools Dashboard */}

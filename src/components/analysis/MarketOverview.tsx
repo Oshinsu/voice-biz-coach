@@ -26,22 +26,22 @@ export const MarketOverview: React.FC<MarketOverviewProps> = ({
   // Generate sector-specific market data
   const getSectorData = (sector: string) => {
     const sectorMappings: Record<string, any> = {
-      'E-commerce': {
-        size: '€142Md',
-        growth: '18.3%',
-        institutions: '3,500+',
-        users: '2.8M',
+      'Enseignement Supérieur': {
+        size: '€32Md',
+        growth: '8.5%',
+        institutions: '280+',
+        users: '380K',
         segments: [
-          { name: 'Plateformes', value: 35 },
-          { name: 'Analytics', value: 25 },
-          { name: 'IA & Automation', value: 22 },
-          { name: 'Logistique', value: 18 }
+          { name: 'EdTech IA', value: 35 },
+          { name: 'Simulations', value: 25 },
+          { name: 'LMS & Plateformes', value: 22 },
+          { name: 'Analytics Learning', value: 18 }
         ],
         trends: [
-          { trend: 'IA générative +120%', up: true },
-          { trend: 'Mobile commerce +95%', up: true },
-          { trend: 'Personnalisation +75%', up: true },
-          { trend: 'Solutions legacy -45%', up: false }
+          { trend: 'IA pédagogique +145%', up: true },
+          { trend: 'Simulations immersives +85%', up: true },
+          { trend: 'Soft skills focus +70%', up: true },
+          { trend: 'Méthodes traditionnelles -35%', up: false }
         ]
       },
       'Cybersécurité': {
@@ -87,7 +87,7 @@ export const MarketOverview: React.FC<MarketOverviewProps> = ({
       sector.toLowerCase().includes(key.toLowerCase())
     );
     
-    return sectorMappings[matchedSector || 'E-commerce'];
+    return sectorMappings[matchedSector || 'Enseignement Supérieur'];
   };
 
   const sectorData = getSectorData(marketData.sector);

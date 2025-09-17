@@ -316,7 +316,7 @@ export class ContextualDiscoveryManager {
   private getRetailDiscoveryConfig(): SectoralDiscoveryConfig {
     return {
       sectorId: 'retail',
-      sectorName: 'Retail & E-commerce',
+      sectorName: 'Enseignement Supérieur',
       discoveryLayers: [
         {
           id: 'surface_retail',

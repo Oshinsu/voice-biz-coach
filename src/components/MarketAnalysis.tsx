@@ -12,8 +12,8 @@ interface MarketAnalysisProps {
 
 export const MarketAnalysis: React.FC<MarketAnalysisProps> = ({ 
   swotAnalyses = [], 
-  sector = 'E-commerce',
-  companyName = 'Entreprise',
+  sector = 'Enseignement Supérieur',
+  companyName = 'EDHEC Business School',
   scenarioId = 'byss-vns-school'
 }) => {
   const { getScenarioById } = useScenarios();

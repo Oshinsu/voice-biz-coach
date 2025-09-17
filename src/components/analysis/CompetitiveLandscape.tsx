@@ -22,30 +22,30 @@ export const CompetitiveLandscape: React.FC<CompetitiveLandscapeProps> = ({
   // Generate sector-specific competitive data
   const getSectorCompetitors = (sector: string) => {
     const sectorMappings: Record<string, any> = {
-      'E-commerce': {
+      'Enseignement Supérieur': {
         direct: [
-          { name: 'Shopify Analytics', description: 'Leader marché, fonctions basiques', market: '35%' },
-          { name: 'Adobe Analytics', description: 'Suite complète, complexe', market: '28%' }
+          { name: 'Cesim Business Simulations', description: 'Leader marché simulations business', market: '35%' },
+          { name: 'Marketplace Simulations', description: 'Simulations marketing spécialisées', market: '28%' }
         ],
         indirect: [
-          { name: 'Google Analytics', description: 'Gratuit, limité e-commerce' },
-          { name: 'Solutions maison', description: 'Tableaux de bord custom' },
-          { name: 'Outils BI', description: 'Power BI, Tableau' }
+          { name: 'Jeux de rôle traditionnels', description: 'Simulations en présentiel' },
+          { name: 'Études de cas statiques', description: 'Méthode Harvard classique' },
+          { name: 'Plateformes LMS', description: 'Moodle, Blackboard' }
         ],
         advantages: [
-          'Spécialisation e-commerce',
-          'Interface intuitive',
-          'Analytics temps réel',
-          'Intégrations natives',
-          'Support personnalisé',
-          'ROI mesurable'
+          'IA conversationnelle temps réel',
+          'Simulation vocale naturelle',
+          'Analytics compétences soft skills',
+          'Intégration LMS native',
+          'Support pédagogique dédié',
+          'ROI engagement mesurable'
         ],
         gaps: [
-          'Solutions généralistes inadaptées',
-          'Complexité technique élevée',
-          'Support standardisé limité',
-          'Coûts cachés récurrents',
-          'Pas d\'adaptation e-commerce'
+          'Simulations non-interactives',
+          'Pas de feedback temps réel',
+          'Évaluation subjective manuelle',
+          'Scaling impossible',
+          'Pas d\'adaptation IA pédagogique'
         ]
       },
       'Cybersécurité': {
@@ -106,7 +106,7 @@ export const CompetitiveLandscape: React.FC<CompetitiveLandscapeProps> = ({
       sector.toLowerCase().includes(key.toLowerCase())
     );
     
-    return sectorMappings[matchedSector || 'E-commerce'];
+    return sectorMappings[matchedSector || 'Enseignement Supérieur'];
   };
 
   const sectorData = getSectorCompetitors(competitiveData.sector);

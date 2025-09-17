@@ -126,7 +126,7 @@ export class TrustEngine {
 
     const rdvReveal = [
       [], [],
-      ["KPIs e-commerce", "Parties prenantes", "Contexte métier"], // Trust 2
+      ["KPIs pédagogiques", "Parties prenantes", "Contexte EDHEC"], // Trust 2
       ["Pains détaillés attribution", "Risques saisonnalité", "Dépendances équipe"], // Trust 3
       ["Métriques: -30% temps reporting", "ROI attendu", "Critères succès"], // Trust 4
       ["Go POC", "Planning comité validation"] // Trust 5
