@@ -1,5 +1,5 @@
-/**
- * AGENTS SDK + WebRTC IMPLEMENTATION
+import { supabase } from "@/integrations/supabase/client";
+ /**
  * Utilisation officielle selon la documentation OpenAI Realtime API
  */
 
@@ -82,20 +82,16 @@ export class RealtimeChat {
     try {
       console.log('🚀 Initialisation Agents SDK + WebRTC...');
 
-      // 1. Obtenir token éphémère avec instructions
-      const response = await fetch('/api/supabase/functions/v1/get-openai-key', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ instructions })
+      // 1. Obtenir token éphémère avec instructions via Supabase SDK
+      const { data, error } = await supabase.functions.invoke('get-openai-key', {
+        body: { instructions }
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (error) {
+        throw new Error(`Supabase Function error: ${error.message}`);
       }
 
-      const data = await response.json();
-      
-      if (!data.client_secret?.value) {
+      if (!data?.client_secret?.value) {
         throw new Error("Failed to get ephemeral token");
       }
 
