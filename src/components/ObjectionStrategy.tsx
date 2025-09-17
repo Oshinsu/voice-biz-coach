@@ -14,7 +14,7 @@ interface ObjectionStrategyProps {
 }
 
 export const ObjectionStrategy: React.FC<ObjectionStrategyProps> = ({ 
-  scenarioId = 'kpi-performance' 
+  scenarioId = 'byss-vns-school' 
 }) => {
   const { getScenarioById } = useScenarios();
   const scenario = getScenarioById(scenarioId);

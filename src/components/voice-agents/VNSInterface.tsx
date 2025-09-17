@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/components/ui/use-toast';
 import { Mic, MicOff, Phone, PhoneOff, Brain, Clock, Target } from 'lucide-react';
 import { TrustEngine, TrustState } from '@/lib/trust-engine';
-import { buildSophiePrompt, DEFAULT_CONFIGS, VNSConfig } from '@/lib/prompts/vns-template';
+import { buildSophiePrompt, DEFAULT_CONFIGS, VNSConfig } from '@/lib/vns-template';
 import { VNSReport } from '@/lib/tools/vns-tools';
 
 interface VNSInterfaceProps {
@@ -48,7 +48,7 @@ export const VNSInterface: React.FC<VNSInterfaceProps> = ({ scenarioId, onSessio
 
   const startSession = async () => {
     try {
-      const config = sessionType === "cold" ? DEFAULT_CONFIGS.cold : DEFAULT_CONFIGS.rdv;
+      const config = sessionType === "cold" ? DEFAULT_CONFIGS.COLD : DEFAULT_CONFIGS.RDV;
       const prompt = buildSophiePrompt(config);
       
       // Simuler connexion WebSocket pour VNS

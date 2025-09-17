@@ -34,7 +34,7 @@ const difficultyOptions = [
 
 const getScenarioIcon = (scenarioId: string) => {
   switch (scenarioId) {
-    case 'kpi-performance':
+    case 'byss-vns-school':
       return <TrendingUp className="h-4 w-4" />;
     case 'ca-benefice':
       return <Calculator className="h-4 w-4" />;

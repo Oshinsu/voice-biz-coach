@@ -1,6 +1,6 @@
 import React from 'react';
 import { SwotAnalysis } from '@/hooks/useScenarios';
-import { DetailedMarketAnalysis } from './analysis/DetailedMarketAnalysis';
+import { ByssVnsAnalysis } from './analysis/ByssVnsAnalysis';
 import { useScenarios } from '@/hooks/useScenarios';
 
 interface MarketAnalysisProps {
@@ -14,7 +14,7 @@ export const MarketAnalysis: React.FC<MarketAnalysisProps> = ({
   swotAnalyses = [], 
   sector = 'E-commerce',
   companyName = 'Entreprise',
-  scenarioId = 'kpi-performance'
+  scenarioId = 'byss-vns-school'
 }) => {
   const { getScenarioById } = useScenarios();
   const scenario = getScenarioById(scenarioId);
@@ -38,7 +38,7 @@ export const MarketAnalysis: React.FC<MarketAnalysisProps> = ({
   return (
     <div className="space-y-6">
       {/* Detailed Market Analysis with Charts and Data */}
-      <DetailedMarketAnalysis scenarioId={scenarioId} />
+      <ByssVnsAnalysis scenarioId={scenarioId} />
     </div>
   );
 };

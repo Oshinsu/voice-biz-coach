@@ -67,7 +67,7 @@ export default function ScenarioPage() {
       </div>
 
       {/* Voice Navigation System (VNS) - Système complet */}
-      {scenario.id === 'kpi-performance' && (
+      {scenario.id === 'byss-vns-school' && (
         <VNSInterface 
           scenarioId={scenario.id}
           onSessionEnd={(report) => {

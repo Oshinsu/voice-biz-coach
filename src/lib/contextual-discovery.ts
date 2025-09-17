@@ -66,13 +66,9 @@ export class ContextualDiscoveryManager {
       case 'Fintech':
         return this.getFintechDiscoveryConfig();
       
-      case 'Retail':
-      case 'E-commerce':
-        return this.getRetailDiscoveryConfig();
-      
-      case 'Manufacturing':
-      case 'Industry':
-        return this.getManufacturingDiscoveryConfig();
+      case 'Enseignement Supérieur':
+      case 'EdTech':
+        return this.getEdTechDiscoveryConfig();
       
       default:
         return this.getGenericDiscoveryConfig();

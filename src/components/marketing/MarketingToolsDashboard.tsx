@@ -6,8 +6,7 @@ import {
   Target, BarChart3, Zap, Users, TrendingUp,
   Shield, Grid3X3, Layers, ArrowRight
 } from 'lucide-react';
-import { GenericMarketingStrategy } from './GenericMarketingStrategy';
-import { GenericBCGMatrix } from './GenericBCGMatrix';
+import { ByssVnsMarketing } from './ByssVnsMarketing';
 import { SwotMatrix } from '../SwotMatrix';
 
 interface MarketingToolsDashboardProps {
@@ -113,7 +112,7 @@ export const MarketingToolsDashboard: React.FC<MarketingToolsDashboardProps> = (
         </TabsContent>
 
         <TabsContent value="marketing" className="space-y-6">
-          <GenericMarketingStrategy scenarioId={scenarioId} productSwot={productSwot} />
+          <ByssVnsMarketing scenarioId={scenarioId} />
         </TabsContent>
       </Tabs>
 

@@ -1,30 +1,12 @@
 // Export all types
 export * from './types';
 
-// Import all scenarios
-import { kpiPerformanceScenario } from './kpi-performance';
-import { fintechStartupScenario } from './fintech-startup';
-import { retailPersonalizationScenario } from './retail-personalization';
-import { digitalAgencyScenario } from './digital-agency';
-import { cybersecurityConsultingScenario } from './cybersecurity-consulting';
-import { saasHrToolScenario } from './saas-hr-tool';
-import { manufacturingIotScenario } from './manufacturing-iot';
-import { industrialMarketplaceScenario } from './industrial-marketplace';
+// Import the single remaining scenario
 import { byssVnsSchoolScenario } from './byss-vns-school';
-import { websiteSalesScenario } from './website-sales';
 
-// Export consolidated scenarios array
+// Export consolidated scenarios array with only Byss VNS
 export const consolidatedScenarios = [
-  kpiPerformanceScenario,
-  fintechStartupScenario,
-  retailPersonalizationScenario,
-  digitalAgencyScenario,
-  cybersecurityConsultingScenario,
-  saasHrToolScenario,
-  manufacturingIotScenario,
-  industrialMarketplaceScenario,
-  byssVnsSchoolScenario,
-  websiteSalesScenario
+  byssVnsSchoolScenario
 ];
 
 // Utility function to get a scenario by ID
