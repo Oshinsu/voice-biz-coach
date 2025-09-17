@@ -5,7 +5,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useScenarios } from "@/hooks/useScenarios";
 import { useSalesStore } from "@/store/salesStore";
 import { useEffect } from "react";
-import { SophieMartinAgentSDK } from "@/components/voice-agents";
+import { SophieAgentsSDK } from "@/components/voice-agents";
 import { ScenarioDetails } from "@/components/ScenarioDetails";
 
 export default function ScenarioPage() {
@@ -67,7 +67,7 @@ export default function ScenarioPage() {
 
       {/* Voice Coach Widget */}
       {scenario.id === 'kpi-performance' && (
-        <SophieMartinAgentSDK conversationType="cold-call" />
+        <SophieAgentsSDK conversationType="cold-call" />
       )}
     </div>
   );

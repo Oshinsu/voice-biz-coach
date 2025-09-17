@@ -18,9 +18,15 @@ serve(async (req) => {
       throw new Error('OPENAI_API_KEY is not set');
     }
 
-    console.log('🔑 Génération token éphémère OpenAI pour Agents SDK...');
+    // Parse request body to get instructions
+    const { instructions } = await req.json();
+    if (!instructions) {
+      throw new Error('Instructions are required');
+    }
 
-    // Appel correct selon la documentation officielle Agents SDK
+    console.log('🔑 Génération token éphémère OpenAI pour Agents SDK WebRTC...');
+
+    // Appel correct selon la documentation officielle Agents SDK + WebRTC
     const response = await fetch(
       "https://api.openai.com/v1/realtime/sessions",
       {
@@ -31,7 +37,8 @@ serve(async (req) => {
         },
         body: JSON.stringify({
           model: "gpt-4o-realtime-preview-2024-12-17",
-          voice: "alloy"
+          voice: "alloy",
+          instructions: instructions // ⭐ CRITIQUE : Instructions dans la session
         }),
       }
     );

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { RealtimeChat } from "@/utils/RealtimeAudio";
 import { 
   Phone, 
   PhoneOff, 
@@ -11,14 +12,14 @@ import {
   Mic, 
   MicOff, 
   Volume2, 
-  VolumeX,
   Clock,
   MessageCircle,
   Minimize2,
-  Maximize2
+  Maximize2,
+  Zap
 } from "lucide-react";
 
-interface SophieMartinAgentSDKProps {
+interface SophieAgentsSDKProps {
   conversationType: 'cold-call' | 'rdv';
   open?: boolean;
   onToggle?: () => void;
@@ -31,11 +32,11 @@ interface Message {
   type: 'audio' | 'text' | 'system';
 }
 
-export function SophieMartinAgentSDK({ 
+export function SophieAgentsSDK({ 
   conversationType = 'cold-call', 
   open = true, 
   onToggle 
-}: SophieMartinAgentSDKProps) {
+}: SophieAgentsSDKProps) {
   const [selectedConversationType, setSelectedConversationType] = useState<'cold-call' | 'rdv'>(conversationType);
   const { toast } = useToast();
   const [isConnected, setIsConnected] = useState(false);
@@ -47,65 +48,74 @@ export function SophieMartinAgentSDK({
   const [sessionDuration, setSessionDuration] = useState(0);
   const [exchangeCount, setExchangeCount] = useState(0);
   
-  const wsRef = useRef<WebSocket | null>(null);
+  const chatRef = useRef<RealtimeChat | null>(null);
   const startTimeRef = useRef<Date | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const audioElementRef = useRef<HTMLAudioElement | null>(null);
 
   /**
-   * PROMPT SOPHIE MARTIN OPTIMISÉ POUR REALTIME API
-   * Réduit à <1000 tokens selon OpenAI Realtime Prompting Guide
+   * PROMPT SOPHIE MARTIN OPTIMISÉ POUR AGENTS SDK
+   * <1000 tokens selon OpenAI Realtime Prompting Guide
    */
-  const getSophieOptimizedPrompt = (): string => {
+  const getSophieAgentsPrompt = (): string => {
     const basePrompt = `# SOPHIE MARTIN - DIRECTRICE MARKETING
 
 ## RÔLE & OBJECTIF
 JE SUIS Sophie Martin, 33 ans, Directrice Marketing & Analytics chez ModaStyle (Lyon).
 VOUS évaluez une solution marketing (DataTrack Pro) pour mes problèmes d'attribution.
 
-## MA SITUATION
+## MA SITUATION BUSINESS
 - ModaStyle: e-commerce mode éthique, 18M€ CA, 85 employés
 - Budget marketing: 80k€/mois mal optimisé (overlap Google/Facebook 40-60%)
 - Problème urgent: reporting manuel chronophage, attribution imprécise
-- Stack: Shopify Plus, GA4, Facebook Ads, Google Ads, Klaviyo, HubSpot
+- Stack actuel: Shopify Plus, GA4, Facebook Ads, Google Ads, Klaviyo, HubSpot
 
 ## PERSONNALITÉ & TON
-- Directe, efficace, parfois impatiente
-- Pragmatique: "Prouvez-moi avec des chiffres"
-- Pose questions précises sur ROI et implémentation
-- Frustrée par outils fragmentés actuels
+- Directe, efficace, parfois impatiente si explications trop techniques
+- Pragmatique: "Prouvez-moi avec des chiffres concrets"
+- Pose questions précises sur ROI et implémentation pratique
+- Frustrée par les outils fragmentés actuels - cherche solution unifiée
 
 ## VITESSE & LANGUE
 - Parlez français naturel, rythme professionnel
 - Réponses courtes et directes (15-30 secondes max)
-- Variez vos réactions - jamais répétitif
+- Variez vos réactions - jamais répétitif ou robotique
 
 ## GESTION INTERRUPTIONS
-- Acceptez interruptions naturellement
-- Reprenez votre idée après interruption
-- "Oui, mais comme je disais..."
+- Acceptez interruptions naturellement : "Oui ?", "Mmh ?"
+- Reprenez votre idée après interruption : "Comme je disais..."
+- Montrez impatience si coupée trop souvent : "Laissez-moi finir svp"
 
-## SÉCURITÉ
-- Restez dans votre rôle de cliente évaluatrice
-- Ne vendez jamais - vous évaluez la solution
-- Raccrochez si approche trop agressive: "Je n'ai pas le temps pour ça"`;
+## SÉCURITÉ & LIMITES
+- Restez TOUJOURS dans votre rôle de cliente évaluatrice
+- Ne vendez jamais rien - VOUS évaluez la solution qu'on vous présente
+- Raccrochez si approche trop agressive : "Je n'ai pas le temps pour ça"
+- Refusez les questions personnelles hors contexte business`;
 
     if (selectedConversationType === 'cold-call') {
       return `${basePrompt}
 
-## MODE COLD-CALL
+## MODE COLD-CALL - "LA MÉFIANTE"
 RÉACTION INITIALE: Méfiance naturelle, demandez légitimité
-"Qui êtes-vous ? Comment avez-vous eu mes coordonnées ?"
-SEUIL RACCROCHAGE: Si vendeur trop insistant ou vague
-OUVERTURE: Si proposition concrète avec chiffres/preuves`;
+"Qui êtes-vous exactement ? Comment avez-vous eu mes coordonnées ?"
+"Vous appelez de quelle société ? Vous vendez quoi ?"
+
+SEUIL RACCROCHAGE: Si vendeur trop insistant, vague ou agressif
+"Écoutez, si vous n'avez rien de concret, j'ai autre chose à faire"
+
+OUVERTURE POSSIBLE: Si proposition claire avec chiffres/preuves
+"Ok, vous avez 2 minutes pour m'expliquer en quoi ça nous aiderait"`;
     }
 
     return `${basePrompt}
 
-## MODE RDV PLANIFIÉ  
+## MODE RDV PLANIFIÉ - "L'ÉVALUATRICE"
 CONTEXTE: Entretien 30min planifié pour évaluer DataTrack Pro
-PHASE 1: "Alors, pour qu'on soit alignés, mon problème c'est..."
+"Alors, pour qu'on soit alignés dès le départ, mon problème c'est..."
+
+ATTENTE: Démonstration concrète, pas de blabla commercial
+"Montrez-moi comment votre solution s'intègre à notre stack"
+"Quels résultats vous avez eus chez des clients e-commerce mode ?"
+
 ATTITUDE: Professionnelle mais exigeante sur preuves et références`;
   };
 
@@ -118,175 +128,90 @@ ATTITUDE: Professionnelle mais exigeante sur preuves et références`;
     }]);
   };
 
-  const setupAudioContext = () => {
-    if (!audioContextRef.current) {
-      audioContextRef.current = new AudioContext({ sampleRate: 24000 });
-    }
-    if (!audioElementRef.current) {
-      audioElementRef.current = new Audio();
-      audioElementRef.current.autoplay = true;
+  /**
+   * Gestionnaire d'événements Agents SDK
+   */
+  const handleAgentsEvent = (event: any) => {
+    console.log('📨 Événement Agents SDK:', event.type);
+    
+    switch (event.type) {
+      case 'session.created':
+        console.log('✅ Session Agents SDK créée');
+        setIsConnected(true);
+        setIsConnecting(false);
+        startTimeRef.current = new Date();
+        addMessage("Sophie Martin connectée via Agents SDK + WebRTC", 'agent', 'system');
+        break;
+        
+      case 'response.audio.delta':
+        // Sophie parle
+        setIsSpeaking(true);
+        setIsListening(false);
+        break;
+        
+      case 'response.audio.done':
+        // Sophie termine
+        setIsSpeaking(false);
+        setIsListening(true);
+        break;
+        
+      case 'response.audio_transcript.delta':
+        if (event.delta) {
+          addMessage(event.delta, 'agent', 'text');
+        }
+        break;
+        
+      case 'input_audio_buffer.speech_started':
+        console.log('🗣️ Utilisateur commence à parler');
+        setIsListening(false);
+        setIsSpeaking(false);
+        break;
+        
+      case 'input_audio_buffer.speech_stopped':
+        console.log('🛑 Utilisateur arrête de parler');
+        setExchangeCount(prev => prev + 1);
+        break;
+        
+      case 'response.function_call_arguments.done':
+        console.log('🔧 Tool call terminé:', event);
+        break;
+        
+      case 'error':
+        console.error('❌ Erreur Agents SDK:', event.error);
+        toast({
+          title: "Erreur session",
+          description: event.error?.message || "Erreur inconnue",
+          variant: "destructive"
+        });
+        break;
     }
   };
 
-  const playAudioChunk = async (audioData: string) => {
-    try {
-      if (!audioContextRef.current || !audioElementRef.current) return;
-      
-      // Decode base64 audio data
-      const binaryString = atob(audioData);
-      const bytes = new Uint8Array(binaryString.length);
-      for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
-      
-      // Create blob and play
-      const blob = new Blob([bytes], { type: 'audio/wav' });
-      const audioUrl = URL.createObjectURL(blob);
-      audioElementRef.current.src = audioUrl;
-      await audioElementRef.current.play();
-    } catch (error) {
-      console.error('❌ Erreur lecture audio:', error);
-    }
-  };
-
+  /**
+   * Démarrage session Agents SDK + WebRTC
+   */
   const startSession = async () => {
     try {
       setIsConnecting(true);
       setMessages([]);
       setExchangeCount(0);
       
-      console.log('🚀 Démarrage session Sophie avec Realtime API...');
+      console.log('🚀 Démarrage Sophie Agents SDK + WebRTC...');
 
-      // Setup audio
-      setupAudioContext();
+      // Obtenir le prompt optimisé
+      const instructions = getSophieAgentsPrompt();
 
-      // Obtenir le token éphémère OpenAI via Edge Function
-      const { data: tokenData, error } = await supabase.functions.invoke('get-openai-key');
-      
-      if (error) throw error;
-      console.log('✅ Token éphémère obtenu:', tokenData);
-      
-      if (!tokenData?.client_secret?.value) {
-        throw new Error("Token éphémère invalide");
-      }
-
-      // Connexion WebSocket avec OpenAI Realtime API
-      const wsUrl = `wss://api.openai.com/v1/realtime?model=gpt-4o-realtime-preview-2024-12-17`;
-      wsRef.current = new WebSocket(wsUrl);
-
-      wsRef.current.onopen = () => {
-        console.log('✅ WebSocket connecté à OpenAI Realtime API');
-        
-        // Envoyer configuration session
-        const sessionUpdate = {
-          type: 'session.update',
-          session: {
-            modalities: ['text', 'audio'],
-            instructions: getSophieOptimizedPrompt(),
-            voice: 'alloy',
-            input_audio_format: 'pcm16',
-            output_audio_format: 'pcm16',
-            input_audio_transcription: { model: 'whisper-1' },
-            turn_detection: {
-              type: 'server_vad',
-              threshold: 0.5,
-              prefix_padding_ms: 300,
-              silence_duration_ms: 1000
-            },
-            temperature: 0.8,
-            max_response_output_tokens: 4096
-          }
-        };
-        
-        wsRef.current?.send(JSON.stringify(sessionUpdate));
-      };
-
-      wsRef.current.onmessage = async (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          console.log('📨 Événement reçu:', data.type);
-          
-          switch (data.type) {
-            case 'session.created':
-              console.log('✅ Session créée');
-              break;
-              
-            case 'session.updated':
-              console.log('✅ Session configurée');
-              setIsConnected(true);
-              setIsConnecting(false);
-              startTimeRef.current = new Date();
-              addMessage("Sophie Martin connectée via Realtime API", 'agent', 'system');
-              break;
-              
-            case 'response.audio.delta':
-              if (data.delta) {
-                await playAudioChunk(data.delta);
-              }
-              setIsSpeaking(true);
-              setIsListening(false);
-              break;
-              
-            case 'response.audio.done':
-              setIsSpeaking(false);
-              setIsListening(true);
-              break;
-              
-            case 'response.audio_transcript.delta':
-              if (data.delta) {
-                addMessage(data.delta, 'agent', 'text');
-              }
-              break;
-              
-            case 'input_audio_buffer.speech_started':
-              console.log('🗣️ Utilisateur commence à parler');
-              setIsListening(false);
-              setIsSpeaking(false);
-              break;
-              
-            case 'input_audio_buffer.speech_stopped':
-              console.log('🛑 Utilisateur arrête de parler');
-              setExchangeCount(prev => prev + 1);
-              break;
-              
-            case 'error':
-              console.error('❌ Erreur session:', data.error);
-              toast({
-                title: "Erreur session",
-                description: data.error?.message || "Erreur inconnue",
-                variant: "destructive"
-              });
-              break;
-          }
-        } catch (error) {
-          console.error('❌ Erreur parsing événement:', error);
-        }
-      };
-
-      wsRef.current.onerror = (error) => {
-        console.error('❌ Erreur WebSocket:', error);
-        setIsConnecting(false);
-        toast({
-          title: "Erreur connexion",
-          description: "Impossible de se connecter à l'API Realtime",
-          variant: "destructive"
-        });
-      };
-
-      wsRef.current.onclose = () => {
-        console.log('🔌 WebSocket fermé');
-        setIsConnected(false);
-        setIsSpeaking(false);
-        setIsListening(false);
-      };
+      // Créer et initialiser RealtimeChat avec Agents SDK
+      chatRef.current = new RealtimeChat(handleAgentsEvent);
+      await chatRef.current.init(instructions);
 
       toast({
-        title: "Connexion en cours",
-        description: "Configuration de Sophie Martin...",
+        title: "✅ Connexion établie",
+        description: "Sophie Martin prête via Agents SDK + WebRTC",
       });
 
     } catch (error) {
-      console.error('❌ Erreur session Sophie:', error);
+      console.error('❌ Erreur session Sophie Agents SDK:', error);
       setIsConnecting(false);
       toast({
         title: "Erreur connexion",
@@ -296,8 +221,11 @@ ATTITUDE: Professionnelle mais exigeante sur preuves et références`;
     }
   };
 
+  /**
+   * Fermeture session
+   */
   const endSession = async () => {
-    console.log('🔌 Fermeture session Sophie...');
+    console.log('🔌 Fermeture session Sophie Agents SDK...');
     
     try {
       if (timerRef.current) {
@@ -305,19 +233,9 @@ ATTITUDE: Professionnelle mais exigeante sur preuves et références`;
         timerRef.current = null;
       }
       
-      if (wsRef.current) {
-        wsRef.current.close();
-        wsRef.current = null;
-      }
-      
-      if (audioContextRef.current) {
-        await audioContextRef.current.close();
-        audioContextRef.current = null;
-      }
-      
-      if (audioElementRef.current) {
-        audioElementRef.current.pause();
-        audioElementRef.current = null;
+      if (chatRef.current) {
+        chatRef.current.disconnect();
+        chatRef.current = null;
       }
       
       setIsConnected(false);
@@ -340,9 +258,7 @@ ATTITUDE: Professionnelle mais exigeante sur preuves et références`;
     } catch (error) {
       console.error('❌ Erreur fermeture session:', error);
       // Force cleanup
-      wsRef.current = null;
-      audioContextRef.current = null;
-      audioElementRef.current = null;
+      chatRef.current = null;
       setIsConnected(false);
       setIsConnecting(false);
       setIsSpeaking(false);
@@ -350,11 +266,13 @@ ATTITUDE: Professionnelle mais exigeante sur preuves et références`;
     }
   };
 
+  /**
+   * Interruption Sophie
+   */
   const handleInterrupt = () => {
-    if (wsRef.current && isSpeaking) {
+    if (chatRef.current && isSpeaking) {
       try {
-        const event = { type: 'response.cancel' };
-        wsRef.current.send(JSON.stringify(event));
+        chatRef.current.interrupt();
         addMessage("Interruption envoyée", 'user', 'system');
       } catch (error) {
         console.error('❌ Erreur interruption:', error);
@@ -412,7 +330,7 @@ ATTITUDE: Professionnelle mais exigeante sur preuves et références`;
               </div>
               <div>
                 <p className="font-medium text-sm">Sophie Martin</p>
-                <p className="text-xs text-muted-foreground">ModaStyle</p>
+                <p className="text-xs text-muted-foreground">Agents SDK</p>
               </div>
             </div>
             <div className="flex gap-1">
@@ -475,8 +393,9 @@ ATTITUDE: Professionnelle mais exigeante sur preuves et références`;
               <p className="text-xs text-muted-foreground">Directrice Marketing • ModaStyle</p>
             </div>
           </div>
-          <Badge variant="secondary" className="text-xs">
-            Realtime API
+          <Badge variant="secondary" className="text-xs flex items-center gap-1">
+            <Zap className="w-3 h-3" />
+            Agents SDK
           </Badge>
         </div>
 
@@ -582,7 +501,7 @@ ATTITUDE: Professionnelle mais exigeante sur preuves et références`;
               size="lg"
             >
               <Phone className="w-4 h-4 mr-2" />
-              Démarrer la conversation
+              Démarrer via Agents SDK
             </Button>
           </div>
         )}
@@ -592,10 +511,10 @@ ATTITUDE: Professionnelle mais exigeante sur preuves et références`;
           <div className="text-center space-y-3">
             <div className="flex items-center justify-center gap-2">
               <Loader2 className="w-4 h-4 animate-spin" />
-              <span className="text-sm">Connexion en cours...</span>
+              <span className="text-sm">Connexion Agents SDK...</span>
             </div>
             <div className="text-xs text-muted-foreground">
-              Initialisation Realtime API avec Sophie Martin
+              Initialisation WebRTC + token éphémère
             </div>
           </div>
         )}
