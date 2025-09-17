@@ -68,7 +68,7 @@ export class ContextualDiscoveryManager {
       
       case 'Enseignement Supérieur':
       case 'EdTech':
-        return this.getEdTechDiscoveryConfig();
+        return this.getEducationDiscoveryConfig();
       
       default:
         return this.getGenericDiscoveryConfig();

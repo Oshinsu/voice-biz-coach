@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { RealtimeChat } from "@/utils/RealtimeAudio";
+import { buildSophiePrompt, VNSConfig, DEFAULT_CONFIGS } from "@/lib/vns-template";
+import { logEvent, scoreTurn, endSession as endSessionTool } from "@/lib/tools/vns-tools";
 import { 
   Phone, 
   PhoneOff, 
@@ -53,51 +55,13 @@ export function SophieAgentsSDK({
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   /**
-   * PROMPT SOPHIE MARTIN VNS ACADÉMIQUEMENT RIGOUREUX
+   * GÉNÉRATION PROMPT VNS ACADÉMIQUE EDHEC
    */
   const getSophieAgentsPrompt = (): string => {
-    // Utiliser le prompt VNS académique selon le type de conversation
-    const isRDV = selectedConversationType === 'rdv';
+    const mode = selectedConversationType === 'rdv' ? 'RDV' : 'COLD';
+    const config: VNSConfig = DEFAULT_CONFIGS[mode];
     
-    return `Tu es Sophie Martin, 33 ans, Directrice Marketing & Analytics ModaStyle (e-commerce mode éthique, 18M€ CA).
-
-## EXPERTISE CONFIRMÉE (10 ans analytics)
-Ex-Agence Lyon → Spartoo → Converteo → ModaStyle. Reconnue secteur e-commerce, speaker conférences attribution.
-Stack maîtrisé: Shopify Plus, GA4, Meta Ads (27k€/mois), Google Ads (18k€/mois), Klaviyo, HubSpot.
-
-## PAIN POINTS TECHNIQUES CRITIQUES
-- Attribution fragmentée: impossible corréler 45k€/mois Google/Meta (overlap 40-60%)
-- Cross-device tracking: 35% trafic mobile, attribution cassée
-- Consolidation manuelle: 8h/semaine équipe pour rapports cohérents
-- Seasonal patterns: besoin prédiction pics collection mode
-
-## PSYCHOLOGIE ${isRDV ? 'RDV PLANIFIÉ' : 'COLD-CALL'} (ÉTAT MENTAL RÉALISTE)
-${isRDV ? 
-`SITUATION: RDV prévu, Sophie évalue la solution technique mais reste sceptique.
-FENÊTRE ATTENTION: 3-5 min pour pitch technique puis questions précises.
-ATTENTES: Démonstration concrète, métriques chiffrées, références e-commerce.` :
-`SITUATION: Appel commercial non attendu, workload chargé (reporting manuel quotidien).
-FENÊTRE ATTENTION: 30-60s max avant test compétence ou interruption.
-MÉCANISME DÉFENSE: Questions techniques pièges automatiques pour éliminer amateurs.`}
-
-## COMPORTEMENT VOCAL ${isRDV ? 'RDV' : 'COLD-CALL'}
-${isRDV ?
-`- Questions directes: "Quel ROI concret?", "Intégration avec notre stack?", "Références similaires?"
-- Expressions typiques: "Montrez-moi", "Concrètement", "Combien de temps?"
-- Seuil engagement: Solution technique + ROI documenté + plan d'implémentation` :
-`- Questions tests immédiates: "Vous gérez comment le cross-device?" "Quelle méthodo attribution?"
-- Expressions authentiques: "J'ai pas le temps", "Encore un vendeur", "Vous connaissez mon secteur?"
-- Interruption si: Pitch généraliste OU incompétence technique détectée`}
-
-## CONTRAINTES HIÉRARCHIQUES
-Budget 80k€/mois à justifier à Clara (CEO). Décision co-validation au-delà 12k€/an.
-Timeline: Collection printemps importante (mars 2025).
-
-## STYLE VOCAL TEMPS RÉEL
-Français direct, ≤2 phrases par défaut. Questions précises qui déstabilisent amateurs.
-${!isRDV ? 'Interruption = arrêt immédiat + test: "Vous maîtrisez vraiment ou vous lisez un script?"' : 'Demande preuves systématiquement: "Vous avez des références sur Shopify Plus?"'}
-
-VARIEZ vos réactions - jamais mécaniques. Testez TOUJOURS la compétence avant révélation.`;
+    return buildSophiePrompt(config);
   };
 
   const addMessage = (content: string, sender: 'user' | 'agent', type: 'audio' | 'text' | 'system' = 'text') => {
@@ -121,7 +85,7 @@ VARIEZ vos réactions - jamais mécaniques. Testez TOUJOURS la compétence avant
         setIsConnected(true);
         setIsConnecting(false);
         startTimeRef.current = new Date();
-        addMessage("Sophie Martin connectée via Agents SDK + WebRTC", 'agent', 'system');
+        addMessage("Sophie Hennion-Moreau connectée via Agents SDK + WebRTC", 'agent', 'system');
         break;
         
       case 'response.audio.delta':
@@ -177,18 +141,41 @@ VARIEZ vos réactions - jamais mécaniques. Testez TOUJOURS la compétence avant
       setMessages([]);
       setExchangeCount(0);
       
-      console.log('🚀 Démarrage Sophie Agents SDK + WebRTC...');
+      console.log('🚀 Démarrage Sophie VNS EDHEC + Agents SDK...');
 
-      // Obtenir le prompt optimisé
+      // Obtenir le prompt VNS optimisé
       const instructions = getSophieAgentsPrompt();
+      console.log('📝 Instructions VNS EDHEC générées:', instructions.substring(0, 200) + '...');
 
-      // Créer et initialiser RealtimeChat avec Agents SDK
+      // Configuration des tools VNS pour Supabase
+      const vnsTools = [
+        {
+          type: "function",
+          name: "log_event",
+          description: "Journaliser un moment clé pendant la session VNS",
+          parameters: logEvent.parameters
+        },
+        {
+          type: "function", 
+          name: "score_turn",
+          description: "Scorer le tour de l'élève par compétence commerciale",
+          parameters: scoreTurn.parameters
+        },
+        {
+          type: "function",
+          name: "end_session", 
+          description: "Clôturer la session VNS et produire le rapport final",
+          parameters: endSessionTool.parameters
+        }
+      ];
+
+      // Créer et initialiser RealtimeChat avec VNS tools
       chatRef.current = new RealtimeChat(handleAgentsEvent);
       await chatRef.current.init(instructions);
 
       toast({
-        title: "✅ Connexion établie",
-        description: "Sophie Martin prête via Agents SDK + WebRTC",
+        title: "✅ Connexion VNS établie",
+        description: "Sophie Hennion-Moreau prête (EDHEC + Byss VNS)",
       });
 
     } catch (error) {
@@ -232,8 +219,8 @@ VARIEZ vos réactions - jamais mécaniques. Testez TOUJOURS la compétence avant
       }
 
       toast({
-        title: "Session terminée",
-        description: `Sophie Martin déconnectée - ${exchangeCount} échanges`,
+        title: "Session VNS terminée",
+        description: `Sophie EDHEC déconnectée - ${exchangeCount} échanges`,
       });
 
     } catch (error) {
@@ -310,8 +297,8 @@ VARIEZ vos réactions - jamais mécaniques. Testez TOUJOURS la compétence avant
                 👩‍💼
               </div>
               <div>
-                <p className="font-medium text-sm">Sophie Martin</p>
-                <p className="text-xs text-muted-foreground">Agents SDK</p>
+                <p className="font-medium text-sm">Sophie Hennion-Moreau</p>
+                <p className="text-xs text-muted-foreground">VNS EDHEC</p>
               </div>
             </div>
             <div className="flex gap-1">
@@ -370,8 +357,8 @@ VARIEZ vos réactions - jamais mécaniques. Testez TOUJOURS la compétence avant
               👩‍💼
             </div>
             <div>
-              <span className="font-medium">Sophie Martin</span>
-              <p className="text-xs text-muted-foreground">Directrice Marketing • ModaStyle</p>
+              <span className="font-medium">Sophie Hennion-Moreau</span>
+              <p className="text-xs text-muted-foreground">Dir. Innovation Pédagogique • EDHEC</p>
             </div>
           </div>
           <Badge variant="secondary" className="text-xs flex items-center gap-1">
@@ -441,8 +428,8 @@ VARIEZ vos réactions - jamais mécaniques. Testez TOUJOURS la compétence avant
         {isConnecting && (
           <div className="text-center py-4">
             <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">Connexion à Sophie Martin...</p>
-            <p className="text-xs text-muted-foreground mt-1">Agents SDK + WebRTC</p>
+            <p className="text-sm text-muted-foreground">Connexion à Sophie Hennion-Moreau...</p>
+            <p className="text-xs text-muted-foreground mt-1">VNS EDHEC + Agents SDK</p>
           </div>
         )}
 
@@ -472,15 +459,15 @@ VARIEZ vos réactions - jamais mécaniques. Testez TOUJOURS la compétence avant
             <div className="text-xs text-muted-foreground space-y-1">
               {selectedConversationType === 'cold-call' ? (
                 <>
-                  <div>📞 Appel à froid - Sophie sera méfiante</div>
-                  <div>🎯 Prouvez votre légitimité rapidement</div>
-                  <div>⚡ Risque de raccrochage si trop vague</div>
+                  <div>📞 Cold Outreach - Méfiance initiale EDHEC</div>
+                  <div>🎯 Teste préparation enjeux pédagogiques</div>
+                  <div>⚡ Questions pièges innovation EdTech</div>
                 </>
               ) : (
                 <>
-                  <div>📅 RDV planifié - Sophie évalue la solution</div>
-                  <div>🔍 Démonstration technique attendue</div>
-                  <div>💰 Questions précises sur ROI et pricing</div>
+                  <div>📅 RDV EDHEC - Évaluation Byss VNS</div>
+                  <div>🔍 Démonstration simulateur vocal attendue</div>
+                  <div>💰 ROI pédagogique + budget 300k€</div>
                 </>
               )}
             </div>

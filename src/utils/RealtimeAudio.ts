@@ -78,13 +78,16 @@ export class RealtimeChat {
     this.audioEl.autoplay = true;
   }
 
-  async init(instructions: string) {
+  async init(instructions: string, tools?: any[]) {
     try {
       console.log('🚀 Initialisation Agents SDK + WebRTC...');
 
-      // 1. Obtenir token éphémère avec instructions via Supabase SDK
+      // 1. Obtenir token éphémère avec instructions + tools via Supabase SDK
       const { data, error } = await supabase.functions.invoke('get-openai-key', {
-        body: { instructions }
+        body: { 
+          instructions,
+          tools: tools || []
+        }
       });
 
       if (error) {
