@@ -23,7 +23,8 @@ import {
   Star,
   Settings,
   Wrench,
-  BarChart3
+  BarChart3,
+  Zap
 } from 'lucide-react';
 import { ProductAnalysis } from './ProductAnalysis';
 import { MarketAnalysis } from './MarketAnalysis';
@@ -149,14 +150,67 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
         </TabsContent>
 
         <TabsContent value="company" className="space-y-6">
+          {/* Section EDHEC */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Building2 className="h-5 w-5" />
-                Vue d'ensemble de l'entreprise
+                EDHEC Business School - Client Cible
               </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                École de commerce française prestigieuse, fondée en 1906, qui cherche à révolutionner son enseignement commercial
+              </p>
             </CardHeader>
             <CardContent className="space-y-6">
+              <div>
+                <h4 className="font-semibold mb-3">Profil Entreprise</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <span className="font-medium">Secteur:</span> {scenario.company.sector}
+                  </div>
+                  <div>
+                    <span className="font-medium">Taille:</span> {scenario.company.size}
+                  </div>
+                  <div>
+                    <span className="font-medium">Revenus:</span> {scenario.company.revenue}
+                  </div>
+                  <div>
+                    <span className="font-medium">Budget Innovation:</span> {scenario.company.budget}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-3">Points de Douleur Critiques</h4>
+                <div className="space-y-3">
+                  {Array.isArray(scenario.company.painPoints) && 
+                   scenario.company.painPoints.slice(0, 4).map((pain: any, index: number) => (
+                    <div key={index} className="p-3 bg-red-50 dark:bg-red-950/20 rounded-lg border-l-4 border-red-500">
+                      <p className="text-sm text-red-800 dark:text-red-200">
+                        {typeof pain === 'string' ? pain : pain.issue || pain.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-3">Écosystème Technologique</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                  <div className="p-3 border rounded-lg">
+                    <span className="font-medium">LMS:</span> Blackboard Learn Ultra + Microsoft Teams
+                  </div>
+                  <div className="p-3 border rounded-lg">
+                    <span className="font-medium">Simulations:</span> Cesim + Marketplace (85k€/an)
+                  </div>
+                  <div className="p-3 border rounded-lg">
+                    <span className="font-medium">Analytics:</span> Power BI + custom dashboards
+                  </div>
+                  <div className="p-3 border rounded-lg">
+                    <span className="font-medium">Infrastructure:</span> Azure Education + on-premise
+                  </div>
+                </div>
+              </div>
               <div>
                 <h4 className="font-semibold mb-3">Description</h4>
                 <p className="text-sm text-muted-foreground leading-relaxed">
@@ -279,6 +333,109 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Section Byss VNS */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="h-5 w-5" />
+                Byss VNS - Solution Révolutionnaire
+              </CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Simulateur vocal IA pour transformer l'enseignement commercial avec GPT-4o Realtime
+              </p>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* SWOT Analysis Byss VNS */}
+              {scenario.swot && (
+                <div>
+                  <h4 className="font-semibold mb-4 flex items-center gap-2">
+                    <BarChart3 className="h-4 w-4" />
+                    Analyse SWOT - Byss VNS
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
+                      <h5 className="font-medium text-green-800 dark:text-green-200 mb-2 flex items-center gap-2">
+                        <TrendingUp className="h-4 w-4" />
+                        Forces
+                      </h5>
+                      <ul className="text-sm space-y-1">
+                        {renderSwotItems(scenario.swot.strengths).map((strength: string, index: number) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <CheckCircle className="h-3 w-3 mt-1 text-green-600 flex-shrink-0" />
+                            {strength}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    <div className="p-4 bg-red-50 dark:bg-red-950/20 rounded-lg">
+                      <h5 className="font-medium text-red-800 dark:text-red-200 mb-2 flex items-center gap-2">
+                        <AlertTriangle className="h-4 w-4" />
+                        Faiblesses
+                      </h5>
+                      <ul className="text-sm space-y-1">
+                        {renderSwotItems(scenario.swot.weaknesses).map((weakness: string, index: number) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <XCircle className="h-3 w-3 mt-1 text-red-600 flex-shrink-0" />
+                            {weakness}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                      <h5 className="font-medium text-blue-800 dark:text-blue-200 mb-2 flex items-center gap-2">
+                        <Target className="h-4 w-4" />
+                        Opportunités
+                      </h5>
+                      <ul className="text-sm space-y-1">
+                        {renderSwotItems(scenario.swot.opportunities).map((opportunity: string, index: number) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <Plus className="h-3 w-3 mt-1 text-blue-600 flex-shrink-0" />
+                            {opportunity}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    <div className="p-4 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
+                      <h5 className="font-medium text-orange-800 dark:text-orange-200 mb-2 flex items-center gap-2">
+                        <Shield className="h-4 w-4" />
+                        Menaces
+                      </h5>
+                      <ul className="text-sm space-y-1">
+                        {renderSwotItems(scenario.swot.threats).map((threat: string, index: number) => (
+                          <li key={index} className="flex items-start gap-2">
+                            <Minus className="h-3 w-3 mt-1 text-orange-600 flex-shrink-0" />
+                            {threat}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <h4 className="font-semibold mb-3">Positionnement & Avantages</h4>
+                <div className="space-y-3">
+                  {scenario.product.competitiveAdvantages.slice(0, 4).map((advantage: string, index: number) => (
+                    <div key={index} className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border-l-4 border-blue-500">
+                      <p className="text-sm text-blue-800 dark:text-blue-200">{advantage}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold mb-3">ROI & Valeur</h4>
+                <div className="p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-950/20 dark:to-blue-950/20 rounded-lg">
+                  <p className="text-sm leading-relaxed">{scenario.product.roi}</p>
                 </div>
               </div>
             </CardContent>
