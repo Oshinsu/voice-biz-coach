@@ -1,13 +1,13 @@
 import { useParams, Navigate, Link } from "react-router-dom";
 import { ArrowLeft, Loader2, AlertCircle } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { TestButton } from "@/components/ui/test-button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useScenarios } from "@/hooks/useScenarios";
 import { useSalesStore } from "@/store/salesStore";
 import { useEffect, useState } from "react";
 import { StudentModeToggle } from "@/components/StudentModeToggle";
 import { SophieAgentsSDK } from "@/components/voice-agents";
-import { ScenarioDetails } from "@/components/ScenarioDetails";
+import { ModernScenarioDetails } from "@/components/ModernScenarioDetails";
 import { ScenarioSelector } from "@/components/ScenarioSelector";
 
 export default function ScenarioPage() {
@@ -52,14 +52,14 @@ export default function ScenarioPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/10">
       {/* Header avec bouton retour */}
-      <header className="border-b bg-card/50 backdrop-blur-sm">
+      <header className="border-b bg-gradient-to-r from-card/80 via-card/50 to-card/80 backdrop-blur-sm">
         <div className="container mx-auto px-6 py-6">
-          <Button variant="ghost" asChild>
+          <TestButton variant="ghost" asChild>
             <Link to="/scenarios" className="flex items-center gap-2">
               <ArrowLeft className="h-4 w-4" />
               Retour aux scénarios
             </Link>
-          </Button>
+          </TestButton>
         </div>
       </header>
 
@@ -72,7 +72,7 @@ export default function ScenarioPage() {
               isStudentMode={isStudentMode} 
               onToggle={setIsStudentMode} 
             />
-            <ScenarioDetails scenario={scenario} />
+            <ModernScenarioDetails scenario={scenario} />
           </div>
           
           {/* Sélecteur de configuration */}

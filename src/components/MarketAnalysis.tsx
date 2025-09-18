@@ -1,5 +1,5 @@
 import React from 'react';
-import { ByssVnsAnalysis } from './analysis/ByssVnsAnalysis';
+import { UnifiedScenarioAnalysis } from './scenario-engine/UnifiedScenarioAnalysis';
 import { useScenarios } from '@/hooks/useScenarios';
 
 interface MarketAnalysisProps {
@@ -34,8 +34,11 @@ export const MarketAnalysis: React.FC<MarketAnalysisProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Detailed Market Analysis with Charts and Data */}
-      <ByssVnsAnalysis scenarioId={scenarioId} />
+      {/* Unified Modern Analysis */}
+      <UnifiedScenarioAnalysis 
+        scenario={scenario} 
+        analysisType="market"
+      />
     </div>
   );
 };

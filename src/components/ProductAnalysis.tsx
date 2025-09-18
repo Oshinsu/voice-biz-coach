@@ -2,7 +2,7 @@ import React from 'react';
 import { Package } from 'lucide-react';
 import { Product } from '@/hooks/useScenarios';
 import { AnalysisSection } from './analysis/AnalysisSection';
-import { ByssVnsProductOverview } from './analysis/ByssVnsProductOverview';
+import { UnifiedScenarioAnalysis } from './scenario-engine/UnifiedScenarioAnalysis';
 import { MarketingToolsDashboard } from './marketing/MarketingToolsDashboard';
 
 interface ProductAnalysisProps {
@@ -33,7 +33,9 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({
         title={`${mainProduct.name} - Vue d'ensemble`}
         icon={Package}
       >
-        <ByssVnsProductOverview scenarioId={scenarioId} />
+        <div className="text-center text-muted-foreground">
+          Analyse produit intégrée dans le nouveau système unifié
+        </div>
       </AnalysisSection>
 
       {/* Marketing Tools Dashboard */}

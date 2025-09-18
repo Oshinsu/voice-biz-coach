@@ -6,7 +6,7 @@ import {
   Target, BarChart3, Zap, Users, TrendingUp,
   Shield, Grid3X3, Layers, ArrowRight
 } from 'lucide-react';
-import { ByssVnsMarketing } from './ByssVnsMarketing';
+import { UnifiedScenarioAnalysis } from '../scenario-engine/UnifiedScenarioAnalysis';
 import { SwotAnalysis } from '../analysis/SwotAnalysis';
 
 interface MarketingToolsDashboardProps {
@@ -112,7 +112,11 @@ export const MarketingToolsDashboard: React.FC<MarketingToolsDashboardProps> = (
         </TabsContent>
 
         <TabsContent value="marketing" className="space-y-6">
-          <ByssVnsMarketing scenarioId={scenarioId} />
+          <div className="p-6 text-center">
+            <p className="text-muted-foreground">
+              Stratégie marketing intégrée dans le nouveau système unifié
+            </p>
+          </div>
         </TabsContent>
       </Tabs>
 

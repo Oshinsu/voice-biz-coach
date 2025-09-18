@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { TestButton } from "@/components/ui/test-button";
 import { Separator } from "@/components/ui/separator";
 import { useScenarios } from "@/hooks/useScenarios";
 import { personas } from "@/data/personas";
@@ -262,13 +262,15 @@ export const ScenarioSelector = () => {
 
         {/* Actions */}
         <div className="space-y-3">
-          <Button 
+          <TestButton 
             onClick={handleStart} 
             disabled={!canStart || isRdvLocked}
             className="w-full"
+            variant={isRdvLocked ? "outline" : "magic"}
+            size="lg"
           >
             {isRdvLocked ? 'RDV verrouillé' : selectedScenario ? 'Redémarrer la session' : 'Démarrer la session'}
-          </Button>
+          </TestButton>
           
           {selectedScenario && (
             <div className="text-center">

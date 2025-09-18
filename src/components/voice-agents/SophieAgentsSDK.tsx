@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { TestButton } from "@/components/ui/test-button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { EDHECVoiceAgent } from "@/utils/RealtimeAgents";
@@ -312,17 +312,17 @@ export function SophieAgentsSDK({
               </div>
             </div>
             <div className="flex gap-1">
-              <Button size="sm" variant="ghost" onClick={() => setIsMinimized(false)} className="h-6 w-6 p-0">
+              <TestButton size="sm" variant="ghost" onClick={() => setIsMinimized(false)} className="h-6 w-6 p-0">
                 <Maximize2 className="w-3 h-3" />
-              </Button>
+              </TestButton>
               {isConnected ? (
-                <Button size="sm" variant="ghost" onClick={endSession} className="h-6 w-6 p-0 text-destructive">
+                <TestButton size="sm" variant="ghost" onClick={endSession} className="h-6 w-6 p-0 text-destructive">
                   <PhoneOff className="w-3 h-3" />
-                </Button>
+                </TestButton>
               ) : (
-                <Button size="sm" variant="ghost" onClick={onToggle} className="h-6 w-6 p-0">
+                <TestButton size="sm" variant="ghost" onClick={onToggle} className="h-6 w-6 p-0">
                   <PhoneOff className="w-3 h-3" />
-                </Button>
+                </TestButton>
               )}
             </div>
           </div>
@@ -379,15 +379,15 @@ export function SophieAgentsSDK({
 
         {/* Status de connexion */}
         <div className="flex items-center justify-between">
-          <Button size="sm" variant="ghost" onClick={() => setIsMinimized(true)}>
+          <TestButton size="sm" variant="ghost" onClick={() => setIsMinimized(true)}>
             <Minimize2 className="w-4 h-4 mr-1" />
             Réduire
-          </Button>
+          </TestButton>
           {onToggle && (
-            <Button size="sm" variant="ghost" onClick={onToggle}>
+            <TestButton size="sm" variant="ghost" onClick={onToggle}>
               <PhoneOff className="w-4 h-4 mr-1" />
               Fermer
-            </Button>
+            </TestButton>
           )}
         </div>
 
@@ -427,18 +427,18 @@ export function SophieAgentsSDK({
 
             <div className="flex gap-2">
               {isSpeaking && (
-                <Button size="sm" variant="outline" onClick={handleInterrupt}>
+                <TestButton size="sm" variant="outline" onClick={handleInterrupt}>
                   Interrompre
-                </Button>
+                </TestButton>
               )}
-              <Button 
+              <TestButton 
                 onClick={endSession}
                 variant="destructive"
                 className="flex-1"
               >
                 <PhoneOff className="w-4 h-4 mr-1" />
                 Terminer
-              </Button>
+              </TestButton>
             </div>
           </div>
         )}
@@ -458,20 +458,20 @@ export function SophieAgentsSDK({
             <div className="space-y-3">
               <h4 className="text-sm font-medium">Type de conversation</h4>
               <div className="grid grid-cols-2 gap-2">
-                <Button
+                <TestButton
                   variant={selectedConversationType === 'cold-call' ? 'default' : 'outline'}
                   onClick={() => setSelectedConversationType('cold-call')}
                   size="sm"
                 >
                   Cold Call
-                </Button>
-                <Button
+                </TestButton>
+                <TestButton
                   variant={selectedConversationType === 'rdv' ? 'default' : 'outline'}
                   onClick={() => setSelectedConversationType('rdv')}
                   size="sm"
                 >
                   RDV Planifié
-                </Button>
+                </TestButton>
               </div>
             </div>
 
@@ -491,14 +491,15 @@ export function SophieAgentsSDK({
               )}
             </div>
 
-            <Button 
+            <TestButton 
               onClick={startSession}
               className="w-full"
               size="lg"
+              variant="magic"
             >
               <Phone className="w-4 h-4 mr-2" />
               Démarrer conversation
-            </Button>
+            </TestButton>
           </div>
         )}
       </div>
