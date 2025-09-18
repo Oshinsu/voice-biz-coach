@@ -13,6 +13,7 @@ import {
   Users, 
   Zap, 
   Phone,
+  Calendar,
   Trophy,
   Euro,
   BarChart3,
@@ -105,17 +106,17 @@ export const ByssVnsScenario: React.FC<ByssVnsScenarioProps> = ({ onStartSession
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-primary">
-                    <Euro className="w-5 h-5" />
-                    <span className="font-medium">Budget Innovation</span>
+                    <Calendar className="w-5 h-5" />
+                    <span className="font-medium">Timeline</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">1,2M€/an</p>
+                  <p className="text-sm text-muted-foreground">Innovation 2024</p>
                 </div>
                 <div className="space-y-2">
                   <div className="flex items-center gap-2 text-primary">
                     <Target className="w-5 h-5" />
-                    <span className="font-medium">Probabilité</span>
+                    <span className="font-medium">Contact</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">{scenario.probability}%</p>
+                  <p className="text-sm text-muted-foreground">S. Hennion-Moreau</p>
                 </div>
               </div>
             </CardContent>

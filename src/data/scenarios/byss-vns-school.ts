@@ -14,16 +14,13 @@ export const byssVnsSchoolScenario: Scenario = {
     location: "Lille & Nice, France - Campus principal Lille (120 hectares), campus Nice (15 hectares)",
     
     metrics: {
-      studentsTotal: "9,000 étudiants tous programmes (Campus Lille: 4,000, Campus Nice: 3,000, autres: 2,000)",
-      rankingFT: "4ème mondiale Financial Times 2024 - 2ème française après HEC (Leadership Global Management)",
-      budgetPedagogie: "1,2 million d'euros par an pour l'innovation pédagogique (0,75% budget total)",
-      budgetIT: "500k€ par an pour la transformation numérique et infrastructure", 
-      satisfactionEtudiants: "82% de satisfaction étudiante (objectif: 87%)",
-      employabilite: "94% placement 6 mois post-diplôme",
-      budgetFormationCorp: "15M€/an corporate training",
-      croissanceExecutive: "+18% programmes executive 2023",
+      studentsTotal: "9,000 étudiants tous programmes",
+      rankingFT: "4ème mondiale Financial Times 2024 - 2ème française après HEC",
+      contactDecideur: "Sophie Hennion-Moreau, Directrice Programmes & Innovation",
+      timelineProjet: "Projet innovation rentrée 2024 - Accreditations 2025",
+      concurrenceDirecte: "HEC lance 'IA Campus' - Course innovation critique",
       internationalStudents: "35% étudiants internationaux",
-      partnershipsCorporate: "180 entreprises partenaires"
+      employabilite: "94% placement 6 mois post-diplôme"
     },
     
     description: "Grande école de commerce française de référence, fondée en 1906, reconnue pour l'excellence académique et l'innovation pédagogique. Pionnière transformation digitale enseignement. Triple accréditation EQUIS, AACSB, AMBA. Spécialisations: Finance, Entrepreneurship, Marketing Digital, Business Development. Vision 2027: leader européen business education avec pédagogies immersives IA. Campus connectés, incubateur startups, 12 chaires recherche corporate. Excellence placement: 65k€ salaire moyen sortie, 96% emploi. Écosystème entrepreneurial: 150 alumni CEO, 45 startups créées/an.",
