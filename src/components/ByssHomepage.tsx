@@ -3,9 +3,35 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useScenarios } from "@/hooks/useScenarios";
 import { EnhancedHeader } from "./EnhancedHeader";
+import { EnhancedStats } from "./EnhancedStats";
+import { TrustElements } from "./TrustElements";
 
 export function ByssHomepage() {
+  const { scenarios, loading, error } = useScenarios();
+  
+  console.log('ByssHomepage rendering:', { scenarios: scenarios?.length, loading, error });
+  
+  const totalRevenue = scenarios.reduce((sum, scenario) => {
+    const revenue = scenario.expected_revenue ? 
+      parseFloat(scenario.expected_revenue.replace(/[€,]/g, '')) : 0;
+    return sum + revenue;
+  }, 0);
+  const avgSuccessRate = scenarios.length > 0 ? 
+    Math.round(scenarios.reduce((sum, s) => sum + s.success_probability, 0) / scenarios.length) : 0;
+  const totalCompanies = scenarios.length;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+          <p className="mt-4 text-muted-foreground">Chargement des données...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -134,7 +160,7 @@ export function ByssHomepage() {
                   </div>
                   <div className="w-2 h-2 bg-accent rounded-full"></div>
                 </div>
-                <div className="text-3xl font-bold mb-2 text-primary">12</div>
+                <div className="text-3xl font-bold mb-2 text-primary">{totalCompanies}</div>
                 <div className="text-sm text-muted-foreground font-medium">Scénarios B2B disponibles</div>
               </div>
             </div>
@@ -239,6 +265,8 @@ export function ByssHomepage() {
         </div>
       </section>
 
+      {/* Trust Elements */}
+      <TrustElements />
 
       {/* Pricing Section - Fond Bleu Marine */}
       <section className="py-20 px-6 bg-primary">

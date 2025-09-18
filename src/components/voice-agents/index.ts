@@ -1,1 +1,1 @@
-export { SophieEDHEC } from './SophieEDHEC';
+export { SophieAgentsSDK } from './SophieAgentsSDK';
