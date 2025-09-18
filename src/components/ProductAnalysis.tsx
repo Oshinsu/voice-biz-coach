@@ -2,7 +2,6 @@ import React from 'react';
 import { Package } from 'lucide-react';
 import { Product } from '@/hooks/useScenarios';
 import { AnalysisSection } from './analysis/AnalysisSection';
-import { UnifiedScenarioAnalysis } from './scenario-engine/UnifiedScenarioAnalysis';
 // import { MarketingToolsDashboard } from './marketing/MarketingToolsDashboard'; // Consolidated
 
 interface ProductAnalysisProps {

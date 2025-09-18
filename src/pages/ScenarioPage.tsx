@@ -4,18 +4,14 @@ import { TestButton } from "@/components/ui/test-button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useScenarios } from "@/hooks/useScenarios";
 import { useSalesStore } from "@/store/salesStore";
-import { useEffect, useState } from "react";
-import { StudentModeToggle } from "@/components/StudentModeToggle";
-import { SophieAgentsSDK } from "@/components/voice-agents";
-import { ScenarioFactory } from "@/components/scenario-engine/ScenarioFactory";
-import { ScenarioSelector } from "@/components/ScenarioSelector";
+import { useEffect } from "react";
+import { ByssVnsScenario } from "@/components/ByssVnsScenario";
 
 export default function ScenarioPage() {
   const { id } = useParams();
   const { scenarios, loading, error, getScenarioById } = useScenarios();
   const scenario = id ? getScenarioById(id) : null;
   const { setScenario } = useSalesStore();
-  const [isStudentMode, setIsStudentMode] = useState(true);
 
   useEffect(() => {
     if (scenario) {
@@ -63,37 +59,14 @@ export default function ScenarioPage() {
         </div>
       </header>
 
-      {/* Contenu principal avec ScenarioDetails et Sélecteur */}
+      {/* Contenu principal - Layout simplifié */}
       <div className="container mx-auto px-6 py-6">
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Détails du scénario */}
-          <div className="lg:col-span-2 space-y-6">
-            <StudentModeToggle 
-              isStudentMode={isStudentMode} 
-              onToggle={setIsStudentMode} 
-            />
-            <ScenarioFactory 
-              scenario={scenario} 
-              componentType="layout"
-              onStartSession={() => {/* Handle session start */}}
-            />
-          </div>
-          
-          {/* Sélecteur de configuration */}
-          <div className="lg:col-span-1">
-            <ScenarioSelector />
-          </div>
-        </div>
-      </div>
-
-      {/* Voice Navigation System (VNS) - Système réel */}
-      {scenario.id === 'byss-vns-school' && (
-        <SophieAgentsSDK 
-          conversationType="rdv"
-          open={true}
-          onToggle={() => {}}
+        <ByssVnsScenario 
+          onStartSession={() => {
+            console.log('Session IA démarrée depuis ScenarioPage');
+          }}
         />
-      )}
+      </div>
     </div>
   );
 }
