@@ -437,205 +437,471 @@ export function ByssHomepage() {
       {/* Trust Elements */}
       <TrustElements />
 
-      {/* Pricing Section - Fond Bleu Marine */}
-      <section className="py-20 px-6 bg-primary">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <Badge className="mb-4 bg-primary-foreground/10 text-accent border border-accent/30">
-              Tarification transparente
-            </Badge>
+      {/* Pricing Section Premium - Ultra Moderne */}
+      <section className="py-20 px-6 bg-gradient-to-br from-primary via-primary/95 to-primary/90 relative overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-accent/5 via-transparent to-transparent"></div>
+          <motion.div 
+            className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-accent/10 via-transparent to-transparent rounded-full blur-3xl"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
+        
+        <div className="max-w-6xl mx-auto relative z-10">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              <Badge className="mb-4 bg-primary-foreground/10 text-accent border border-accent/30 backdrop-blur-sm">
+                Tarification transparente
+              </Badge>
+            </motion.div>
             <h2 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
               Une solution complète pour votre établissement
             </h2>
             <p className="text-xl text-primary-foreground/80 mb-8">
               Accès illimité pour tous vos étudiants et formateurs
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Pricing Card */}
-            <Card className="bg-primary-foreground border border-primary-foreground/20 shadow-lg">
-              <CardContent className="p-8">
-                <div className="text-center mb-8">
-                  <div className="inline-flex items-center gap-2 bg-accent/10 px-4 py-2 rounded-full mb-4">
-                    <Star className="h-4 w-4 text-accent" />
-                    <span className="text-sm font-medium text-accent">Solution Premium</span>
-                  </div>
-                  <div className="text-6xl font-bold text-primary mb-2">
-                    749€
-                  </div>
-                  <div className="text-lg text-primary/80">par mois</div>
-                  <div className="text-sm text-primary/60 mt-2">+ coûts API OpenAI variables</div>
-                </div>
-                
-                <div className="space-y-4 mb-8">
-                  {[
-                    "Accès illimité pour tous les étudiants",
-                    "Tableaux de bord enseignants avancés",
-                    "Analytics détaillés par étudiant",
-                    "Support prioritaire 24/7",
-                    "Intégration LMS personnalisée",
-                    "Formation équipe pédagogique",
-                    "Scénarios personnalisés sur demande",
-                    "Rapports de performance détaillés"
-                  ].map((feature) => (
-                    <div key={feature} className="flex items-center gap-3">
-                      <CheckCircle className="h-5 w-5 text-accent flex-shrink-0" />
-                      <span className="text-primary">{feature}</span>
+            {/* Pricing Card Ultra Premium */}
+            <motion.div
+              initial={{ opacity: 0, x: -50, scale: 0.9 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <MagicSpotlight>
+                <Card className="bg-primary-foreground/95 backdrop-blur-lg border border-primary-foreground/20 shadow-2xl hover:shadow-3xl transition-all duration-500 relative overflow-hidden">
+                  {/* Gradient Border Animation */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-accent/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  <CardContent className="p-8 relative z-10">
+                    <motion.div 
+                      className="text-center mb-8"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      <motion.div 
+                        className="inline-flex items-center gap-2 bg-accent/10 px-4 py-2 rounded-full mb-4"
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <motion.div
+                          animate={{ rotate: [0, 360] }}
+                          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                        >
+                          <Star className="h-4 w-4 text-accent" />
+                        </motion.div>
+                        <span className="text-sm font-medium text-accent">Solution Premium</span>
+                      </motion.div>
+                      <motion.div 
+                        className="text-6xl font-bold text-primary mb-2"
+                        initial={{ scale: 0 }}
+                        whileInView={{ scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+                      >
+                        749€
+                      </motion.div>
+                      <div className="text-lg text-primary/80">par mois</div>
+                      <div className="text-sm text-primary/60 mt-2">+ coûts API OpenAI variables</div>
+                    </motion.div>
+                    
+                    <div className="space-y-4 mb-8">
+                      {[
+                        "Accès illimité pour tous les étudiants",
+                        "Tableaux de bord enseignants avancés",
+                        "Analytics détaillés par étudiant", 
+                        "Support prioritaire 24/7",
+                        "Intégration LMS personnalisée",
+                        "Formation équipe pédagogique",
+                        "Scénarios personnalisés sur demande",
+                        "Rapports de performance détaillés"
+                      ].map((feature, index) => (
+                        <motion.div 
+                          key={feature}
+                          className="flex items-center gap-3"
+                          initial={{ opacity: 0, x: -20 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.4, delay: 0.6 + index * 0.1 }}
+                        >
+                          <motion.div
+                            whileHover={{ scale: 1.2, rotate: 360 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <CheckCircle className="h-5 w-5 text-accent flex-shrink-0" />
+                          </motion.div>
+                          <span className="text-primary">{feature}</span>
+                        </motion.div>
+                      ))}
                     </div>
-                  ))}
-                </div>
 
-                <Button className="w-full bg-accent hover:bg-accent/90 text-primary text-lg py-4" asChild>
-                  <Link to="/contact">
-                    Demander une démo personnalisée
-                  </Link>
-                </Button>
-              </CardContent>
-            </Card>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      <TestButton variant="magic" className="w-full text-lg py-4" asChild>
+                        <Link to="/contact">
+                          Demander une démo personnalisée
+                        </Link>
+                      </TestButton>
+                    </motion.div>
+                  </CardContent>
+                </Card>
+              </MagicSpotlight>
+            </motion.div>
 
-            {/* Value Propositions */}
-            <div className="space-y-8">
+            {/* Value Propositions Ultra Modernes */}
+            <motion.div 
+              className="space-y-8"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
               <div>
-                <h3 className="text-2xl font-bold text-primary-foreground mb-6">
+                <motion.h3 
+                  className="text-2xl font-bold text-primary-foreground mb-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 }}
+                >
                   Pourquoi choisir Byss VNS ?
-                </h3>
+                </motion.h3>
                 <div className="space-y-6">
                   {[
                     {
                       icon: Brain,
                       title: "ROI mesurable",
-                      description: "Amélioration de 40% des compétences commerciales selon nos études"
+                      description: "Amélioration de 40% des compétences commerciales selon nos études",
+                      delay: 0
                     },
                     {
                       icon: Shield,
-                      title: "Sécurité garantie",
-                      description: "Conformité RGPD et hébergement en Europe avec chiffrement end-to-end"
+                      title: "Sécurité garantie", 
+                      description: "Conformité RGPD et hébergement en Europe avec chiffrement end-to-end",
+                      delay: 0.1
                     },
                     {
                       icon: Users,
                       title: "Support dédié",
-                      description: "Équipe d'experts pédagogiques pour vous accompagner dans le déploiement"
+                      description: "Équipe d'experts pédagogiques pour vous accompagner dans le déploiement",
+                      delay: 0.2
                     }
-                  ].map((item) => {
+                  ].map((item, index) => {
                     const Icon = item.icon;
                     return (
-                      <div key={item.title} className="flex gap-4 p-4 bg-primary-foreground/10 rounded-xl border border-primary-foreground/20">
-                        <div className="p-3 bg-accent/20 rounded-lg flex-shrink-0 border border-accent/30">
+                      <motion.div 
+                        key={item.title}
+                        className="flex gap-4 p-4 bg-primary-foreground/10 rounded-xl border border-primary-foreground/20 hover:bg-primary-foreground/15 transition-all duration-300 group"
+                        initial={{ opacity: 0, x: 20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.6 + item.delay }}
+                        whileHover={{ scale: 1.02 }}
+                      >
+                        <motion.div 
+                          className="p-3 bg-accent/20 rounded-lg flex-shrink-0 border border-accent/30 group-hover:bg-accent/30 transition-all duration-300"
+                          whileHover={{ rotate: 5, scale: 1.1 }}
+                        >
                           <Icon className="h-6 w-6 text-accent" />
-                        </div>
+                        </motion.div>
                         <div>
-                          <h4 className="font-semibold text-primary-foreground mb-2">{item.title}</h4>
+                          <h4 className="font-semibold text-primary-foreground mb-2 group-hover:text-accent transition-colors duration-300">{item.title}</h4>
                           <p className="text-sm text-primary-foreground/80 leading-relaxed">{item.description}</p>
                         </div>
-                      </div>
+                      </motion.div>
                     );
                   })}
                 </div>
               </div>
 
-              <div className="p-6 bg-primary-foreground/10 rounded-xl border border-primary-foreground/20">
+              <motion.div 
+                className="p-6 bg-primary-foreground/10 rounded-xl border border-primary-foreground/20 backdrop-blur-sm"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.8 }}
+                whileHover={{ scale: 1.02 }}
+              >
                 <div className="flex items-center gap-3 mb-3">
-                  <CheckCircle className="h-6 w-6 text-accent" />
+                  <motion.div
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <CheckCircle className="h-6 w-6 text-accent" />
+                  </motion.div>
                   <span className="font-semibold text-accent">Garantie satisfait ou remboursé</span>
                 </div>
                 <p className="text-sm text-primary-foreground/80">
                   Essai gratuit de 30 jours. Si vous n'êtes pas satisfait, nous vous remboursons intégralement.
                 </p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section - Fond Bleu Marine */}
-      <section className="py-20 px-6 bg-primary">
-        <div className="max-w-5xl mx-auto text-center">
-          <Badge className="mb-6 bg-primary-foreground/10 text-accent border border-accent/30">
-            🚀 Révolution pédagogique
-          </Badge>
+      {/* CTA Section Ultra Spectaculaire */}
+      <section className="py-20 px-6 bg-gradient-to-br from-primary via-primary/98 to-primary/95 relative overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div 
+            className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl"
+            animate={{ 
+              x: [0, 100, 0],
+              y: [0, -50, 0],
+              scale: [1, 1.2, 1]
+            }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div 
+            className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl"
+            animate={{ 
+              x: [0, -100, 0],
+              y: [0, 50, 0],
+              scale: [1, 1.3, 1]
+            }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
+        
+        <div className="max-w-5xl mx-auto text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <Badge className="mb-6 bg-primary-foreground/10 text-accent border border-accent/30 backdrop-blur-sm">
+              🚀 Révolution pédagogique
+            </Badge>
+          </motion.div>
           
-          <h2 className="text-4xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
+          <motion.h2 
+            className="text-4xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
             Révolutionnez l'enseignement
-            <span className="block text-accent">
+            <motion.span 
+              className="block text-accent drop-shadow-lg"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
               commercial
-            </span>
-          </h2>
+            </motion.span>
+          </motion.h2>
           
-          <p className="text-xl text-primary-foreground/80 mb-8 max-w-3xl mx-auto leading-relaxed">
+          <motion.p 
+            className="text-xl text-primary-foreground/80 mb-8 max-w-3xl mx-auto leading-relaxed"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
             Rejoignez les écoles de commerce qui forment déjà la nouvelle génération 
             de commerciaux avec notre technologie IA révolutionnaire.
-          </p>
+          </motion.p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-primary px-8 py-4" asChild>
-              <Link to="/auth">
-                Commencer l'essai gratuit
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary px-8 py-4" asChild>
-              <Link to="/contact">
-                Programmer une présentation
-              </Link>
-            </Button>
-          </div>
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+          >
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <TestButton variant="magic" size="lg" className="px-8 py-4" asChild>
+                <Link to="/auth">
+                  Commencer l'essai gratuit
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </TestButton>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <TestButton variant="outline" size="lg" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary px-8 py-4" asChild>
+                <Link to="/contact">
+                  Programmer une présentation
+                </Link>
+              </TestButton>
+            </motion.div>
+          </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-bold text-accent mb-2">30 jours</div>
-              <div className="text-primary-foreground/80">Essai gratuit</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-accent mb-2">24/7</div>
-              <div className="text-primary-foreground/80">Support dédié</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-accent mb-2">100%</div>
-              <div className="text-primary-foreground/80">Satisfait ou remboursé</div>
-            </div>
-          </div>
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center"
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 1.0 }}
+          >
+            {[
+              { value: "30 jours", label: "Essai gratuit", delay: 0 },
+              { value: "24/7", label: "Support dédié", delay: 0.1 },
+              { value: "100%", label: "Satisfait ou remboursé", delay: 0.2 }
+            ].map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 1.2 + stat.delay, type: "spring", stiffness: 200 }}
+              >
+                <motion.div 
+                  className="text-3xl font-bold text-accent mb-2"
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: index * 0.5 }}
+                >
+                  {stat.value}
+                </motion.div>
+                <div className="text-primary-foreground/80">{stat.label}</div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
-      {/* Footer - Fond Blanc */}
-      <footer className="py-16 px-6 bg-background border-t border-primary/20">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="p-2 bg-primary rounded-lg">
+      {/* Footer Premium - Design Moderne */}
+      <footer className="py-16 px-6 bg-gradient-to-br from-background via-background/95 to-background/90 border-t border-primary/20 relative overflow-hidden">
+        {/* Subtle Background Elements */}
+        <div className="absolute inset-0 overflow-hidden opacity-50">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <motion.div 
+            className="grid grid-cols-1 md:grid-cols-4 gap-8"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <motion.div 
+              className="col-span-1 md:col-span-2"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <motion.div 
+                className="flex items-center gap-2 mb-4"
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.3 }}
+              >
+                <motion.div 
+                  className="p-2 bg-primary rounded-lg"
+                  whileHover={{ rotate: 10 }}
+                  transition={{ duration: 0.3 }}
+                >
                   <Brain className="h-6 w-6 text-primary-foreground" />
-                </div>
+                </motion.div>
                 <span className="text-xl font-bold text-primary">Byss VNS</span>
-              </div>
-              <p className="text-primary/80 mb-6 max-w-md">
+              </motion.div>
+              <p className="text-primary/80 mb-6 max-w-md leading-relaxed">
                 La plateforme de formation commerciale IA qui révolutionne l'apprentissage 
                 des techniques de négociation dans l'enseignement supérieur.
               </p>
-            </div>
+            </motion.div>
             
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
               <h4 className="font-semibold text-primary mb-4">Plateforme</h4>
               <ul className="space-y-2 text-primary/80">
-                <li><Link to="/scenarios" className="hover:text-accent">Scénarios</Link></li>
-                <li><Link to="/about" className="hover:text-accent">À propos</Link></li>
-                <li><Link to="/contact" className="hover:text-accent">Contact</Link></li>
+                {[
+                  { to: "/scenarios", label: "Scénarios" },
+                  { to: "/about", label: "À propos" },
+                  { to: "/contact", label: "Contact" }
+                ].map((link, index) => (
+                  <motion.li 
+                    key={link.label}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.6 + index * 0.1 }}
+                  >
+                    <Link 
+                      to={link.to} 
+                      className="hover:text-accent transition-colors duration-300 hover:underline"
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.li>
+                ))}
               </ul>
-            </div>
+            </motion.div>
             
-            <div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
               <h4 className="font-semibold text-primary mb-4">Légal</h4>
               <ul className="space-y-2 text-primary/80">
-                <li><Link to="/privacy" className="hover:text-accent">Confidentialité</Link></li>
-                <li><Link to="/terms" className="hover:text-accent">Conditions</Link></li>
+                {[
+                  { to: "/privacy", label: "Confidentialité" },
+                  { to: "/terms", label: "Conditions" }
+                ].map((link, index) => (
+                  <motion.li 
+                    key={link.label}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.8 + index * 0.1 }}
+                  >
+                    <Link 
+                      to={link.to} 
+                      className="hover:text-accent transition-colors duration-300 hover:underline"
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.li>
+                ))}
               </ul>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
           
-          <div className="border-t border-primary/20 mt-12 pt-8 text-center text-primary/80">
+          <motion.div 
+            className="border-t border-primary/20 mt-12 pt-8 text-center text-primary/80"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 1.0 }}
+          >
             <p>&copy; 2024 Byss VNS. Tous droits réservés.</p>
-          </div>
+          </motion.div>
         </div>
       </footer>
     </div>
