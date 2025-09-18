@@ -9,19 +9,19 @@ export const byssVnsSchoolScenario: Scenario = {
   company: {
     name: "EDHEC Business School",
     sector: "Enseignement Supérieur",
-    size: "2,800 étudiants, 180 professeurs",
-    revenue: "85M€/an (40% formations initiales, 35% executive education, 15% recherche, 10% international)",
+    size: "9,000 étudiants tous programmes, 350 professeurs et intervenants",
+    revenue: "160M€/an (45% formations initiales, 30% executive education, 15% recherche, 10% international)",
     location: "Lille & Nice, France - Campus principal Lille (120 hectares), campus Nice (15 hectares)",
     
     metrics: {
-      studentsTotal: "2,800 étudiants tous programmes",
-      rankingFT: "Top 15 écoles européennes Financial Times",
-      budgetPedagogie: "12 millions d'euros par an pour l'innovation pédagogique",
-      budgetIT: "3,2 millions d'euros par an pour la transformation numérique", 
-      satisfactionEtudiants: "87% de satisfaction étudiante (objectif: 92%)",
-      employabilite: "96% placement 6 mois post-diplôme",
-      budgetFormationCorp: "18M€/an corporate training",
-      croissanceExecutive: "+22% programmes executive 2023",
+      studentsTotal: "9,000 étudiants tous programmes (Campus Lille: 4,000, Campus Nice: 3,000, autres: 2,000)",
+      rankingFT: "15ème école européenne Financial Times (4ème-5ème française après HEC, ESSEC, ESCP)",
+      budgetPedagogie: "1,2 million d'euros par an pour l'innovation pédagogique (0,75% budget total)",
+      budgetIT: "500k€ par an pour la transformation numérique et infrastructure", 
+      satisfactionEtudiants: "82% de satisfaction étudiante (objectif: 87%)",
+      employabilite: "94% placement 6 mois post-diplôme",
+      budgetFormationCorp: "15M€/an corporate training",
+      croissanceExecutive: "+18% programmes executive 2023",
       internationalStudents: "35% étudiants internationaux",
       partnershipsCorporate: "180 entreprises partenaires"
     },
@@ -40,26 +40,26 @@ export const byssVnsSchoolScenario: Scenario = {
     },
     
     ecosystemeTechnologique: {
-      lms: "Blackboard Learn Ultra (35k€/an) + Microsoft Teams Education",
-      videoLearning: "Kaltura + Zoom Education + custom streaming platform",
-      simulation: "Cesim Business Simulations + Marketplace Simulations (85k€/an)",
-      analytics: "Power BI Education + custom dashboards + learning analytics",
-      collaboration: "Microsoft 365 Education + Slack Education",
-      infrastructure: "Azure Education + on-premise servers",
-      development: "Learning Lab interne: React, Python, Azure AI Services",
-      crm: "Salesforce Education Cloud (étudiants prospects + alumni)",
-      finance: "SAP Education + Sage comptabilité",
-      research: "SPSS + R Studio + Python analytics labs"
+      lms: "Blackboard Learn Ultra (18k€/an) + Microsoft Teams Education",
+      videoLearning: "Kaltura + Zoom Education (15k€/an total)",
+      simulation: "Cesim Business Simulations + Marketplace Simulations (45k€/an)",
+      analytics: "Power BI Education + Google Analytics + outils gratuits",
+      collaboration: "Microsoft 365 Education (inclus dans licensing global)",
+      infrastructure: "Mix Azure Education + serveurs on-premise modestes",
+      development: "Learning Lab interne: équipe réduite, outils standards",
+      crm: "Salesforce Education Cloud allégé (8k€/an)",
+      finance: "SAP Education + comptabilité standard",
+      research: "SPSS + R Studio + Python (licences éducation)"
     },
 
     painPoints: [
-      "Formation trop théorique: 73% des étudiants trouvent les cours de vente trop académiques. Il manque de la pratique avec de vrais clients. Les stages de 6 mois sont la seule expérience terrain, mais il n'y a que 180 places de qualité pour 2 800 étudiants",
-      "Difficile d'évaluer les compétences humaines: négociation, persuasion, gestion des objections ne peuvent pas être mesurées avec des examens écrits. Les professeurs sont frustrés: 'nous formons des théoriciens, pas des praticiens'. Les tests pratiques coûtent 850€ par étudiant, seulement 2 fois par an",
-      "Concurrence des grandes écoles: HEC, ESSEC, ESCP investissent massivement dans l'intelligence artificielle pédagogique. EDHEC perd sa position innovation (15ème place vs 8ème en 2019). Pression importante avant le renouvellement des accréditations en 2025",
+      "Formation trop théorique: 68% des étudiants trouvent les cours de vente trop académiques. Manque de pratique terrain authentique. Les stages qualité difficiles à obtenir (ratio 1 place pour 5 candidats)",
+      "Difficile d'évaluer les compétences humaines: négociation, persuasion, gestion des objections ne peuvent pas être mesurées objectivement. Les professeurs manquent d'outils d'évaluation moderne. Tests pratiques manuels chronophages",
+      "Concurrence des grandes écoles: HEC, ESSEC, ESCP investissent dans l'IA pédagogique. EDHEC maintient sa 15ème place européenne mais pression concurrentielle réelle avant renouvellement accréditations 2025",
       "Corporate training déconnecté formations initiales: executive education utilise vrais business cases, étudiants Grande École ont cas d'école obsolètes. Clients corporate demandent cohérence programmes, menacent transfert formations vers concurrence",
-      "Scaling impossible formations commerciales: 1 prof négociation pour 180 étudiants MSc International Business. Jeux de rôles limités: 2h/semestre/étudiant. Besoin 15h pratique minimum selon standards industry, impossible avec ressources actuelles",
-      "ROI formation commerciale non mesurable: entreprises partenaires questionnent efficacité diplômés EDHEC vs autres écoles. Manque données probantes amélioration performance commerciale. Alumni DRH: 'recrutement basé réputation, pas preuves compétences'",
-      "Innovation pédagogique bloquée budget: learning lab 850k€/an innovations, mais 65% budget consommé plateformes existantes. Reste 300k€ pour R&D vs 1.2M€ nécessaires projets IA ambitieux. Frustration équipe innovation",
+      "Scaling formations commerciales difficile: ratio prof/étudiants élevé limite temps pratique. Jeux de rôles: 2h/semestre/étudiant vs 8h souhaité. Ressources limitées pour individualisation formation",
+      "ROI formation commerciale difficile à prouver: entreprises partenaires attendent plus de preuves concrètes d'efficacité. Manque de métriques objectives progression compétences soft skills",
+      "Innovation pédagogique contrainte budget: learning lab 1M€/an mais 70% consommé plateformes existantes. Reste 300k€ nouveaux projets, frustration équipe innovation face aux limitations",
       "Génération Z engagement faible: étudiants nés digital natives, attentes expériences immersives gaming/VR. Cours magistraux = désengagement progressif. Absentéisme +18% cours théoriques vs +3% cours pratiques/workshops",
       "International students satisfaction: 35% étudiants étrangers, barrière langue française pour simulations commerciales. Besoin outils universels, simulation multilingue. Risque: perte attractivité internationale = -15% revenus",
       "Partenariats corporate menacés: 180 entreprises partenaires exigent étudiants 'job-ready' dès stage. Feedback négatif soft skills: -22% offres stages qualitatives 2023 vs 2022. Cercle vicieux: moins stages qualité = moins expérience = moins employabilité"
@@ -67,7 +67,7 @@ export const byssVnsSchoolScenario: Scenario = {
     
     currentSolution: "Patchwork pédagogique fragmenté: Cesim Business Simulations (text-based, 85k€/an) + Marketplace Simulations + jeux rôles manuels professeurs. Time investment: 12h/prof préparation simulations/semestre. Student experience: 2h practice/semester vs 15h standard industry. ROI measurement: impossible, aucune métrique objective skills progression. Technology gap: simulations 2015 vs attentes 2024 étudiants digital natives.",
     
-    budget: "Budget innovation: 12 millions €/an - Projet Byss VNS: jusqu'à 300 000€",
+    budget: "Budget innovation pédagogique: 1,2 million €/an - Projet Byss VNS: jusqu'à 80 000€",
     
     timeline: "Urgence stratégique 2024: renouvellement accreditations EQUIS/AACSB 2025 nécessite innovation pédagogique majeure. Deadline pilot programs: janvier 2024 pour évaluation mars-juin, déploiement septembre 2024 si concluant. Competition pressure: HEC lance 'IA Campus' février 2024.",
     
@@ -82,16 +82,16 @@ export const byssVnsSchoolScenario: Scenario = {
     ],
     
     detailedFinancials: {
-      revenue2023: "85,000,000€",
-      breakdown: "Initial programs 34M€, Executive education 30M€, Research 13M€, International 8M€",
-      operatingBudget: "78M€ (costs)",
-      innovationBudget: "12,000,000€ (14% total budget)",
-      techBudget: "3,200,000€ infrastructure + learning platforms",
-      profitMargin: "8.2% (7M€ bénéfice)",
+      revenue2023: "160,000,000€",
+      breakdown: "Initial programs 72M€, Executive education 48M€, Research 24M€, International 16M€",
+      operatingBudget: "148M€ (costs)",
+      innovationBudget: "1,200,000€ (0,75% total budget)",
+      techBudget: "500,000€ infrastructure + learning platforms",
+      profitMargin: "7.5% (12M€ bénéfice)",
       studentTuition: "Master Grande École 17k€/an, MSc 25k€/an, Executive 45k€/module",
-      corporateTraining: "18M€/an (average 25k€/program)",
-      researchFunding: "13M€ (EU grants + corporate partnerships)",
-      internationalRevenue: "8M€ (study abroad + partnerships)"
+      corporateTraining: "15M€/an (average 25k€/program)",
+      researchFunding: "24M€ (EU grants + corporate partnerships)",
+      internationalRevenue: "16M€ (study abroad + partnerships)"
     }
   },
   
@@ -104,7 +104,7 @@ export const byssVnsSchoolScenario: Scenario = {
     linkedinProfile: {
       headline: "Directrice Innovation Pédagogique @EDHEC | Ex-INSEAD VP Learning | EdTech Pioneer | PhD Education Innovation",
       experience: [
-        "EDHEC Business School (4 ans) - Directrice Programmes & Innovation: Transformation pédagogique digitale, learning lab direction, budget 850k€, équipe 12 personnes",
+        "EDHEC Business School (4 ans) - Directrice Programmes & Innovation: Transformation pédagogique digitale, learning lab direction, budget 1M€, équipe 8 personnes",
         "INSEAD (6 ans) - VP Learning Innovation: Déploiement blended learning, MOOCs développement, satisfaction étudiants +15%, innovation awards 3x",
         "emlyon business school (3 ans) - Learning Design Manager: Pédagogies actives, business simulations, learning analytics implementation"
       ],
@@ -129,12 +129,12 @@ export const byssVnsSchoolScenario: Scenario = {
     
     communicationStyle: "Communication énergique et passionnée, parle rapidement avec enthousiasme débordant pour innovations pédagogiques. Vocabulaire technique EdTech mélangé expressions françaises traditionnelles. Interruptions fréquentes pour poser questions précises ou challenger assumptions. Adore démonstrations interactives, déteste présentations PowerPoint statiques. Prend notes manuscrites structurées iPad avec couleurs différentes par concept. Body language expressif: gestes larges, contact visuel intense, penche vers avant quand intéressée. Expressions favorites: 'Quel impact learning outcomes?', 'Students first!', 'ROI pédagogique mesurable?'",
     
-    decisionPower: "Décisionnaire opérationnel budget innovations 850k€/an. Co-décision avec Directeur Général >200k€ (validation 48h). Influence majeure: choix plateformes apprentissage, méthodes pédagogiques, partenariats EdTech. Sponsor projects pilotes, évaluation solutions, roadmap innovation. Veto pédagogique: bloque outils sans valeur éducative prouvée. Input stratégique programmes académiques, satisfaction étudiants, différentiation concurrentielle.",
+    decisionPower: "Décisionnaire opérationnel budget innovations 1M€/an. Décision autonome jusqu'à 50k€. Co-décision avec Directeur Général >50k€ (validation 48h). Influence majeure: choix plateformes apprentissage, méthodes pédagogiques, partenariats EdTech. Sponsor projects pilotes, évaluation solutions, roadmap innovation. Veto pédagogique: bloque outils sans valeur éducative prouvée.",
     
     priorities: [
-      "Amélioration satisfaction étudiants: objectif 87%→92% via innovations pédagogiques immersives, expériences learning engaging, feedback temps réel",
+      "Amélioration satisfaction étudiants: objectif 82%→87% via innovations pédagogiques immersives, expériences learning engaging, feedback temps réel",
       "Différentiation concurrentielle: innover avant HEC/ESSEC, créer avantage pédagogique unique, maintenir ranking Top 15 Europe minimum",
-      "ROI innovations mesurable: justifier budget 850k€/an learning lab, prouver impact learning outcomes, démontrer valeur ajoutée quantifiable",
+      "ROI innovations mesurable: justifier budget 1M€/an learning lab, prouver impact learning outcomes, démontrer valeur ajoutée quantifiable",
       "Préparation accreditations 2025: renouvellement EQUIS/AACSB nécessite innovations majeures, excellence pédagogique démontrée, satisfaction stakeholders",
       "Scaling formations pratiques: industrialiser apprentissage compétences soft skills, multiplier heures practice sans explosion ressources professorales",
       "Corporate training alignment: cohérence programmes initial/executive, répondre attentes entreprises partenaires, maintenir revenus 18M€/an",
@@ -145,7 +145,7 @@ export const byssVnsSchoolScenario: Scenario = {
       "Adoption professeurs résistants: corps professoral traditionnel, résistance changement pédagogique, formation nécessaire mais chronophage",
       "ROI non prouvé: investissements EdTech passés sans impact mesurable, scepticisme direction générale, pression résultats quantifiables",
       "Complexité technique intégration: écosystème IT complexe EDHEC, intégrations multiples, risque disruption programmes en cours",
-      "Budget learning lab serré: 850k€ déjà alloués plateformes existantes, reste 300k€ nouveaux projects vs besoins 1.2M€",
+      "Budget learning lab serré: 700k€ déjà alloués plateformes existantes, reste 300k€ nouveaux projects vs besoins réels",
       "Timeline accreditations: deadline mars 2025, besoin pilots concluants avant évaluation, pression timing énorme",
       "Student privacy & RGPD: données étudiants sensibles, conformité stricte, audit trail conversations Byss VNS obligatoire",
       "Concurrence aggressive: HEC lance IA Campus février 2024, ESSEC investit 2M€ EdTech, course innovation intensifiée"
@@ -159,7 +159,7 @@ export const byssVnsSchoolScenario: Scenario = {
       "Mission EDHEC: maintenir excellence académique, renforcer positionnement école, contribuer succès institutionnel"
     ],
     
-    experience: "12 années expertise transformation pédagogique business schools: EMLYON (2012-2015): Learning Design Manager, développement pédagogies actives, business simulations, learning analytics. INSEAD (2015-2021): VP Learning Innovation, transformation digitale programmes, MOOCs développement, satisfaction étudiants +15%, innovation awards Educational Technology 3 années consécutives. EDHEC (2021-present): Directrice Innovation Pédagogique, learning lab création, budget 850k€ management, équipe 12 learning designers, pilots EdTech cutting-edge. Publications: 15 papers académiques EdTech, speaker 25+ conférences internationales."
+    experience: "12 années expertise transformation pédagogique business schools: EMLYON (2012-2015): Learning Design Manager, développement pédagogies actives, business simulations, learning analytics. INSEAD (2015-2021): VP Learning Innovation, transformation digitale programmes, MOOCs développement, satisfaction étudiants +15%, innovation awards Educational Technology 3 années consécutives. EDHEC (2021-present): Directrice Innovation Pédagogique, learning lab création, budget 1M€ management, équipe 8 learning designers, pilots EdTech cutting-edge. Publications: 12 papers académiques EdTech, speaker 20+ conférences internationales."
   },
   
   product: {
@@ -206,15 +206,15 @@ export const byssVnsSchoolScenario: Scenario = {
     },
     
     pricing: {
-      starter: "749€/mois HT (jusqu'à 100 étudiants, scenarios de base, analytics standard, support email)",
-      professional: "1,499€/mois HT (jusqu'à 500 étudiants, tous scenarios, analytics avancés, support prioritaire)",
-      enterprise: "2,999€/mois HT (étudiants illimités, scenarios custom, API, intégrations LMS, CSM dédié)",
+      starter: "499€/mois HT (jusqu'à 100 étudiants, scenarios de base, analytics standard, support email)",
+      professional: "899€/mois HT (jusqu'à 500 étudiants, tous scenarios, analytics avancés, support prioritaire)",
+      enterprise: "1,499€/mois HT (étudiants illimités, scenarios custom, API, intégrations LMS, CSM dédié)",
       enterprise_plus: "Sur-mesure (multi-campus, white-label, développements spécifiques, consulting pédagogique)",
       
       pricingModel: "Abonnement mensuel/annuel + coûts API OpenAI variables",
       setupFees: "Gratuit (setup 24h inclus)",
       contractTerms: "12 mois minimum, résiliation préavis 3 mois",
-      overage: "0.5€/étudiant supplémentaire",
+      overage: "0.3€/étudiant supplémentaire",
       migration: "Migration données gratuite + formation équipe incluse",
       cancelPolicy: "Préavis 3 mois, pas de pénalités"
     },
@@ -242,21 +242,21 @@ export const byssVnsSchoolScenario: Scenario = {
       "Évolutivité: startup agile vs rigidité grands éditeurs"
     ],
     
-    roi: "ROI pédagogique quantifiable: +40% amélioration compétences commerciales mesurées, +25% satisfaction étudiants formations pratiques, -60% temps préparation simulations professeurs, +15% attractivité programmes vs concurrence. ROI financier: payback 8-12 mois via amélioration satisfaction étudiants, différentiation concurrentielle, attraction nouveaux étudiants. Économies: -80% coûts assessment centers, -50% temps administratif simulations.",
+    roi: "ROI pédagogique quantifiable: +25% amélioration compétences commerciales mesurées, +18% satisfaction étudiants formations pratiques, -40% temps préparation simulations professeurs, +12% attractivité programmes vs concurrence. ROI financier: payback 12-18 mois via amélioration satisfaction étudiants, différentiation concurrentielle modérée. Économies: -60% coûts assessment centers externes, -30% temps administratif simulations.",
     
     implementationTime: "Setup technique: 24h. Formation équipe: 1 semaine. Déploiement pilote: 2 semaines. Déploiement complet: 1 mois. Adoption étudiants: immédiate (interface intuitive). Mesure ROI: 3 mois première évaluation."
   },
   
   objectives: [
-    "Convaincre EDHEC investir dans révolution pédagogique IA pour différentiation concurrentielle majeure",
-    "Démontrer ROI Byss VNS: +5pts satisfaction étudiants, maintien placement 96%, innovation leadership",
-    "Obtenir pilote 3 mois sur MSc International Business (180 étudiants) budget 25k€",
+    "Convaincre EDHEC investir dans innovation pédagogique IA pour améliorer différentiation concurrentielle",
+    "Démontrer ROI Byss VNS: +5pts satisfaction étudiants (82%→87%), maintien placement 94%, amélioration ranking",
+    "Obtenir pilote 6 mois sur MSc International Business (300 étudiants) budget 50-80k€",
     "Valider intégration écosystème technique EDHEC + conformité RGPD éducation",
     "Sécuriser sponsorship Sophie Hennion-Moreau + validation Directeur Général Emmanuel Métais"
   ],
   
-  salesGoal: "Signature contrat Enterprise 36k€ (12 mois × 2,999€/mois) pour déploiement pilote puis complet",
-  expectedRevenue: "36,000€",
+  salesGoal: "Signature contrat Professional 18k€ (12 mois × 1,499€/mois) pour déploiement pilote puis extension",
+  expectedRevenue: "18,000€",
   
   swot: {
     strengths: [
@@ -264,7 +264,7 @@ export const byssVnsSchoolScenario: Scenario = {
       "Timing parfait: urgence innovation pédagogique avant accreditations 2025",
       "Spécialisation business education vs solutions généralistes",
       "Agilité startup: customisation rapide vs rigidité grands éditeurs",
-      "Prix compétitif: 36k€/an vs 200k€ solutions enterprise",
+      "Prix compétitif: 18k€/an vs 45k€ solutions établies",
       "Équipe experte: maîtrise IA conversationnelle + compréhension enjeux pédagogiques"
     ],
     weaknesses: [
@@ -285,7 +285,7 @@ export const byssVnsSchoolScenario: Scenario = {
       "Concurrents établis: Cesim, Marketplace Simulations, budgets millions",
       "OpenAI direct: risque développement solution éducation propre",
       "Adoption professeurs: résistance changement, formation nécessaire",
-      "Budget learning lab serré: 300k€ disponibles vs besoins 36k€",
+      "Budget learning lab serré: 300k€ disponibles pour nouveaux projets",
       "Réglementation RGPD: complexité compliance données étudiants"
     ]
   },
