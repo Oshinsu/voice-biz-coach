@@ -99,9 +99,10 @@ export class EDHECVoiceAgent {
   private setupEventHandlers(): void {
     if (!this.session) return;
 
-    // Note: Configuration des événements selon la vraie API Agents SDK
-    // Les événements seront configurés après connexion réussie
     console.log('📝 Configuration des événements Agents SDK prête');
+    
+    // Note: Les événements exacts dépendent de l'API finale du SDK
+    // Configuration minimale pour démarrer
   }
 
   /**
@@ -140,7 +141,7 @@ export class EDHECVoiceAgent {
   async disconnect(): Promise<void> {
     try {
       if (this.session) {
-        // Note: L'API exacte de déconnexion dépend de l'implémentation réelle
+        // Note: La méthode exacte de déconnexion sera définie par l'API finale
         this.session = null;
       }
       this.agent = null;
@@ -148,6 +149,9 @@ export class EDHECVoiceAgent {
       this.emit('disconnected', {});
     } catch (error) {
       console.error('❌ Erreur déconnexion:', error);
+      // Force cleanup même en cas d'erreur
+      this.session = null;
+      this.agent = null;
     }
   }
 
@@ -169,7 +173,12 @@ export class EDHECVoiceAgent {
    * Obtenir l'historique actuel
    */
   getHistory(): any[] {
-    // Retour temporaire - sera remplacé par la vraie API
+    if (!this.session) {
+      return [];
+    }
+    
+    // Note: L'accès à l'historique sera défini par l'API finale du SDK
+    // Pour l'instant, retour vide en attendant l'API complète
     return [];
   }
 
