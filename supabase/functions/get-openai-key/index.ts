@@ -36,21 +36,9 @@ serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "gpt-4o-realtime-preview-2024-12-17",
-          voice: Math.random() > 0.5 ? "marin" : "cedar", // 🎯 Nouvelles voix 2025 naturelles
-          instructions: instructions,
-          tools: tools || [],
-          turn_detection: {
-            type: "server_vad", // ✅ VAD stable (semantic_vad = instable)
-            threshold: 0.5,
-            prefix_padding_ms: 300,
-            silence_duration_ms: 800 // ⚡ Optimisé pour interruptions rapides
-          },
-          input_audio_transcription: {
-            model: "whisper-1"
-          },
-          temperature: 0.8,
-          max_response_output_tokens: 500 // 🎯 Réponses courtes Sophie
+          model: "gpt-realtime",
+          // Note: La voix sera définie côté client dans RealtimeAgent
+          // car elle doit être fixée avant la première parole
         }),
       }
     );

@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import { RealtimeChat } from "@/utils/RealtimeAudio";
-import { buildSophiePrompt, VNSConfig, DEFAULT_CONFIGS } from "@/lib/vns-template";
-import { logEvent, scoreTurn, endSession as endSessionTool } from "@/lib/tools/vns-tools";
+import { EDHECVoiceAgent } from "@/utils/RealtimeAgents";
+import { buildEDHECInstructions } from "@/lib/edhec-prompts";
 import { 
   Phone, 
   PhoneOff, 
@@ -27,11 +25,11 @@ interface SophieAgentsSDKProps {
   onToggle?: () => void;
 }
 
-interface Message {
+interface HistoryItem {
+  role: 'user' | 'assistant' | 'system';
   content: string;
-  sender: 'user' | 'agent';
   timestamp: Date;
-  type: 'audio' | 'text' | 'system';
+  type: 'audio' | 'transcript' | 'system';
 }
 
 export function SophieAgentsSDK({ 
@@ -46,153 +44,125 @@ export function SophieAgentsSDK({
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [history, setHistory] = useState<HistoryItem[]>([]);
   const [sessionDuration, setSessionDuration] = useState(0);
   const [exchangeCount, setExchangeCount] = useState(0);
   
-  const chatRef = useRef<RealtimeChat | null>(null);
+  const agentRef = useRef<EDHECVoiceAgent | null>(null);
   const startTimeRef = useRef<Date | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   /**
-   * GÉNÉRATION PROMPT VNS ACADÉMIQUE EDHEC
+   * Gestion de l'historique Agents SDK
    */
-  const getSophieAgentsPrompt = (): string => {
-    const mode = selectedConversationType === 'rdv' ? 'RDV' : 'COLD';
-    const config: VNSConfig = DEFAULT_CONFIGS[mode];
-    
-    return buildSophiePrompt(config);
-  };
-
-  const addMessage = (content: string, sender: 'user' | 'agent', type: 'audio' | 'text' | 'system' = 'text') => {
-    setMessages(prev => [...prev, {
+  const addToHistory = (role: 'user' | 'assistant' | 'system', content: string, type: 'audio' | 'transcript' | 'system' = 'transcript') => {
+    setHistory(prev => [...prev, {
+      role,
       content,
-      sender,
       timestamp: new Date(),
       type
     }]);
   };
 
   /**
-   * Gestionnaire d'événements Agents SDK
+   * Gestionnaire événements Agents SDK officiel
    */
-  const handleAgentsEvent = (event: any) => {
-    console.log('📨 Événement Agents SDK:', event.type);
-    
-    switch (event.type) {
-      case 'session.created':
-        console.log('✅ Session Agents SDK créée');
-        setIsConnected(true);
-        setIsConnecting(false);
-        startTimeRef.current = new Date();
-        addMessage("Sophie Hennion-Moreau connectée via Agents SDK + WebRTC", 'agent', 'system');
-        break;
-        
-      case 'response.audio.delta':
-        // Sophie parle
-        setIsSpeaking(true);
-        setIsListening(false);
-        break;
-        
-      case 'response.audio.done':
-        // Sophie termine
-        setIsSpeaking(false);
-        setIsListening(true);
-        break;
-        
-      case 'response.audio_transcript.delta':
-        if (event.delta) {
-          addMessage(event.delta, 'agent', 'text');
-        }
-        break;
-        
-      case 'input_audio_buffer.speech_started':
-        console.log('🗣️ Utilisateur commence à parler');
-        setIsListening(false);
-        setIsSpeaking(false);
-        break;
-        
-      case 'input_audio_buffer.speech_stopped':
-        console.log('🛑 Utilisateur arrête de parler');
-        setExchangeCount(prev => prev + 1);
-        break;
-        
-      case 'response.function_call_arguments.done':
-        console.log('🔧 Tool call terminé:', event);
-        break;
-        
-      case 'error':
-        console.error('❌ Erreur Agents SDK:', event.error);
-        
-        // 🔧 Gestion d'erreurs granulaire
-        const errorType = event.error?.type || 'unknown';
-        const isRecoverable = ['audio_error', 'temporary_failure'].includes(errorType);
-        
-        toast({
-          title: isRecoverable ? "Problème temporaire" : "Erreur session",
-          description: event.error?.message || "Erreur inconnue",
-          variant: "destructive"
-        });
+  const setupEventHandlers = (agent: EDHECVoiceAgent) => {
+    // Événement principal: historique mis à jour
+    agent.on('history_updated', (event) => {
+      console.log('📝 History updated via Agents SDK');
+      const agentHistory = agent.getHistory();
+      
+      // Convertir l'historique SDK vers notre format
+      const convertedHistory: HistoryItem[] = agentHistory.map((item: any) => ({
+        role: item.role === 'user' ? 'user' : 'assistant',
+        content: item.content || item.transcript || '',
+        timestamp: new Date(),
+        type: item.type || 'transcript'
+      }));
+      
+      setHistory(convertedHistory);
+      setExchangeCount(agentHistory.filter((item: any) => item.role === 'user').length);
+    });
 
-        // Auto-récupération pour erreurs temporaires
-        if (isRecoverable && chatRef.current) {
-          console.log('🔄 Tentative auto-récupération...');
-          setTimeout(() => {
-            // Optionnel: tentative de récupération automatique
-          }, 2000);
-        }
-        break;
-    }
+    // Interruption audio (utilisateur prend la parole)
+    agent.on('audio_interrupted', () => {
+      console.log('🔇 Audio interrupted - À vous');
+      setIsSpeaking(false);
+      setIsListening(true);
+      addToHistory('system', '🔇 Interruption - À vous', 'system');
+    });
+
+    // Connexion établie
+    agent.on('connected', () => {
+      console.log('✅ Connexion Agents SDK établie');
+      setIsConnected(true);
+      setIsConnecting(false);
+      startTimeRef.current = new Date();
+      addToHistory('system', 'Sophie Hennion-Moreau connectée (Agents SDK)', 'system');
+      
+      // Si RDV, démarrer avec agenda
+      if (selectedConversationType === 'rdv') {
+        setTimeout(() => {
+          agent.sendMessage("Ouvre le RDV: agenda 30-60s…");
+        }, 1000);
+      }
+    });
+
+    // Déconnexion
+    agent.on('disconnected', () => {
+      console.log('🔌 Déconnexion Agents SDK');
+      setIsConnected(false);
+      setIsSpeaking(false);
+      setIsListening(false);
+    });
+
+    // Erreurs
+    agent.on('error', (event) => {
+      console.error('❌ Erreur Agents SDK:', event);
+      toast({
+        title: "Erreur session",
+        description: event.message || "Erreur de connexion",
+        variant: "destructive"
+      });
+    });
   };
 
   /**
-   * Démarrage session Agents SDK + WebRTC
+   * Démarrage session Agents SDK officiel
    */
   const startSession = async () => {
     try {
       setIsConnecting(true);
-      setMessages([]);
+      setHistory([]);
       setExchangeCount(0);
       
-      console.log('🚀 Démarrage Sophie VNS EDHEC + Agents SDK...');
+      console.log('🚀 Démarrage Sophie EDHEC avec Agents SDK officiel...');
 
-      // Obtenir le prompt VNS optimisé
-      const instructions = getSophieAgentsPrompt();
-      console.log('📝 Instructions VNS EDHEC générées:', instructions.substring(0, 200) + '...');
+      // Obtenir les instructions EDHEC authentiques
+      const instructions = buildEDHECInstructions(selectedConversationType);
+      console.log('📝 Instructions EDHEC générées:', instructions.substring(0, 200) + '...');
 
-      // Configuration des tools VNS pour Supabase
-      const vnsTools = [
-        {
-          type: "function",
-          name: "log_event",
-          description: "Journaliser un moment clé pendant la session VNS",
-          parameters: logEvent.parameters
-        },
-        {
-          type: "function", 
-          name: "score_turn",
-          description: "Scorer le tour de l'élève par compétence commerciale",
-          parameters: scoreTurn.parameters
-        },
-        {
-          type: "function",
-          name: "end_session", 
-          description: "Clôturer la session VNS et produire le rapport final",
-          parameters: endSessionTool.parameters
-        }
-      ];
+      // Créer l'agent EDHEC
+      agentRef.current = new EDHECVoiceAgent({
+        conversationType: selectedConversationType,
+        instructions: instructions
+      });
 
-      // Créer et initialiser RealtimeChat avec VNS tools
-      chatRef.current = new RealtimeChat(handleAgentsEvent);
-      await chatRef.current.init(instructions, vnsTools);
+      // Configurer les événements
+      setupEventHandlers(agentRef.current);
+
+      // Initialiser et connecter
+      await agentRef.current.initialize();
+      await agentRef.current.connect();
 
       toast({
-        title: "✅ Connexion VNS établie",
-        description: "Sophie Hennion-Moreau prête (EDHEC + Byss VNS)",
+        title: "✅ Connexion établie",
+        description: `Sophie EDHEC prête (${selectedConversationType})`,
       });
 
     } catch (error) {
-      console.error('❌ Erreur session Sophie Agents SDK:', error);
+      console.error('❌ Erreur session Agents SDK:', error);
       setIsConnecting(false);
       toast({
         title: "Erreur connexion",
@@ -206,7 +176,7 @@ export function SophieAgentsSDK({
    * Fermeture session
    */
   const endSession = async () => {
-    console.log('🔌 Fermeture session Sophie Agents SDK...');
+    console.log('🔌 Fermeture session Agents SDK...');
     
     try {
       if (timerRef.current) {
@@ -214,9 +184,9 @@ export function SophieAgentsSDK({
         timerRef.current = null;
       }
       
-      if (chatRef.current) {
-        chatRef.current.disconnect();
-        chatRef.current = null;
+      if (agentRef.current) {
+        await agentRef.current.disconnect();
+        agentRef.current = null;
       }
       
       setIsConnected(false);
@@ -228,18 +198,18 @@ export function SophieAgentsSDK({
       if (startTimeRef.current) {
         duration = Math.floor((Date.now() - startTimeRef.current.getTime()) / 1000);
         startTimeRef.current = null;
-        addMessage(`Session terminée - Durée: ${duration}s - Échanges: ${exchangeCount}`, 'agent', 'system');
+        addToHistory('system', `Session terminée - Durée: ${duration}s - Échanges: ${exchangeCount}`, 'system');
       }
 
       toast({
-        title: "Session VNS terminée",
+        title: "Session terminée",
         description: `Sophie EDHEC déconnectée - ${exchangeCount} échanges`,
       });
 
     } catch (error) {
       console.error('❌ Erreur fermeture session:', error);
       // Force cleanup
-      chatRef.current = null;
+      agentRef.current = null;
       setIsConnected(false);
       setIsConnecting(false);
       setIsSpeaking(false);
@@ -248,21 +218,28 @@ export function SophieAgentsSDK({
   };
 
   /**
-   * Interruption Sophie (optimisée)
+   * Interruption Sophie via Agents SDK
    */
-  const handleInterrupt = () => {
-    if (chatRef.current && isSpeaking) {
-      const success = chatRef.current.interrupt();
-      if (success) {
-        addMessage("🔇 Interruption réussie", 'user', 'system');
-        setExchangeCount(prev => prev + 1);
-        setIsSpeaking(false);
-        setIsListening(true);
-      } else {
-        addMessage("⚠️ Échec interruption", 'user', 'system');
+  const handleInterrupt = async () => {
+    if (agentRef.current && agentRef.current.isConnected()) {
+      try {
+        const success = await agentRef.current.interrupt();
+        if (success) {
+          addToHistory('system', '🔇 Interruption réussie', 'system');
+          setIsSpeaking(false);
+          setIsListening(true);
+        } else {
+          toast({
+            title: "Interruption échouée",
+            description: "Problème WebRTC",
+            variant: "destructive"
+          });
+        }
+      } catch (error) {
+        console.error('❌ Erreur interruption:', error);
         toast({
-          title: "Interruption échouée",
-          description: "Problème de connexion WebRTC",
+          title: "Erreur interruption",
+          description: "Impossible d'interrompre Sophie",
           variant: "destructive"
         });
       }
