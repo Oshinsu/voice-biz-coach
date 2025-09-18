@@ -171,7 +171,7 @@ export function SophieAgentsSDK({
 
       // Créer et initialiser RealtimeChat avec VNS tools
       chatRef.current = new RealtimeChat(handleAgentsEvent);
-      await chatRef.current.init(instructions);
+      await chatRef.current.init(instructions, vnsTools);
 
       toast({
         title: "✅ Connexion VNS établie",

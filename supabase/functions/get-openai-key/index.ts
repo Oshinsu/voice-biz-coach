@@ -18,8 +18,8 @@ serve(async (req) => {
       throw new Error('OPENAI_API_KEY is not set');
     }
 
-    // Parse request body to get instructions
-    const { instructions } = await req.json();
+    // Parse request body to get instructions and tools
+    const { instructions, tools } = await req.json();
     if (!instructions) {
       throw new Error('Instructions are required');
     }
@@ -38,7 +38,8 @@ serve(async (req) => {
         body: JSON.stringify({
           model: "gpt-4o-realtime-preview-2024-12-17",
           voice: "alloy",
-          instructions: instructions // ⭐ CRITIQUE : Instructions dans la session
+          instructions: instructions, // ⭐ CRITIQUE : Instructions dans la session
+          tools: tools || [] // 🔧 VNS TOOLS : Outils d'évaluation Sophie
         }),
       }
     );
