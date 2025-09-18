@@ -284,58 +284,70 @@ export function SophieAgentsSDK({
 
   if (!open) return null;
 
-  // Interface réduite pendant conversation
-  if (isMinimized && isConnected) {
+  // Interface réduite
+  if (isMinimized) {
     return (
-      <Card className="fixed bottom-4 right-4 w-80 shadow-xl border-2 z-50">
-        <CardHeader className="pb-2">
+      <Card className="fixed bottom-4 right-4 w-60 shadow-xl border-2 z-50">
+        <CardContent className="p-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm ${
-                isSpeaking ? 'bg-blue-100 animate-pulse' : 'bg-blue-50'
+              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                isConnected 
+                  ? isSpeaking 
+                    ? 'bg-blue-100 animate-pulse' 
+                    : isListening
+                      ? 'bg-green-100'
+                      : 'bg-blue-50'
+                  : 'bg-muted'
               }`}>
                 👩‍💼
               </div>
-              <div>
-                <p className="font-medium text-sm">Sophie Hennion-Moreau</p>
-                <p className="text-xs text-muted-foreground">VNS EDHEC</p>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-xs truncate">Sophie</p>
+                {isConnected && (
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <span>{formatTime(sessionDuration)}</span>
+                    <span>•</span>
+                    <span>{exchangeCount}</span>
+                  </div>
+                )}
               </div>
             </div>
             <div className="flex gap-1">
               <Button size="sm" variant="ghost" onClick={() => setIsMinimized(false)} className="h-6 w-6 p-0">
                 <Maximize2 className="w-3 h-3" />
               </Button>
-              <Button size="sm" variant="ghost" onClick={endSession} className="h-6 w-6 p-0 text-destructive">
-                <PhoneOff className="w-3 h-3" />
-              </Button>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <div className="space-y-2">
-            <div className="flex justify-between text-xs">
-              <span>{formatTime(sessionDuration)}</span>
-              <span>{exchangeCount} échanges</span>
-            </div>
-            <div className="text-center">
-              {isListening ? (
-                <Badge variant="default" className="bg-green-600 text-xs">
-                  <Mic className="w-3 h-3 mr-1" />
-                  À vous
-                </Badge>
-              ) : isSpeaking ? (
-                <Badge variant="default" className="bg-blue-600 animate-pulse text-xs">
-                  <Volume2 className="w-3 h-3 mr-1" />
-                  Sophie répond
-                </Badge>
+              {isConnected ? (
+                <Button size="sm" variant="ghost" onClick={endSession} className="h-6 w-6 p-0 text-destructive">
+                  <PhoneOff className="w-3 h-3" />
+                </Button>
               ) : (
-                <Badge variant="outline" className="text-xs">
-                  <MicOff className="w-3 h-3 mr-1" />
-                  En écoute
-                </Badge>
+                <Button size="sm" variant="ghost" onClick={onToggle} className="h-6 w-6 p-0">
+                  <PhoneOff className="w-3 h-3" />
+                </Button>
               )}
             </div>
           </div>
+          {isConnected && (
+            <div className="mt-2 flex justify-center">
+              {isListening ? (
+                <Badge variant="default" className="bg-green-600 text-xs h-5">
+                  <Mic className="w-3 h-3 mr-1" />
+                  Vous
+                </Badge>
+              ) : isSpeaking ? (
+                <Badge variant="default" className="bg-blue-600 animate-pulse text-xs h-5">
+                  <Volume2 className="w-3 h-3 mr-1" />
+                  Sophie
+                </Badge>
+              ) : (
+                <Badge variant="outline" className="text-xs h-5">
+                  <MicOff className="w-3 h-3 mr-1" />
+                  Pause
+                </Badge>
+              )}
+            </div>
+          )}
         </CardContent>
       </Card>
     );
@@ -368,13 +380,22 @@ export function SophieAgentsSDK({
         </div>
 
         {/* Status de connexion */}
+        <div className="flex items-center justify-between">
+          <Button size="sm" variant="ghost" onClick={() => setIsMinimized(true)}>
+            <Minimize2 className="w-4 h-4 mr-1" />
+            Réduire
+          </Button>
+          {onToggle && (
+            <Button size="sm" variant="ghost" onClick={onToggle}>
+              <PhoneOff className="w-4 h-4 mr-1" />
+              Fermer
+            </Button>
+          )}
+        </div>
+
         {isConnected && (
           <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Button size="sm" variant="ghost" onClick={() => setIsMinimized(true)}>
-                <Minimize2 className="w-4 h-4 mr-1" />
-                Réduire
-              </Button>
+            <div>
               <div className="text-center">
                 {isListening ? (
                   <Badge variant="default" className="bg-green-600">
