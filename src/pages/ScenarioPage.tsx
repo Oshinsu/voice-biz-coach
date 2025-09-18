@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useScenarios } from "@/hooks/useScenarios";
 import { useSalesStore } from "@/store/salesStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { StudentModeToggle } from "@/components/StudentModeToggle";
 import { SophieAgentsSDK } from "@/components/voice-agents";
 import { ScenarioDetails } from "@/components/ScenarioDetails";
 import { ScenarioSelector } from "@/components/ScenarioSelector";
@@ -14,6 +15,7 @@ export default function ScenarioPage() {
   const { scenarios, loading, error, getScenarioById } = useScenarios();
   const scenario = id ? getScenarioById(id) : null;
   const { setScenario } = useSalesStore();
+  const [isStudentMode, setIsStudentMode] = useState(true);
 
   useEffect(() => {
     if (scenario) {
@@ -65,7 +67,11 @@ export default function ScenarioPage() {
       <div className="container mx-auto px-6 py-6">
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Détails du scénario */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6">
+            <StudentModeToggle 
+              isStudentMode={isStudentMode} 
+              onToggle={setIsStudentMode} 
+            />
             <ScenarioDetails scenario={scenario} />
           </div>
           

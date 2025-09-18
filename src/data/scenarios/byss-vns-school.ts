@@ -16,9 +16,9 @@ export const byssVnsSchoolScenario: Scenario = {
     metrics: {
       studentsTotal: "2,800 étudiants tous programmes",
       rankingFT: "Top 15 écoles européennes Financial Times",
-      budgetPedagogie: "12M€/an innovations pédagogiques",
-      budgetIT: "3.2M€/an transformation digitale",
-      satisfactionEtudiants: "87% satisfaction pédagogie (objectif 92%)",
+      budgetPedagogie: "12 millions d'euros par an pour l'innovation pédagogique",
+      budgetIT: "3,2 millions d'euros par an pour la transformation numérique", 
+      satisfactionEtudiants: "87% de satisfaction étudiante (objectif: 92%)",
       employabilite: "96% placement 6 mois post-diplôme",
       budgetFormationCorp: "18M€/an corporate training",
       croissanceExecutive: "+22% programmes executive 2023",
@@ -53,9 +53,9 @@ export const byssVnsSchoolScenario: Scenario = {
     },
 
     painPoints: [
-      "Enseignement commercial théorique vs pratique terrain: 73% étudiants jugent formations vente/négociation 'trop académiques', manque expérience immersive face clients réels. Stages 6 mois = unique contact terrain, mais 2,800 étudiants pour 180 places qualitatives",
-      "Évaluation compétences soft skills impossible: négociation, persuasion, gestion objections non mesurables par examens écrits classiques. Professeurs frustrés: 'on forme théoriciens, pas praticiens'. Assessment center coûteux: 850€/étudiant, 2 fois/an maximum",
-      "Concurrence féroce écoles business: HEC, ESSEC, ESCP investissent massivement IA pédagogique. EDHEC perd ranking innovation (15ème vs 8ème 2019). Pression différentiation majeure avant renouvellement accreditations 2025",
+      "Formation trop théorique: 73% des étudiants trouvent les cours de vente trop académiques. Il manque de la pratique avec de vrais clients. Les stages de 6 mois sont la seule expérience terrain, mais il n'y a que 180 places de qualité pour 2 800 étudiants",
+      "Difficile d'évaluer les compétences humaines: négociation, persuasion, gestion des objections ne peuvent pas être mesurées avec des examens écrits. Les professeurs sont frustrés: 'nous formons des théoriciens, pas des praticiens'. Les tests pratiques coûtent 850€ par étudiant, seulement 2 fois par an",
+      "Concurrence des grandes écoles: HEC, ESSEC, ESCP investissent massivement dans l'intelligence artificielle pédagogique. EDHEC perd sa position innovation (15ème place vs 8ème en 2019). Pression importante avant le renouvellement des accréditations en 2025",
       "Corporate training déconnecté formations initiales: executive education utilise vrais business cases, étudiants Grande École ont cas d'école obsolètes. Clients corporate demandent cohérence programmes, menacent transfert formations vers concurrence",
       "Scaling impossible formations commerciales: 1 prof négociation pour 180 étudiants MSc International Business. Jeux de rôles limités: 2h/semestre/étudiant. Besoin 15h pratique minimum selon standards industry, impossible avec ressources actuelles",
       "ROI formation commerciale non mesurable: entreprises partenaires questionnent efficacité diplômés EDHEC vs autres écoles. Manque données probantes amélioration performance commerciale. Alumni DRH: 'recrutement basé réputation, pas preuves compétences'",
@@ -67,7 +67,7 @@ export const byssVnsSchoolScenario: Scenario = {
     
     currentSolution: "Patchwork pédagogique fragmenté: Cesim Business Simulations (text-based, 85k€/an) + Marketplace Simulations + jeux rôles manuels professeurs. Time investment: 12h/prof préparation simulations/semestre. Student experience: 2h practice/semester vs 15h standard industry. ROI measurement: impossible, aucune métrique objective skills progression. Technology gap: simulations 2015 vs attentes 2024 étudiants digital natives.",
     
-    budget: "12M€/an innovations pédagogiques - Investissement Byss VNS jusqu'à 300k€",
+    budget: "Budget innovation: 12 millions €/an - Projet Byss VNS: jusqu'à 300 000€",
     
     timeline: "Urgence stratégique 2024: renouvellement accreditations EQUIS/AACSB 2025 nécessite innovation pédagogique majeure. Deadline pilot programs: janvier 2024 pour évaluation mars-juin, déploiement septembre 2024 si concluant. Competition pressure: HEC lance 'IA Campus' février 2024.",
     

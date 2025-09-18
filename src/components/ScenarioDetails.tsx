@@ -31,6 +31,8 @@ import { MarketAnalysis } from './MarketAnalysis';
 import { ObjectionStrategy } from './ObjectionStrategy';
 import { ScenarioObjectives } from './ScenarioObjectives';
 import { ScenarioInitialInfo } from './ScenarioInitialInfo';
+import { Glossary } from './Glossary';
+import { SimplifiedPricing } from './SimplifiedPricing';
 
 interface ScenarioDetailsProps {
   scenario: {
@@ -135,14 +137,11 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
 
       {/* Detailed tabs */}
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
-          <TabsTrigger value="company">Entreprise</TabsTrigger>
-          <TabsTrigger value="contact">Contact</TabsTrigger>
-          <TabsTrigger value="product">Produit</TabsTrigger>
-          <TabsTrigger value="analysis">Analyses</TabsTrigger>
-          <TabsTrigger value="objectives">Objectifs</TabsTrigger>
-          <TabsTrigger value="objections">Objections</TabsTrigger>
+          <TabsTrigger value="company">École EDHEC</TabsTrigger>
+          <TabsTrigger value="product">Solution & Prix</TabsTrigger>
+          <TabsTrigger value="glossary">Glossaire</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -195,19 +194,19 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
               </div>
 
               <div>
-                <h4 className="font-semibold mb-3">Écosystème Technologique</h4>
+              <h4 className="font-semibold mb-3">Outils Informatiques Actuels</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                   <div className="p-3 border rounded-lg">
-                    <span className="font-medium">LMS:</span> Blackboard Learn Ultra + Microsoft Teams
+                    <span className="font-medium">Plateforme d'apprentissage:</span> Blackboard + Microsoft Teams
                   </div>
                   <div className="p-3 border rounded-lg">
-                    <span className="font-medium">Simulations:</span> Cesim + Marketplace (85k€/an)
+                    <span className="font-medium">Simulations actuelles:</span> Cesim + Marketplace (85 000€/an)
                   </div>
                   <div className="p-3 border rounded-lg">
-                    <span className="font-medium">Analytics:</span> Power BI + custom dashboards
+                    <span className="font-medium">Tableaux de bord:</span> Power BI + outils personnalisés
                   </div>
                   <div className="p-3 border rounded-lg">
-                    <span className="font-medium">Infrastructure:</span> Azure Education + on-premise
+                    <span className="font-medium">Serveurs:</span> Azure Education + serveurs internes
                   </div>
                 </div>
               </div>
@@ -564,6 +563,10 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
 
         <TabsContent value="objections" className="space-y-6">
           <ObjectionStrategy scenarioId={scenario.id} />
+        </TabsContent>
+
+        <TabsContent value="glossary" className="space-y-6">
+          <Glossary />
         </TabsContent>
       </Tabs>
     </div>

@@ -45,7 +45,7 @@ export function ByssHomepage() {
             <div className="text-left">
               <div className="inline-flex items-center gap-2 bg-primary-foreground/10 border border-primary-foreground/20 rounded-lg px-4 py-2 mb-8">
                 <Zap className="h-5 w-5 text-accent" />
-                <span className="text-sm font-medium text-accent">Powered by OpenAI GPT-4o Realtime</span>
+                <span className="text-sm font-medium text-accent">Intelligence Artificielle Conversationnelle</span>
               </div>
               
               <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
@@ -55,8 +55,8 @@ export function ByssHomepage() {
               </h1>
               
               <p className="text-xl text-primary-foreground/80 mb-8 max-w-2xl leading-relaxed">
-                Formez vos étudiants aux techniques de négociation commerciale avec notre simulateur vocal IA de pointe. 
-                Une technologie révolutionnaire pour l'enseignement commercial moderne.
+                Apprenez les techniques de négociation commerciale avec notre simulateur de conversation intelligent. 
+                Pratiquez vos ventes dans un environnement sécurisé et interactif.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mb-12">
@@ -76,7 +76,7 @@ export function ByssHomepage() {
               <div className="flex flex-wrap items-center gap-6 text-primary-foreground/80">
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-accent" />
-                  <span>IA vocale la plus avancée</span>
+                  <span>Conversations ultra-réalistes</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-accent" />
@@ -84,7 +84,7 @@ export function ByssHomepage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle className="h-5 w-5 text-accent" />
-                  <span>Analytics en temps réel</span>
+                  <span>Suivi de vos progrès</span>
                 </div>
               </div>
             </div>
@@ -173,8 +173,8 @@ export function ByssHomepage() {
                   </div>
                   <div className="w-2 h-2 bg-accent rounded-full"></div>
                 </div>
-                <div className="text-3xl font-bold mb-2 text-primary">85%</div>
-                <div className="text-sm text-muted-foreground font-medium">Taux de satisfaction étudiants</div>
+                <div className="text-3xl font-bold mb-2 text-primary">87%</div>
+                <div className="text-sm text-muted-foreground font-medium">Satisfaction étudiants EDHEC</div>
               </div>
             </div>
             
@@ -213,12 +213,12 @@ export function ByssHomepage() {
           <div className="text-center mb-16">
             <Badge className="mb-4 bg-accent text-primary">Technologie de pointe</Badge>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-6">
-              Propulsé par l'IA vocale<br />
-              <span className="text-accent">la plus avancée</span>
+              Technologie d'intelligence artificielle<br />
+              <span className="text-accent">conversationnelle</span>
             </h2>
             <p className="text-xl text-primary/80 max-w-3xl mx-auto">
-              Notre plateforme utilise OpenAI GPT-4o Realtime API, l'IA conversationnelle 
-              la plus sophistiquée disponible, pour des simulations ultra-réalistes.
+              Notre plateforme utilise une intelligence artificielle avancée pour créer 
+              des conversations réalistes et vous aider à progresser efficacement.
             </p>
           </div>
 
@@ -228,10 +228,10 @@ export function ByssHomepage() {
                 <div className="p-4 bg-accent/10 rounded-lg w-16 h-16 mx-auto mb-6 flex items-center justify-center">
                   <Brain className="h-8 w-8 text-accent" />
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-primary">IA Conversationnelle</h3>
+                <h3 className="text-xl font-bold mb-4 text-primary">Conversations Intelligentes</h3>
                 <p className="text-primary/80">
-                  Conversations vocales naturelles avec analyse en temps réel des émotions, 
-                  du ton et des techniques de négociation utilisées.
+                  Parlez naturellement avec un client virtuel qui s'adapte à vos réponses 
+                  et vous aide à améliorer vos techniques de vente.
                 </p>
               </CardContent>
             </Card>
@@ -241,10 +241,10 @@ export function ByssHomepage() {
                 <div className="p-4 bg-accent/10 rounded-lg w-16 h-16 mx-auto mb-6 flex items-center justify-center">
                   <BarChart3 className="h-8 w-8 text-accent" />
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-primary">Analytics Avancés</h3>
+                <h3 className="text-xl font-bold mb-4 text-primary">Suivi de Progression</h3>
                 <p className="text-primary/80">
-                  Tableaux de bord détaillés pour suivre les progrès des étudiants, 
-                  identifier les points d'amélioration et personnaliser l'enseignement.
+                  Visualisez vos progrès avec des graphiques simples et des conseils 
+                  personnalisés pour améliorer vos compétences commerciales.
                 </p>
               </CardContent>
             </Card>
@@ -254,10 +254,10 @@ export function ByssHomepage() {
                 <div className="p-4 bg-accent/10 rounded-lg w-16 h-16 mx-auto mb-6 flex items-center justify-center">
                   <GraduationCap className="h-8 w-8 text-accent" />
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-primary">Pédagogie Innovante</h3>
+                <h3 className="text-xl font-bold mb-4 text-primary">Apprentissage Pratique</h3>
                 <p className="text-primary/80">
-                  Méthodes d'apprentissage immersives basées sur la pratique, 
-                  adaptées aux programmes des écoles de commerce modernes.
+                  Apprenez en pratiquant directement avec des situations réelles 
+                  adaptées à votre niveau et vos objectifs pédagogiques.
                 </p>
               </CardContent>
             </Card>
