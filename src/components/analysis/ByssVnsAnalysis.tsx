@@ -13,10 +13,10 @@ interface ByssVnsAnalysisProps {
 
 export const ByssVnsAnalysis: React.FC<ByssVnsAnalysisProps> = ({ scenarioId }) => {
   const edhecMetrics = [
-    { name: 'Étudiants Total', value: '2,800', target: '3,000', progress: 93 },
-    { name: 'Satisfaction Pédagogie', value: '87%', target: '92%', progress: 94 },
-    { name: 'Budget Innovation', value: '12M€', target: '15M€', progress: 80 },
-    { name: 'Ranking Europe', value: '15ème', target: 'Top 10', progress: 60 }
+    { name: 'Étudiants Total', value: '9,000', target: '9,500', progress: 95 },
+    { name: 'Satisfaction Pédagogie', value: '82%', target: '87%', progress: 94 },
+    { name: 'Budget Innovation', value: '1.2M€', target: '1.5M€', progress: 80 },
+    { name: 'Ranking Mondial', value: '4ème', target: 'Top 3', progress: 85 }
   ];
 
   const painPoints = [
@@ -35,14 +35,14 @@ export const ByssVnsAnalysis: React.FC<ByssVnsAnalysisProps> = ({ scenarioId }) 
     {
       title: "Concurrence HEC/ESSEC",
       severity: "Critique", 
-      impact: "HEC lance IA Campus février 2024",
-      cost: "Risque déclassement ranking"
+      impact: "Pression maintenir leadership 4ème mondial FT",
+      cost: "Risque déclassement si innovation insuffisante"
     },
     {
       title: "Scaling Formations Commerciales",
       severity: "Majeur",
       impact: "1 prof négociation pour 180 étudiants MSc",
-      cost: "2h pratique/semestre vs 15h standard industry"
+      cost: "2h pratique/semestre vs 8h souhaité réellement"
     }
   ];
 
@@ -62,7 +62,7 @@ export const ByssVnsAnalysis: React.FC<ByssVnsAnalysisProps> = ({ scenarioId }) 
         "Métriques objectives compétences commerciales",
         "Progression trackée individuellement",
         "Reporting automatisé pour accreditations",
-        "Coût par étudiant divisé par 10 vs assessment centers"
+        "Coût par étudiant divisé par 8 vs assessment centers"
       ]
     },
     {
@@ -175,24 +175,24 @@ export const ByssVnsAnalysis: React.FC<ByssVnsAnalysisProps> = ({ scenarioId }) 
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-primary">300k€</div>
+              <div className="text-2xl font-bold text-primary">80k€</div>
               <div className="text-sm text-muted-foreground">
-                Budget Byss VNS<br />
-                (sur 12M€ innovations)
+                Budget Byss VNS Maximum<br />
+                (sur 1.2M€ innovations)
               </div>
             </div>
             <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-green-600">85k€</div>
+              <div className="text-2xl font-bold text-green-600">45k€</div>
               <div className="text-sm text-muted-foreground">
                 Économies vs Assessment Centers<br />
                 (première année)
               </div>
             </div>
             <div className="text-center space-y-2">
-              <div className="text-2xl font-bold text-blue-600">2,800</div>
+              <div className="text-2xl font-bold text-blue-600">9,000</div>
               <div className="text-sm text-muted-foreground">
                 Étudiants bénéficiaires<br />
-                (formations immersives)
+                (tous programmes)
               </div>
             </div>
           </div>

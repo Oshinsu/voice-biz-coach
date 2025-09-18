@@ -2,8 +2,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { TestButton } from "@/components/ui/test-button";
 import { MagicSpotlight } from "@/components/ui/magic-spotlight";
+import { ModernScenarioCard } from "@/components/ModernScenarioCard";
 import { EnhancedHeader } from "@/components/EnhancedHeader";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { 
   Building, Users, TrendingUp, Target, ArrowRight, 
   Star, MapPin, Calendar, DollarSign, Loader2, AlertCircle, Filter, Search, Brain
@@ -17,6 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 const Scenarios = () => {
   const { scenarios, loading, error } = useScenarios();
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState("all");
   const [sectorFilter, setSectorFilter] = useState("all");

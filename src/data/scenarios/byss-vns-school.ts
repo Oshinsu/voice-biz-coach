@@ -2,8 +2,8 @@ import { Scenario } from './types';
 
 export const byssVnsSchoolScenario: Scenario = {
   id: "byss-vns-school",
-  title: "Révolution Pédagogique IA",
-  description: "Vendre Byss VNS à EDHEC Business School pour transformer l'enseignement commercial avec notre simulateur vocal IA révolutionnaire",
+  title: "EDHEC Business School - 4ème Mondiale FT 2024",
+  description: "Révolution IA Pédagogique à l'EDHEC - 4ème école mondiale Financial Times. Vendre Byss VNS (80k€ max) pour transformer l'enseignement commercial avec notre simulateur vocal IA révolutionnaire. Leadership innovation pédagogique mondiale.",
   difficulty: "Difficile",
   probability: 75,
   company: {
@@ -15,7 +15,7 @@ export const byssVnsSchoolScenario: Scenario = {
     
     metrics: {
       studentsTotal: "9,000 étudiants tous programmes (Campus Lille: 4,000, Campus Nice: 3,000, autres: 2,000)",
-      rankingFT: "15ème école européenne Financial Times (4ème-5ème française après HEC, ESSEC, ESCP)",
+      rankingFT: "4ème mondiale Financial Times 2024 - 2ème française après HEC (Leadership Global Management)",
       budgetPedagogie: "1,2 million d'euros par an pour l'innovation pédagogique (0,75% budget total)",
       budgetIT: "500k€ par an pour la transformation numérique et infrastructure", 
       satisfactionEtudiants: "82% de satisfaction étudiante (objectif: 87%)",
@@ -55,11 +55,11 @@ export const byssVnsSchoolScenario: Scenario = {
     painPoints: [
       "Formation trop théorique: 68% des étudiants trouvent les cours de vente trop académiques. Manque de pratique terrain authentique. Les stages qualité difficiles à obtenir (ratio 1 place pour 5 candidats)",
       "Difficile d'évaluer les compétences humaines: négociation, persuasion, gestion des objections ne peuvent pas être mesurées objectivement. Les professeurs manquent d'outils d'évaluation moderne. Tests pratiques manuels chronophages",
-      "Concurrence des grandes écoles: HEC, ESSEC, ESCP investissent dans l'IA pédagogique. EDHEC maintient sa 15ème place européenne mais pression concurrentielle réelle avant renouvellement accréditations 2025",
+      "Concurrence des grandes écoles: HEC, ESSEC, ESCP investissent massivement dans l'IA pédagogique. EDHEC maintient sa 4ème place mondiale FT mais pression énorme pour rester leader innovation avant renouvellement accréditations 2025",
       "Corporate training déconnecté formations initiales: executive education utilise vrais business cases, étudiants Grande École ont cas d'école obsolètes. Clients corporate demandent cohérence programmes, menacent transfert formations vers concurrence",
       "Scaling formations commerciales difficile: ratio prof/étudiants élevé limite temps pratique. Jeux de rôles: 2h/semestre/étudiant vs 8h souhaité. Ressources limitées pour individualisation formation",
       "ROI formation commerciale difficile à prouver: entreprises partenaires attendent plus de preuves concrètes d'efficacité. Manque de métriques objectives progression compétences soft skills",
-      "Innovation pédagogique contrainte budget: learning lab 1M€/an mais 70% consommé plateformes existantes. Reste 300k€ nouveaux projets, frustration équipe innovation face aux limitations",
+      "Innovation pédagogique contrainte budget: learning lab 1,2M€/an mais 70% consommé plateformes existantes. Reste 500k€ nouveaux projets, projet Byss VNS limité 80k€ maximum",
       "Génération Z engagement faible: étudiants nés digital natives, attentes expériences immersives gaming/VR. Cours magistraux = désengagement progressif. Absentéisme +18% cours théoriques vs +3% cours pratiques/workshops",
       "International students satisfaction: 35% étudiants étrangers, barrière langue française pour simulations commerciales. Besoin outils universels, simulation multilingue. Risque: perte attractivité internationale = -15% revenus",
       "Partenariats corporate menacés: 180 entreprises partenaires exigent étudiants 'job-ready' dès stage. Feedback négatif soft skills: -22% offres stages qualitatives 2023 vs 2022. Cercle vicieux: moins stages qualité = moins expérience = moins employabilité"
@@ -67,7 +67,7 @@ export const byssVnsSchoolScenario: Scenario = {
     
     currentSolution: "Patchwork pédagogique fragmenté: Cesim Business Simulations (text-based, 85k€/an) + Marketplace Simulations + jeux rôles manuels professeurs. Time investment: 12h/prof préparation simulations/semestre. Student experience: 2h practice/semester vs 15h standard industry. ROI measurement: impossible, aucune métrique objective skills progression. Technology gap: simulations 2015 vs attentes 2024 étudiants digital natives.",
     
-    budget: "Budget innovation pédagogique: 1,2 million €/an - Projet Byss VNS: jusqu'à 80 000€",
+    budget: "Budget innovation pédagogique: 1,2 million €/an - Projet Byss VNS: jusqu'à 80 000€ maximum",
     
     timeline: "Urgence stratégique 2024: renouvellement accreditations EQUIS/AACSB 2025 nécessite innovation pédagogique majeure. Deadline pilot programs: janvier 2024 pour évaluation mars-juin, déploiement septembre 2024 si concluant. Competition pressure: HEC lance 'IA Campus' février 2024.",
     
@@ -129,11 +129,11 @@ export const byssVnsSchoolScenario: Scenario = {
     
     communicationStyle: "Communication énergique et passionnée, parle rapidement avec enthousiasme débordant pour innovations pédagogiques. Vocabulaire technique EdTech mélangé expressions françaises traditionnelles. Interruptions fréquentes pour poser questions précises ou challenger assumptions. Adore démonstrations interactives, déteste présentations PowerPoint statiques. Prend notes manuscrites structurées iPad avec couleurs différentes par concept. Body language expressif: gestes larges, contact visuel intense, penche vers avant quand intéressée. Expressions favorites: 'Quel impact learning outcomes?', 'Students first!', 'ROI pédagogique mesurable?'",
     
-    decisionPower: "Décisionnaire opérationnel budget innovations 1M€/an. Décision autonome jusqu'à 50k€. Co-décision avec Directeur Général >50k€ (validation 48h). Influence majeure: choix plateformes apprentissage, méthodes pédagogiques, partenariats EdTech. Sponsor projects pilotes, évaluation solutions, roadmap innovation. Veto pédagogique: bloque outils sans valeur éducative prouvée.",
+    decisionPower: "Décisionnaire opérationnel budget innovations 1,2M€/an. Décision autonome jusqu'à 50k€. Co-décision avec Directeur Général >50k€ (validation 48h). Projet Byss VNS 80k€ maximum nécessite validation DG. Influence majeure: choix plateformes apprentissage, méthodes pédagogiques, partenariats EdTech. Sponsor projects pilotes, évaluation solutions, roadmap innovation. Veto pédagogique: bloque outils sans valeur éducative prouvée.",
     
     priorities: [
       "Amélioration satisfaction étudiants: objectif 82%→87% via innovations pédagogiques immersives, expériences learning engaging, feedback temps réel",
-      "Différentiation concurrentielle: innover avant HEC/ESSEC, créer avantage pédagogique unique, maintenir ranking Top 15 Europe minimum",
+      "Différentiation concurrentielle: maintenir leadership 4ème mondial FT, innover avant concurrence, créer avantage pédagogique unique face à HEC/ESSEC",
       "ROI innovations mesurable: justifier budget 1M€/an learning lab, prouver impact learning outcomes, démontrer valeur ajoutée quantifiable",
       "Préparation accreditations 2025: renouvellement EQUIS/AACSB nécessite innovations majeures, excellence pédagogique démontrée, satisfaction stakeholders",
       "Scaling formations pratiques: industrialiser apprentissage compétences soft skills, multiplier heures practice sans explosion ressources professorales",
@@ -145,7 +145,7 @@ export const byssVnsSchoolScenario: Scenario = {
       "Adoption professeurs résistants: corps professoral traditionnel, résistance changement pédagogique, formation nécessaire mais chronophage",
       "ROI non prouvé: investissements EdTech passés sans impact mesurable, scepticisme direction générale, pression résultats quantifiables",
       "Complexité technique intégration: écosystème IT complexe EDHEC, intégrations multiples, risque disruption programmes en cours",
-      "Budget learning lab serré: 700k€ déjà alloués plateformes existantes, reste 300k€ nouveaux projects vs besoins réels",
+      "Budget learning lab serré: 700k€ déjà alloués plateformes existantes, reste 500k€ nouveaux projects, projet Byss VNS 80k€ maximum",
       "Timeline accreditations: deadline mars 2025, besoin pilots concluants avant évaluation, pression timing énorme",
       "Student privacy & RGPD: données étudiants sensibles, conformité stricte, audit trail conversations Byss VNS obligatoire",
       "Concurrence aggressive: HEC lance IA Campus février 2024, ESSEC investit 2M€ EdTech, course innovation intensifiée"
@@ -250,13 +250,13 @@ export const byssVnsSchoolScenario: Scenario = {
   objectives: [
     "Convaincre EDHEC investir dans innovation pédagogique IA pour améliorer différentiation concurrentielle",
     "Démontrer ROI Byss VNS: +5pts satisfaction étudiants (82%→87%), maintien placement 94%, amélioration ranking",
-    "Obtenir pilote 6 mois sur MSc International Business (300 étudiants) budget 50-80k€",
+    "Obtenir pilote 6 mois sur MSc International Business (200-300 étudiants) budget 50-80k€ maximum",
     "Valider intégration écosystème technique EDHEC + conformité RGPD éducation",
     "Sécuriser sponsorship Sophie Hennion-Moreau + validation Directeur Général Emmanuel Métais"
   ],
   
-  salesGoal: "Signature contrat Professional 18k€ (12 mois × 1,499€/mois) pour déploiement pilote puis extension",
-  expectedRevenue: "18,000€",
+  salesGoal: "Signature contrat Professional 60k€ (12 mois × 5k€/mois maximum) pour déploiement pilote réaliste",
+  expectedRevenue: "60,000€",
   
   swot: {
     strengths: [
@@ -285,7 +285,7 @@ export const byssVnsSchoolScenario: Scenario = {
       "Concurrents établis: Cesim, Marketplace Simulations, budgets millions",
       "OpenAI direct: risque développement solution éducation propre",
       "Adoption professeurs: résistance changement, formation nécessaire",
-      "Budget learning lab serré: 300k€ disponibles pour nouveaux projets",
+      "Budget learning lab serré: 500k€ disponibles pour nouveaux projets, projet Byss VNS 80k€ maximum représente 16% budget",
       "Réglementation RGPD: complexité compliance données étudiants"
     ]
   },

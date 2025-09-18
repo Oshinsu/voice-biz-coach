@@ -13,26 +13,26 @@ export interface Persona {
 
 export const personas: Persona[] = [
   {
-    id: "sophie-martin",
-    title: "Sophie Hennion-Moreau - EDHEC",
-    sector: "Enseignement Supérieur",
-    companySize: "2800 étudiants, 180 professeurs",
-    budget: "12M€/an innovations pédagogiques",
+    id: "sophie-hennion-moreau",
+    title: "Sophie Hennion-Moreau - EDHEC (4ème Mondiale FT)",
+    sector: "Enseignement Supérieur Business Schools",
+    companySize: "9,000 étudiants, 350 professeurs",
+    budget: "1.2M€/an innovations pédagogiques (80k€ max projet Byss VNS)",
     painPoints: [
-      "Enseignement commercial théorique vs pratique terrain",
-      "Évaluation compétences soft skills impossible",
-      "Concurrence féroce écoles business (HEC, ESSEC)",
-      "Scaling impossible formations commerciales"
+      "Enseignement commercial théorique vs pratique terrain (73% étudiants insatisfaits)",
+      "Évaluation compétences soft skills impossible objectivement", 
+      "Concurrence féroce: maintenir leadership 4ème mondial vs HEC/ESSEC",
+      "Scaling impossible formations commerciales (2h→8h pratique souhaité)"
     ],
     priorities: [
-      "Innovation pédagogique IA",
-      "ROI mesurable",
-      "Différentiation concurrentielle",
-      "Engagement étudiant +25%"
+      "Innovation pédagogique IA différenciante",
+      "ROI mesurable sur learning outcomes",
+      "Maintenir leadership 4ème mondial FT 2024",
+      "Engagement étudiant +5pts (82%→87%)"
     ],
-    decisionProcess: "Analyse pédagogique poussée, validation ROI",
-    objectionStyle: "Exigeante, focus impact learning outcomes",
-    communicationStyle: "Énergique, vocabulaire EdTech, questions précises"
+    decisionProcess: "Analyse pédagogique rigoureuse, validation ROI quantifiable, sponsorship DG >50k€",
+    objectionStyle: "Exigeante metrics, focus impact learning outcomes mesurable",
+    communicationStyle: "Énergique, vocabulaire EdTech expert, questions précises ROI"
   }
 ];
 
