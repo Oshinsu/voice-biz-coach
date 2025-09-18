@@ -3,7 +3,7 @@ import { Package } from 'lucide-react';
 import { Product } from '@/hooks/useScenarios';
 import { AnalysisSection } from './analysis/AnalysisSection';
 import { UnifiedScenarioAnalysis } from './scenario-engine/UnifiedScenarioAnalysis';
-import { MarketingToolsDashboard } from './marketing/MarketingToolsDashboard';
+// import { MarketingToolsDashboard } from './marketing/MarketingToolsDashboard'; // Consolidated
 
 interface ProductAnalysisProps {
   products?: Product[];
@@ -21,7 +21,11 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({
   if (!mainProduct) {
     return (
       <div className="space-y-6">
-        <MarketingToolsDashboard scenarioId={scenarioId} productSwot={productSwot} />
+        <div className="p-6 text-center">
+          <p className="text-muted-foreground">
+            Analyse produit consolidée dans le nouveau système unifié
+          </p>
+        </div>
       </div>
     );
   }
@@ -38,8 +42,12 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({
         </div>
       </AnalysisSection>
 
-      {/* Marketing Tools Dashboard */}
-      <MarketingToolsDashboard scenarioId={scenarioId} productSwot={productSwot} />
+      {/* Marketing Tools Dashboard - Consolidated */}
+      <div className="p-6 text-center">
+        <p className="text-muted-foreground">
+          Outils marketing consolidés dans le nouveau système unifié
+        </p>
+      </div>
     </div>
   );
 };

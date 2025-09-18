@@ -7,7 +7,7 @@ import { useSalesStore } from "@/store/salesStore";
 import { useEffect, useState } from "react";
 import { StudentModeToggle } from "@/components/StudentModeToggle";
 import { SophieAgentsSDK } from "@/components/voice-agents";
-import { ModernScenarioDetails } from "@/components/ModernScenarioDetails";
+import { ScenarioFactory } from "@/components/scenario-engine/ScenarioFactory";
 import { ScenarioSelector } from "@/components/ScenarioSelector";
 
 export default function ScenarioPage() {
@@ -72,7 +72,11 @@ export default function ScenarioPage() {
               isStudentMode={isStudentMode} 
               onToggle={setIsStudentMode} 
             />
-            <ModernScenarioDetails scenario={scenario} />
+            <ScenarioFactory 
+              scenario={scenario} 
+              componentType="layout"
+              onStartSession={() => {/* Handle session start */}}
+            />
           </div>
           
           {/* Sélecteur de configuration */}

@@ -1,75 +1,32 @@
 import React from 'react';
 import { Scenario } from '@/data/scenarios/types';
-import { UnifiedScenarioAnalysis } from './UnifiedScenarioAnalysis';
+import { ScenarioFactory } from './ScenarioFactory';
 
 interface ScenarioEngineProps {
   scenario: Scenario;
   componentType: 'analysis' | 'details' | 'selector' | 'overview';
   variant?: 'market' | 'product' | 'marketing' | 'comprehensive';
+  onStartSession?: () => void;
 }
 
 /**
- * Factory Pattern pour composants scénario-spécifiques
- * Centralise la logique de rendu des différents types de composants
+ * @deprecated Use ScenarioFactory instead
+ * Wrapper pour compatibilité descendante
  */
 export const ScenarioEngine: React.FC<ScenarioEngineProps> = ({
   scenario,
   componentType,
-  variant = 'comprehensive'
+  variant = 'comprehensive',
+  onStartSession
 }) => {
   
-  const renderComponent = () => {
-    switch (componentType) {
-      case 'analysis':
-        return (
-          <UnifiedScenarioAnalysis 
-            scenario={scenario}
-            analysisType={variant as 'market' | 'product' | 'marketing' | 'comprehensive'}
-          />
-        );
-      
-      case 'details':
-        // Future: ScenarioDetailsModern component
-        return <div>Détails du scénario (à implémenter)</div>;
-      
-      case 'selector':
-        // Future: ScenarioSelectorModern component  
-        return <div>Sélecteur de scénario (à implémenter)</div>;
-      
-      case 'overview':
-        // Future: ScenarioOverview component
-        return <div>Vue d'ensemble (à implémenter)</div>;
-      
-      default:
-        return <div>Type de composant non supporté</div>;
-    }
-  };
-
-  // Configuration spécifique par scénario
-  const getScenarioConfig = (scenarioId: string) => {
-    switch (scenarioId) {
-      case 'byss-vns-school':
-        return {
-          theme: 'education',
-          primaryColor: 'blue',
-          features: ['voice-ai', 'realtime', 'analytics']
-        };
-      
-      default:
-        return {
-          theme: 'default',
-          primaryColor: 'primary',
-          features: []
-        };
-    }
-  };
-
-  const config = getScenarioConfig(scenario.id);
-
   return (
-    <div className={`scenario-engine theme-${config.theme}`}>
-      {renderComponent()}
-    </div>
+    <ScenarioFactory
+      scenario={scenario}
+      componentType={componentType === 'analysis' ? 'layout' : componentType}
+      variant={variant}
+      onStartSession={onStartSession}
+    />
   );
 };
 

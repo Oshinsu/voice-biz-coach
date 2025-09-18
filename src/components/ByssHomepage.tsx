@@ -8,7 +8,7 @@ import { MagicSpotlight } from "@/components/ui/magic-spotlight";
 import { useScenarios } from "@/hooks/useScenarios";
 import { EnhancedHeader } from "./EnhancedHeader";
 import { EnhancedStats } from "./EnhancedStats";
-import { TrustElements } from "./TrustElements";
+import { ConsolidatedTrustSection } from "./ConsolidatedTrustSection";
 import { motion } from "framer-motion";
 
 export function ByssHomepage() {
@@ -435,7 +435,7 @@ export function ByssHomepage() {
       </section>
 
       {/* Trust Elements */}
-      <TrustElements />
+      <ConsolidatedTrustSection />
 
       {/* Pricing Section Premium - Ultra Moderne */}
       <section className="py-20 px-6 bg-gradient-to-br from-primary via-primary/95 to-primary/90 relative overflow-hidden">
