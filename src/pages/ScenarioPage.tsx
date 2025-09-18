@@ -7,6 +7,7 @@ import { useSalesStore } from "@/store/salesStore";
 import { useEffect } from "react";
 import { SophieAgentsSDK } from "@/components/voice-agents";
 import { ScenarioDetails } from "@/components/ScenarioDetails";
+import { ByssVnsOverview } from "@/components/ByssVnsOverview";
 
 export default function ScenarioPage() {
   const { id } = useParams();
@@ -62,16 +63,27 @@ export default function ScenarioPage() {
 
       {/* Contenu principal avec ScenarioDetails */}
       <div className="container mx-auto px-6 py-6">
-        <ScenarioDetails scenario={scenario} />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <ScenarioDetails scenario={scenario} />
+          
+          {/* Byss VNS Overview intégré */}
+          {scenario.id === 'byss-vns-school' && (
+            <div>
+              <ByssVnsOverview scenarioId={scenario.id} />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Voice Navigation System (VNS) - Système réel */}
       {scenario.id === 'byss-vns-school' && (
-        <SophieAgentsSDK 
-          conversationType="rdv"
-          open={true}
-          onToggle={() => {}}
-        />
+        <div className="fixed bottom-4 right-4 z-50">
+          <SophieAgentsSDK 
+            conversationType="rdv"
+            open={false}
+            onToggle={() => {}}
+          />
+        </div>
       )}
     </div>
   );

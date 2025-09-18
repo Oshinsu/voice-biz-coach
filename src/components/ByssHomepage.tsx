@@ -292,10 +292,10 @@ export function ByssHomepage() {
                     <Star className="h-4 w-4 text-accent" />
                     <span className="text-sm font-medium text-accent">Solution Premium</span>
                   </div>
-                  <div className="text-6xl font-bold text-primary mb-2">
-                    749€
+                <div className="text-6xl font-bold text-primary mb-2">
+                    3,000€
                   </div>
-                  <div className="text-lg text-primary/80">par mois</div>
+                  <div className="text-lg text-primary/80">par an</div>
                   <div className="text-sm text-primary/60 mt-2">+ coûts API OpenAI variables</div>
                 </div>
                 
