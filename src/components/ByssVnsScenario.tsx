@@ -31,20 +31,31 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1
+      duration: 0.2,
+      staggerChildren: 0.03
     }
   }
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 }
+  hidden: { opacity: 0, y: 8 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      duration: 0.2
+    }
+  }
 };
 
 export const ByssVnsScenario: React.FC<ByssVnsScenarioProps> = ({ onStartSession }) => {
   const { getScenarioById } = useScenarios();
   const scenario = getScenarioById('byss-vns-school');
   const [showVoiceAgent, setShowVoiceAgent] = useState(false);
+
+  // Debug logging pour vérifier les données
+  console.log('Scenario data:', scenario);
+  console.log('Pain points:', scenario?.company?.painPoints);
 
   if (!scenario) {
     return (
@@ -64,7 +75,7 @@ export const ByssVnsScenario: React.FC<ByssVnsScenarioProps> = ({ onStartSession
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="space-y-6"
+      className="space-y-6 min-h-screen"
     >
       {/* Section 1: Vue d'ensemble EDHEC */}
       <motion.div variants={itemVariants}>
@@ -152,18 +163,22 @@ export const ByssVnsScenario: React.FC<ByssVnsScenarioProps> = ({ onStartSession
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4">
-                  {scenario.company.painPoints.slice(0, 4).map((pain, index) => (
+                  {scenario.company.painPoints?.slice(0, 4).map((pain, index) => (
                     <motion.div
                       key={index}
-                      initial={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, x: -8 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.1 }}
+                      transition={{ delay: index * 0.03, duration: 0.2 }}
                       className="flex items-start gap-3 p-4 rounded-lg bg-destructive/5 border border-destructive/20"
                     >
                       <div className="w-2 h-2 rounded-full bg-destructive mt-2 flex-shrink-0" />
                       <p className="text-sm leading-relaxed">{pain}</p>
                     </motion.div>
-                  ))}
+                  )) || (
+                    <div className="text-center text-muted-foreground">
+                      <p>Aucun pain point disponible</p>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
