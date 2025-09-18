@@ -164,13 +164,15 @@ export const ScenarioSelector = () => {
                         <p className="text-sm text-muted-foreground">
                           {scenario.description}
                         </p>
-                        <div className="flex flex-wrap gap-1">
-                          {scenario.available_tools.map((tool) => (
-                            <Badge key={tool} variant="secondary" className="text-xs">
-                              {tool.replace('_', ' ')}
-                            </Badge>
-                          ))}
-                        </div>
+                        {scenario.tools && scenario.tools.length > 0 && (
+                          <div className="flex flex-wrap gap-1">
+                            {scenario.tools.map((tool, index) => (
+                              <Badge key={index} variant="secondary" className="text-xs">
+                                {tool}
+                              </Badge>
+                            ))}
+                          </div>
+                        )}
                       </div>
                   ) : null;
                 })()}
