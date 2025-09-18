@@ -2,7 +2,9 @@ import { ArrowRight, Brain, Users, Target, Award, CheckCircle, Linkedin, Mail } 
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { TestButton } from "@/components/ui/test-button";
+import { MagicSpotlight } from "@/components/ui/magic-spotlight";
+import { motion } from "framer-motion";
 
 export default function About() {
   const team = [
@@ -75,130 +77,299 @@ export default function About() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header Navigation */}
+      {/* Header Navigation Ultra-Premium */}
       <header className="fixed top-0 w-full z-50 bg-background/90 backdrop-blur-lg border-b border-border">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="p-2 bg-accent rounded-lg">
-              <Brain className="h-6 w-6 text-accent-foreground" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-foreground">Byss VNS</h1>
-              <p className="text-xs text-muted-foreground">Virtual Negotiation Simulator</p>
-            </div>
-          </Link>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <Link to="/" className="flex items-center gap-3 group">
+              <motion.div 
+                className="p-2 bg-accent rounded-lg"
+                whileHover={{ scale: 1.1, rotate: 10 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Brain className="h-6 w-6 text-accent-foreground" />
+              </motion.div>
+              <div>
+                <h1 className="text-xl font-bold text-foreground group-hover:text-accent transition-colors duration-300">Byss VNS</h1>
+                <p className="text-xs text-muted-foreground">Virtual Negotiation Simulator</p>
+              </div>
+            </Link>
+          </motion.div>
           
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/" className="text-muted-foreground hover:text-accent transition-colors">Accueil</Link>
-            <Link to="/services" className="text-muted-foreground hover:text-accent transition-colors">Services</Link>
-            <Link to="/about" className="text-accent font-medium">Qui sommes-nous</Link>
-            <Link to="/contact" className="text-muted-foreground hover:text-accent transition-colors">Contact</Link>
+            {[
+              { to: "/", label: "Accueil" },
+              { to: "/services", label: "Services" },
+              { to: "/about", label: "Qui sommes-nous", active: true },
+              { to: "/contact", label: "Contact" }
+            ].map((item, index) => (
+              <motion.div
+                key={item.to}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + index * 0.1 }}
+              >
+                <Link 
+                  to={item.to} 
+                  className={`${item.active ? 'text-accent font-medium' : 'text-muted-foreground hover:text-accent'} transition-colors duration-300 relative group`}
+                >
+                  {item.label}
+                  {item.active && (
+                    <motion.div 
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent rounded-full"
+                      layoutId="activeTab"
+                    />
+                  )}
+                </Link>
+              </motion.div>
+            ))}
           </nav>
 
-          <div className="flex items-center gap-4">
-            <Button variant="outline" asChild>
+          <motion.div 
+            className="flex items-center gap-4"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <TestButton variant="outline" asChild>
               <Link to="/auth">Connexion</Link>
-            </Button>
-            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
+            </TestButton>
+            <TestButton variant="magic" asChild>
               <Link to="/auth">Essai gratuit</Link>
-            </Button>
-          </div>
+            </TestButton>
+          </motion.div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6 bg-primary">
-        <div className="max-w-7xl mx-auto">
+      {/* Hero Section Spectaculaire */}
+      <section className="pt-32 pb-20 px-6 bg-gradient-to-br from-primary via-primary/95 to-primary/90 relative overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div 
+            className="absolute -top-1/2 -left-1/4 w-full h-full bg-gradient-to-br from-accent/30 via-transparent to-transparent rounded-full blur-3xl"
+            animate={{ 
+              rotate: 360,
+              scale: [1, 1.2, 1],
+              x: [0, 50, 0]
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.div 
+            className="absolute -bottom-1/2 -right-1/4 w-full h-full bg-gradient-to-tl from-accent/20 via-transparent to-transparent rounded-full blur-3xl"
+            animate={{ 
+              rotate: -360,
+              scale: [1, 1.3, 1],
+              y: [0, -30, 0]
+            }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
+        
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <Badge className="mb-6 bg-secondary text-accent">Notre Mission</Badge>
-               <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight">
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+              >
+                <Badge className="mb-6 bg-secondary text-accent backdrop-blur-sm border border-accent/30">Notre Mission</Badge>
+              </motion.div>
+               <motion.h1 
+                 className="text-5xl md:text-6xl font-bold text-primary-foreground mb-6 leading-tight"
+                 initial={{ opacity: 0, y: 30 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ duration: 0.8, delay: 0.4 }}
+               >
                  L'Alliance de l'Innovation
-                 <span className="text-accent block">et de la Formation</span>
-               </h1>
-               <p className="text-xl text-primary-foreground/80 mb-8 leading-relaxed">
+                 <motion.span 
+                   className="text-accent block drop-shadow-lg"
+                   initial={{ opacity: 0, x: -30 }}
+                   animate={{ opacity: 1, x: 0 }}
+                   transition={{ duration: 0.8, delay: 0.8 }}
+                 >
+                   et de la Formation
+                 </motion.span>
+               </motion.h1>
+               <motion.p 
+                 className="text-xl text-primary-foreground/80 mb-8 leading-relaxed"
+                 initial={{ opacity: 0, y: 20 }}
+                 animate={{ opacity: 1, y: 0 }}
+                 transition={{ duration: 0.6, delay: 0.6 }}
+               >
                  Byss Agency et Metora s'unissent pour créer Byss VNS : le premier simulateur vocal 
                  de négociation commerciale alimenté par l'IA GPT-4o Realtime. Une révolution 
                  technologique au service de l'excellence pédagogique.
-               </p>
+               </motion.p>
               
-              <div className="grid grid-cols-2 gap-6">
-                 <div className="text-center">
-                   <div className="text-4xl font-bold text-accent mb-2">2</div>
-                   <div className="text-sm text-primary-foreground/60">Entreprises partenaires</div>
-                 </div>
-                 <div className="text-center">
-                   <div className="text-4xl font-bold text-accent mb-2">1</div>
-                   <div className="text-sm text-primary-foreground/60">Produit révolutionnaire</div>
-                 </div>
-              </div>
-            </div>
+              <motion.div 
+                className="grid grid-cols-2 gap-6"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.0 }}
+              >
+                 {[
+                   { value: "2", label: "Entreprises partenaires" },
+                   { value: "1", label: "Produit révolutionnaire" }
+                 ].map((stat, index) => (
+                   <motion.div 
+                     key={stat.label}
+                     className="text-center"
+                     initial={{ scale: 0 }}
+                     animate={{ scale: 1 }}
+                     transition={{ delay: 1.2 + index * 0.2, type: "spring", stiffness: 200 }}
+                     whileHover={{ scale: 1.05 }}
+                   >
+                     <motion.div 
+                       className="text-4xl font-bold text-accent mb-2"
+                       animate={{ scale: [1, 1.1, 1] }}
+                       transition={{ duration: 2, repeat: Infinity, delay: index * 0.5 }}
+                     >
+                       {stat.value}
+                     </motion.div>
+                     <div className="text-sm text-primary-foreground/60">{stat.label}</div>
+                   </motion.div>
+                 ))}
+              </motion.div>
+            </motion.div>
 
-            <div className="relative">
-              <Card className="bg-card border border-border shadow-lg">
-                <CardContent className="p-8">
-                  <h3 className="text-2xl font-bold mb-6 text-center text-foreground">Notre Vision</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-3">
-                      <CheckCircle className="h-6 w-6 text-success mt-1 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-semibold mb-1 text-foreground">Innovation Permanente</h4>
-                        <p className="text-sm text-muted-foreground">
-                          Intégrer les dernières avancées en IA pour des expériences toujours plus réalistes
-                        </p>
-                      </div>
+            <motion.div 
+              className="relative"
+              initial={{ opacity: 0, x: 50, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
+              <MagicSpotlight className="w-full">
+                <Card className="bg-card/90 backdrop-blur-lg border border-border/50 shadow-2xl">
+                  <CardContent className="p-8">
+                    <motion.h3 
+                      className="text-2xl font-bold mb-6 text-center text-foreground"
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.8 }}
+                    >
+                      Notre Vision
+                    </motion.h3>
+                    <div className="space-y-4">
+                      {[
+                        {
+                          title: "Innovation Permanente",
+                          description: "Intégrer les dernières avancées en IA pour des expériences toujours plus réalistes",
+                          delay: 0
+                        },
+                        {
+                          title: "Accessibilité Universelle",
+                          description: "Démocratiser l'accès à une formation commerciale de qualité pour tous",
+                          delay: 0.1
+                        },
+                        {
+                          title: "Impact Mesurable",
+                          description: "Créer des outils qui génèrent des résultats concrets et durables",
+                          delay: 0.2
+                        }
+                      ].map((item, index) => (
+                        <motion.div 
+                          key={item.title}
+                          className="flex items-start gap-3 group"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 1.0 + item.delay }}
+                          whileHover={{ scale: 1.02 }}
+                        >
+                          <motion.div
+                            whileHover={{ scale: 1.2, rotate: 360 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <CheckCircle className="h-6 w-6 text-success mt-1 flex-shrink-0 group-hover:text-accent transition-colors duration-300" />
+                          </motion.div>
+                          <div>
+                            <h4 className="font-semibold mb-1 text-foreground group-hover:text-accent transition-colors duration-300">{item.title}</h4>
+                            <p className="text-sm text-muted-foreground">
+                              {item.description}
+                            </p>
+                          </div>
+                        </motion.div>
+                      ))}
                     </div>
-                    <div className="flex items-start gap-3">
-                      <CheckCircle className="h-6 w-6 text-success mt-1 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-semibold mb-1 text-foreground">Accessibilité Universelle</h4>
-                        <p className="text-sm text-muted-foreground">
-                          Démocratiser l'accès à une formation commerciale de qualité pour tous
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
-                      <CheckCircle className="h-6 w-6 text-success mt-1 flex-shrink-0" />
-                      <div>
-                        <h4 className="font-semibold mb-1 text-foreground">Impact Mesurable</h4>
-                        <p className="text-sm text-muted-foreground">
-                          Créer des outils qui génèrent des résultats concrets et durables
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                  </CardContent>
+                </Card>
+              </MagicSpotlight>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="py-20 px-6 bg-background">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+      {/* Values Section Interactive */}
+      <section className="py-20 px-6 bg-gradient-to-br from-background via-background/95 to-background/90 relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 overflow-hidden opacity-30">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <h2 className="text-4xl font-bold text-foreground mb-4">
               Nos Valeurs Fondamentales
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Les principes qui guident chacune de nos décisions et innovations
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((value, index) => (
-              <Card key={index} className="text-center group hover:shadow-xl transition-all duration-300 bg-card border border-border">
-                <CardContent className="p-6">
-                  <div className="p-4 bg-secondary rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center">
-                    <value.icon className="h-8 w-8 text-accent" />
-                  </div>
-                  <h3 className="text-lg font-bold mb-3 text-foreground">{value.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {value.description}
-                  </p>
-                </CardContent>
-              </Card>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <MagicSpotlight>
+                  <Card className="text-center group hover:shadow-2xl transition-all duration-500 bg-card/90 backdrop-blur-sm border border-border/50 h-full">
+                    <CardContent className="p-6">
+                      <motion.div 
+                        className="p-4 bg-secondary rounded-full w-16 h-16 mx-auto mb-6 flex items-center justify-center group-hover:bg-accent/20 transition-all duration-300"
+                        whileHover={{ scale: 1.2, rotate: 10 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <motion.div
+                          animate={{ 
+                            rotate: [0, 5, -5, 0],
+                            scale: [1, 1.05, 1]
+                          }}
+                          transition={{ 
+                            duration: 4, 
+                            repeat: Infinity,
+                            delay: index * 0.5
+                          }}
+                        >
+                          <value.icon className="h-8 w-8 text-accent group-hover:text-primary transition-colors duration-300" />
+                        </motion.div>
+                      </motion.div>
+                      <h3 className="text-lg font-bold mb-3 text-foreground group-hover:text-accent transition-colors duration-300">{value.title}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {value.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </MagicSpotlight>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -367,21 +538,60 @@ export default function About() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-6 bg-primary">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
+      {/* CTA Section Spectaculaire */}
+      <section className="py-20 px-6 bg-gradient-to-br from-primary via-primary/95 to-primary/90 relative overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div 
+            className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-accent/10 via-transparent to-transparent"
+            animate={{ opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+          <motion.div 
+            className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-accent/20 via-transparent to-transparent rounded-full blur-3xl"
+            animate={{ rotate: 360, scale: [1, 1.2, 1] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
+        
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <motion.h2 
+            className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
             Rejoignez l'Innovation Pédagogique
-          </h2>
-          <p className="text-xl text-primary-foreground/80 mb-8">
+          </motion.h2>
+          <motion.p 
+            className="text-xl text-primary-foreground/80 mb-8"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             Découvrez comment Byss VNS peut transformer l'expérience d'apprentissage 
             dans votre établissement
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8 py-4">
-              Planifier une rencontre
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+          </motion.p>
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <TestButton variant="magic" size="lg" className="text-lg px-8 py-4" asChild>
+                <Link to="/contact">
+                  Planifier une rencontre
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </TestButton>
+            </motion.div>
             <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary text-lg px-8 py-4">
               En savoir plus
             </Button>
