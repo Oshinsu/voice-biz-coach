@@ -445,14 +445,14 @@ export default function About() {
                     {member.description}
                   </p>
                   
-                  <div className="flex justify-center gap-2">
-                    <Button size="sm" variant="outline" className="p-2">
-                      <Linkedin className="h-4 w-4" />
-                    </Button>
-                    <Button size="sm" variant="outline" className="p-2">
-                      <Mail className="h-4 w-4" />
-                    </Button>
-                  </div>
+                   <div className="flex justify-center gap-2">
+                     <TestButton size="sm" variant="outline" className="p-2">
+                       <Linkedin className="h-4 w-4" />
+                     </TestButton>
+                     <TestButton size="sm" variant="outline" className="p-2">
+                       <Mail className="h-4 w-4" />
+                     </TestButton>
+                   </div>
                 </CardContent>
               </Card>
             ))}
@@ -574,30 +574,37 @@ export default function About() {
             Découvrez comment Byss VNS peut transformer l'expérience d'apprentissage 
             dans votre établissement
           </motion.p>
-          <motion.div 
-            className="flex flex-col sm:flex-row gap-4 justify-center"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <TestButton variant="magic" size="lg" className="text-lg px-8 py-4" asChild>
-                <Link to="/contact">
-                  Planifier une rencontre
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Link>
-              </TestButton>
-            </motion.div>
-            <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary text-lg px-8 py-4">
-              En savoir plus
-            </Button>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
-}
+           <motion.div 
+             className="flex flex-col sm:flex-row gap-4 justify-center"
+             initial={{ opacity: 0, y: 30 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ duration: 0.6, delay: 0.4 }}
+           >
+             <motion.div
+               whileHover={{ scale: 1.05 }}
+               whileTap={{ scale: 0.95 }}
+             >
+               <TestButton variant="magic" size="lg" className="text-lg px-8 py-4" asChild>
+                 <Link to="/contact">
+                   Planifier une rencontre
+                   <ArrowRight className="ml-2 h-5 w-5" />
+                 </Link>
+               </TestButton>
+             </motion.div>
+             <motion.div
+               whileHover={{ scale: 1.05 }}
+               whileTap={{ scale: 0.95 }}
+             >
+               <TestButton variant="outline" size="lg" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary text-lg px-8 py-4" asChild>
+                 <Link to="/services">
+                   En savoir plus
+                 </Link>
+               </TestButton>
+             </motion.div>
+           </motion.div>
+         </div>
+       </section>
+     </div>
+   );
+ }
