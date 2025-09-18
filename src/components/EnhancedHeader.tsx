@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Brain, Menu, X, ChevronDown, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { TestButton } from "@/components/ui/test-button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigation } from "@/hooks/useNavigation";
@@ -79,7 +79,7 @@ export function EnhancedHeader() {
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-4">
             {user ? (
-              <Button 
+              <TestButton 
                 variant="outline" 
                 className="border-border hover:border-accent hover:text-accent transition-all duration-300"
                 asChild
@@ -88,25 +88,25 @@ export function EnhancedHeader() {
                   <User className="h-4 w-4" />
                   Mon profil
                 </Link>
-              </Button>
+              </TestButton>
             ) : (
               <>
-                <Button 
+                <TestButton 
                   variant="outline" 
                   className="border-border hover:border-accent hover:text-accent transition-all duration-300"
                   asChild
                 >
                   <Link to="/auth">Connexion</Link>
-                </Button>
-                <Button className="bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300" asChild>
+                </TestButton>
+                <TestButton className="bg-accent hover:bg-accent/90 text-accent-foreground transition-all duration-300" asChild>
                   <Link to="/auth">Essai gratuit</Link>
-                </Button>
+                </TestButton>
               </>
             )}
           </div>
 
           {/* Mobile Menu Button */}
-          <Button
+          <TestButton
             variant="ghost"
             size="icon"
             className="lg:hidden"
@@ -117,7 +117,7 @@ export function EnhancedHeader() {
             ) : (
               <Menu className="h-6 w-6" />
             )}
-          </Button>
+          </TestButton>
         </div>
 
         {/* Mobile Menu */}
@@ -143,7 +143,7 @@ export function EnhancedHeader() {
             
             <div className="mt-6 pt-4 border-t border-border space-y-3">
               {user ? (
-                <Button 
+                <TestButton 
                   variant="outline" 
                   className="w-full border-border hover:border-accent"
                   asChild
@@ -152,19 +152,19 @@ export function EnhancedHeader() {
                     <User className="h-4 w-4" />
                     Mon profil
                   </Link>
-                </Button>
+                </TestButton>
               ) : (
                 <>
-                  <Button 
+                  <TestButton 
                     variant="outline" 
                     className="w-full border-border hover:border-accent"
                     asChild
                   >
                     <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Connexion</Link>
-                  </Button>
-                  <Button className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
+                  </TestButton>
+                  <TestButton className="w-full bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
                     <Link to="/auth" onClick={() => setIsMenuOpen(false)}>Essai gratuit</Link>
-                  </Button>
+                  </TestButton>
                 </>
               )}
             </div>
