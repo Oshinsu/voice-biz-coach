@@ -6,7 +6,7 @@ import {
   Target, BarChart3, Zap, Users, TrendingUp,
   Shield, Grid3X3, Layers, ArrowRight
 } from 'lucide-react';
-
+import { ByssVnsMarketing } from './ByssVnsMarketing';
 import { SwotMatrix } from '../SwotMatrix';
 
 interface MarketingToolsDashboardProps {
@@ -112,11 +112,7 @@ export const MarketingToolsDashboard: React.FC<MarketingToolsDashboardProps> = (
         </TabsContent>
 
         <TabsContent value="marketing" className="space-y-6">
-          <div className="p-6 text-center">
-            <p className="text-muted-foreground">
-              Les informations marketing détaillées sont maintenant intégrées dans l'onglet "Vue d'ensemble".
-            </p>
-          </div>
+          <ByssVnsMarketing scenarioId={scenarioId} />
         </TabsContent>
       </Tabs>
 

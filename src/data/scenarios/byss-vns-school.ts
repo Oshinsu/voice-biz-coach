@@ -67,7 +67,7 @@ export const byssVnsSchoolScenario: Scenario = {
     
     currentSolution: "Patchwork pédagogique fragmenté: Cesim Business Simulations (text-based, 85k€/an) + Marketplace Simulations + jeux rôles manuels professeurs. Time investment: 12h/prof préparation simulations/semestre. Student experience: 2h practice/semester vs 15h standard industry. ROI measurement: impossible, aucune métrique objective skills progression. Technology gap: simulations 2015 vs attentes 2024 étudiants digital natives.",
     
-    budget: "12M€/an innovations pédagogiques - Investissement Byss VNS 3000€/an + API costs",
+    budget: "12M€/an innovations pédagogiques - Investissement Byss VNS jusqu'à 300k€",
     
     timeline: "Urgence stratégique 2024: renouvellement accreditations EQUIS/AACSB 2025 nécessite innovation pédagogique majeure. Deadline pilot programs: janvier 2024 pour évaluation mars-juin, déploiement septembre 2024 si concluant. Competition pressure: HEC lance 'IA Campus' février 2024.",
     
@@ -206,17 +206,17 @@ export const byssVnsSchoolScenario: Scenario = {
     },
     
     pricing: {
-      starter: "3,000€/an HT (formule unique business schools)",
-      professional: "3,000€/an HT + coûts API variables (2-4k€/an estimés)",
-      enterprise: "3,000€/an HT + API + setup 24h garanti + support FR",
-      enterprise_plus: "3,000€/an HT (économie 4.75M€/an vs assessment centers)",
+      starter: "749€/mois HT (jusqu'à 100 étudiants, scenarios de base, analytics standard, support email)",
+      professional: "1,499€/mois HT (jusqu'à 500 étudiants, tous scenarios, analytics avancés, support prioritaire)",
+      enterprise: "2,999€/mois HT (étudiants illimités, scenarios custom, API, intégrations LMS, CSM dédié)",
+      enterprise_plus: "Sur-mesure (multi-campus, white-label, développements spécifiques, consulting pédagogique)",
       
-      pricingModel: "Abonnement annuel + coûts API OpenAI variables à la charge client",
-      setupFees: "Gratuit - Setup 24h garanti inclus",
-      contractTerms: "12 mois minimum, ROI immédiat",
-      overage: "Illimité étudiants inclus",
-      migration: "Formation équipe pédagogique incluse",
-      cancelPolicy: "Économie massive vs solutions actuelles"
+      pricingModel: "Abonnement mensuel/annuel + coûts API OpenAI variables",
+      setupFees: "Gratuit (setup 24h inclus)",
+      contractTerms: "12 mois minimum, résiliation préavis 3 mois",
+      overage: "0.5€/étudiant supplémentaire",
+      migration: "Migration données gratuite + formation équipe incluse",
+      cancelPolicy: "Préavis 3 mois, pas de pénalités"
     },
     
     keyFeatures: [

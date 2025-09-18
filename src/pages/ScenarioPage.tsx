@@ -67,13 +67,11 @@ export default function ScenarioPage() {
 
       {/* Voice Navigation System (VNS) - Système réel */}
       {scenario.id === 'byss-vns-school' && (
-        <div className="fixed bottom-4 right-4 z-50">
-          <SophieAgentsSDK 
-            conversationType="rdv"
-            open={false}
-            onToggle={() => {}}
-          />
-        </div>
+        <SophieAgentsSDK 
+          conversationType="rdv"
+          open={true}
+          onToggle={() => {}}
+        />
       )}
     </div>
   );
