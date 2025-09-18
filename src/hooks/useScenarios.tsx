@@ -4,16 +4,6 @@ import { consolidatedScenarios, Scenario, Interlocutor, Product, Stakeholder } f
 // Re-export types for compatibility
 export type { Interlocutor, Product, Stakeholder, Scenario };
 
-// Add SwotAnalysis interface for compatibility
-export interface SwotAnalysis {
-  id: string;
-  scenario_id: string;
-  analysis_type: string;
-  strengths?: any;
-  weaknesses?: any;
-  opportunities?: any;
-  threats?: any;
-}
 
 export const useScenarios = () => {
   const [scenarios, setScenarios] = useState<Scenario[]>([]);

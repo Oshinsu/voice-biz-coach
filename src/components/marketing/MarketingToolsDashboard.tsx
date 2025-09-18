@@ -7,6 +7,7 @@ import {
   Shield, Grid3X3, Layers, ArrowRight
 } from 'lucide-react';
 import { ByssVnsMarketing } from './ByssVnsMarketing';
+import { SwotAnalysis } from '../analysis/SwotAnalysis';
 
 interface MarketingToolsDashboardProps {
   scenarioId: string;
@@ -107,11 +108,7 @@ export const MarketingToolsDashboard: React.FC<MarketingToolsDashboardProps> = (
         </TabsContent>
 
         <TabsContent value="swot" className="space-y-6">
-          <div className="p-6 text-center">
-            <p className="text-muted-foreground">
-              Analyse SWOT en cours de développement...
-            </p>
-          </div>
+          <SwotAnalysis scenarioId={scenarioId} />
         </TabsContent>
 
         <TabsContent value="marketing" className="space-y-6">

@@ -7,6 +7,7 @@ import { useSalesStore } from "@/store/salesStore";
 import { useEffect } from "react";
 import { SophieAgentsSDK } from "@/components/voice-agents";
 import { ScenarioDetails } from "@/components/ScenarioDetails";
+import { ScenarioSelector } from "@/components/ScenarioSelector";
 
 export default function ScenarioPage() {
   const { id } = useParams();
@@ -60,9 +61,19 @@ export default function ScenarioPage() {
         </div>
       </header>
 
-      {/* Contenu principal avec ScenarioDetails */}
+      {/* Contenu principal avec ScenarioDetails et Sélecteur */}
       <div className="container mx-auto px-6 py-6">
-        <ScenarioDetails scenario={scenario} />
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* Détails du scénario */}
+          <div className="lg:col-span-2">
+            <ScenarioDetails scenario={scenario} />
+          </div>
+          
+          {/* Sélecteur de configuration */}
+          <div className="lg:col-span-1">
+            <ScenarioSelector />
+          </div>
+        </div>
       </div>
 
       {/* Voice Navigation System (VNS) - Système réel */}

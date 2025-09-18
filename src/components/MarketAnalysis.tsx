@@ -1,17 +1,14 @@
 import React from 'react';
-import { SwotAnalysis } from '@/hooks/useScenarios';
 import { ByssVnsAnalysis } from './analysis/ByssVnsAnalysis';
 import { useScenarios } from '@/hooks/useScenarios';
 
 interface MarketAnalysisProps {
-  swotAnalyses?: SwotAnalysis[];
   sector?: string;
   companyName?: string;
   scenarioId?: string;
 }
 
 export const MarketAnalysis: React.FC<MarketAnalysisProps> = ({ 
-  swotAnalyses = [], 
   sector = 'Enseignement Supérieur',
   companyName = 'EDHEC Business School',
   scenarioId = 'byss-vns-school'

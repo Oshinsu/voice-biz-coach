@@ -552,7 +552,6 @@ export const ScenarioDetails: React.FC<ScenarioDetailsProps> = ({ scenario }) =>
 
         <TabsContent value="analysis" className="space-y-6">
           <MarketAnalysis 
-            swotAnalyses={scenario.swot ? [scenario.swot] : []} 
             sector={scenario.company?.sector}
             companyName={scenario.company?.name}
             scenarioId={scenario.id}

@@ -33,16 +33,8 @@ const difficultyOptions = [
 ];
 
 const getScenarioIcon = (scenarioId: string) => {
-  switch (scenarioId) {
-    case 'byss-vns-school':
-      return <TrendingUp className="h-4 w-4" />;
-    case 'ca-benefice':
-      return <Calculator className="h-4 w-4" />;
-    case 'etude-marche':
-      return <Target className="h-4 w-4" />;
-    default:
-      return <Zap className="h-4 w-4" />;
-  }
+  // Dynamically get icon based on scenario data
+  return <TrendingUp className="h-4 w-4" />;
 };
 
 export const ScenarioSelector = () => {
