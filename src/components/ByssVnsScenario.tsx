@@ -237,15 +237,15 @@ export const ByssVnsScenario: React.FC<ByssVnsScenarioProps> = ({ onStartSession
                       <div className="space-y-2">
                         <div className="flex justify-between">
                           <span className="text-sm">Licence annuelle</span>
-                          <span className="font-medium">80,000€</span>
+                          <span className="font-medium">15,000€</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-sm">Setup & Formation</span>
                           <span className="font-medium">Inclus</span>
                         </div>
                         <div className="flex justify-between border-t pt-2">
-                          <span className="text-sm font-medium">Total Max</span>
-                          <span className="font-bold text-primary">80,000€</span>
+                          <span className="text-sm font-medium">Total Annuel</span>
+                          <span className="font-bold text-primary">15,000€</span>
                         </div>
                       </div>
                     </CardContent>
@@ -255,20 +255,20 @@ export const ByssVnsScenario: React.FC<ByssVnsScenarioProps> = ({ onStartSession
                     <CardContent className="pt-4">
                       <h4 className="font-medium mb-3 flex items-center gap-2">
                         <TrendingUp className="w-4 h-4 text-primary" />
-                        ROI Attendu
+                        Valeur Innovation
                       </h4>
                       <div className="space-y-2">
                         <div className="flex justify-between">
-                          <span className="text-sm">Économies Professeurs</span>
-                          <span className="font-medium">120,000€</span>
+                          <span className="text-sm">Leadership Tech 18 mois</span>
+                          <span className="font-medium">Différentiation</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-sm">Attractivité +15%</span>
-                          <span className="font-medium">180,000€</span>
+                          <span className="text-sm">Scalabilité x10 étudiants</span>
+                          <span className="font-medium">Impact Massif</span>
                         </div>
                         <div className="flex justify-between border-t pt-2">
-                          <span className="text-sm font-medium">ROI Total</span>
-                          <span className="font-bold text-primary">300,000€</span>
+                          <span className="text-sm font-medium">ROI Stratégique</span>
+                          <span className="font-bold text-primary">Premium Positioning</span>
                         </div>
                       </div>
                     </CardContent>
@@ -324,7 +324,7 @@ export const ByssVnsScenario: React.FC<ByssVnsScenarioProps> = ({ onStartSession
                       </li>
                       <li className="flex items-start gap-2">
                         <ArrowRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
-                        Présenter ROI 300k€ détaillé
+                        Présenter valeur innovation pédagogique
                       </li>
                       <li className="flex items-start gap-2">
                         <ArrowRight className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
@@ -343,7 +343,7 @@ export const ByssVnsScenario: React.FC<ByssVnsScenarioProps> = ({ onStartSession
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm">Emmanuel Métais (DG)</span>
-                      <Badge variant="secondary">Validation &gt;50k€</Badge>
+                      <Badge variant="secondary">Validation &gt;15k€</Badge>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm">Frédéric Fréry (Prof)</span>

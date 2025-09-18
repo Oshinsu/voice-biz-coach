@@ -3,7 +3,7 @@ import { Scenario } from './types';
 export const byssVnsSchoolScenario: Scenario = {
   id: "byss-vns-school",
   title: "EDHEC Business School - 4ème Mondiale FT 2024",
-  description: "Révolution IA Pédagogique à l'EDHEC - 4ème école mondiale Financial Times. Vendre Byss VNS (80k€ max) pour transformer l'enseignement commercial avec notre simulateur vocal IA révolutionnaire. Leadership innovation pédagogique mondiale.",
+  description: "Leadership IA Pédagogique à l'EDHEC - 4ème école mondiale Financial Times. Byss VNS (15k€/an) : premier simulateur vocal IA pour excellence formation commerciale. Innovation technologique pure, différentiation concurrentielle majeure.",
   difficulty: "Difficile",
   probability: 75,
   company: {
@@ -59,7 +59,7 @@ export const byssVnsSchoolScenario: Scenario = {
       "Corporate training déconnecté formations initiales: executive education utilise vrais business cases, étudiants Grande École ont cas d'école obsolètes. Clients corporate demandent cohérence programmes, menacent transfert formations vers concurrence",
       "Scaling formations commerciales difficile: ratio prof/étudiants élevé limite temps pratique. Jeux de rôles: 2h/semestre/étudiant vs 8h souhaité. Ressources limitées pour individualisation formation",
       "ROI formation commerciale difficile à prouver: entreprises partenaires attendent plus de preuves concrètes d'efficacité. Manque de métriques objectives progression compétences soft skills",
-      "Innovation pédagogique contrainte budget: learning lab 1,2M€/an mais 70% consommé plateformes existantes. Reste 500k€ nouveaux projets, projet Byss VNS limité 80k€ maximum",
+      "Innovation pédagogique contrainte budget: learning lab 1,2M€/an mais 70% consommé plateformes existantes. Reste 500k€ nouveaux projets, projet Byss VNS: 15k€ annuel accessible",
       "Génération Z engagement faible: étudiants nés digital natives, attentes expériences immersives gaming/VR. Cours magistraux = désengagement progressif. Absentéisme +18% cours théoriques vs +3% cours pratiques/workshops",
       "International students satisfaction: 35% étudiants étrangers, barrière langue française pour simulations commerciales. Besoin outils universels, simulation multilingue. Risque: perte attractivité internationale = -15% revenus",
       "Partenariats corporate menacés: 180 entreprises partenaires exigent étudiants 'job-ready' dès stage. Feedback négatif soft skills: -22% offres stages qualitatives 2023 vs 2022. Cercle vicieux: moins stages qualité = moins expérience = moins employabilité"
@@ -67,13 +67,13 @@ export const byssVnsSchoolScenario: Scenario = {
     
     currentSolution: "Patchwork pédagogique fragmenté: Cesim Business Simulations (text-based, 85k€/an) + Marketplace Simulations + jeux rôles manuels professeurs. Time investment: 12h/prof préparation simulations/semestre. Student experience: 2h practice/semester vs 15h standard industry. ROI measurement: impossible, aucune métrique objective skills progression. Technology gap: simulations 2015 vs attentes 2024 étudiants digital natives.",
     
-    budget: "Budget innovation pédagogique: 1,2 million €/an - Projet Byss VNS: jusqu'à 80 000€ maximum",
+    budget: "Budget innovation pédagogique: 1,2 million €/an - Projet Byss VNS: jusqu'à 15 000€ annuel",
     
     timeline: "Urgence stratégique 2024: renouvellement accreditations EQUIS/AACSB 2025 nécessite innovation pédagogique majeure. Deadline pilot programs: janvier 2024 pour évaluation mars-juin, déploiement septembre 2024 si concluant. Competition pressure: HEC lance 'IA Campus' février 2024.",
     
     foundedYear: 1906,
     keyPeople: [
-      "Emmanuel Métais - Directeur Général, 52 ans (Ex-Dean ESSEC, PhD Stanford). Visionnaire transformation digitale, sponsor innovation pédagogique, décideur final budgets >200k€. Objectif: positionner EDHEC leader IA education Europe",
+      "Emmanuel Métais - Directeur Général, 52 ans (Ex-Dean ESSEC, PhD Stanford). Visionnaire transformation digitale, sponsor innovation pédagogique, décideur final budgets >15k€. Objectif: positionner EDHEC leader IA education Europe",
       "Sophie Hennion-Moreau - Directrice Programmes & Innovation, 45 ans (Ex-VP Learning Innovation INSEAD). Responsable learning lab, budget 850k€/an. Champion nouvelles pédagogies, frustrée limitations actuelles, sponsor projet",
       "Frédéric Fréry - Professeur Stratégie & Négociation, 48 ans (Agrégé, consultant McKinsey 5 ans). Authorité académique négociation, 180 étudiants/an, influence majeure adoption nouvelles méthodes. Sceptique tech sans valeur pédagogique",
       "Julien Granata - Chef de Projets Innovation, 35 ans (Ex-learning designer Coursera). Opérationnel déploiement solutions IA, maîtrise technique, évalue faisabilité intégrations. Contact quotidien budget pilots",
@@ -206,9 +206,9 @@ export const byssVnsSchoolScenario: Scenario = {
     },
     
     pricing: {
-      starter: "499€/mois HT (jusqu'à 100 étudiants, scenarios de base, analytics standard, support email)",
-      professional: "899€/mois HT (jusqu'à 500 étudiants, tous scenarios, analytics avancés, support prioritaire)",
-      enterprise: "1,499€/mois HT (étudiants illimités, scenarios custom, API, intégrations LMS, CSM dédié)",
+      starter: "599€/mois HT (jusqu'à 100 étudiants, scenarios de base, analytics standard, support email)",
+      professional: "1,249€/mois HT (jusqu'à 500 étudiants, tous scenarios, analytics avancés, support prioritaire)",
+      enterprise: "15,000€/an HT (étudiants illimités, scenarios custom, API, intégrations LMS, CSM dédié)",
       enterprise_plus: "Sur-mesure (multi-campus, white-label, développements spécifiques, consulting pédagogique)",
       
       pricingModel: "Abonnement mensuel/annuel + coûts API OpenAI variables",
@@ -242,7 +242,7 @@ export const byssVnsSchoolScenario: Scenario = {
       "Évolutivité: startup agile vs rigidité grands éditeurs"
     ],
     
-    roi: "ROI pédagogique quantifiable: +25% amélioration compétences commerciales mesurées, +18% satisfaction étudiants formations pratiques, -40% temps préparation simulations professeurs, +12% attractivité programmes vs concurrence. ROI financier: payback 12-18 mois via amélioration satisfaction étudiants, différentiation concurrentielle modérée. Économies: -60% coûts assessment centers externes, -30% temps administratif simulations.",
+    roi: "ROI innovation stratégique: Leadership technologique 18 mois avance concurrence, différentiation pédagogique majeure, positionnement premier école mondiale IA vocale. Valeur qualitative: +35% engagement étudiants formation immersive, x10 scalabilité formation pratique, analytics objectifs compétences soft skills. Media impact: couverture innovation presse spécialisée, attraction étudiants internationaux premium. ROI réputation: renforcement ranking 4ème mondial FT, avantage concurrentiel accreditations 2025.",
     
     implementationTime: "Setup technique: 24h. Formation équipe: 1 semaine. Déploiement pilote: 2 semaines. Déploiement complet: 1 mois. Adoption étudiants: immédiate (interface intuitive). Mesure ROI: 3 mois première évaluation."
   },
