@@ -7,7 +7,6 @@ import { useSalesStore } from "@/store/salesStore";
 import { useEffect } from "react";
 import { SophieAgentsSDK } from "@/components/voice-agents";
 import { ScenarioDetails } from "@/components/ScenarioDetails";
-import { ByssVnsOverview } from "@/components/ByssVnsOverview";
 
 export default function ScenarioPage() {
   const { id } = useParams();
@@ -63,16 +62,7 @@ export default function ScenarioPage() {
 
       {/* Contenu principal avec ScenarioDetails */}
       <div className="container mx-auto px-6 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <ScenarioDetails scenario={scenario} />
-          
-          {/* Byss VNS Overview intégré */}
-          {scenario.id === 'byss-vns-school' && (
-            <div>
-              <ByssVnsOverview scenarioId={scenario.id} />
-            </div>
-          )}
-        </div>
+        <ScenarioDetails scenario={scenario} />
       </div>
 
       {/* Voice Navigation System (VNS) - Système réel */}

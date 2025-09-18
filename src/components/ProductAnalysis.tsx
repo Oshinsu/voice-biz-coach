@@ -2,7 +2,6 @@ import React from 'react';
 import { Package } from 'lucide-react';
 import { Product } from '@/hooks/useScenarios';
 import { AnalysisSection } from './analysis/AnalysisSection';
-import { ByssVnsOverview } from './ByssVnsOverview';
 import { MarketingToolsDashboard } from './marketing/MarketingToolsDashboard';
 
 interface ProductAnalysisProps {
@@ -33,7 +32,11 @@ export const ProductAnalysis: React.FC<ProductAnalysisProps> = ({
         title={`${mainProduct.name} - Vue d'ensemble`}
         icon={Package}
       >
-        <ByssVnsOverview scenarioId={scenarioId} />
+        <div className="p-6 text-center">
+          <p className="text-muted-foreground">
+            Les informations produit détaillées sont maintenant intégrées dans l'onglet "Vue d'ensemble".
+          </p>
+        </div>
       </AnalysisSection>
 
       {/* Marketing Tools Dashboard */}

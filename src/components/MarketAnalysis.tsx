@@ -1,6 +1,5 @@
 import React from 'react';
 import { SwotAnalysis } from '@/hooks/useScenarios';
-import { ByssVnsOverview } from './ByssVnsOverview';
 import { useScenarios } from '@/hooks/useScenarios';
 
 interface MarketAnalysisProps {
@@ -37,8 +36,11 @@ export const MarketAnalysis: React.FC<MarketAnalysisProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Analyse complète avec nouveau composant unifié */}
-      <ByssVnsOverview scenarioId={scenarioId} />
+      <div className="p-6 text-center">
+        <p className="text-muted-foreground">
+          Les données d'analyse de marché sont maintenant intégrées dans l'onglet "Vue d'ensemble".
+        </p>
+      </div>
     </div>
   );
 };

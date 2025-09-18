@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Building2, Users, DollarSign, Calendar, Target, TrendingUp } from 'lucide-react';
+import { Building2, Users, DollarSign, Calendar, Target, TrendingUp, Zap, CheckCircle } from 'lucide-react';
 import { useScenarios } from '@/hooks/useScenarios';
+import { useByssVnsData } from '@/hooks/useByssVnsData';
 
 interface ScenarioInitialInfoProps {
   scenarioId: string;
@@ -15,6 +16,7 @@ export const ScenarioInitialInfo: React.FC<ScenarioInitialInfoProps> = ({
 }) => {
   const { getScenarioById } = useScenarios();
   const scenarioData = getScenarioById(scenarioId);
+  const { data: byssData, getDisplayMetrics } = useByssVnsData();
   
   if (!scenarioData?.marketData?.marketOverview) {
     return null;
@@ -23,9 +25,78 @@ export const ScenarioInitialInfo: React.FC<ScenarioInitialInfoProps> = ({
   const marketData = scenarioData.marketData;
   const marketOverview = marketData?.marketOverview;
   const objectives = scenarioData.specificObjectives;
+  const isByssVnsScenario = scenarioId === 'byss-vns-school';
+  const displayMetrics = isByssVnsScenario ? getDisplayMetrics() : null;
 
   return (
     <div className="space-y-6">
+      {/* Spécifique Byss VNS - Métriques clés */}
+      {isByssVnsScenario && displayMetrics && (
+        <Card className="bg-gradient-to-r from-primary/5 to-secondary/5 border-primary/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-primary" />
+              Byss VNS - Solution IA Conversationnelle
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+              <div className="text-center p-4 bg-card rounded-lg border">
+                <DollarSign className="h-6 w-6 mx-auto mb-2 text-primary" />
+                <p className="text-sm text-muted-foreground">Prix annuel</p>
+                <p className="font-bold text-primary">{displayMetrics.pricing}</p>
+                <p className="text-xs text-muted-foreground">+ coûts API clients</p>
+              </div>
+              
+              <div className="text-center p-4 bg-card rounded-lg border">
+                <Zap className="h-6 w-6 mx-auto mb-2 text-green-600" />
+                <p className="text-sm text-muted-foreground">Technologie IA</p>
+                <p className="font-bold text-green-700">{displayMetrics.technology}</p>
+              </div>
+              
+              <div className="text-center p-4 bg-card rounded-lg border">
+                <Calendar className="h-6 w-6 mx-auto mb-2 text-blue-600" />
+                <p className="text-sm text-muted-foreground">Déploiement</p>
+                <p className="font-bold text-blue-700">{displayMetrics.setup}</p>
+              </div>
+              
+              <div className="text-center p-4 bg-card rounded-lg border">
+                <TrendingUp className="h-6 w-6 mx-auto mb-2 text-purple-600" />
+                <p className="text-sm text-muted-foreground">ROI an 1</p>
+                <p className="font-bold text-purple-700">{displayMetrics.roi.roiPercent}</p>
+              </div>
+            </div>
+            
+            {/* Avantages clés Byss VNS */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <h4 className="font-semibold text-sm flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  Avantages Technologiques
+                </h4>
+                <ul className="text-sm space-y-1 text-muted-foreground">
+                  <li>• IA conversationnelle avancée (GPT-4)</li>
+                  <li>• Analyse émotionnelle en temps réel</li>
+                  <li>• Rapports automatisés détaillés</li>
+                </ul>
+              </div>
+              
+              <div className="space-y-2">
+                <h4 className="font-semibold text-sm flex items-center gap-2">
+                  <CheckCircle className="h-4 w-4 text-blue-600" />
+                  Impact pour EDHEC
+                </h4>
+                <ul className="text-sm space-y-1 text-muted-foreground">
+                  <li>• {byssData.edhec.students} étudiants impactés</li>
+                  <li>• Évaluations 24h/24, 7j/7</li>
+                  <li>• Réduction coûts de 60%</li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Vue d'ensemble du marché */}
       <Card>
         <CardHeader>
