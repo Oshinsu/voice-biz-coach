@@ -15,7 +15,6 @@ import {
   Phone,
   Calendar,
   Trophy,
-  Euro,
   BarChart3,
   AlertTriangle,
   CheckCircle,
@@ -232,7 +231,7 @@ export const ByssVnsScenario: React.FC<ByssVnsScenarioProps> = ({ onStartSession
                   <Card className="border-primary/20">
                     <CardContent className="pt-4">
                       <h4 className="font-medium mb-3 flex items-center gap-2">
-                        <Euro className="w-4 h-4 text-primary" />
+                        <TrendingUp className="w-4 h-4 text-primary" />
                         Investissement EDHEC
                       </h4>
                       <div className="space-y-2">
