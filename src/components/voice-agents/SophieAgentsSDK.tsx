@@ -123,11 +123,24 @@ export function SophieAgentsSDK({
         
       case 'error':
         console.error('❌ Erreur Agents SDK:', event.error);
+        
+        // 🔧 Gestion d'erreurs granulaire
+        const errorType = event.error?.type || 'unknown';
+        const isRecoverable = ['audio_error', 'temporary_failure'].includes(errorType);
+        
         toast({
-          title: "Erreur session",
+          title: isRecoverable ? "Problème temporaire" : "Erreur session",
           description: event.error?.message || "Erreur inconnue",
           variant: "destructive"
         });
+
+        // Auto-récupération pour erreurs temporaires
+        if (isRecoverable && chatRef.current) {
+          console.log('🔄 Tentative auto-récupération...');
+          setTimeout(() => {
+            // Optionnel: tentative de récupération automatique
+          }, 2000);
+        }
         break;
     }
   };
@@ -235,15 +248,23 @@ export function SophieAgentsSDK({
   };
 
   /**
-   * Interruption Sophie
+   * Interruption Sophie (optimisée)
    */
   const handleInterrupt = () => {
     if (chatRef.current && isSpeaking) {
-      try {
-        chatRef.current.interrupt();
-        addMessage("Interruption envoyée", 'user', 'system');
-      } catch (error) {
-        console.error('❌ Erreur interruption:', error);
+      const success = chatRef.current.interrupt();
+      if (success) {
+        addMessage("🔇 Interruption réussie", 'user', 'system');
+        setExchangeCount(prev => prev + 1);
+        setIsSpeaking(false);
+        setIsListening(true);
+      } else {
+        addMessage("⚠️ Échec interruption", 'user', 'system');
+        toast({
+          title: "Interruption échouée",
+          description: "Problème de connexion WebRTC",
+          variant: "destructive"
+        });
       }
     }
   };

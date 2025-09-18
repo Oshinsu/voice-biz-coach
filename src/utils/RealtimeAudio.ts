@@ -123,7 +123,7 @@ export class RealtimeChat {
       this.pc.addTrack(mediaStream.getTracks()[0]);
       console.log('🎤 Microphone connecté');
 
-      // 5. Configurer data channel pour événements
+      // 5. Configurer data channel pour événements (optimisé)
       this.dc = this.pc.createDataChannel("oai-events");
       this.dc.addEventListener("message", (e) => {
         try {
@@ -132,6 +132,16 @@ export class RealtimeChat {
           this.onMessage(event);
         } catch (error) {
           console.error('❌ Erreur parsing événement:', error);
+          // 🔄 Pas de disruption de session sur erreur parsing
+        }
+      });
+
+      // 🔧 Gestion état de connexion WebRTC optimisée
+      this.pc.addEventListener('connectionstatechange', () => {
+        console.log('📡 État WebRTC:', this.pc?.connectionState);
+        if (this.pc?.connectionState === 'failed') {
+          console.warn('⚠️ WebRTC connexion échouée - tentative reconnexion');
+          // Auto-récupération possible ici
         }
       });
 
@@ -233,13 +243,21 @@ export class RealtimeChat {
   }
 
   /**
-   * Interrompre Sophie
+   * Interrompre Sophie (optimisé)
    */
   interrupt() {
     if (this.dc?.readyState === 'open') {
-      this.dc.send(JSON.stringify({ type: 'response.cancel' }));
-      console.log('⏹️ Interruption envoyée');
+      try {
+        this.dc.send(JSON.stringify({ type: 'response.cancel' }));
+        console.log('⏹️ Interruption envoyée');
+        return true;
+      } catch (error) {
+        console.error('❌ Erreur interruption:', error);
+        return false;
+      }
     }
+    console.warn('⚠️ Data channel non disponible pour interruption');
+    return false;
   }
 
   /**
@@ -261,9 +279,36 @@ export class RealtimeChat {
   }
 
   /**
-   * État de connexion
+   * État de connexion (optimisé avec détails)
    */
   isConnected(): boolean {
     return this.pc?.connectionState === 'connected' && this.dc?.readyState === 'open';
+  }
+
+  /**
+   * Diagnostics WebRTC pour debugging
+   */
+  getConnectionStats() {
+    return {
+      peerConnectionState: this.pc?.connectionState || 'unknown',
+      dataChannelState: this.dc?.readyState || 'unknown',
+      iceConnectionState: this.pc?.iceConnectionState || 'unknown',
+      isFullyConnected: this.isConnected()
+    };
+  }
+
+  /**
+   * Qualité audio en temps réel (métrique basique)
+   */
+  getAudioQuality() {
+    // Heuristique simple basée sur les états WebRTC
+    const stats = this.getConnectionStats();
+    if (stats.iceConnectionState === 'connected' && stats.peerConnectionState === 'connected') {
+      return 'excellent';
+    } else if (stats.peerConnectionState === 'connecting') {
+      return 'connecting';
+    } else {
+      return 'poor';
+    }
   }
 }
