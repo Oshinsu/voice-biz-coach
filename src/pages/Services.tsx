@@ -2,7 +2,9 @@ import { ArrowRight, Brain, Users, BarChart3, Shield, GraduationCap, Mic, Target
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { TestButton } from "@/components/ui/test-button";
+import { MagicSpotlight } from "@/components/ui/magic-spotlight";
+import { motion } from "framer-motion";
 
 export default function Services() {
   const services = [
@@ -85,56 +87,150 @@ export default function Services() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header Navigation */}
+      {/* Header Navigation Ultra-Premium */}
       <header className="fixed top-0 w-full z-50 bg-background/90 backdrop-blur-lg border-b border-border">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="p-2 bg-accent rounded-lg">
-              <Brain className="h-6 w-6 text-accent-foreground" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-foreground">Byss VNS</h1>
-              <p className="text-xs text-muted-foreground">Virtual Negotiation Simulator</p>
-            </div>
-          </Link>
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <Link to="/" className="flex items-center gap-3 group">
+              <motion.div 
+                className="p-2 bg-accent rounded-lg"
+                whileHover={{ scale: 1.1, rotate: 10 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Brain className="h-6 w-6 text-accent-foreground" />
+              </motion.div>
+              <div>
+                <h1 className="text-xl font-bold text-foreground group-hover:text-accent transition-colors duration-300">Byss VNS</h1>
+                <p className="text-xs text-muted-foreground">Virtual Negotiation Simulator</p>
+              </div>
+            </Link>
+          </motion.div>
           
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/" className="text-muted-foreground hover:text-accent transition-colors">Accueil</Link>
-            <Link to="/services" className="text-accent font-medium">Services</Link>
-            <Link to="/about" className="text-muted-foreground hover:text-accent transition-colors">Qui sommes-nous</Link>
-            <Link to="/contact" className="text-muted-foreground hover:text-accent transition-colors">Contact</Link>
+            {[
+              { to: "/", label: "Accueil" },
+              { to: "/services", label: "Services", active: true },
+              { to: "/about", label: "Qui sommes-nous" },
+              { to: "/contact", label: "Contact" }
+            ].map((item, index) => (
+              <motion.div
+                key={item.to}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + index * 0.1 }}
+              >
+                <Link 
+                  to={item.to} 
+                  className={`${item.active ? 'text-accent font-medium' : 'text-muted-foreground hover:text-accent'} transition-colors duration-300 relative group`}
+                >
+                  {item.label}
+                  {item.active && (
+                    <motion.div 
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-accent rounded-full"
+                      layoutId="activeTab"
+                    />
+                  )}
+                </Link>
+              </motion.div>
+            ))}
           </nav>
 
-          <div className="flex items-center gap-4">
-            <Button variant="outline" asChild>
+          <motion.div 
+            className="flex items-center gap-4"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <TestButton variant="outline" asChild>
               <Link to="/auth">Connexion</Link>
-            </Button>
-            <Button className="bg-accent hover:bg-accent/90 text-accent-foreground" asChild>
+            </TestButton>
+            <TestButton variant="magic" asChild>
               <Link to="/auth">Essai gratuit</Link>
-            </Button>
-          </div>
+            </TestButton>
+          </motion.div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-6 bg-primary">
-        <div className="max-w-7xl mx-auto text-center">
-          <Badge className="mb-6 bg-secondary text-accent">Solutions complètes</Badge>
-          <h1 className="text-5xl md:text-6xl font-bold text-primary-foreground mb-6">
+      {/* Hero Section Spectaculaire */}
+      <section className="pt-32 pb-20 px-6 bg-gradient-to-br from-primary via-primary/95 to-primary/90 relative overflow-hidden">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div 
+            className="absolute -top-1/2 -left-1/4 w-full h-full bg-gradient-to-br from-accent/30 via-transparent to-transparent rounded-full blur-3xl"
+            animate={{ 
+              rotate: 360,
+              scale: [1, 1.2, 1],
+              x: [0, 50, 0]
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          />
+          <motion.div 
+            className="absolute -bottom-1/2 -right-1/4 w-full h-full bg-gradient-to-tl from-accent/20 via-transparent to-transparent rounded-full blur-3xl"
+            animate={{ 
+              rotate: -360,
+              scale: [1, 1.3, 1],
+              y: [0, -30, 0]
+            }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
+        
+        <div className="max-w-7xl mx-auto text-center relative z-10">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.6 }}
+          >
+            <Badge className="mb-6 bg-secondary text-accent backdrop-blur-sm border border-accent/30">Solutions complètes</Badge>
+          </motion.div>
+          <motion.h1 
+            className="text-5xl md:text-6xl font-bold text-primary-foreground mb-6"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
             Services &amp; Solutions
-            <span className="text-accent block">Byss VNS</span>
-          </h1>
-          <p className="text-xl text-primary-foreground/80 mb-12 max-w-3xl mx-auto">
+            <motion.span 
+              className="text-accent block drop-shadow-lg"
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+            >
+              Byss VNS
+            </motion.span>
+          </motion.h1>
+          <motion.p 
+            className="text-xl text-primary-foreground/80 mb-12 max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
             Découvrez notre gamme complète de services pour révolutionner 
             l'enseignement commercial avec l'IA vocale de pointe
-          </p>
+          </motion.p>
         </div>
       </section>
 
-      {/* Main Services */}
-      <section className="py-20 px-6 bg-background">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+      {/* Main Services Ultra Modernes */}
+      <section className="py-20 px-6 bg-gradient-to-br from-background via-background/95 to-background/90 relative overflow-hidden">
+        {/* Background Effects */}
+        <div className="absolute inset-0 overflow-hidden opacity-30">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto relative z-10">
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
             <h2 className="text-4xl font-bold text-foreground mb-4">
               Nos Services Principaux
             </h2>
@@ -142,35 +238,74 @@ export default function Services() {
               Révolutionnez l'enseignement commercial avec notre simulateur de négociation vocale alimenté par GPT-4o Realtime. 
               Vos étudiants s'entraînent face à des interlocuteurs IA ultra-réalistes dans des scénarios métier authentiques.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {services.map((service, index) => (
-              <Card key={index} className="group hover:shadow-xl transition-all duration-300 bg-card border border-border">
-                <CardHeader>
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="p-4 bg-secondary rounded-xl">
-                      <service.icon className="h-8 w-8 text-accent" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-2xl group-hover:text-accent transition-colors text-foreground">
-                        {service.title}
-                      </CardTitle>
-                      <p className="text-muted-foreground mt-2">{service.description}</p>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {service.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center gap-3">
-                        <CheckCircle className="h-5 w-5 text-success flex-shrink-0" />
-                        <span className="text-sm text-foreground">{feature}</span>
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <MagicSpotlight>
+                  <Card className="group hover:shadow-2xl transition-all duration-500 bg-card/90 backdrop-blur-sm border border-border/50 h-full">
+                    <CardHeader>
+                      <div className="flex items-center gap-4 mb-4">
+                        <motion.div 
+                          className="p-4 bg-secondary rounded-xl group-hover:bg-accent/20 transition-all duration-300"
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <motion.div
+                            animate={{ 
+                              rotate: [0, 5, -5, 0],
+                              scale: [1, 1.05, 1]
+                            }}
+                            transition={{ 
+                              duration: 4, 
+                              repeat: Infinity,
+                              delay: index * 0.5
+                            }}
+                          >
+                            <service.icon className="h-8 w-8 text-accent group-hover:text-primary transition-colors duration-300" />
+                          </motion.div>
+                        </motion.div>
+                        <div>
+                          <CardTitle className="text-2xl group-hover:text-accent transition-colors text-foreground">
+                            {service.title}
+                          </CardTitle>
+                          <p className="text-muted-foreground mt-2">{service.description}</p>
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {service.features.map((feature, featureIndex) => (
+                          <motion.div 
+                            key={featureIndex}
+                            className="flex items-center gap-3"
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: 0.5 + featureIndex * 0.1 }}
+                            whileHover={{ scale: 1.02, x: 5 }}
+                          >
+                            <motion.div
+                              whileHover={{ scale: 1.2, rotate: 360 }}
+                              transition={{ duration: 0.3 }}
+                            >
+                              <CheckCircle className="h-5 w-5 text-success flex-shrink-0" />
+                            </motion.div>
+                            <span className="text-sm text-foreground">{feature}</span>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </MagicSpotlight>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -349,25 +484,71 @@ export default function Services() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-6 bg-primary">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
+      {/* CTA Section Spectaculaire */}
+      <section className="py-20 px-6 bg-gradient-to-br from-primary via-primary/95 to-primary/90 relative overflow-hidden">
+        {/* Animated Background */}
+        <div className="absolute inset-0 overflow-hidden">
+          <motion.div 
+            className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-accent/10 via-transparent to-transparent"
+            animate={{ opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 4, repeat: Infinity }}
+          />
+          <motion.div 
+            className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-accent/20 via-transparent to-transparent rounded-full blur-3xl"
+            animate={{ rotate: 360, scale: [1, 1.2, 1] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          />
+        </div>
+        
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <motion.h2 
+            className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
             Prêt à transformer votre enseignement ?
-          </h2>
-          <p className="text-xl text-primary-foreground/80 mb-8">
+          </motion.h2>
+          <motion.p 
+            className="text-xl text-primary-foreground/80 mb-8"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             Découvrez comment Byss VNS peut révolutionner la formation commerciale 
             dans votre établissement
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-accent hover:bg-accent/90 text-accent-foreground text-lg px-8 py-4">
-              Planifier une démo
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button size="lg" variant="outline" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary text-lg px-8 py-4">
-              Télécharger la brochure
-            </Button>
-          </div>
+          </motion.p>
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+          >
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <TestButton variant="magic" size="lg" className="text-lg px-8 py-4" asChild>
+                <Link to="/contact">
+                  Planifier une démo
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Link>
+              </TestButton>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <TestButton variant="outline" size="lg" className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary text-lg px-8 py-4" asChild>
+                <Link to="/scenarios">
+                  Télécharger la brochure
+                </Link>
+              </TestButton>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
     </div>
