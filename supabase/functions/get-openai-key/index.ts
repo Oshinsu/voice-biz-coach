@@ -38,7 +38,7 @@ serve(async (req) => {
         body: JSON.stringify({
           session: {
             type: "realtime",
-            model: "gpt-4o-realtime-preview-2024-12-17",
+            model: "gpt-4o-realtime-preview-2024-10-01",
             voice: "alloy",
             instructions: instructions || "Your system prompt here."
           }
