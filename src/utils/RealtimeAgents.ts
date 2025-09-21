@@ -232,8 +232,7 @@ export class EDHECVoiceAgent {
           eagerness: 'medium', // Équilibre entre réactivité et faux positifs
           createResponse: true,
           interruptResponse: true
-        },
-        max_response_output_tokens: 4096
+        }
       },
       // Guardrails EDHEC intégrés
       outputGuardrails: this.createEDHECGuardrails(),
