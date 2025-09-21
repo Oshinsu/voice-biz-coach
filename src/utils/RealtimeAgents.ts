@@ -3,7 +3,7 @@
  * Conforme septembre 2025 - WebRTC + clés éphémères
  */
 
-import { RealtimeAgent, RealtimeSession } from '@openai/agents-realtime';
+import { RealtimeAgent, RealtimeSession } from '@openai/agents/realtime';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface AgentsConfig {
@@ -74,7 +74,7 @@ export class EDHECVoiceAgent {
         throw new Error(`Erreur clé éphémère: ${error.message}`);
       }
 
-      if (!data?.client_secret?.value) {
+      if (!data?.value) {
         throw new Error('Clé éphémère manquante dans la réponse');
       }
 
@@ -82,7 +82,7 @@ export class EDHECVoiceAgent {
 
       // Connexion avec clé éphémère
       await this.session.connect({
-        apiKey: data.client_secret.value
+        apiKey: data.value
       });
 
       console.log('✅ Connexion WebRTC établie');
