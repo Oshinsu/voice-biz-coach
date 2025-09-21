@@ -218,7 +218,7 @@ export class EDHECVoiceAgent {
 
     // Initialize session with advanced configuration
     this.session = new RealtimeSession(this.agent, {
-      model: 'gpt-4o-realtime-preview-2024-12-17',
+      model: 'gpt-realtime',
       config: {
         modalities: ['text', 'audio'], // Support texte + audio explicite
         voice: 'alloy',
