@@ -28,7 +28,7 @@ serve(async (req) => {
 
     // Appel correct selon la documentation officielle Agents SDK
     const response = await fetch(
-      "https://api.openai.com/v1/realtime/client_secrets",
+      "https://api.openai.com/v1/realtime/sessions",
       {
         method: "POST",
         headers: {
@@ -36,10 +36,9 @@ serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          session: {
-            type: "realtime",
-            model: "gpt-realtime"
-          }
+          model: "gpt-4o-realtime-preview-2024-12-17",
+          voice: "alloy",
+          instructions: instructions || "Your system prompt here."
         }),
       }
     );

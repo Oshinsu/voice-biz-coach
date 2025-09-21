@@ -131,6 +131,10 @@ export function SophieAgentsSDK({
       console.log('🎬 Response créée (natif):', data);
       setIsSpeaking(true);
       setIsListening(false);
+      setConversationMetrics(prev => ({
+        ...prev,
+        responsesStarted: (prev as any).responsesStarted + 1 || 1
+      }));
     });
 
     agent.on('response_done', (data: any) => {
@@ -139,14 +143,23 @@ export function SophieAgentsSDK({
       setIsListening(true);
       
       // Mise à jour métriques enrichies
-      if (data.metrics) {
-        setConversationMetrics(prev => ({
-          ...prev,
-          tokens: data.metrics.tokens,
-          duration: data.metrics.duration,
-          lastUpdate: Date.now()
-        }));
-      }
+      setConversationMetrics(prev => ({
+        ...prev,
+        responsesCompleted: (prev as any).responsesCompleted + 1 || 1,
+        tokens: (data.usage?.total_tokens || 0) + (prev.tokens || 0),
+        duration: data.metrics?.duration || prev.duration,
+        lastUpdate: Date.now()
+      }));
+    });
+
+    agent.on('native_transcription', (data: any) => {
+      console.log('📝 Native transcription:', data.transcript);
+      // Mettre à jour l'historique avec la transcription native
+      setHistory(prev => prev.map(item => 
+        (item as any).id === data.item_id 
+          ? { ...item, content: data.transcript }
+          : item
+      ));
     });
 
     // Transcription temps réel native

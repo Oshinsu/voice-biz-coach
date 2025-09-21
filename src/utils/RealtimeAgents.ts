@@ -243,6 +243,7 @@ export class EDHECVoiceAgent {
 
     // Set up native event handlers
     this.setupEventHandlers();
+    this.setupNativeResponseEvents();
     
     console.log('✅ Agent EDHEC avancé initialisé avec guardrails et semantic VAD');
   }
@@ -290,6 +291,33 @@ export class EDHECVoiceAgent {
       console.error('❌ Erreur connexion:', error);
       throw error;
     }
+  }
+
+  /**
+   * Configuration des événements natifs response.created/response.done
+   */
+  private setupNativeResponseEvents() {
+    if (!this.session) return;
+
+    // Pour l'instant, simuler les événements natifs via les événements audio existants
+    // Les vrais événements response.created/done seront ajoutés quand disponibles dans l'API
+    console.log('⚙️ Configuration événements response natifs (simulés pour l\'instant)');
+    
+    // Simuler response.created quand l'audio commence
+    this.session.on('audio', (event: TransportLayerAudio) => {
+      this.emit('response_created', {
+        response_id: 'simulated_' + Date.now(),
+        status: 'in_progress',
+        timestamp: Date.now()
+      });
+    });
+
+    // Les événements de transcription seront gérés via l'historique
+    this.emit('native_transcription', {
+      item_id: 'setup',
+      transcript: 'Événements natifs configurés',
+      timestamp: Date.now()
+    });
   }
 
   private setupEventHandlers() {
