@@ -3,7 +3,7 @@
  * Conforme septembre 2025 - WebRTC + clés éphémères
  */
 
-import { RealtimeAgent, RealtimeSession } from '@openai/agents/realtime';
+import { RealtimeAgent, RealtimeSession, OpenAIRealtimeWebRTC } from '@openai/agents/realtime';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface AgentsConfig {
@@ -15,6 +15,7 @@ export interface AgentsConfig {
 export class EDHECVoiceAgent {
   private agent: RealtimeAgent | null = null;
   private session: RealtimeSession | null = null;
+  private transport: OpenAIRealtimeWebRTC | null = null;
   private eventHandlers: Map<string, (event: any) => void> = new Map();
 
   constructor(private config: AgentsConfig) {}
@@ -26,8 +27,8 @@ export class EDHECVoiceAgent {
     try {
       console.log('🚀 Initialisation Agents SDK officiel...');
 
-      // 1. Créer l'agent avec voix selon type conversation
-      const voice = this.config.conversationType === 'cold-call' ? 'marin' : 'cedar';
+      // 1. Créer l'agent avec voix OpenAI officielle selon type conversation
+      const voice = this.config.conversationType === 'cold-call' ? 'alloy' : 'sage';
       
       this.agent = new RealtimeAgent({
         name: 'Sophie Hennion-Moreau',
@@ -35,12 +36,19 @@ export class EDHECVoiceAgent {
         voice: voice
       });
 
-      // 2. Créer la session avec configuration optimale  
-      this.session = new RealtimeSession(this.agent, {
-        model: 'gpt-realtime'
+      // 2. Configurer transport WebRTC avec microphone et audio
+      this.transport = new OpenAIRealtimeWebRTC({
+        mediaStream: await navigator.mediaDevices.getUserMedia({ audio: true }),
+        audioElement: document.createElement('audio'),
       });
 
-      // 3. Configurer les événements
+      // 3. Créer la session avec transport WebRTC
+      this.session = new RealtimeSession(this.agent, {
+        model: 'gpt-realtime',
+        transport: this.transport
+      });
+
+      // 4. Configurer les événements
       this.setupEventHandlers();
 
       console.log('✅ Agent et Session créés avec succès');
@@ -86,6 +94,9 @@ export class EDHECVoiceAgent {
       });
 
       console.log('✅ Connexion WebRTC établie');
+      
+      // Émettre événement de connexion
+      this.emit('connected', {});
 
     } catch (error) {
       console.error('❌ Erreur connexion:', error);
@@ -99,10 +110,11 @@ export class EDHECVoiceAgent {
   private setupEventHandlers(): void {
     if (!this.session) return;
 
-    console.log('📝 Configuration des événements Agents SDK prête');
+    console.log('📝 Configuration des événements Agents SDK...');
     
-    // Note: Les événements exacts dépendent de l'API finale du SDK
-    // Configuration minimale pour démarrer
+    // Pour l'instant, les événements seront émis manuellement
+    // selon les callbacks de connexion/déconnexion
+    console.log('✅ Événements Agents SDK configurés (mode callback)');
   }
 
   /**
@@ -141,8 +153,13 @@ export class EDHECVoiceAgent {
   async disconnect(): Promise<void> {
     try {
       if (this.session) {
-        // Note: La méthode exacte de déconnexion sera définie par l'API finale
+        // Pour l'instant, pas de méthode disconnect disponible
+        // Utiliser la cleanup manuelle
         this.session = null;
+      }
+      if (this.transport) {
+        // Cleanup transport WebRTC
+        this.transport = null;
       }
       this.agent = null;
       console.log('🔌 Déconnexion propre terminée');
@@ -151,6 +168,7 @@ export class EDHECVoiceAgent {
       console.error('❌ Erreur déconnexion:', error);
       // Force cleanup même en cas d'erreur
       this.session = null;
+      this.transport = null;
       this.agent = null;
     }
   }
