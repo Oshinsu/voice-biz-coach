@@ -26,9 +26,9 @@ serve(async (req) => {
 
     console.log('🔑 Génération token éphémère OpenAI pour Agents SDK WebRTC...');
 
-    // Appel correct selon la documentation officielle Agents SDK
+    // Appel correct pour WebRTC client secrets selon la documentation Agents SDK
     const response = await fetch(
-      "https://api.openai.com/v1/realtime/sessions",
+      "https://api.openai.com/v1/realtime/client_secrets",
       {
         method: "POST",
         headers: {
@@ -36,9 +36,12 @@ serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "gpt-4o-realtime-preview-2024-12-17",
-          voice: "alloy",
-          instructions: instructions || "Your system prompt here."
+          session: {
+            type: "realtime",
+            model: "gpt-4o-realtime-preview-2024-12-17",
+            voice: "alloy",
+            instructions: instructions || "Your system prompt here."
+          }
         }),
       }
     );
