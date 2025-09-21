@@ -27,6 +27,16 @@ serve(async (req) => {
     console.log('🔑 Génération token éphémère OpenAI pour Agents SDK WebRTC...');
 
     // Appel correct pour WebRTC client secrets selon la documentation Agents SDK
+    console.log('📝 Instructions envoyées:', instructions);
+    
+    const requestBody = {
+      model: "gpt-realtime",
+      voice: "alloy",
+      instructions: instructions || "Your system prompt here."
+    };
+    
+    console.log('📦 Body de la requête:', JSON.stringify(requestBody, null, 2));
+    
     const response = await fetch(
       "https://api.openai.com/v1/realtime/client_secrets",
       {
@@ -35,14 +45,7 @@ serve(async (req) => {
           Authorization: `Bearer ${OPENAI_API_KEY}`,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          session: {
-            type: "realtime",
-            model: "gpt-realtime",
-            voice: "alloy",
-            instructions: instructions || "Your system prompt here."
-          }
-        }),
+        body: JSON.stringify(requestBody),
       }
     );
 
