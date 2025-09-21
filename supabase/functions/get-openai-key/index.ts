@@ -38,7 +38,7 @@ serve(async (req) => {
     console.log('📦 Body de la requête:', JSON.stringify(requestBody, null, 2));
     
     const response = await fetch(
-      "https://api.openai.com/v1/realtime/client_secrets",
+      "https://api.openai.com/v1/realtime/sessions",
       {
         method: "POST",
         headers: {
