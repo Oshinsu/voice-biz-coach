@@ -4,6 +4,8 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Cache-Control': 'no-store',
+  'X-Content-Type-Options': 'nosniff'
 };
 
 serve(async (req) => {
@@ -21,7 +23,8 @@ serve(async (req) => {
       });
     }
 
-    console.log('🔑 Génération token éphémère OpenAI WebRTC...');
+    const { instructions } = await req.json().catch(() => ({}));
+    console.log('🔑 Génération token éphémère OpenAI WebRTC (septembre 2025)...');
     
     const response = await fetch("https://api.openai.com/v1/realtime/client_secrets", {
       method: "POST",
@@ -37,7 +40,8 @@ serve(async (req) => {
           modalities: ["text", "audio"],
           input_audio_format: "pcm16",
           output_audio_format: "pcm16",
-          turn_detection: { type: "semantic_vad" }
+          turn_detection: { type: "semantic_vad" },
+          instructions: instructions || "Assistant vocal pédagogique en temps réel pour BYSS VNS."
         }
       })
     });
