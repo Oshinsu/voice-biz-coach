@@ -26,19 +26,28 @@ serve(async (req) => {
 
     console.log('🔑 Génération token éphémère OpenAI pour Agents SDK WebRTC...');
 
-    // Appel correct pour WebRTC client secrets selon la documentation Agents SDK
+    // Appel correct selon doc officielle OpenAI /v1/realtime/client_secrets
     console.log('📝 Instructions envoyées:', instructions);
     
+    // Body encapsulé dans "session" selon doc officielle
     const requestBody = {
-      model: "gpt-realtime",
-      voice: "alloy",
-      instructions: instructions || "Your system prompt here."
+      session: {
+        type: "realtime",
+        model: "gpt-realtime",
+        voice: "alloy",
+        modalities: ["text", "audio"],
+        input_audio_format: "pcm16",
+        output_audio_format: "pcm16",
+        turn_detection: { type: "semantic_vad" },
+        instructions: instructions || "Your system prompt here.",
+        ...(tools && { tools })
+      }
     };
     
     console.log('📦 Body de la requête:', JSON.stringify(requestBody, null, 2));
     
     const response = await fetch(
-      "https://api.openai.com/v1/realtime/sessions",
+      "https://api.openai.com/v1/realtime/client_secrets",
       {
         method: "POST",
         headers: {
@@ -55,11 +64,16 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    console.log('✅ Token éphémère généré avec succès pour Agents SDK');
+    console.log('✅ Token éphémère généré avec succès:', data);
 
-    return new Response(JSON.stringify(data), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    // Extraire client_secret.value et retourner format compatible
+    if (data.client_secret?.value) {
+      return new Response(JSON.stringify({ value: data.client_secret.value }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    } else {
+      throw new Error('client_secret.value manquant dans la réponse OpenAI');
+    }
   } catch (error) {
     console.error("❌ Erreur génération token éphémère:", error);
     return new Response(JSON.stringify({ error: error.message }), {
