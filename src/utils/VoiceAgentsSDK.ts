@@ -1,4 +1,4 @@
-import { RealtimeAgent, RealtimeSession } from "@openai/agents-realtime";
+import { RealtimeAgent, RealtimeSession } from "@openai/agents/realtime";
 import { supabase } from "@/integrations/supabase/client";
 
 export async function startVoiceAgent(instructions?: string): Promise<RealtimeSession> {
