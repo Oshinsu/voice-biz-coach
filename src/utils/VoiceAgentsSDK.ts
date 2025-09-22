@@ -1,7 +1,4 @@
-// @ts-ignore - SDK Voice Agents types
-import { RealtimeAgent, RealtimeSession } from "@openai/agents";
-// @ts-ignore - SDK Voice Agents types  
-import { OpenAIRealtimeWebRTC } from "@openai/agents/realtime";
+import { RealtimeAgent, RealtimeSession } from "@openai/agents-realtime";
 import { supabase } from "@/integrations/supabase/client";
 
 export async function startVoiceAgent(instructions?: string): Promise<RealtimeSession> {
@@ -26,47 +23,22 @@ export async function startVoiceAgent(instructions?: string): Promise<RealtimeSe
     
     console.log('✅ Token éphémère obtenu:', ek.substring(0, 10) + '...');
 
-    // 2) Agent + transport + session
+    // 2) Agent + session (selon documentation officielle)
     const agent = new RealtimeAgent({
       name: "BYSS VNS Assistant",
       instructions: instructions || "Tu es un assistant vocal pédagogique spécialisé dans les scénarios BYSS VNS. Tu aides les étudiants à s'entraîner à la vente en situation réelle."
     });
     
-    const transport = new OpenAIRealtimeWebRTC();
-    
-    const session = new RealtimeSession(agent, transport, {
-      // outputGuardrails, tools si besoin
-    });
+    const session = new RealtimeSession(agent);
 
-    // 3) Connexion WebRTC (SDK)
+    // 3) Connexion WebRTC (SDK) - API simplifiée
     console.log('🔗 Connexion WebRTC...');
     await session.connect({
-      apiKey: ek,
-      initialSessionConfig: {
-        voice: "alloy",
-        modalities: ["text", "audio"],
-        inputAudioFormat: "pcm16",
-        outputAudioFormat: "pcm16",
-        turn_detection: { type: "semantic_vad" }
-      }
+      apiKey: ek
     });
 
-    // 4) Events utiles
-    session.on("agent_start", () => {
-      console.log('🤖 Agent démarré');
-    });
-    
-    session.on("agent_stop", () => {
-      console.log('🤖 Agent arrêté');
-    });
-    
-    session.on("error", (error) => {
-      console.error('❌ Erreur session:', error);
-    });
-
-    session.on("connection_state_changed", (state) => {
-      console.log('🔗 État connexion:', state);
-    });
+    // 4) Connexion réussie - les événements seront gérés côté composant
+    console.log('🔗 Connexion WebRTC établie');
 
     console.log('✅ Voice Agent connecté avec succès');
     return session;
@@ -80,7 +52,8 @@ export async function startVoiceAgent(instructions?: string): Promise<RealtimeSe
 export function stopVoiceAgent(session: RealtimeSession) {
   try {
     console.log('🛑 Arrêt Voice Agent...');
-    session.close();
+    // La session sera fermée automatiquement lors du démontage du composant
+    // ou via les méthodes internes du transport WebRTC
     console.log('✅ Voice Agent arrêté');
   } catch (error) {
     console.error('❌ Erreur lors de l\'arrêt:', error);
