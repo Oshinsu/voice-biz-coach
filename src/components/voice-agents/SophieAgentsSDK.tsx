@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { TestButton } from "@/components/ui/test-button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { startVoiceAgent, stopVoiceAgent } from "@/utils/VoiceAgentsSDK";
+import { startVoiceAgent, stopVoiceAgent, VoiceAgentSession } from "@/utils/VoiceAgentsSDK";
 import { buildEDHECInstructions } from "@/lib/edhec-prompts";
 import { 
   Phone, 
@@ -77,10 +77,12 @@ export function SophieAgentsSDK({
   const [textInput, setTextInput] = useState('');
   const [guardrailAlerts, setGuardrailAlerts] = useState<any[]>([]);
   const [nativeTranscripts, setNativeTranscripts] = useState<string>('');
-  
-  const sessionRef = useRef<any | null>(null);
+
+  const sessionRef = useRef<VoiceAgentSession | null>(null);
   const startTimeRef = useRef<Date | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const audioElementRef = useRef<HTMLAudioElement | null>(null);
+  const remoteStreamCleanupRef = useRef<(() => void) | null>(null);
 
   /**
    * Gestion de l'historique Agents SDK
@@ -94,6 +96,100 @@ export function SophieAgentsSDK({
     }]);
   };
 
+  const updateListeningFromLocal = useCallback((stream?: MediaStream | null) => {
+    if (!stream) {
+      setIsListening(false);
+      return;
+    }
+
+    const hasActiveTrack = stream.getAudioTracks().some((track) =>
+      track.enabled && !track.muted && track.readyState === 'live'
+    );
+
+    setIsListening(hasActiveTrack);
+  }, []);
+
+  const attachLocalStreamHandlers = useCallback((session: VoiceAgentSession) => {
+    const { localStream } = session;
+    const syncLocalActivity = () => updateListeningFromLocal(localStream);
+
+    localStream.getAudioTracks().forEach((track) => {
+      track.onmute = syncLocalActivity;
+      track.onunmute = syncLocalActivity;
+      track.onended = syncLocalActivity;
+    });
+
+    syncLocalActivity();
+  }, [updateListeningFromLocal]);
+
+  const attachRemoteStreamHandlers = useCallback((session: VoiceAgentSession) => {
+    const { remoteStream } = session;
+
+    if (remoteStreamCleanupRef.current) {
+      remoteStreamCleanupRef.current();
+      remoteStreamCleanupRef.current = null;
+    }
+
+    const ensurePlayback = () => {
+      const audioNode = audioElementRef.current;
+      if (audioNode && audioNode.srcObject instanceof MediaStream) {
+        const playPromise = audioNode.play();
+        if (playPromise) {
+          playPromise.catch((error) => {
+            console.warn('🎧 Impossible de lancer la lecture du flux distant:', error);
+          });
+        }
+      }
+    };
+
+    const handleRemoteSilence = () => {
+      setIsSpeaking(false);
+      updateListeningFromLocal(sessionRef.current?.localStream ?? null);
+    };
+
+    const registerRemoteTrack = (track: MediaStreamTrack) => {
+      track.onunmute = () => {
+        setIsSpeaking(true);
+        setIsListening(false);
+        ensurePlayback();
+      };
+      track.onmute = handleRemoteSilence;
+      track.onended = handleRemoteSilence;
+    };
+
+    remoteStream.getTracks().forEach(registerRemoteTrack);
+
+    const handleAddTrack = (event: MediaStreamTrackEvent) => {
+      registerRemoteTrack(event.track);
+      ensurePlayback();
+    };
+
+    const handleRemoveTrack = () => {
+      if (remoteStream.getTracks().length === 0) {
+        handleRemoteSilence();
+      }
+    };
+
+    remoteStream.addEventListener('addtrack', handleAddTrack);
+    remoteStream.addEventListener('removetrack', handleRemoveTrack);
+
+    const audioElement = audioElementRef.current;
+    if (audioElement) {
+      audioElement.srcObject = remoteStream;
+      ensurePlayback();
+    }
+
+    remoteStreamCleanupRef.current = () => {
+      remoteStream.removeEventListener('addtrack', handleAddTrack);
+      remoteStream.removeEventListener('removetrack', handleRemoveTrack);
+      remoteStream.getTracks().forEach((track) => {
+        track.onmute = null;
+        track.onunmute = null;
+        track.onended = null;
+      });
+    };
+  }, [updateListeningFromLocal]);
+
   const setupEventHandlers = (session: any) => {
     // Connection events with metrics
     session.on('agent_start', () => {
@@ -102,6 +198,7 @@ export function SophieAgentsSDK({
       setIsConnecting(false);
       startTimeRef.current = new Date();
       addToHistory('system', 'Sophie Hennion-Moreau connectée (Voice Agents SDK)', 'system');
+      updateListeningFromLocal(sessionRef.current?.localStream ?? null);
     });
 
     session.on('agent_stop', () => {
@@ -109,7 +206,7 @@ export function SophieAgentsSDK({
       setIsConnected(false);
       setIsConnecting(false);
       setIsSpeaking(false);
-      setIsListening(false);
+      updateListeningFromLocal(null);
     });
 
     session.on('connection_state_changed', (state: any) => {
@@ -117,7 +214,12 @@ export function SophieAgentsSDK({
       if (state === 'connected') {
         setIsConnected(true);
         setIsConnecting(false);
-        setIsListening(true);
+        updateListeningFromLocal(sessionRef.current?.localStream ?? null);
+      }
+      if (state === 'disconnected' || state === 'failed' || state === 'closed') {
+        setIsConnected(false);
+        setIsSpeaking(false);
+        updateListeningFromLocal(null);
       }
     });
 
@@ -125,36 +227,13 @@ export function SophieAgentsSDK({
       console.error('❌ Erreur session Voice SDK:', error);
       setIsConnected(false);
       setIsConnecting(false);
+      setIsSpeaking(false);
+      updateListeningFromLocal(null);
       toast({
         title: "Erreur session",
         description: error?.message || "Erreur de connexion",
         variant: "destructive"
       });
-    });
-
-    // Audio events simulation (to be replaced with real events when available)
-    const audioInterval = setInterval(() => {
-      if (sessionRef.current) {
-        // Toggle speaking/listening states for demo
-        setIsSpeaking(prev => {
-          if (prev) {
-            setIsListening(true);
-            return false;
-          } else {
-            const shouldSpeak = Math.random() > 0.7; // Simulate AI speaking
-            if (shouldSpeak) {
-              setIsListening(false);
-              return true;
-            }
-          }
-          return false;
-        });
-      }
-    }, 3000);
-
-    // Cleanup interval on session end
-    session.on('agent_stop', () => {
-      clearInterval(audioInterval);
     });
   };
 
@@ -174,10 +253,14 @@ export function SophieAgentsSDK({
       console.log('📝 Instructions EDHEC générées:', instructions.substring(0, 200) + '...');
 
       // Démarrer la session WebRTC via SDK simplifié
-      sessionRef.current = await startVoiceAgent(instructions);
+      const session = await startVoiceAgent(instructions);
+      sessionRef.current = session;
 
-      // Configurer les événements
-      setupEventHandlers(sessionRef.current);
+      attachLocalStreamHandlers(session);
+      attachRemoteStreamHandlers(session);
+
+      const transport = session.transport;
+      setupEventHandlers(transport);
 
       toast({
         title: "✅ Connexion établie",
@@ -206,16 +289,26 @@ export function SophieAgentsSDK({
         clearInterval(timerRef.current);
         timerRef.current = null;
       }
-      
+
+      if (remoteStreamCleanupRef.current) {
+        remoteStreamCleanupRef.current();
+        remoteStreamCleanupRef.current = null;
+      }
+
       if (sessionRef.current) {
-        stopVoiceAgent(sessionRef.current);
+        await stopVoiceAgent(sessionRef.current);
         sessionRef.current = null;
       }
-      
+
+      if (audioElementRef.current) {
+        audioElementRef.current.pause();
+        audioElementRef.current.srcObject = null;
+      }
+
       setIsConnected(false);
       setIsConnecting(false);
       setIsSpeaking(false);
-      setIsListening(false);
+      updateListeningFromLocal(null);
 
       let duration = 0;
       if (startTimeRef.current) {
@@ -236,7 +329,7 @@ export function SophieAgentsSDK({
       setIsConnected(false);
       setIsConnecting(false);
       setIsSpeaking(false);
-      setIsListening(false);
+      updateListeningFromLocal(null);
     }
   };
 
@@ -244,11 +337,14 @@ export function SophieAgentsSDK({
     if (sessionRef.current && isConnected) {
       try {
         // Utiliser l'interruption native du SDK Voice Agents
-        await sessionRef.current.interrupt();
+        const transport = sessionRef.current.transport as any;
+        if (transport && typeof transport.interrupt === 'function') {
+          await transport.interrupt();
+        }
         addToHistory('system', '🔇 Interruption réussie (Voice SDK)', 'system');
         setIsSpeaking(false);
-        setIsListening(true);
-        
+        updateListeningFromLocal(sessionRef.current.localStream);
+
         toast({
           title: "Interruption réussie",
           description: "Sophie interrompue",
@@ -269,12 +365,16 @@ export function SophieAgentsSDK({
     if (sessionRef.current && isConnected && textInput.trim()) {
       try {
         // Utiliser sendMessage du SDK Voice Agents
-        await sessionRef.current.sendMessage(textInput.trim());
-        console.log('📤 Message texte envoyé (Voice SDK):', textInput);
-        setTextInput('');
+        const transport = sessionRef.current.transport as any;
+        const message = textInput.trim();
+        if (transport && typeof transport.sendMessage === 'function') {
+          await transport.sendMessage(message);
+        }
+        console.log('📤 Message texte envoyé (Voice SDK):', message);
         
         // Add to local history
-        addToHistory('user', textInput.trim(), 'transcript');
+        addToHistory('user', message, 'transcript');
+        setTextInput('');
       } catch (error) {
         console.error('❌ Erreur envoi message texte:', error);
         toast({
@@ -291,13 +391,18 @@ export function SophieAgentsSDK({
     if (!pendingApproval || !sessionRef.current) return;
 
     try {
+      const transport = sessionRef.current.transport as any;
       if (approve) {
         // Utiliser les méthodes d'approval du Voice SDK
         console.log('✅ Tool approuvé (Voice SDK):', pendingApproval.toolName);
-        // sessionRef.current.approveTool(pendingApproval.approvalItem); // When available
+        if (transport && typeof transport.approveTool === 'function') {
+          await transport.approveTool(pendingApproval.approvalItem);
+        }
       } else {
         console.log('❌ Tool rejeté (Voice SDK):', pendingApproval.toolName);
-        // sessionRef.current.rejectTool(pendingApproval.request); // When available
+        if (transport && typeof transport.rejectTool === 'function') {
+          await transport.rejectTool(pendingApproval.request);
+        }
       }
       setPendingApproval(null);
       
@@ -334,7 +439,7 @@ export function SophieAgentsSDK({
   // Cleanup au démontage
   useEffect(() => {
     return () => {
-      endSession();
+      void endSession();
     };
   }, []);
 
@@ -346,214 +451,228 @@ export function SophieAgentsSDK({
 
   if (!open) return null;
 
+  const audioElement = (
+    <audio
+      ref={audioElementRef}
+      className="hidden"
+      autoPlay
+      playsInline
+    />
+  );
+
   // Interface réduite
   if (isMinimized) {
     return (
-      <Card className="fixed bottom-4 right-4 w-60 shadow-xl border-2 z-50">
-        <CardContent className="p-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                isConnected 
-                  ? isSpeaking 
-                    ? 'bg-blue-100 animate-pulse' 
-                    : isListening
-                      ? 'bg-green-100'
-                      : 'bg-blue-50'
-                  : 'bg-muted'
-              }`}>
-                👩‍💼
+      <>
+        {audioElement}
+        <Card className="fixed bottom-4 right-4 w-60 shadow-xl border-2 z-50">
+          <CardContent className="p-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                  isConnected
+                    ? isSpeaking
+                      ? 'bg-blue-100 animate-pulse'
+                      : isListening
+                        ? 'bg-green-100'
+                        : 'bg-blue-50'
+                    : 'bg-muted'
+                }`}>
+                  👩‍💼
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-xs truncate">Sophie</p>
+                  {isConnected && (
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <span>{formatTime(sessionDuration)}</span>
+                      <span>•</span>
+                      <span>{exchangeCount}</span>
+                    </div>
+                  )}
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-xs truncate">Sophie</p>
-                {isConnected && (
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>{formatTime(sessionDuration)}</span>
-                    <span>•</span>
-                    <span>{exchangeCount}</span>
-                  </div>
+              <div className="flex gap-1">
+                <TestButton size="sm" variant="ghost" onClick={() => setIsMinimized(false)} className="h-6 w-6 p-0">
+                  <Maximize2 className="w-3 h-3" />
+                </TestButton>
+                {isConnected ? (
+                  <TestButton size="sm" variant="ghost" onClick={endSession} className="h-6 w-6 p-0 text-destructive">
+                    <PhoneOff className="w-3 h-3" />
+                  </TestButton>
+                ) : (
+                  <TestButton size="sm" variant="ghost" onClick={onToggle} className="h-6 w-6 p-0">
+                    <PhoneOff className="w-3 h-3" />
+                  </TestButton>
                 )}
               </div>
             </div>
-            <div className="flex gap-1">
-              <TestButton size="sm" variant="ghost" onClick={() => setIsMinimized(false)} className="h-6 w-6 p-0">
-                <Maximize2 className="w-3 h-3" />
-              </TestButton>
-              {isConnected ? (
-                <TestButton size="sm" variant="ghost" onClick={endSession} className="h-6 w-6 p-0 text-destructive">
-                  <PhoneOff className="w-3 h-3" />
-                </TestButton>
-              ) : (
-                <TestButton size="sm" variant="ghost" onClick={onToggle} className="h-6 w-6 p-0">
-                  <PhoneOff className="w-3 h-3" />
-                </TestButton>
-              )}
-            </div>
-          </div>
-          {isConnected && (
-            <div className="mt-2 flex justify-center">
-              {isListening ? (
-                <Badge variant="default" className="bg-green-600 text-xs h-5">
-                  <Mic className="w-3 h-3 mr-1" />
-                  Vous
-                </Badge>
-              ) : isSpeaking ? (
-                <Badge variant="default" className="bg-blue-600 animate-pulse text-xs h-5">
-                  <Volume2 className="w-3 h-3 mr-1" />
-                  Sophie
-                </Badge>
-              ) : (
-                <Badge variant="outline" className="text-xs h-5">
-                  <MicOff className="w-3 h-3 mr-1" />
-                  Pause
-                </Badge>
-              )}
-            </div>
-          )}
-        </CardContent>
-      </Card>
+            {isConnected && (
+              <div className="mt-2 flex justify-center">
+                {isListening ? (
+                  <Badge variant="default" className="bg-green-600 text-xs h-5">
+                    <Mic className="w-3 h-3 mr-1" />
+                    Vous
+                  </Badge>
+                ) : isSpeaking ? (
+                  <Badge variant="default" className="bg-blue-600 animate-pulse text-xs h-5">
+                    <Volume2 className="w-3 h-3 mr-1" />
+                    Sophie
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="text-xs h-5">
+                    <MicOff className="w-3 h-3 mr-1" />
+                    Pause
+                  </Badge>
+                )}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </>
     );
   }
 
   // Interface principale
   return (
-    <Card className="fixed bottom-6 right-6 w-96 p-6 bg-card/95 backdrop-blur-sm border shadow-lg z-50">
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-              isConnected 
-                ? isSpeaking 
-                  ? 'bg-blue-100 animate-pulse' 
-                  : 'bg-blue-50'
-                : 'bg-muted'
-            }`}>
-              👩‍💼
+    <>
+      {audioElement}
+      <Card className="fixed bottom-6 right-6 w-96 p-6 bg-card/95 backdrop-blur-sm border shadow-lg z-50">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                isConnected
+                  ? isSpeaking
+                    ? 'bg-blue-100 animate-pulse'
+                    : 'bg-blue-50'
+                  : 'bg-muted'
+              }`}>
+                👩‍💼
+              </div>
+              <div>
+                <span className="font-medium">Sophie Hennion-Moreau</span>
+                <p className="text-xs text-muted-foreground">Dir. Innovation Pédagogique • EDHEC</p>
+              </div>
             </div>
-            <div>
-              <span className="font-medium">Sophie Hennion-Moreau</span>
-              <p className="text-xs text-muted-foreground">Dir. Innovation Pédagogique • EDHEC</p>
-            </div>
+            <Badge variant="secondary" className="text-xs flex items-center gap-1">
+              <Zap className="w-3 h-3" />
+              Agents SDK
+            </Badge>
           </div>
-          <Badge variant="secondary" className="text-xs flex items-center gap-1">
-            <Zap className="w-3 h-3" />
-            Agents SDK
-          </Badge>
-        </div>
 
-        {/* Status de connexion */}
-        <div className="flex items-center justify-between">
-          <TestButton size="sm" variant="ghost" onClick={() => setIsMinimized(true)}>
-            <Minimize2 className="w-4 h-4 mr-1" />
-            Réduire
-          </TestButton>
-          {onToggle && (
-            <TestButton size="sm" variant="ghost" onClick={onToggle}>
-              <PhoneOff className="w-4 h-4 mr-1" />
-              Fermer
+          {/* Status de connexion */}
+          <div className="flex items-center justify-between">
+            <TestButton size="sm" variant="ghost" onClick={() => setIsMinimized(true)}>
+              <Minimize2 className="w-4 h-4 mr-1" />
+              Réduire
             </TestButton>
-          )}
-        </div>
-
-        {isConnected && (
-          <div className="space-y-3">
-            {/* Métriques enrichies */}
-            <div className="text-sm text-muted-foreground grid grid-cols-2 gap-2">
-              <span>Durée: {formatTime(sessionDuration)}</span>
-              <span>Échanges: {conversationMetrics.totalMessages}</span>
-              <span>Tools: {conversationMetrics.toolCalls}</span>
-              <span>Tokens: {conversationMetrics.tokens || 'N/A'}</span>
-            </div>
-
-            {/* Guardrail alerts */}
-            {guardrailAlerts.map(alert => (
-              <div key={alert.id} className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-3 py-2 rounded text-sm">
-                🚨 Contenu filtré par guardrail
-              </div>
-            ))}
-
-            {/* Tool approval UI */}
-            {pendingApproval && (
-              <div className="bg-blue-50 border border-blue-200 p-3 rounded space-y-2">
-                <div className="text-sm font-medium">Approbation requise</div>
-                <div className="text-xs text-muted-foreground">
-                  Tool: {pendingApproval.toolName}
-                </div>
-                <div className="flex gap-2">
-                  <TestButton size="sm" onClick={() => handleToolApproval(true)}>
-                    Approuver
-                  </TestButton>
-                  <TestButton size="sm" variant="outline" onClick={() => handleToolApproval(false)}>
-                    Rejeter
-                  </TestButton>
-                </div>
-              </div>
-            )}
-
-            {/* Text input hybride */}
-            {isConnected && (
-              <div className="space-y-2">
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={textInput}
-                    onChange={(e) => setTextInput(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleTextMessage()}
-                    placeholder="Message texte..."
-                    className="flex-1 px-2 py-1 border rounded text-sm"
-                  />
-                  <TestButton size="sm" onClick={handleTextMessage} disabled={!textInput.trim()}>
-                    Envoyer
-                  </TestButton>
-                </div>
-              </div>
-            )}
-
-            <div>
-              <div className="text-center">
-                {isListening ? (
-                  <Badge variant="default" className="bg-green-600">
-                    <Mic className="w-4 h-4 mr-1" />
-                    À vous
-                  </Badge>
-                ) : isSpeaking ? (
-                  <Badge variant="default" className="bg-blue-600 animate-pulse">
-                    <Volume2 className="w-4 h-4 mr-1" />
-                    Sophie répond
-                  </Badge>
-                ) : (
-                  <Badge variant="outline">
-                    <MicOff className="w-4 h-4 mr-1" />
-                    En écoute
-                  </Badge>
-                )}
-              </div>
-            </div>
-
-            <div className="flex gap-2">
-              {isSpeaking && (
-                <TestButton size="sm" variant="outline" onClick={handleInterrupt}>
-                  Interrompre
-                </TestButton>
-              )}
-              <TestButton 
-                onClick={endSession}
-                variant="destructive"
-                className="flex-1"
-              >
+            {onToggle && (
+              <TestButton size="sm" variant="ghost" onClick={onToggle}>
                 <PhoneOff className="w-4 h-4 mr-1" />
-                Terminer
+                Fermer
               </TestButton>
-            </div>
-
-            {/* Transcription temps réel */}
-            {nativeTranscripts && (
-              <div className="text-xs text-muted-foreground bg-gray-50 p-2 rounded max-h-20 overflow-y-auto">
-                {nativeTranscripts}
-              </div>
             )}
           </div>
-        )}
+
+          {isConnected && (
+            <div className="space-y-3">
+              {/* Métriques enrichies */}
+              <div className="text-sm text-muted-foreground grid grid-cols-2 gap-2">
+                <span>Durée: {formatTime(sessionDuration)}</span>
+                <span>Échanges: {conversationMetrics.totalMessages}</span>
+                <span>Tools: {conversationMetrics.toolCalls}</span>
+                <span>Tokens: {conversationMetrics.tokens || 'N/A'}</span>
+              </div>
+
+              {/* Guardrail alerts */}
+              {guardrailAlerts.map(alert => (
+                <div key={alert.id} className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-3 py-2 rounded text-sm">
+                  🚨 Contenu filtré par guardrail
+                </div>
+              ))}
+
+              {/* Tool approval UI */}
+              {pendingApproval && (
+                <div className="bg-blue-50 border border-blue-200 p-3 rounded space-y-2">
+                  <div className="text-sm font-medium">Approbation requise</div>
+                  <div className="text-xs text-muted-foreground">
+                    Tool: {pendingApproval.toolName}
+                  </div>
+                  <div className="flex gap-2">
+                    <TestButton size="sm" onClick={() => handleToolApproval(true)}>
+                      Approuver
+                    </TestButton>
+                    <TestButton size="sm" variant="outline" onClick={() => handleToolApproval(false)}>
+                      Rejeter
+                    </TestButton>
+                  </div>
+                </div>
+              )}
+
+              {/* Text input hybride */}
+              {isConnected && (
+                <div className="space-y-2">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={textInput}
+                      onChange={(e) => setTextInput(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleTextMessage()}
+                      placeholder="Message texte..."
+                      className="flex-1 px-2 py-1 border rounded text-sm"
+                    />
+                    <TestButton size="sm" onClick={handleTextMessage} disabled={!textInput.trim()}>
+                      Envoyer
+                    </TestButton>
+                  </div>
+                </div>
+              )}
+
+              <div>
+                <div className="text-center">
+                  {isListening ? (
+                    <Badge variant="default" className="bg-green-600">
+                      <Mic className="w-4 h-4 mr-1" />
+                      À vous
+                    </Badge>
+                  ) : isSpeaking ? (
+                    <Badge variant="default" className="bg-blue-600 animate-pulse">
+                      <Volume2 className="w-4 h-4 mr-1" />
+                      Sophie répond
+                    </Badge>
+                  ) : (
+                    <Badge variant="outline">
+                      <MicOff className="w-4 h-4 mr-1" />
+                      En écoute
+                    </Badge>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex gap-2">
+                {isSpeaking && (
+                  <TestButton size="sm" variant="outline" onClick={handleInterrupt}>
+                    Interrompre
+                  </TestButton>
+                )}
+                <TestButton
+                  onClick={endSession}
+                  variant="destructive"
+                  className="flex-1"
+                >
+                  <PhoneOff className="w-4 h-4 mr-1" />
+                  Terminer
+                </TestButton>
+              </div>
+
+              {/* Transcription temps réel */}
+              {nativeTranscripts && (
+                <div className="text-xs text-muted-foreground bg-gray-50 p-2 rounded max-h-20 overflow-y-auto">
+                  {nativeTranscripts}
+                </div>
+              )}
+            </div>
+          )}
 
         {/* État de connexion */}
         {isConnecting && (
@@ -613,7 +732,8 @@ export function SophieAgentsSDK({
             </TestButton>
           </div>
         )}
-      </div>
-    </Card>
+        </div>
+      </Card>
+    </>
   );
 }
