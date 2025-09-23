@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { VOICE_AGENT_MODEL } from "../../../shared/voiceAgentModel.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -35,7 +36,7 @@ serve(async (req) => {
       body: JSON.stringify({
         session: {
           type: "realtime",
-          model: "gpt-realtime",
+          model: VOICE_AGENT_MODEL,
           voice: "alloy",
           modalities: ["text", "audio"],
           input_audio_format: "pcm16",
