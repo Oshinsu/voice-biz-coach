@@ -200,18 +200,29 @@ export function SophieAgentsSDK({
    */
   const endSession = async () => {
     console.log('🔌 Fermeture session Voice Agents SDK...');
-    
+
     try {
       if (timerRef.current) {
         clearInterval(timerRef.current);
         timerRef.current = null;
       }
-      
-      if (sessionRef.current) {
-        stopVoiceAgent(sessionRef.current);
-        sessionRef.current = null;
+
+      const currentSession = sessionRef.current;
+      if (currentSession) {
+        try {
+          await stopVoiceAgent(currentSession);
+          sessionRef.current = null;
+        } catch (error) {
+          console.error('❌ Erreur teardown Voice SDK:', error);
+          sessionRef.current = null;
+          toast({
+            title: "Erreur fermeture",
+            description: "La déconnexion a rencontré un problème. Vous pouvez réessayer.",
+            variant: "destructive",
+          });
+        }
       }
-      
+
       setIsConnected(false);
       setIsConnecting(false);
       setIsSpeaking(false);
