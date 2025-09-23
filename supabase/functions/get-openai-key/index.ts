@@ -35,7 +35,7 @@ serve(async (req) => {
       body: JSON.stringify({
         session: {
           type: "realtime",
-          model: "gpt-realtime",
+          model: "gpt-4o-realtime-preview-2024-12-17",
           voice: "alloy",
           modalities: ["text", "audio"],
           input_audio_format: "pcm16",
