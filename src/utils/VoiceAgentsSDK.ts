@@ -1,26 +1,45 @@
 import { RealtimeAgent, RealtimeSession } from "@openai/agents/realtime";
 import { supabase } from "@/integrations/supabase/client";
 
-export async function startVoiceAgent(instructions?: string): Promise<RealtimeSession> {
+type VoicePreset = "cold-call" | "rdv";
+
+export async function startVoiceAgent(
+  instructions?: string,
+  voicePreset: VoicePreset = "cold-call"
+): Promise<RealtimeSession> {
   try {
     console.log('🎤 Démarrage Voice Agent SDK...');
     
     // 1) Récupère le token éphémère (ek_…)
     const { data, error } = await supabase.functions.invoke('get-openai-key', {
-      body: { instructions: instructions || "Assistant vocal pédagogique en temps réel pour BYSS VNS." }
+      body: {
+        instructions: instructions || "Assistant vocal pédagogique en temps réel pour BYSS VNS.",
+        voicePreset
+      }
     });
-    
+
     if (error) {
       console.error('❌ Erreur Edge Function:', error);
-      throw new Error(`Edge Function error: ${error.message}`);
+      const details = typeof error?.details === 'string'
+        ? error.details
+        : error?.details ? JSON.stringify(error.details) : undefined;
+      const context = typeof (error as any)?.context === 'string'
+        ? (error as any).context
+        : (error as any)?.context ? JSON.stringify((error as any).context) : undefined;
+      const extraInfo = [details, context].filter(Boolean).join(' | ');
+      throw new Error(`Edge Function error: ${error.message}${extraInfo ? ` – ${extraInfo}` : ''}`);
     }
-    
-    const { value: ek } = data;
+
+    const { value: ek, audioFormatFallback } = data ?? {};
     if (!ek?.startsWith("ek_")) {
       console.error('❌ Token éphémère invalide:', ek);
       throw new Error("Token éphémère invalide");
     }
-    
+
+    if (audioFormatFallback) {
+      console.warn('⚠️ Session RTC obtenue après repli audio PCM16. Vérifier support opus côté API.');
+    }
+
     console.log('✅ Token éphémère obtenu:', ek.substring(0, 10) + '...');
 
     // 2) Agent + session (selon documentation officielle)

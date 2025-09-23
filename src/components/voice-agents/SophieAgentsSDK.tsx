@@ -174,7 +174,7 @@ export function SophieAgentsSDK({
       console.log('📝 Instructions EDHEC générées:', instructions.substring(0, 200) + '...');
 
       // Démarrer la session WebRTC via SDK simplifié
-      sessionRef.current = await startVoiceAgent(instructions);
+      sessionRef.current = await startVoiceAgent(instructions, selectedConversationType);
 
       // Configurer les événements
       setupEventHandlers(sessionRef.current);
