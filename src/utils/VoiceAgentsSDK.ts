@@ -1,5 +1,6 @@
 import { OpenAIRealtimeWebRTC } from "@openai/agents-realtime";
 import { supabase } from "@/integrations/supabase/client";
+import { VOICE_AGENT_MODEL } from "../../shared/voiceAgentModel";
 
 export async function startVoiceAgent(instructions?: string): Promise<OpenAIRealtimeWebRTC> {
   try {
@@ -32,7 +33,7 @@ export async function startVoiceAgent(instructions?: string): Promise<OpenAIReal
     console.log('🔗 Connexion WebRTC...');
     await webrtcTransport.connect({
       apiKey: ek,
-      model: "gpt-4o-realtime-preview-2024-12-17"
+      model: VOICE_AGENT_MODEL
     });
 
     console.log('✅ Voice Agent connecté avec succès');
