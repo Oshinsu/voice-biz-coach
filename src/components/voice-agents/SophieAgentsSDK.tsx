@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { TestButton } from "@/components/ui/test-button";
 import { Badge } from "@/components/ui/badge";
@@ -81,50 +81,275 @@ export function SophieAgentsSDK({
   const sessionRef = useRef<any | null>(null);
   const startTimeRef = useRef<Date | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const latestHistoryRef = useRef<any[]>([]);
+  const systemHistoryRef = useRef<HistoryItem[]>([]);
+  const cleanupHandlersRef = useRef<(() => void) | null>(null);
+  const isConnectedRef = useRef(isConnected);
+
+  useEffect(() => {
+    isConnectedRef.current = isConnected;
+  }, [isConnected]);
 
   /**
    * Gestion de l'historique Agents SDK
    */
   const addToHistory = (role: 'user' | 'assistant' | 'system', content: string, type: 'audio' | 'transcript' | 'system' = 'transcript') => {
-    setHistory(prev => [...prev, {
+    const entry: HistoryItem = {
       role,
       content,
       timestamp: new Date(),
       type
-    }]);
+    };
+
+    if (type === 'system') {
+      systemHistoryRef.current = [...systemHistoryRef.current, entry];
+    }
+
+    setHistory(prev => [...prev, entry]);
   };
 
+  const transformRealtimeHistory = useCallback((sourceHistory: any[]): HistoryItem[] => {
+    const entries: HistoryItem[] = [];
+
+    sourceHistory.forEach((item: any) => {
+      if (!item) return;
+
+      const rawRole = item.role ?? item.type ?? 'system';
+      const role: HistoryItem['role'] = rawRole === 'assistant' || rawRole === 'user' ? rawRole : 'system';
+      const timestampValue = item.created_at ? new Date(item.created_at) : new Date();
+
+      let derivedType: HistoryItem['type'] = 'transcript';
+      const textFragments: string[] = [];
+
+      const pushText = (value: unknown) => {
+        if (value === undefined || value === null) return;
+        if (typeof value === 'string') {
+          if (value.trim().length > 0) {
+            textFragments.push(value.trim());
+          }
+          return;
+        }
+        if (typeof value === 'number' || typeof value === 'boolean') {
+          textFragments.push(String(value));
+          return;
+        }
+
+        try {
+          const serialised = JSON.stringify(value);
+          if (serialised) {
+            textFragments.push(serialised);
+          }
+        } catch (error) {
+          console.warn('⚠️ Impossible de sérialiser un fragment de contenu', error);
+        }
+      };
+
+      if (Array.isArray(item.content)) {
+        item.content.forEach((fragment: any) => {
+          if (!fragment) return;
+
+          const fragmentType = typeof fragment === 'object' ? fragment.type : undefined;
+          if (fragmentType && typeof fragmentType === 'string' && fragmentType.includes('audio')) {
+            derivedType = 'audio';
+          }
+
+          if (typeof fragment === 'string') {
+            pushText(fragment);
+            return;
+          }
+
+          if (fragment?.text) {
+            pushText(fragment.text);
+          }
+
+          if (fragment?.transcript) {
+            pushText(fragment.transcript);
+          }
+
+          if (fragment?.delta) {
+            pushText(fragment.delta);
+          }
+
+          if (fragment?.value) {
+            pushText(fragment.value);
+          }
+        });
+      } else if (typeof item.content === 'string') {
+        pushText(item.content);
+      } else if (item.content?.text) {
+        pushText(item.content.text);
+      } else if (item.content?.transcript) {
+        derivedType = 'audio';
+        pushText(item.content.transcript);
+      }
+
+      const combinedText = textFragments.join(' ').trim();
+      if (combinedText || derivedType === 'audio') {
+        entries.push({
+          role,
+          content: combinedText || '[Audio]',
+          timestamp: timestampValue instanceof Date && !Number.isNaN(timestampValue.valueOf()) ? timestampValue : new Date(),
+          type: derivedType
+        });
+      }
+    });
+
+    return entries;
+  }, []);
+
+  const syncConversationState = useCallback((rawHistory?: any[], overrides?: { isSpeaking?: boolean; isListening?: boolean }) => {
+    const effectiveHistory = Array.isArray(rawHistory) ? rawHistory : latestHistoryRef.current;
+    if (Array.isArray(rawHistory)) {
+      latestHistoryRef.current = rawHistory;
+    }
+
+    const conversationEntries = transformRealtimeHistory(effectiveHistory);
+    const combinedHistory = [...systemHistoryRef.current, ...conversationEntries].sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+    setHistory(combinedHistory);
+
+    const conversationOnly = conversationEntries.filter(entry => entry.role !== 'system');
+    const userMessages = conversationOnly.filter(entry => entry.role === 'user').length;
+    const assistantMessages = conversationOnly.filter(entry => entry.role === 'assistant').length;
+    const totalMessages = conversationOnly.length;
+    const computedExchangeCount = Math.max(0, Math.floor(totalMessages / 2));
+
+    const toolCalls = effectiveHistory.filter((item: any) => {
+      if (!item) return false;
+      if (item.role === 'tool') return true;
+      if (item.type && typeof item.type === 'string' && item.type.includes('tool')) return true;
+      if (Array.isArray(item.content)) {
+        return item.content.some((fragment: any) => fragment?.type && typeof fragment.type === 'string' && fragment.type.includes('tool'));
+      }
+      return false;
+    }).length;
+
+    const duration = startTimeRef.current ? Math.floor((Date.now() - startTimeRef.current.getTime()) / 1000) : 0;
+
+    setExchangeCount(computedExchangeCount);
+
+    setConversationMetrics(prev => ({
+      ...prev,
+      totalMessages,
+      userMessages,
+      assistantMessages,
+      toolCalls,
+      duration,
+      lastUpdate: Date.now()
+    }));
+
+    const transcriptPreview = conversationOnly
+      .map(entry => `${entry.role === 'assistant' ? 'Sophie' : 'Vous'} · ${entry.content}`)
+      .join('\n');
+    setNativeTranscripts(transcriptPreview);
+
+    const lastEntry = conversationOnly[conversationOnly.length - 1];
+    let derivedSpeaking = false;
+    let derivedListening = false;
+
+    if (lastEntry) {
+      derivedSpeaking = lastEntry.role === 'assistant';
+      derivedListening = lastEntry.role !== 'assistant';
+    } else {
+      derivedSpeaking = false;
+      derivedListening = isConnectedRef.current;
+    }
+
+    const nextIsSpeaking = overrides?.isSpeaking !== undefined ? overrides.isSpeaking : derivedSpeaking;
+    const nextIsListening = overrides?.isListening !== undefined ? overrides.isListening : derivedListening;
+
+    setIsSpeaking(nextIsSpeaking);
+    setIsListening(nextIsListening);
+  }, [transformRealtimeHistory]);
+
   const setupEventHandlers = (session: any) => {
-    // Connection events with metrics
-    session.on('agent_start', () => {
-      console.log('✅ Agent démarré (Voice SDK)');
+    const cleanupCallbacks: Array<() => void> = [];
+
+    const register = (eventName: string, handler: (...args: any[]) => void) => {
+      if (typeof session?.on === 'function') {
+        session.on(eventName, handler);
+        cleanupCallbacks.push(() => {
+          if (typeof session?.off === 'function') {
+            session.off(eventName, handler);
+          } else if (typeof session?.removeListener === 'function') {
+            session.removeListener(eventName, handler);
+          }
+        });
+      }
+    };
+
+    register('session.connected', () => {
+      console.log('✅ Session connectée (Voice Agents SDK)');
       setIsConnected(true);
       setIsConnecting(false);
       startTimeRef.current = new Date();
       addToHistory('system', 'Sophie Hennion-Moreau connectée (Voice Agents SDK)', 'system');
+      syncConversationState([], { isSpeaking: false, isListening: true });
     });
 
-    session.on('agent_stop', () => {
-      console.log('🔌 Agent arrêté (Voice SDK)');
+    register('session.disconnected', () => {
+      console.log('🔌 Session déconnectée (Voice Agents SDK)');
       setIsConnected(false);
       setIsConnecting(false);
-      setIsSpeaking(false);
-      setIsListening(false);
+      syncConversationState(undefined, { isSpeaking: false, isListening: false });
+      addToHistory('system', 'Session Voice Agents terminée', 'system');
+      cleanupHandlersRef.current?.();
     });
 
-    session.on('connection_state_changed', (state: any) => {
-      console.log('🔗 État connexion:', state);
-      if (state === 'connected') {
-        setIsConnected(true);
-        setIsConnecting(false);
-        setIsListening(true);
+    register('history_updated', (event: any = {}) => {
+      console.log('📝 Historique mis à jour (Voice Agents SDK)', event);
+      const eventHistory = Array.isArray(event?.history)
+        ? event.history
+        : Array.isArray(event?.data?.history)
+          ? event.data.history
+          : undefined;
+
+      if (Array.isArray(eventHistory)) {
+        syncConversationState(eventHistory);
+        return;
       }
+
+      if (Array.isArray(session?.history)) {
+        syncConversationState(session.history);
+        return;
+      }
+
+      if (typeof session?.getHistory === 'function') {
+        try {
+          const currentHistory = session.getHistory();
+          if (Array.isArray(currentHistory)) {
+            syncConversationState(currentHistory);
+            return;
+          }
+        } catch (error) {
+          console.warn('⚠️ Impossible de récupérer l\'historique courant', error);
+        }
+      }
+
+      syncConversationState();
     });
 
-    session.on('error', (error: any) => {
-      console.error('❌ Erreur session Voice SDK:', error);
+    register('response.created', (event: any) => {
+      console.log('🤖 Réponse créée (Voice Agents SDK)', event);
+      syncConversationState(undefined, { isSpeaking: true, isListening: false });
+    });
+
+    register('response.completed', (event: any) => {
+      console.log('✅ Réponse terminée (Voice Agents SDK)', event);
+      syncConversationState(undefined, { isSpeaking: false, isListening: true });
+    });
+
+    register('audio_interrupted', () => {
+      console.log('⏹️ Audio interrompu (Voice Agents SDK)');
+      addToHistory('system', 'Lecture audio interrompue', 'system');
+      syncConversationState(undefined, { isSpeaking: false, isListening: true });
+    });
+
+    register('error', (error: any) => {
+      console.error('❌ Erreur session Voice Agents SDK:', error);
       setIsConnected(false);
       setIsConnecting(false);
+      syncConversationState(undefined, { isSpeaking: false, isListening: false });
+      cleanupHandlersRef.current?.();
       toast({
         title: "Erreur session",
         description: error?.message || "Erreur de connexion",
@@ -132,30 +357,16 @@ export function SophieAgentsSDK({
       });
     });
 
-    // Audio events simulation (to be replaced with real events when available)
-    const audioInterval = setInterval(() => {
-      if (sessionRef.current) {
-        // Toggle speaking/listening states for demo
-        setIsSpeaking(prev => {
-          if (prev) {
-            setIsListening(true);
-            return false;
-          } else {
-            const shouldSpeak = Math.random() > 0.7; // Simulate AI speaking
-            if (shouldSpeak) {
-              setIsListening(false);
-              return true;
-            }
-          }
-          return false;
-        });
-      }
-    }, 3000);
-
-    // Cleanup interval on session end
-    session.on('agent_stop', () => {
-      clearInterval(audioInterval);
-    });
+    cleanupHandlersRef.current = () => {
+      cleanupCallbacks.forEach(cleanup => {
+        try {
+          cleanup();
+        } catch (error) {
+          console.warn('⚠️ Erreur lors du nettoyage des écouteurs Voice Agents', error);
+        }
+      });
+      cleanupHandlersRef.current = null;
+    };
   };
 
   /**
@@ -166,7 +377,21 @@ export function SophieAgentsSDK({
       setIsConnecting(true);
       setHistory([]);
       setExchangeCount(0);
-      
+      latestHistoryRef.current = [];
+      systemHistoryRef.current = [];
+      cleanupHandlersRef.current?.();
+      setNativeTranscripts('');
+      setConversationMetrics(prev => ({
+        ...prev,
+        totalMessages: 0,
+        userMessages: 0,
+        assistantMessages: 0,
+        toolCalls: 0,
+        duration: 0,
+        tokens: undefined,
+        lastUpdate: Date.now()
+      }));
+
       console.log('🚀 Démarrage Sophie EDHEC avec Voice Agents SDK...');
 
       // Obtenir les instructions EDHEC authentiques
@@ -200,22 +425,25 @@ export function SophieAgentsSDK({
    */
   const endSession = async () => {
     console.log('🔌 Fermeture session Voice Agents SDK...');
-    
+
     try {
       if (timerRef.current) {
         clearInterval(timerRef.current);
         timerRef.current = null;
       }
-      
+
+      cleanupHandlersRef.current?.();
+
       if (sessionRef.current) {
         stopVoiceAgent(sessionRef.current);
         sessionRef.current = null;
       }
-      
+
       setIsConnected(false);
       setIsConnecting(false);
       setIsSpeaking(false);
       setIsListening(false);
+      syncConversationState(undefined, { isSpeaking: false, isListening: false });
 
       let duration = 0;
       if (startTimeRef.current) {
@@ -246,9 +474,8 @@ export function SophieAgentsSDK({
         // Utiliser l'interruption native du SDK Voice Agents
         await sessionRef.current.interrupt();
         addToHistory('system', '🔇 Interruption réussie (Voice SDK)', 'system');
-        setIsSpeaking(false);
-        setIsListening(true);
-        
+        syncConversationState(undefined, { isSpeaking: false, isListening: true });
+
         toast({
           title: "Interruption réussie",
           description: "Sophie interrompue",
