@@ -3,7 +3,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { TestButton } from "@/components/ui/test-button";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { startVoiceAgent, stopVoiceAgent } from "@/utils/VoiceAgentsSDK";
+import {
+  startVoiceAgent,
+  stopVoiceAgent,
+  getVoiceAgentRemoteStream,
+  stopMediaStream,
+  VoiceAgentSession
+} from "@/utils/VoiceAgentsSDK";
 import { buildEDHECInstructions } from "@/lib/edhec-prompts";
 import { 
   Phone, 
@@ -78,7 +84,10 @@ export function SophieAgentsSDK({
   const [guardrailAlerts, setGuardrailAlerts] = useState<any[]>([]);
   const [nativeTranscripts, setNativeTranscripts] = useState<string>('');
   
-  const sessionRef = useRef<any | null>(null);
+  const sessionRef = useRef<VoiceAgentSession | null>(null);
+  const localStreamRef = useRef<MediaStream | null>(null);
+  const remoteStreamRef = useRef<MediaStream | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const startTimeRef = useRef<Date | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -166,7 +175,7 @@ export function SophieAgentsSDK({
       setIsConnecting(true);
       setHistory([]);
       setExchangeCount(0);
-      
+
       console.log('🚀 Démarrage Sophie EDHEC avec Voice Agents SDK...');
 
       // Obtenir les instructions EDHEC authentiques
@@ -175,9 +184,40 @@ export function SophieAgentsSDK({
 
       // Démarrer la session WebRTC via SDK simplifié
       sessionRef.current = await startVoiceAgent(instructions);
+      localStreamRef.current = sessionRef.current.localStream;
+
+      const transport = sessionRef.current.transport;
+      const remoteStream = getVoiceAgentRemoteStream(sessionRef.current);
+      remoteStreamRef.current = remoteStream;
+
+      if (audioRef.current) {
+        audioRef.current.srcObject = remoteStream ?? null;
+        if (remoteStream) {
+          audioRef.current.play().catch(error => {
+            console.warn('⚠️ Lecture audio distante impossible immédiatement:', error);
+          });
+        }
+      }
+
+      const peerConnection = (transport as unknown as { pc?: RTCPeerConnection; peerConnection?: RTCPeerConnection }).pc
+        ?? (transport as unknown as { pc?: RTCPeerConnection; peerConnection?: RTCPeerConnection }).peerConnection;
+
+      peerConnection?.addEventListener('track', () => {
+        if (!sessionRef.current) return;
+        const refreshedStream = getVoiceAgentRemoteStream(sessionRef.current);
+        remoteStreamRef.current = refreshedStream;
+        if (audioRef.current) {
+          audioRef.current.srcObject = refreshedStream ?? null;
+          if (refreshedStream) {
+            audioRef.current.play().catch(error => {
+              console.warn('⚠️ Lecture audio distante impossible après mise à jour de piste:', error);
+            });
+          }
+        }
+      });
 
       // Configurer les événements
-      setupEventHandlers(sessionRef.current);
+      setupEventHandlers(transport);
 
       toast({
         title: "✅ Connexion établie",
@@ -200,18 +240,29 @@ export function SophieAgentsSDK({
    */
   const endSession = async () => {
     console.log('🔌 Fermeture session Voice Agents SDK...');
-    
+
     try {
       if (timerRef.current) {
         clearInterval(timerRef.current);
         timerRef.current = null;
       }
-      
+
       if (sessionRef.current) {
         stopVoiceAgent(sessionRef.current);
         sessionRef.current = null;
       }
-      
+
+      stopMediaStream(localStreamRef.current);
+      stopMediaStream(remoteStreamRef.current);
+
+      localStreamRef.current = null;
+      remoteStreamRef.current = null;
+
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.srcObject = null;
+      }
+
       setIsConnected(false);
       setIsConnecting(false);
       setIsSpeaking(false);
@@ -233,6 +284,14 @@ export function SophieAgentsSDK({
       console.error('❌ Erreur fermeture session:', error);
       // Force cleanup
       sessionRef.current = null;
+      stopMediaStream(localStreamRef.current);
+      stopMediaStream(remoteStreamRef.current);
+      localStreamRef.current = null;
+      remoteStreamRef.current = null;
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.srcObject = null;
+      }
       setIsConnected(false);
       setIsConnecting(false);
       setIsSpeaking(false);
@@ -244,7 +303,7 @@ export function SophieAgentsSDK({
     if (sessionRef.current && isConnected) {
       try {
         // Utiliser l'interruption native du SDK Voice Agents
-        await sessionRef.current.interrupt();
+        await sessionRef.current.transport.interrupt();
         addToHistory('system', '🔇 Interruption réussie (Voice SDK)', 'system');
         setIsSpeaking(false);
         setIsListening(true);
@@ -269,7 +328,7 @@ export function SophieAgentsSDK({
     if (sessionRef.current && isConnected && textInput.trim()) {
       try {
         // Utiliser sendMessage du SDK Voice Agents
-        await sessionRef.current.sendMessage(textInput.trim());
+        await sessionRef.current.transport.sendMessage(textInput.trim());
         console.log('📤 Message texte envoyé (Voice SDK):', textInput);
         setTextInput('');
         
@@ -346,14 +405,18 @@ export function SophieAgentsSDK({
 
   if (!open) return null;
 
+  const audioElement = <audio ref={audioRef} autoPlay playsInline className="hidden" />;
+
   // Interface réduite
   if (isMinimized) {
     return (
-      <Card className="fixed bottom-4 right-4 w-60 shadow-xl border-2 z-50">
-        <CardContent className="p-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+      <>
+        {audioElement}
+        <Card className="fixed bottom-4 right-4 w-60 shadow-xl border-2 z-50">
+          <CardContent className="p-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
                 isConnected 
                   ? isSpeaking 
                     ? 'bg-blue-100 animate-pulse' 
@@ -410,36 +473,39 @@ export function SophieAgentsSDK({
               )}
             </div>
           )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </>
     );
   }
 
   // Interface principale
   return (
-    <Card className="fixed bottom-6 right-6 w-96 p-6 bg-card/95 backdrop-blur-sm border shadow-lg z-50">
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
-              isConnected 
-                ? isSpeaking 
-                  ? 'bg-blue-100 animate-pulse' 
-                  : 'bg-blue-50'
-                : 'bg-muted'
-            }`}>
-              👩‍💼
+    <>
+      {audioElement}
+      <Card className="fixed bottom-6 right-6 w-96 p-6 bg-card/95 backdrop-blur-sm border shadow-lg z-50">
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-lg ${
+                isConnected
+                  ? isSpeaking
+                    ? 'bg-blue-100 animate-pulse'
+                    : 'bg-blue-50'
+                  : 'bg-muted'
+              }`}>
+                👩‍💼
+              </div>
+              <div>
+                <span className="font-medium">Sophie Hennion-Moreau</span>
+                <p className="text-xs text-muted-foreground">Dir. Innovation Pédagogique • EDHEC</p>
+              </div>
             </div>
-            <div>
-              <span className="font-medium">Sophie Hennion-Moreau</span>
-              <p className="text-xs text-muted-foreground">Dir. Innovation Pédagogique • EDHEC</p>
-            </div>
+            <Badge variant="secondary" className="text-xs flex items-center gap-1">
+              <Zap className="w-3 h-3" />
+              Agents SDK
+            </Badge>
           </div>
-          <Badge variant="secondary" className="text-xs flex items-center gap-1">
-            <Zap className="w-3 h-3" />
-            Agents SDK
-          </Badge>
-        </div>
 
         {/* Status de connexion */}
         <div className="flex items-center justify-between">
@@ -613,7 +679,8 @@ export function SophieAgentsSDK({
             </TestButton>
           </div>
         )}
-      </div>
-    </Card>
+        </div>
+      </Card>
+    </>
   );
 }
