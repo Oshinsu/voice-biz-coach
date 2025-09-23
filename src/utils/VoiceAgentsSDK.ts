@@ -45,13 +45,49 @@ export async function startVoiceAgent(instructions?: string): Promise<OpenAIReal
   }
 }
 
-export function stopVoiceAgent(transport: OpenAIRealtimeWebRTC) {
+export async function stopVoiceAgent(transport?: OpenAIRealtimeWebRTC | null) {
+  if (!transport) {
+    return;
+  }
+
+  console.log('🛑 Arrêt Voice Agent...');
+
+  const stopStreamTracks = (stream?: MediaStream | null) => {
+    if (!stream) return;
+    stream.getTracks().forEach(track => {
+      try {
+        track.stop();
+      } catch (trackError) {
+        console.warn('⚠️ Impossible d\'arrêter une piste média:', trackError);
+      }
+    });
+  };
+
   try {
-    console.log('🛑 Arrêt Voice Agent...');
-    // La session sera fermée automatiquement lors du démontage du composant
-    // ou via les méthodes internes du transport WebRTC
+    const transportAny = transport as unknown as {
+      localStream?: MediaStream;
+      remoteStream?: MediaStream;
+      microphoneStream?: MediaStream;
+      speakerStream?: MediaStream;
+      remoteStreams?: MediaStream[];
+    };
+
+    stopStreamTracks(transportAny.localStream || transportAny.microphoneStream || null);
+    stopStreamTracks(transportAny.remoteStream || transportAny.speakerStream || null);
+
+    if (Array.isArray(transportAny.remoteStreams)) {
+      transportAny.remoteStreams.forEach(stream => stopStreamTracks(stream));
+    }
+
+    if (typeof transport.disconnect === 'function') {
+      await transport.disconnect();
+    } else if (typeof (transport as any).close === 'function') {
+      await (transport as any).close();
+    }
+
     console.log('✅ Voice Agent arrêté');
   } catch (error) {
     console.error('❌ Erreur lors de l\'arrêt:', error);
+    throw error;
   }
 }
