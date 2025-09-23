@@ -1,7 +1,7 @@
-import { RealtimeAgent, RealtimeSession } from "@openai/agents/realtime";
+import { OpenAIRealtimeWebRTC } from "@openai/agents-realtime";
 import { supabase } from "@/integrations/supabase/client";
 
-export async function startVoiceAgent(instructions?: string): Promise<RealtimeSession> {
+export async function startVoiceAgent(instructions?: string): Promise<OpenAIRealtimeWebRTC> {
   try {
     console.log('🎤 Démarrage Voice Agent SDK...');
     
@@ -23,25 +23,20 @@ export async function startVoiceAgent(instructions?: string): Promise<RealtimeSe
     
     console.log('✅ Token éphémère obtenu:', ek.substring(0, 10) + '...');
 
-    // 2) Agent + session (selon documentation officielle)
-    const agent = new RealtimeAgent({
-      name: "BYSS VNS Assistant",
-      instructions: instructions || "Tu es un assistant vocal pédagogique spécialisé dans les scénarios BYSS VNS. Tu aides les étudiants à s'entraîner à la vente en situation réelle."
-    });
-    
-    const session = new RealtimeSession(agent);
-
-    // 3) Connexion WebRTC (SDK) - API simplifiée
-    console.log('🔗 Connexion WebRTC...');
-    await session.connect({
+    // 2) WebRTC transport avec token éphémère
+    const webrtcTransport = new OpenAIRealtimeWebRTC({
       apiKey: ek
     });
 
-    // 4) Connexion réussie - les événements seront gérés côté composant
-    console.log('🔗 Connexion WebRTC établie');
+    // 3) Connexion WebRTC
+    console.log('🔗 Connexion WebRTC...');
+    await webrtcTransport.connect({
+      apiKey: ek,
+      model: "gpt-4o-realtime-preview-2024-12-17"
+    });
 
     console.log('✅ Voice Agent connecté avec succès');
-    return session;
+    return webrtcTransport;
 
   } catch (error) {
     console.error('❌ Erreur startVoiceAgent:', error);
@@ -49,7 +44,7 @@ export async function startVoiceAgent(instructions?: string): Promise<RealtimeSe
   }
 }
 
-export function stopVoiceAgent(session: RealtimeSession) {
+export function stopVoiceAgent(transport: OpenAIRealtimeWebRTC) {
   try {
     console.log('🛑 Arrêt Voice Agent...');
     // La session sera fermée automatiquement lors du démontage du composant
