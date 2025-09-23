@@ -49,13 +49,21 @@ export async function startVoiceAgent(instructions?: string): Promise<RealtimeSe
   }
 }
 
-export function stopVoiceAgent(session: RealtimeSession) {
+export async function stopVoiceAgent(session: RealtimeSession) {
+  console.log('🛑 Arrêt Voice Agent...');
+
   try {
-    console.log('🛑 Arrêt Voice Agent...');
-    // La session sera fermée automatiquement lors du démontage du composant
-    // ou via les méthodes internes du transport WebRTC
+    if (typeof session.disconnect === 'function') {
+      await session.disconnect();
+    } else if (typeof session.close === 'function') {
+      await session.close();
+    } else {
+      throw new Error("La session ne propose pas de méthode de fermeture compatible");
+    }
+
     console.log('✅ Voice Agent arrêté');
   } catch (error) {
     console.error('❌ Erreur lors de l\'arrêt:', error);
+    throw error;
   }
 }

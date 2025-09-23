@@ -208,7 +208,7 @@ export function SophieAgentsSDK({
       }
       
       if (sessionRef.current) {
-        stopVoiceAgent(sessionRef.current);
+        await stopVoiceAgent(sessionRef.current);
         sessionRef.current = null;
       }
       
@@ -237,6 +237,12 @@ export function SophieAgentsSDK({
       setIsConnecting(false);
       setIsSpeaking(false);
       setIsListening(false);
+
+      toast({
+        title: "Erreur fermeture",
+        description: error instanceof Error ? error.message : "Impossible d'arrêter la session",
+        variant: "destructive",
+      });
     }
   };
 
