@@ -77,10 +77,11 @@ export function SophieAgentsSDK({
   const [textInput, setTextInput] = useState('');
   const [guardrailAlerts, setGuardrailAlerts] = useState<any[]>([]);
   const [nativeTranscripts, setNativeTranscripts] = useState<string>('');
-  
+
   const sessionRef = useRef<any | null>(null);
   const startTimeRef = useRef<Date | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const eventHandlersRef = useRef<{ event: string; handler: (...args: any[]) => void }[]>([]);
 
   /**
    * Gestion de l'historique Agents SDK
@@ -94,9 +95,29 @@ export function SophieAgentsSDK({
     }]);
   };
 
+  const registerSessionEvent = (session: any, event: string, handler: (...args: any[]) => void) => {
+    if (!session || typeof session.on !== 'function') return;
+    session.on(event, handler);
+    eventHandlersRef.current.push({ event, handler });
+  };
+
+  const clearSessionEvents = (session: any) => {
+    if (!session) return;
+    eventHandlersRef.current.forEach(({ event, handler }) => {
+      if (typeof session.off === 'function') {
+        session.off(event, handler);
+      } else if (typeof session.removeEventListener === 'function') {
+        session.removeEventListener(event, handler as EventListener);
+      }
+    });
+    eventHandlersRef.current = [];
+  };
+
   const setupEventHandlers = (session: any) => {
+    clearSessionEvents(session);
+
     // Connection events with metrics
-    session.on('agent_start', () => {
+    registerSessionEvent(session, 'agent_start', () => {
       console.log('✅ Agent démarré (Voice SDK)');
       setIsConnected(true);
       setIsConnecting(false);
@@ -104,7 +125,7 @@ export function SophieAgentsSDK({
       addToHistory('system', 'Sophie Hennion-Moreau connectée (Voice Agents SDK)', 'system');
     });
 
-    session.on('agent_stop', () => {
+    registerSessionEvent(session, 'agent_stop', () => {
       console.log('🔌 Agent arrêté (Voice SDK)');
       setIsConnected(false);
       setIsConnecting(false);
@@ -112,7 +133,7 @@ export function SophieAgentsSDK({
       setIsListening(false);
     });
 
-    session.on('connection_state_changed', (state: any) => {
+    registerSessionEvent(session, 'connection_state_changed', (state: any) => {
       console.log('🔗 État connexion:', state);
       if (state === 'connected') {
         setIsConnected(true);
@@ -121,7 +142,7 @@ export function SophieAgentsSDK({
       }
     });
 
-    session.on('error', (error: any) => {
+    registerSessionEvent(session, 'error', (error: any) => {
       console.error('❌ Erreur session Voice SDK:', error);
       setIsConnected(false);
       setIsConnecting(false);
@@ -132,29 +153,146 @@ export function SophieAgentsSDK({
       });
     });
 
-    // Audio events simulation (to be replaced with real events when available)
-    const audioInterval = setInterval(() => {
-      if (sessionRef.current) {
-        // Toggle speaking/listening states for demo
-        setIsSpeaking(prev => {
-          if (prev) {
-            setIsListening(true);
-            return false;
-          } else {
-            const shouldSpeak = Math.random() > 0.7; // Simulate AI speaking
-            if (shouldSpeak) {
-              setIsListening(false);
-              return true;
-            }
-          }
-          return false;
-        });
+    registerSessionEvent(session, 'conversation.transcript.delta', (event: any) => {
+      const role = event?.delta?.role || event?.role || event?.speaker;
+      let textDelta = '';
+      if (typeof event?.delta === 'string') {
+        textDelta = event.delta;
+      } else if (typeof event?.delta?.text === 'string') {
+        textDelta = event.delta.text;
+      } else if (Array.isArray(event?.delta?.content)) {
+        textDelta = event.delta.content
+          .map((part: any) => part?.text || part?.transcript || '')
+          .filter(Boolean)
+          .join('\n');
       }
-    }, 3000);
 
-    // Cleanup interval on session end
-    session.on('agent_stop', () => {
-      clearInterval(audioInterval);
+      if (textDelta) {
+        setNativeTranscripts(prev => `${prev}${textDelta}`);
+      }
+
+      if (role === 'assistant') {
+        setIsSpeaking(true);
+        setIsListening(false);
+      } else if (role === 'user') {
+        setIsListening(true);
+        setIsSpeaking(false);
+      }
+    });
+
+    registerSessionEvent(session, 'conversation.updated', (event: any) => {
+      const conversation = event?.conversation;
+      const items: any[] = conversation?.items ?? [];
+
+      const historyItems: HistoryItem[] = [];
+      let userMessages = 0;
+      let assistantMessages = 0;
+      let toolCalls = 0;
+      const guardrailItems: any[] = [];
+      let pending: ToolApprovalRequest | null = null;
+
+      const getItemTimestamp = (item: any) => {
+        if (item?.created_at) {
+          // created_at peut être en secondes ou millisecondes selon le SDK
+          const value = typeof item.created_at === 'number'
+            ? (item.created_at > 1e12 ? item.created_at : item.created_at * 1000)
+            : Date.parse(item.created_at);
+          if (!Number.isNaN(value)) {
+            return new Date(value);
+          }
+        }
+        return new Date();
+      };
+
+      items.forEach((item: any) => {
+        if (item?.type === 'message') {
+          const role: HistoryItem['role'] = item.role === 'assistant'
+            ? 'assistant'
+            : item.role === 'user'
+              ? 'user'
+              : 'system';
+
+          const content = Array.isArray(item?.content)
+            ? item.content
+                .map((part: any) => part?.text || part?.transcript || part?.formatted?.text || '')
+                .filter(Boolean)
+                .join('\n')
+            : item?.content?.text || item?.content?.transcript || '';
+
+          if (content) {
+            historyItems.push({
+              role,
+              content,
+              timestamp: getItemTimestamp(item),
+              type: role === 'system' ? 'system' : 'transcript'
+            });
+          }
+
+          if (role === 'user') {
+            userMessages += 1;
+          }
+
+          if (role === 'assistant') {
+            assistantMessages += 1;
+          }
+        }
+
+        if (item?.type === 'tool-call' || item?.type === 'function_call') {
+          toolCalls += 1;
+          const requiresApproval = item?.status === 'requires_action' || item?.requires_approval;
+          if (requiresApproval && !pending) {
+            pending = {
+              toolName: item?.name || item?.tool_name || 'Tool',
+              parameters: item?.arguments || item?.parameters || item?.input || {},
+              approvalItem: item,
+              request: item,
+              timestamp: Date.now(),
+            };
+          }
+        }
+
+        if (item?.type === 'guardrail' || item?.category === 'guardrail') {
+          guardrailItems.push(item);
+        }
+      });
+
+      historyItems.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+      setHistory(historyItems);
+
+      const totalMessages = userMessages + assistantMessages;
+      const exchangeEstimate = Math.ceil(totalMessages / 2);
+      setExchangeCount(exchangeEstimate);
+
+      setConversationMetrics(prev => ({
+        totalMessages,
+        userMessages,
+        assistantMessages,
+        toolCalls,
+        tokens: conversation?.metrics?.tokens ?? prev.tokens,
+        duration: startTimeRef.current
+          ? Math.floor((Date.now() - startTimeRef.current.getTime()) / 1000)
+          : prev.duration,
+        lastUpdate: Date.now(),
+      }));
+
+      const assistantSpeaking = items.some(item => item?.role === 'assistant' && item?.status !== 'completed');
+      const userSpeaking = items.some(item => item?.role === 'user' && item?.status !== 'completed');
+
+      setIsSpeaking(assistantSpeaking);
+      setIsListening(!assistantSpeaking || userSpeaking);
+
+      setGuardrailAlerts(guardrailItems);
+      setPendingApproval(pending);
+    });
+
+    registerSessionEvent(session, 'conversation.interruption', () => {
+      setIsSpeaking(false);
+      setIsListening(true);
+    });
+
+    registerSessionEvent(session, 'response.completed', () => {
+      setIsSpeaking(false);
+      setIsListening(true);
     });
   };
 
@@ -178,6 +316,18 @@ export function SophieAgentsSDK({
 
       // Configurer les événements
       setupEventHandlers(sessionRef.current);
+
+      setNativeTranscripts('');
+      setGuardrailAlerts([]);
+      setPendingApproval(null);
+      setConversationMetrics({
+        totalMessages: 0,
+        userMessages: 0,
+        assistantMessages: 0,
+        toolCalls: 0,
+        duration: 0,
+        lastUpdate: Date.now(),
+      });
 
       toast({
         title: "✅ Connexion établie",
@@ -206,21 +356,6 @@ export function SophieAgentsSDK({
         clearInterval(timerRef.current);
         timerRef.current = null;
       }
-
-      const currentSession = sessionRef.current;
-      if (currentSession) {
-        try {
-          await stopVoiceAgent(currentSession);
-          sessionRef.current = null;
-        } catch (error) {
-          console.error('❌ Erreur teardown Voice SDK:', error);
-          sessionRef.current = null;
-          toast({
-            title: "Erreur fermeture",
-            description: "La déconnexion a rencontré un problème. Vous pouvez réessayer.",
-            variant: "destructive",
-          });
-        }
       }
 
       setIsConnected(false);
