@@ -350,19 +350,14 @@ export function SophieAgentsSDK({
    */
   const endSession = async () => {
     console.log('🔌 Fermeture session Voice Agents SDK...');
-    
+
     try {
       if (timerRef.current) {
         clearInterval(timerRef.current);
         timerRef.current = null;
       }
-      
-      if (sessionRef.current) {
-        clearSessionEvents(sessionRef.current);
-        stopVoiceAgent(sessionRef.current);
-        sessionRef.current = null;
       }
-      
+
       setIsConnected(false);
       setIsConnecting(false);
       setIsSpeaking(false);
