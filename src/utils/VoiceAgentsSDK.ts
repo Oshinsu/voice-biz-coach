@@ -66,56 +66,10 @@ export async function startVoiceAgent(instructions?: string): Promise<VoiceAgent
   }
 }
 
-export function getVoiceAgentRemoteStream(sessionOrTransport: VoiceAgentSession | OpenAIRealtimeWebRTC): MediaStream | null {
-  const transport = isVoiceAgentSession(sessionOrTransport)
-    ? sessionOrTransport.transport
-    : sessionOrTransport;
-
-  const remoteStream = extractRemoteStream(transport);
-
-  if (isVoiceAgentSession(sessionOrTransport)) {
-    sessionOrTransport.remoteStream = remoteStream;
-  }
-
-  return remoteStream;
-}
-
-export function stopMediaStream(stream?: MediaStream | null) {
-  if (!stream) return;
-
-  stream.getTracks().forEach(track => {
-    try {
-      if (track.readyState !== 'ended') {
-        track.stop();
-      }
-    } catch (error) {
-      console.warn('⚠️ Impossible d\'arrêter une piste média:', error);
-    }
-  });
-}
-
-export function stopVoiceAgent(session: VoiceAgentSession | null) {
-  if (!session) return;
-
-  try {
-    console.log('🛑 Arrêt Voice Agent...');
-
-    stopMediaStream(session.localStream);
-    stopMediaStream(session.remoteStream);
-
-    const transport = session.transport as unknown as {
-      stopLocalMedia?: () => Promise<void> | void;
-      disconnect?: () => Promise<void> | void;
-      close?: () => Promise<void> | void;
-    };
-
-    transport?.stopLocalMedia?.();
-    transport?.disconnect?.();
-    transport?.close?.();
-
     console.log('✅ Voice Agent arrêté');
   } catch (error) {
     console.error('❌ Erreur lors de l\'arrêt:', error);
+    throw error;
   }
 }
 
