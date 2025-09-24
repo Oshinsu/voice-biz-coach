@@ -83,8 +83,12 @@ export function SophieAgentsSDK({
   const [textInput, setTextInput] = useState('');
   const [guardrailAlerts, setGuardrailAlerts] = useState<any[]>([]);
   const [nativeTranscripts, setNativeTranscripts] = useState<string>('');
+  const sessionRef = useRef<VoiceAgentSession | null>(null);
+  const localStreamRef = useRef<MediaStream | null>(null);
+  const remoteStreamRef = useRef<MediaStream | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const startTimeRef = useRef<Date | null>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const eventHandlersRef = useRef<{ event: string; handler: (...args: any[]) => void }[]>([]);
 
   /**
@@ -305,6 +309,10 @@ export function SophieAgentsSDK({
    */
   const startSession = async () => {
     try {
+      if (sessionRef.current || localStreamRef.current || remoteStreamRef.current) {
+        await endSession();
+      }
+
       setIsConnecting(true);
       setHistory([]);
       setExchangeCount(0);
@@ -352,6 +360,12 @@ export function SophieAgentsSDK({
       // Configurer les événements
       setupEventHandlers(transport);
 
+      setIsConnected(true);
+      setIsConnecting(false);
+      setIsListening(true);
+      setIsSpeaking(false);
+      startTimeRef.current = new Date();
+      setSessionDuration(0);
       setNativeTranscripts('');
       setGuardrailAlerts([]);
       setPendingApproval(null);
@@ -386,45 +400,86 @@ export function SophieAgentsSDK({
   const endSession = async () => {
     console.log('🔌 Fermeture session Voice Agents SDK...');
 
+    const currentSession = sessionRef.current;
+    const hadActiveSession = Boolean(currentSession || localStreamRef.current || remoteStreamRef.current);
+
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+
+    let duration = 0;
+    if (startTimeRef.current) {
+      duration = Math.floor((Date.now() - startTimeRef.current.getTime()) / 1000);
+      startTimeRef.current = null;
+    }
+
+    let hadError = false;
+
     try {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
+      if (currentSession) {
+        clearSessionEvents(currentSession.transport);
+        await stopVoiceAgent(currentSession);
       }
-      main
-      setIsConnected(false);
-      setIsConnecting(false);
-      setIsSpeaking(false);
-      setIsListening(false);
-
-      let duration = 0;
-      if (startTimeRef.current) {
-        duration = Math.floor((Date.now() - startTimeRef.current.getTime()) / 1000);
-        startTimeRef.current = null;
-        addToHistory('system', `Session terminée - Durée: ${duration}s - Échanges: ${exchangeCount}`, 'system');
-      }
-
-      toast({
-        title: "Session terminée",
-        description: `Sophie EDHEC déconnectée - ${exchangeCount} échanges`,
-      });
-
     } catch (error) {
+      hadError = true;
       console.error('❌ Erreur fermeture session:', error);
-      // Force cleanup
+      toast({
+        title: "Erreur fermeture",
+        description: error instanceof Error ? error.message : "Impossible de fermer la session",
+        variant: "destructive",
+      });
+      addToHistory('system', 'Session interrompue suite à une erreur', 'system');
+    } finally {
       sessionRef.current = null;
+      eventHandlersRef.current = [];
+
       stopMediaStream(localStreamRef.current);
       stopMediaStream(remoteStreamRef.current);
+
       localStreamRef.current = null;
       remoteStreamRef.current = null;
+
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current.srcObject = null;
       }
+
       setIsConnected(false);
       setIsConnecting(false);
       setIsSpeaking(false);
       setIsListening(false);
+      setExchangeCount(0);
+      setSessionDuration(0);
+      setPendingApproval(null);
+      setGuardrailAlerts([]);
+      setNativeTranscripts('');
+      setConversationMetrics({
+        totalMessages: 0,
+        userMessages: 0,
+        assistantMessages: 0,
+        toolCalls: 0,
+        tokens: undefined,
+        duration: 0,
+        lastUpdate: Date.now(),
+      });
+
+      if (!hadError) {
+        if (duration > 0) {
+          addToHistory('system', `Session terminée - Durée: ${duration}s - Échanges: ${exchangeCount}`, 'system');
+        } else if (hadActiveSession) {
+          addToHistory('system', 'Session terminée', 'system');
+        }
+      }
+
+      if (hadActiveSession && !hadError) {
+        toast({
+          title: "Session terminée",
+          description: duration > 0
+            ? `Sophie EDHEC déconnectée - ${exchangeCount} échanges`
+            : "Sophie EDHEC déconnectée",
+        });
+      }
     }
   };
 
@@ -522,7 +577,7 @@ export function SophieAgentsSDK({
   // Cleanup au démontage
   useEffect(() => {
     return () => {
-      endSession();
+      void endSession();
     };
   }, []);
 
