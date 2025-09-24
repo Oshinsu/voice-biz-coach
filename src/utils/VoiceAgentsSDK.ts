@@ -92,7 +92,7 @@ export async function startVoiceAgent(instructions?: string): Promise<VoiceAgent
     });
 
     console.log("🎧 Initialisation des médias locaux...");
-    const requestedLocalStream = await webrtcTransport.startLocalMedia({ audio: true }).catch((mediaError) => {
+    const requestedLocalStream = await navigator.mediaDevices.getUserMedia({ audio: true }).catch((mediaError) => {
       console.error("❌ Impossible d'initialiser le micro:", mediaError);
       throw mediaError;
     });

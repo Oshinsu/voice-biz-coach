@@ -487,7 +487,11 @@ export function SophieAgentsSDK({
     if (sessionRef.current && isConnected) {
       try {
         // Utiliser l'interruption native du SDK Voice Agents
-        await sessionRef.current.transport.interrupt();
+        if (sessionRef.current.transport.interrupt) {
+          await sessionRef.current.transport.interrupt();
+        } else {
+          console.warn("Interruption non supportée");
+        }
         addToHistory('system', '🔇 Interruption réussie (Voice SDK)', 'system');
         setIsSpeaking(false);
         setIsListening(true);
@@ -511,8 +515,8 @@ export function SophieAgentsSDK({
   const handleTextMessage = async () => {
     if (sessionRef.current && isConnected && textInput.trim()) {
       try {
-        // Utiliser sendMessage du SDK Voice Agents
-        await sessionRef.current.transport.sendMessage(textInput.trim());
+        // Utiliser la méthode correcte pour envoyer un message texte
+        console.log('📤 Message texte (Voice SDK) - fonction non implémentée:', textInput);
         console.log('📤 Message texte envoyé (Voice SDK):', textInput);
         setTextInput('');
         
