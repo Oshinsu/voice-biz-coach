@@ -83,6 +83,8 @@ export function SophieAgentsSDK({
   const [textInput, setTextInput] = useState('');
   const [guardrailAlerts, setGuardrailAlerts] = useState<any[]>([]);
   const [nativeTranscripts, setNativeTranscripts] = useState<string>('');
+  const [showUnmute, setShowUnmute] = useState(false);
+  
   const sessionRef = useRef<VoiceAgentSession | null>(null);
   const localStreamRef = useRef<MediaStream | null>(null);
   const remoteStreamRef = useRef<MediaStream | null>(null);
@@ -91,9 +93,6 @@ export function SophieAgentsSDK({
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const eventHandlersRef = useRef<{ event: string; handler: (...args: any[]) => void }[]>([]);
 
-  /**
-   * Gestion de l'historique Agents SDK
-   */
   const addToHistory = (role: 'user' | 'assistant' | 'system', content: string, type: 'audio' | 'transcript' | 'system' = 'transcript') => {
     setHistory(prev => [...prev, {
       role,
@@ -124,7 +123,53 @@ export function SophieAgentsSDK({
   const setupEventHandlers = (session: any) => {
     clearSessionEvents(session);
 
-    // Connection events with metrics
+    // Session-level events (SDK Voice Agents 2025)
+    registerSessionEvent(session, 'history_updated', (history: any) => {
+      console.log('📚 Historique mis à jour:', history);
+      if (Array.isArray(history)) {
+        const historyItems: HistoryItem[] = history.map((item: any) => ({
+          role: item.role === 'assistant' ? 'assistant' : item.role === 'user' ? 'user' : 'system',
+          content: typeof item.content === 'string' ? item.content : item.content?.text || '',
+          timestamp: new Date(item.timestamp || Date.now()),
+          type: 'transcript' as const
+        }));
+        setHistory(historyItems);
+      }
+    });
+
+    registerSessionEvent(session, 'audio_interrupted', () => {
+      console.log('🔇 Audio interrompu');
+      setIsSpeaking(false);
+      setIsListening(true);
+    });
+
+    registerSessionEvent(session, 'guardrail_tripped', (details: any) => {
+      console.log('🚨 Guardrail déclenché:', details);
+      setGuardrailAlerts(prev => [...prev, details]);
+    });
+
+    registerSessionEvent(session, 'error', (error: any) => {
+      console.error('❌ Erreur session Voice SDK:', error);
+      setIsConnected(false);
+      setIsConnecting(false);
+      toast({
+        title: "Erreur session",
+        description: error?.message || "Erreur de connexion",
+        variant: "destructive"
+      });
+    });
+
+    // Transport-level events pour les transcripts en temps réel
+    if (session.transport) {
+      registerSessionEvent(session.transport, 'transcript_delta', (event: any) => {
+        const text = event?.text || '';
+        if (text) {
+          setNativeTranscripts(prev => `${prev}${text}`);
+        }
+      });
+    }
+
+    // Connection events avec fallback sur les anciens noms
     registerSessionEvent(session, 'agent_start', () => {
       console.log('✅ Agent démarré (Voice SDK)');
       setIsConnected(true);
@@ -150,17 +195,7 @@ export function SophieAgentsSDK({
       }
     });
 
-    registerSessionEvent(session, 'error', (error: any) => {
-      console.error('❌ Erreur session Voice SDK:', error);
-      setIsConnected(false);
-      setIsConnecting(false);
-      toast({
-        title: "Erreur session",
-        description: error?.message || "Erreur de connexion",
-        variant: "destructive"
-      });
-    });
-
+    // Fallback sur anciens événements
     registerSessionEvent(session, 'conversation.transcript.delta', (event: any) => {
       const role = event?.delta?.role || event?.role || event?.speaker;
       let textDelta = '';
@@ -187,126 +222,8 @@ export function SophieAgentsSDK({
         setIsSpeaking(false);
       }
     });
-
-    registerSessionEvent(session, 'conversation.updated', (event: any) => {
-      const conversation = event?.conversation;
-      const items: any[] = conversation?.items ?? [];
-
-      const historyItems: HistoryItem[] = [];
-      let userMessages = 0;
-      let assistantMessages = 0;
-      let toolCalls = 0;
-      const guardrailItems: any[] = [];
-      let pending: ToolApprovalRequest | null = null;
-
-      const getItemTimestamp = (item: any) => {
-        if (item?.created_at) {
-          // created_at peut être en secondes ou millisecondes selon le SDK
-          const value = typeof item.created_at === 'number'
-            ? (item.created_at > 1e12 ? item.created_at : item.created_at * 1000)
-            : Date.parse(item.created_at);
-          if (!Number.isNaN(value)) {
-            return new Date(value);
-          }
-        }
-        return new Date();
-      };
-
-      items.forEach((item: any) => {
-        if (item?.type === 'message') {
-          const role: HistoryItem['role'] = item.role === 'assistant'
-            ? 'assistant'
-            : item.role === 'user'
-              ? 'user'
-              : 'system';
-
-          const content = Array.isArray(item?.content)
-            ? item.content
-                .map((part: any) => part?.text || part?.transcript || part?.formatted?.text || '')
-                .filter(Boolean)
-                .join('\n')
-            : item?.content?.text || item?.content?.transcript || '';
-
-          if (content) {
-            historyItems.push({
-              role,
-              content,
-              timestamp: getItemTimestamp(item),
-              type: role === 'system' ? 'system' : 'transcript'
-            });
-          }
-
-          if (role === 'user') {
-            userMessages += 1;
-          }
-
-          if (role === 'assistant') {
-            assistantMessages += 1;
-          }
-        }
-
-        if (item?.type === 'tool-call' || item?.type === 'function_call') {
-          toolCalls += 1;
-          const requiresApproval = item?.status === 'requires_action' || item?.requires_approval;
-          if (requiresApproval && !pending) {
-            pending = {
-              toolName: item?.name || item?.tool_name || 'Tool',
-              parameters: item?.arguments || item?.parameters || item?.input || {},
-              approvalItem: item,
-              request: item,
-              timestamp: Date.now(),
-            };
-          }
-        }
-
-        if (item?.type === 'guardrail' || item?.category === 'guardrail') {
-          guardrailItems.push(item);
-        }
-      });
-
-      historyItems.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
-      setHistory(historyItems);
-
-      const totalMessages = userMessages + assistantMessages;
-      const exchangeEstimate = Math.ceil(totalMessages / 2);
-      setExchangeCount(exchangeEstimate);
-
-      setConversationMetrics(prev => ({
-        totalMessages,
-        userMessages,
-        assistantMessages,
-        toolCalls,
-        tokens: conversation?.metrics?.tokens ?? prev.tokens,
-        duration: startTimeRef.current
-          ? Math.floor((Date.now() - startTimeRef.current.getTime()) / 1000)
-          : prev.duration,
-        lastUpdate: Date.now(),
-      }));
-
-      const assistantSpeaking = items.some(item => item?.role === 'assistant' && item?.status !== 'completed');
-      const userSpeaking = items.some(item => item?.role === 'user' && item?.status !== 'completed');
-
-      setIsSpeaking(assistantSpeaking);
-      setIsListening(!assistantSpeaking || userSpeaking);
-
-      setGuardrailAlerts(guardrailItems);
-      setPendingApproval(pending);
-    });
-
-    registerSessionEvent(session, 'conversation.interruption', () => {
-      setIsSpeaking(false);
-      setIsListening(true);
-    });
-
-    registerSessionEvent(session, 'response.completed', () => {
-      setIsSpeaking(false);
-      setIsListening(true);
-    });
   };
 
-  /**
-   * Démarrage session Voice Agents SDK (septembre 2025)
-   */
   const startSession = async () => {
     try {
       if (sessionRef.current || localStreamRef.current || remoteStreamRef.current) {
@@ -319,11 +236,9 @@ export function SophieAgentsSDK({
 
       console.log('🚀 Démarrage Sophie EDHEC avec Voice Agents SDK...');
 
-      // Obtenir les instructions EDHEC authentiques
       const instructions = buildEDHECInstructions(selectedConversationType);
       console.log('📝 Instructions EDHEC générées:', instructions.substring(0, 200) + '...');
 
-      // Démarrer la session WebRTC via SDK simplifié
       sessionRef.current = await startVoiceAgent(instructions);
       localStreamRef.current = sessionRef.current.localStream;
 
@@ -335,30 +250,13 @@ export function SophieAgentsSDK({
         audioRef.current.srcObject = remoteStream ?? null;
         if (remoteStream) {
           audioRef.current.play().catch(error => {
-            console.warn('⚠️ Lecture audio distante impossible immédiatement:', error);
+            console.warn('⚠️ Lecture audio distante impossible:', error);
+            setShowUnmute(true);
           });
         }
       }
 
-      const peerConnection = (transport as unknown as { pc?: RTCPeerConnection; peerConnection?: RTCPeerConnection }).pc
-        ?? (transport as unknown as { pc?: RTCPeerConnection; peerConnection?: RTCPeerConnection }).peerConnection;
-
-      peerConnection?.addEventListener('track', () => {
-        if (!sessionRef.current) return;
-        const refreshedStream = getVoiceAgentRemoteStream(sessionRef.current);
-        remoteStreamRef.current = refreshedStream;
-        if (audioRef.current) {
-          audioRef.current.srcObject = refreshedStream ?? null;
-          if (refreshedStream) {
-            audioRef.current.play().catch(error => {
-              console.warn('⚠️ Lecture audio distante impossible après mise à jour de piste:', error);
-            });
-          }
-        }
-      });
-
-      // Configurer les événements
-      setupEventHandlers(transport);
+      setupEventHandlers(sessionRef.current);
 
       setIsConnected(true);
       setIsConnecting(false);
@@ -394,9 +292,6 @@ export function SophieAgentsSDK({
     }
   };
 
-  /**
-   * Fermeture session Voice Agents SDK
-   */
   const endSession = async () => {
     console.log('🔌 Fermeture session Voice Agents SDK...');
 
@@ -418,7 +313,7 @@ export function SophieAgentsSDK({
 
     try {
       if (currentSession) {
-        clearSessionEvents(currentSession.transport);
+        clearSessionEvents(currentSession.transport || currentSession);
         await stopVoiceAgent(currentSession);
       }
     } catch (error) {
@@ -454,6 +349,7 @@ export function SophieAgentsSDK({
       setPendingApproval(null);
       setGuardrailAlerts([]);
       setNativeTranscripts('');
+      setShowUnmute(false);
       setConversationMetrics({
         totalMessages: 0,
         userMessages: 0,
@@ -486,9 +382,11 @@ export function SophieAgentsSDK({
   const handleInterrupt = async () => {
     if (sessionRef.current && isConnected) {
       try {
-        // Utiliser l'interruption native du SDK Voice Agents
-        if (sessionRef.current.transport.interrupt) {
-          await sessionRef.current.transport.interrupt();
+        // Utiliser session.interrupt() au lieu de transport.interrupt()
+        if (typeof (sessionRef.current as any).interrupt === 'function') {
+          await (sessionRef.current as any).interrupt();
+        } else if (sessionRef.current.transport && typeof (sessionRef.current.transport as any).interrupt === 'function') {
+          await (sessionRef.current.transport as any).interrupt();
         } else {
           console.warn("Interruption non supportée");
         }
@@ -511,17 +409,19 @@ export function SophieAgentsSDK({
     }
   };
 
-  // Support text input hybride (Voice SDK)
   const handleTextMessage = async () => {
     if (sessionRef.current && isConnected && textInput.trim()) {
       try {
-        // Utiliser la méthode correcte pour envoyer un message texte
-        console.log('📤 Message texte (Voice SDK) - fonction non implémentée:', textInput);
-        console.log('📤 Message texte envoyé (Voice SDK):', textInput);
-        setTextInput('');
+        // Utiliser session.sendMessage() au lieu de transport
+        if (typeof (sessionRef.current as any).sendMessage === 'function') {
+          await (sessionRef.current as any).sendMessage(textInput.trim());
+          console.log('📤 Message texte envoyé (Voice SDK):', textInput);
+        } else {
+          console.log('📤 Message texte (Voice SDK) - fonction non implémentée:', textInput);
+        }
         
-        // Add to local history
         addToHistory('user', textInput.trim(), 'transcript');
+        setTextInput('');
       } catch (error) {
         console.error('❌ Erreur envoi message texte:', error);
         toast({
@@ -533,18 +433,20 @@ export function SophieAgentsSDK({
     }
   };
 
-  // Tool approval workflow (Voice SDK)
   const handleToolApproval = async (approve: boolean) => {
     if (!pendingApproval || !sessionRef.current) return;
 
     try {
       if (approve) {
-        // Utiliser les méthodes d'approval du Voice SDK
+        if (typeof (sessionRef.current as any).approve === 'function') {
+          await (sessionRef.current as any).approve(pendingApproval.approvalItem);
+        }
         console.log('✅ Tool approuvé (Voice SDK):', pendingApproval.toolName);
-        // sessionRef.current.approveTool(pendingApproval.approvalItem); // When available
       } else {
+        if (typeof (sessionRef.current as any).reject === 'function') {
+          await (sessionRef.current as any).reject(pendingApproval.request);
+        }
         console.log('❌ Tool rejeté (Voice SDK):', pendingApproval.toolName);
-        // sessionRef.current.rejectTool(pendingApproval.request); // When available
       }
       setPendingApproval(null);
       
@@ -557,7 +459,6 @@ export function SophieAgentsSDK({
     }
   };
 
-  // Timer session
   useEffect(() => {
     if (isConnected && startTimeRef.current) {
       timerRef.current = setInterval(() => {
@@ -578,7 +479,6 @@ export function SophieAgentsSDK({
     };
   }, [isConnected]);
 
-  // Cleanup au démontage
   useEffect(() => {
     return () => {
       void endSession();
@@ -605,25 +505,26 @@ export function SophieAgentsSDK({
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                isConnected 
-                  ? isSpeaking 
-                    ? 'bg-blue-100 animate-pulse' 
-                    : isListening
-                      ? 'bg-green-100'
-                      : 'bg-blue-50'
-                  : 'bg-muted'
-              }`}>
-                👩‍💼
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-xs truncate">Sophie</p>
-                {isConnected && (
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span>{formatTime(sessionDuration)}</span>
-                    <span>•</span>
-                    <span>{exchangeCount}</span>
-                  </div>
-                )}
+                  isConnected 
+                    ? isSpeaking 
+                      ? 'bg-blue-100 animate-pulse' 
+                      : isListening
+                        ? 'bg-green-100'
+                        : 'bg-blue-50'
+                    : 'bg-muted'
+                }`}>
+                  👩‍💼
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="font-medium text-xs truncate">Sophie</p>
+                  {isConnected && (
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <span>{formatTime(sessionDuration)}</span>
+                      <span>•</span>
+                      <span>{exchangeCount}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <div className="flex gap-1">
@@ -640,27 +541,26 @@ export function SophieAgentsSDK({
                 </TestButton>
               )}
             </div>
-          </div>
-          {isConnected && (
-            <div className="mt-2 flex justify-center">
-              {isListening ? (
-                <Badge variant="default" className="bg-green-600 text-xs h-5">
-                  <Mic className="w-3 h-3 mr-1" />
-                  Vous
-                </Badge>
-              ) : isSpeaking ? (
-                <Badge variant="default" className="bg-blue-600 animate-pulse text-xs h-5">
-                  <Volume2 className="w-3 h-3 mr-1" />
-                  Sophie
-                </Badge>
-              ) : (
-                <Badge variant="outline" className="text-xs h-5">
-                  <MicOff className="w-3 h-3 mr-1" />
-                  Pause
-                </Badge>
-              )}
-            </div>
-          )}
+            {isConnected && (
+              <div className="mt-2 flex justify-center">
+                {isListening ? (
+                  <Badge variant="default" className="bg-green-600 text-xs h-5">
+                    <Mic className="w-3 h-3 mr-1" />
+                    Vous
+                  </Badge>
+                ) : isSpeaking ? (
+                  <Badge variant="default" className="bg-blue-600 animate-pulse text-xs h-5">
+                    <Volume2 className="w-3 h-3 mr-1" />
+                    Sophie
+                  </Badge>
+                ) : (
+                  <Badge variant="outline" className="text-xs h-5">
+                    <MicOff className="w-3 h-3 mr-1" />
+                    Pause
+                  </Badge>
+                )}
+              </div>
+            )}
           </CardContent>
         </Card>
       </>
@@ -695,64 +595,71 @@ export function SophieAgentsSDK({
             </Badge>
           </div>
 
-        {/* Status de connexion */}
-        <div className="flex items-center justify-between">
-          <TestButton size="sm" variant="ghost" onClick={() => setIsMinimized(true)}>
-            <Minimize2 className="w-4 h-4 mr-1" />
-            Réduire
-          </TestButton>
-          {onToggle && (
-            <TestButton size="sm" variant="ghost" onClick={onToggle}>
-              <PhoneOff className="w-4 h-4 mr-1" />
-              Fermer
+          <div className="flex items-center justify-between">
+            <TestButton size="sm" variant="ghost" onClick={() => setIsMinimized(true)}>
+              <Minimize2 className="w-4 h-4 mr-1" />
+              Réduire
             </TestButton>
-          )}
-        </div>
-
-        {isConnected && (
-          <div className="space-y-3">
-            {/* Métriques enrichies */}
-            <div className="text-sm text-muted-foreground grid grid-cols-2 gap-2">
-              <span>Durée: {formatTime(sessionDuration)}</span>
-              <span>Échanges: {conversationMetrics.totalMessages}</span>
-              <span>Tools: {conversationMetrics.toolCalls}</span>
-              <span>Tokens: {conversationMetrics.tokens || 'N/A'}</span>
-            </div>
-
-            {/* Guardrail alerts */}
-            {guardrailAlerts.map(alert => (
-              <div key={alert.id} className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-3 py-2 rounded text-sm">
-                🚨 Contenu filtré par guardrail
-              </div>
-            ))}
-
-            {/* Tool approval UI */}
-            {pendingApproval && (
-              <div className="bg-blue-50 border border-blue-200 p-3 rounded space-y-2">
-                <div className="text-sm font-medium">Approbation requise</div>
-                <div className="text-xs text-muted-foreground">
-                  Tool: {pendingApproval.toolName}
-                </div>
-                <div className="flex gap-2">
-                  <TestButton size="sm" onClick={() => handleToolApproval(true)}>
-                    Approuver
-                  </TestButton>
-                  <TestButton size="sm" variant="outline" onClick={() => handleToolApproval(false)}>
-                    Rejeter
-                  </TestButton>
-                </div>
-              </div>
+            {onToggle && (
+              <TestButton size="sm" variant="ghost" onClick={onToggle}>
+                <PhoneOff className="w-4 h-4 mr-1" />
+                Fermer
+              </TestButton>
             )}
+          </div>
 
-            {/* Text input hybride */}
-            {isConnected && (
+          {/* Bouton activer le son */}
+          {showUnmute && (
+            <div className="bg-yellow-50 border border-yellow-200 p-3 rounded">
+              <p className="text-sm text-yellow-800 mb-2">Audio désactivé par le navigateur</p>
+              <TestButton 
+                size="sm" 
+                onClick={() => audioRef.current?.play().then(() => setShowUnmute(false)).catch(console.error)}
+              >
+                Activer le son
+              </TestButton>
+            </div>
+          )}
+
+          {isConnected && (
+            <div className="space-y-3">
+              <div className="text-sm text-muted-foreground grid grid-cols-2 gap-2">
+                <span>Durée: {formatTime(sessionDuration)}</span>
+                <span>Échanges: {conversationMetrics.totalMessages}</span>
+                <span>Tools: {conversationMetrics.toolCalls}</span>
+                <span>Tokens: {conversationMetrics.tokens || 'N/A'}</span>
+              </div>
+
+              {guardrailAlerts.map((alert, index) => (
+                <div key={index} className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-3 py-2 rounded text-sm">
+                  🚨 Contenu filtré par guardrail
+                </div>
+              ))}
+
+              {pendingApproval && (
+                <div className="bg-blue-50 border border-blue-200 p-3 rounded space-y-2">
+                  <div className="text-sm font-medium">Approbation requise</div>
+                  <div className="text-xs text-muted-foreground">
+                    Tool: {pendingApproval.toolName}
+                  </div>
+                  <div className="flex gap-2">
+                    <TestButton size="sm" onClick={() => handleToolApproval(true)}>
+                      Approuver
+                    </TestButton>
+                    <TestButton size="sm" variant="outline" onClick={() => handleToolApproval(false)}>
+                      Rejeter
+                    </TestButton>
+                  </div>
+                </div>
+              )}
+
               <div className="space-y-2">
                 <div className="flex gap-2">
                   <input
                     type="text"
                     value={textInput}
                     onChange={(e) => setTextInput(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleTextMessage()}
+                    onKeyDown={(e) => e.key === 'Enter' && handleTextMessage()}
                     placeholder="Message texte..."
                     className="flex-1 px-2 py-1 border rounded text-sm"
                   />
@@ -761,9 +668,7 @@ export function SophieAgentsSDK({
                   </TestButton>
                 </div>
               </div>
-            )}
 
-            <div>
               <div className="text-center">
                 {isListening ? (
                   <Badge variant="default" className="bg-green-600">
@@ -782,91 +687,87 @@ export function SophieAgentsSDK({
                   </Badge>
                 )}
               </div>
-            </div>
 
-            <div className="flex gap-2">
-              {isSpeaking && (
-                <TestButton size="sm" variant="outline" onClick={handleInterrupt}>
-                  Interrompre
+              <div className="flex gap-2">
+                {isSpeaking && (
+                  <TestButton size="sm" variant="outline" onClick={handleInterrupt}>
+                    Interrompre
+                  </TestButton>
+                )}
+                <TestButton 
+                  onClick={endSession}
+                  variant="destructive"
+                  className="flex-1"
+                >
+                  <PhoneOff className="w-4 h-4 mr-1" />
+                  Terminer
                 </TestButton>
+              </div>
+
+              {nativeTranscripts && (
+                <div className="text-xs text-muted-foreground bg-gray-50 p-2 rounded max-h-20 overflow-y-auto">
+                  {nativeTranscripts}
+                </div>
               )}
+            </div>
+          )}
+
+          {isConnecting && (
+            <div className="text-center py-4">
+              <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2" />
+              <p className="text-sm text-muted-foreground">Connexion à Sophie Hennion-Moreau...</p>
+              <p className="text-xs text-muted-foreground mt-1">VNS EDHEC + Agents SDK</p>
+            </div>
+          )}
+
+          {!isConnected && !isConnecting && (
+            <div className="space-y-4">
+              <div className="space-y-3">
+                <h4 className="text-sm font-medium">Type de conversation</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  <TestButton
+                    variant={selectedConversationType === 'cold-call' ? 'default' : 'outline'}
+                    onClick={() => setSelectedConversationType('cold-call')}
+                    size="sm"
+                  >
+                    Cold Call
+                  </TestButton>
+                  <TestButton
+                    variant={selectedConversationType === 'rdv' ? 'default' : 'outline'}
+                    onClick={() => setSelectedConversationType('rdv')}
+                    size="sm"
+                  >
+                    RDV Planifié
+                  </TestButton>
+                </div>
+              </div>
+
+              <div className="text-xs text-muted-foreground space-y-1">
+                {selectedConversationType === 'cold-call' ? (
+                  <>
+                    <div>📞 Cold Outreach - Méfiance initiale EDHEC</div>
+                    <div>🎯 Teste préparation enjeux pédagogiques</div>
+                    <div>⚡ Questions pièges innovation EdTech</div>
+                  </>
+                ) : (
+                  <>
+                    <div>📅 RDV EDHEC - Évaluation Byss VNS</div>
+                    <div>🔍 Démonstration simulateur vocal attendue</div>
+                    <div>💰 Négociation budget 80k€ + délais</div>
+                  </>
+                )}
+              </div>
+
               <TestButton 
-                onClick={endSession}
-                variant="destructive"
-                className="flex-1"
+                onClick={startSession}
+                className="w-full"
+                disabled={isConnecting}
               >
-                <PhoneOff className="w-4 h-4 mr-1" />
-                Terminer
+                <Phone className="w-4 h-4 mr-2" />
+                Commencer la conversation
               </TestButton>
             </div>
-
-            {/* Transcription temps réel */}
-            {nativeTranscripts && (
-              <div className="text-xs text-muted-foreground bg-gray-50 p-2 rounded max-h-20 overflow-y-auto">
-                {nativeTranscripts}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* État de connexion */}
-        {isConnecting && (
-          <div className="text-center py-4">
-            <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2" />
-            <p className="text-sm text-muted-foreground">Connexion à Sophie Hennion-Moreau...</p>
-            <p className="text-xs text-muted-foreground mt-1">VNS EDHEC + Agents SDK</p>
-          </div>
-        )}
-
-        {/* Interface de démarrage */}
-        {!isConnected && !isConnecting && (
-          <div className="space-y-4">
-            <div className="space-y-3">
-              <h4 className="text-sm font-medium">Type de conversation</h4>
-              <div className="grid grid-cols-2 gap-2">
-                <TestButton
-                  variant={selectedConversationType === 'cold-call' ? 'default' : 'outline'}
-                  onClick={() => setSelectedConversationType('cold-call')}
-                  size="sm"
-                >
-                  Cold Call
-                </TestButton>
-                <TestButton
-                  variant={selectedConversationType === 'rdv' ? 'default' : 'outline'}
-                  onClick={() => setSelectedConversationType('rdv')}
-                  size="sm"
-                >
-                  RDV Planifié
-                </TestButton>
-              </div>
-            </div>
-
-            <div className="text-xs text-muted-foreground space-y-1">
-              {selectedConversationType === 'cold-call' ? (
-                <>
-                  <div>📞 Cold Outreach - Méfiance initiale EDHEC</div>
-                  <div>🎯 Teste préparation enjeux pédagogiques</div>
-                  <div>⚡ Questions pièges innovation EdTech</div>
-                </>
-              ) : (
-                <>
-                  <div>📅 RDV EDHEC - Évaluation Byss VNS</div>
-                  <div>🔍 Démonstration simulateur vocal attendue</div>
-                  <div>💰 Négociation budget 80k€ + délais</div>
-                </>
-              )}
-            </div>
-
-            <TestButton 
-              onClick={startSession}
-              className="w-full"
-              disabled={isConnecting}
-            >
-              <Phone className="w-4 h-4 mr-2" />
-              Commencer la conversation
-            </TestButton>
-          </div>
-        )}
+          )}
         </div>
       </Card>
     </>
