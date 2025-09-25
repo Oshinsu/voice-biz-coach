@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { TestButton } from '@/components/ui/test-button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MagicSpotlight } from '@/components/ui/magic-spotlight';
-import { SophieAgentsSDK } from '@/components/voice-agents';
+import { SophieVoiceAgent } from '@/components/voice-agents';
 import { 
   Building2, 
   TrendingUp, 
@@ -1278,7 +1278,7 @@ export const ByssVnsScenario: React.FC<ByssVnsScenarioProps> = ({ onStartSession
 
       {/* Voice Agent Modal */}
       {showVoiceAgent && (
-        <SophieAgentsSDK 
+        <SophieVoiceAgent 
           conversationType="rdv"
           open={showVoiceAgent}
           onToggle={() => setShowVoiceAgent(false)}
