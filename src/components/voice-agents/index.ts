@@ -1,1 +1,1 @@
-export { SophieVoiceAgent } from './SophieAgentsSDK';
+export { SophieVoiceAgent } from './SophieVoiceAgent';
